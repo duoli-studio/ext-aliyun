@@ -2,6 +2,7 @@
 
 use Illuminate\Auth\AuthManager;
 use Illuminate\Cache\CacheManager;
+use Illuminate\Cache\TaggableStore;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Contracts\Routing\ResponseFactory;
@@ -41,7 +42,7 @@ trait PoppyTrait
 	/**
 	 * @return ConfRepository
 	 */
-	protected function getConf(): ConfRepository
+	protected function getSetting(): ConfRepository
 	{
 		return $this->getContainer()->make('system.conf');
 	}
@@ -187,11 +188,16 @@ trait PoppyTrait
 	}
 
 	/**
+	 * @param string $tag
 	 * @return \Illuminate\Cache\CacheManager
 	 */
-	protected function getCache(): CacheManager
+	protected function getCache($tag = ''): CacheManager
 	{
-		return $this->getContainer()->make('cache');
+		$cache = $this->getContainer()->make('cache');
+		if ($cache instanceof TaggableStore && $tag) {
+			$cache->tags($tag);
+		}
+		return $cache;
 	}
 
 	/**

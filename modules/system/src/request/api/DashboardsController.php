@@ -40,7 +40,7 @@ class DashboardsController extends Controller
 			});
 		});
 		$dashboards = $dashboards->keyBy('identification');
-		$saved      = collect(json_decode($this->getConf()->get('administration.dashboards', '')));
+		$saved      = collect(json_decode($this->getSetting()->get('administration.dashboards', '')));
 		$saved->has('hidden') && collect($saved->get('hidden', []))->each(function ($identification) use (
 			$dashboards,
 			$hidden

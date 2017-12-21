@@ -24,12 +24,7 @@ class AddonRepository extends CollectRepository
 	 */
 	public function initialize(Collection $data)
 	{
-		$cache = $this->getCache();
-		if ($cache instanceof TaggableStore) {
-			$cache->tags('poppy');
-		}
-
-		$this->items = $cache->rememberForever('addon.repository', function () use ($data) {
+		$this->items = $this->getCache('poppy')->rememberForever('addon.repository', function () use ($data) {
 			$collection = collect();
 			$data->each(function ($directory) use ($collection) {
 				$addon = new Addon([
@@ -63,9 +58,9 @@ class AddonRepository extends CollectRepository
 						$provider = $addon->offsetGet('provider');
 						$addon->offsetSet('initialized', boolval(class_exists($provider) ?: false));
 						$key = 'addon.' . $addon->offsetGet('identification') . '.enabled';
-						$addon->offsetSet('enabled', $this->getConf()->get($key, false));
+						$addon->offsetSet('enabled', $this->getSetting()->get($key, false));
 						$key = 'addon.' . $addon->offsetGet('identification') . '.installed';
-						$addon->offsetSet('installed', $this->getConf()->get($key, false));
+						$addon->offsetSet('installed', $this->getSetting()->get($key, false));
 					}
 					$collection->put($configurations->get('identification'), $addon);
 				}

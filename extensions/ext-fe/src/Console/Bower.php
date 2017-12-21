@@ -28,7 +28,7 @@ class Bower extends Command
 	 * 前端部署.
 	 * @var string
 	 */
-	protected $signature = 'lemon:bower
+	protected $signature = 'ext:fe:bower
 		{--force= : Force update}
 	';
 
@@ -303,7 +303,7 @@ class Bower extends Command
 
 							for ($l = 0; $l < $level; $l++) {
 								$trim     = substr($relative, 0, strpos($relative, '/') + 1);
-								$trimLen = strlen($trim);
+								$trimLen  = strlen($trim);
 								$relative = substr($relative, $trimLen);
 							}
 

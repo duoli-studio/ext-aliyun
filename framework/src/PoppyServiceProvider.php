@@ -1,18 +1,12 @@
 <?php namespace Poppy\Framework;
 
-use Poppy\Framework\Console\ConsoleServiceProvider;
-use Poppy\Framework\Console\GeneratorServiceProvider;
-use Poppy\Framework\GraphQL\GraphQLServiceProvider;
-use Poppy\Framework\Module\ModuleServiceProvider;
-use Poppy\Framework\Parse\ParseServiceProvider;
-use Poppy\Framework\Poppy\PoppyServiceProvider as PoppyInstanceServiceProvider;
-use Poppy\Framework\Providers\BladeServiceProvider;
-use Poppy\Framework\Support\HelperServiceProvider;
 use Illuminate\Support\ServiceProvider;
-use Poppy\Framework\Translation\TranslationServiceProvider;
+use Poppy\Framework\Classes\Traits\PoppyTrait;
+use Poppy\Framework\Extension\Extension;
 
 class PoppyServiceProvider extends ServiceProvider
 {
+	use PoppyTrait;
 
 	/**
 	 * Indicates if loading of the provider is deferred.
@@ -34,6 +28,14 @@ class PoppyServiceProvider extends ServiceProvider
 
 		$this->app['poppy']->register();
 
+		$this->getExtension()->repository()->each(function (Extension $extension) {
+			$providers = collect($this->app['config']->get('app.providers'));
+			if (isset($extension['service']) && $extension['service']) {
+				$providers->push($extension->service());
+				$this->getConfig()->set('app.providers', $providers->toArray());
+			}
+		});
+
 		// 定义视图
 		$this->loadViewsFrom(__DIR__ . '/../resources/views', 'poppy');
 		$this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'poppy');
@@ -49,16 +51,6 @@ class PoppyServiceProvider extends ServiceProvider
 			__DIR__ . '/../config/poppy.php', 'poppy'
 		);
 
-		// module manage
-		$this->app->register(ConsoleServiceProvider::class);
-		$this->app->register(GeneratorServiceProvider::class);
-		$this->app->register(BladeServiceProvider::class);
-		$this->app->register(HelperServiceProvider::class);
-		$this->app->register(PoppyInstanceServiceProvider::class);
-		$this->app->register(ParseServiceProvider::class);
-		$this->app->register(TranslationServiceProvider::class);
-		$this->app->register(GraphQLServiceProvider::class);
-		$this->app->register(ModuleServiceProvider::class);
 
 		$this->registerFormBuilder();
 	}

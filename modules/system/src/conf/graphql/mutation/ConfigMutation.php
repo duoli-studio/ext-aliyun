@@ -44,7 +44,7 @@ class ConfigMutation extends Mutation
 	public function resolve($root, $args)
 	{
 		$config = $args['config'] ?? [];
-		$conf   = $this->getConf();
+		$conf   = $this->getSetting();
 		foreach ($config as $value) {
 			if (!$conf->set($value['key'], $value['value'])) {
 				return $conf->getError()->toArray();

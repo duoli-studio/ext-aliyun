@@ -1,4 +1,4 @@
-<?php namespace Slt\Request\Web\Controllers;
+<?php namespace Slt\Request\Web;
 
 
 class HomeController extends InitController

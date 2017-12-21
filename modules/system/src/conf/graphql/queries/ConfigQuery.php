@@ -49,7 +49,7 @@ class ConfigQuery extends Query
 	 */
 	public function resolve($root, $args)
 	{
-		return $this->getConf()->getNsGroup($args['module'], $args['group']);
+		return $this->getSetting()->getNsGroup($args['module'], $args['group']);
 	}
 
 

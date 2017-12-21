@@ -7,9 +7,7 @@ class Kernel extends ConsoleKernel
 {
 
 	protected $bootstrappers = [
-		// poppy loader
-		'Poppy\Framework\Foundation\Bootstrap\RegisterClassLoader',
-
+		'Poppy\Framework\Foundation\Bootstrap\RegisterClassLoader',   // poppy module loader
 		'Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables',
 		'Illuminate\Foundation\Bootstrap\LoadConfiguration',
 		'Illuminate\Foundation\Bootstrap\HandleExceptions',
@@ -17,6 +15,7 @@ class Kernel extends ConsoleKernel
 		'Illuminate\Foundation\Bootstrap\SetRequestForConsole',
 		'Illuminate\Foundation\Bootstrap\RegisterProviders',
 		'Illuminate\Foundation\Bootstrap\BootProviders',
+
 	];
 
 	/**

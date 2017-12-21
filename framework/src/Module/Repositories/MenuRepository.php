@@ -28,7 +28,7 @@ class MenuRepository extends CollectRepository
 	 */
 	public function initialize(Collection $slugs)
 	{
-		$configuration       = json_decode($this->getConf()->get('administration.menus', ''), true);
+		$configuration       = json_decode($this->getSetting()->get('administration.menus', ''), true);
 		$this->configuration = is_array($configuration) ? $configuration : [];
 		$cache               = $this->getCache();
 		if ($cache instanceof TaggableStore) {

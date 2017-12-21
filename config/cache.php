@@ -74,7 +74,7 @@ return [
 	|
 	*/
 
-	'prefix' => env('CACHE_PREFIX', 'poppy'),
+	'prefix' => env('CACHE_PREFIX', 'play'),
 
 	/*
 	|--------------------------------------------------------------------------

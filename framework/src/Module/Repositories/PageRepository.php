@@ -30,7 +30,7 @@ class PageRepository extends CollectRepository
 			$collection->transform(function ($definition) {
 				data_set($definition, 'tabs', collect($definition['tabs'])->map(function ($definition) {
 					data_set($definition, 'fields', collect($definition['fields'])->map(function ($definition) {
-						$setting = $this->getConf()->get($definition['key'], '');
+						$setting = $this->getSetting()->get($definition['key'], '');
 						if (isset($definition['format'])) {
 							switch ($definition['format']) {
 								case 'boolean':

@@ -1,6 +1,7 @@
 {
-	"name": "duoli/ext-alipay",
+	"name": "poppy/ext-fe",
 	"description": "支付宝Laravel 5 插件. 支持web 端即时到帐",
+	"type": "poppy-extension",
 	"authors": [
 		{
 			"name": "Mark Zhao",
@@ -12,7 +13,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Duoli\\ExtAlipay\\": "src/"
+			"Poppy\\Extension\\Fe\\": "src/"
 		}
 	},
 	"config": {

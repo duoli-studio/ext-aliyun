@@ -5,6 +5,7 @@ use Slt\Models\PrdBook;
 use Slt\Models\PrdContent;
 use Slt\Policies\PrdBookPolicy;
 use Slt\Policies\PrdContentPolicy;
+use Slt\Request\RouteServiceProvider;
 
 
 class ServiceProvider extends ModuleServiceProviderBase
@@ -28,6 +29,7 @@ class ServiceProvider extends ModuleServiceProviderBase
 
 	public function register()
 	{
+		$this->app->register(RouteServiceProvider::class);
 		$this->registerCommand();
 	}
 

@@ -10,10 +10,7 @@ class Kernel extends HttpKernel
 	 * @var array
 	 */
 	protected $bootstrappers = [
-		// poppy loader
-		'Poppy\Framework\Foundation\Bootstrap\RegisterClassLoader',
-
-		// framework
+		'Poppy\Framework\Foundation\Bootstrap\RegisterClassLoader',   // poppy class loader
 		'Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables',
 		'Illuminate\Foundation\Bootstrap\LoadConfiguration',
 		'Illuminate\Foundation\Bootstrap\HandleExceptions',

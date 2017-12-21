@@ -3,6 +3,17 @@
 use Closure;
 use Exception;
 use Illuminate\Foundation\Application as ApplicationBase;
+use Poppy\Framework\Addon\AddonServiceProvider;
+use Poppy\Framework\Console\ConsoleServiceProvider;
+use Poppy\Framework\Console\GeneratorServiceProvider;
+use Poppy\Framework\Extension\ExtensionServiceProvider;
+use Poppy\Framework\GraphQL\GraphQLServiceProvider;
+use Poppy\Framework\Module\ModuleServiceProvider;
+use Poppy\Framework\Parse\ParseServiceProvider;
+use Poppy\Framework\Poppy\PoppyServiceProvider;
+use Poppy\Framework\Providers\BladeServiceProvider;
+use Poppy\Framework\Support\HelperServiceProvider;
+use Poppy\Framework\Translation\TranslationServiceProvider;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Throwable;
 
@@ -17,9 +28,26 @@ class Application extends ApplicationBase
 	 */
 	protected $executionContext;
 
-	protected $pluginsPath;
+	protected $addonPath;
 
 	protected $modulesPath;
+
+	public function registerBaseServiceProviders()
+	{
+		parent::registerBaseServiceProviders();
+
+		$this->register(ConsoleServiceProvider::class);
+		$this->register(GeneratorServiceProvider::class);
+		$this->register(BladeServiceProvider::class);
+		$this->register(HelperServiceProvider::class);
+		$this->register(PoppyServiceProvider::class);
+		$this->register(ParseServiceProvider::class);
+		$this->register(TranslationServiceProvider::class);
+		$this->register(GraphQLServiceProvider::class);
+		$this->register(ModuleServiceProvider::class);
+		$this->register(AddonServiceProvider::class);
+		$this->register(ExtensionServiceProvider::class);
+	}
 
 
 	/**
@@ -32,82 +60,10 @@ class Application extends ApplicationBase
 
 		$this->instance('path.framework', $this->frameworkPath());
 		$this->instance('path.module', $this->modulePath());
-		$this->instance('path.extension', $this->addonPath());
-		$this->instance('path.plugins', $this->pluginsPath());
+		$this->instance('path.extension', $this->extensionPath());
+		$this->instance('path.addon', $this->addonPath());
 	}
 
-	/**
-	 * 获取插件路径
-	 * @return string
-	 */
-	public function pluginsPath()
-	{
-		return $this->pluginsPath ?: $this->basePath . '/plugins';
-	}
-
-	/**
-	 * 设置插件路径
-	 * @param  string $path
-	 * @return $this
-	 */
-	public function setPluginsPath($path)
-	{
-		$this->pluginsPath = $path;
-		$this->instance('path.plugins', $path);
-		return $this;
-	}
-
-	/**
-	 * 获取主题的路径
-	 * @return string
-	 */
-	public function themesPath()
-	{
-		return $this->themesPath ?: $this->basePath . '/themes';
-	}
-
-	/**
-	 * 设置皮肤的路径
-	 * @param  string $path
-	 * @return $this
-	 */
-	public function setThemesPath($path)
-	{
-		$this->themesPath = $path;
-		$this->instance('path.themes', $path);
-		return $this;
-	}
-
-	/**
-	 * 获取临时文件路径
-	 * @return string
-	 */
-	public function tempPath()
-	{
-		return $this->basePath . '/storage/temp';
-	}
-
-	/**
-	 * Resolve the given type from the container.
-	 * (Overriding Container::make)
-	 * @param string $abstract
-	 * @param array  $parameters
-	 * @return mixed
-	 */
-	public function make($abstract, array $parameters = [])
-	{
-		$abstract = $this->getAlias($abstract);
-
-		if (isset($this->deferredServices[$abstract])) {
-			$this->loadDeferredProvider($abstract);
-		}
-
-		if ($parameters) {
-			return $this->make(Maker::class)->make($abstract, $parameters);
-		}
-
-		return parent::make($abstract);
-	}
 
 	/**
 	 * register "matched" event
@@ -168,10 +124,7 @@ class Application extends ApplicationBase
 			$this['db.connection']->getPdo();
 		} catch (Throwable $ex) {
 			return false;
-		} catch (Exception $ex) {
-			return false;
 		}
-
 		return true;
 	}
 
@@ -190,7 +143,6 @@ class Application extends ApplicationBase
 				return false;
 			}
 			$this->instance('installed', true);
-
 			return true;
 		}
 	}
@@ -237,6 +189,14 @@ class Application extends ApplicationBase
 		return $this->storagePath() . '/framework/services.php';
 	}
 
+	/**
+	 * Get the path to the cached packages.php file.
+	 * @return string
+	 */
+	public function getCachedClassesPath()
+	{
+		return $this->storagePath() . '/framework/classes.php';
+	}
 
 	/*
 	|--------------------------------------------------------------------------
@@ -251,7 +211,7 @@ class Application extends ApplicationBase
 	 */
 	public function frameworkPath($path = '')
 	{
-		return __DIR__ . '/../../../framework' . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+		return realpath(__DIR__ . '/../../../framework' . ($path ? DIRECTORY_SEPARATOR . $path : $path));
 	}
 
 	/**
@@ -264,6 +224,18 @@ class Application extends ApplicationBase
 	}
 
 	/**
+	 * 设置插件路径
+	 * @param  string $path
+	 * @return $this
+	 */
+	public function setAddonPath($path)
+	{
+		$this->addonPath = $path;
+		$this->instance('path.addon', $path);
+		return $this;
+	}
+
+	/**
 	 * @return string
 	 */
 	public function addonPath()
@@ -273,11 +245,24 @@ class Application extends ApplicationBase
 
 
 	/**
-	 * Get the path to the cached packages.php file.
+	 * 设置插件路径
+	 * @param  string $path
+	 * @return $this
+	 */
+	public function setExtensionPath($path)
+	{
+		$this->addonPath = $path;
+		$this->instance('path.extension', $path);
+		return $this;
+	}
+
+	/**
 	 * @return string
 	 */
-	public function getCachedClassesPath()
+	public function extensionPath()
 	{
-		return $this->storagePath() . '/framework/classes.php';
+		return $this->basePath . DIRECTORY_SEPARATOR . 'extensions';
 	}
+
+
 }

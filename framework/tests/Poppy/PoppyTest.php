@@ -25,14 +25,16 @@ class PoppyTest extends TestCase
 		$this->assertEquals('', ArrHelper::genKey([]));
 	}
 
-	public function testModulePath()
-	{
-		echo app('path.module');
-	}
 
 	public function testModule()
 	{
 		$module = app('module')->repository()->get('system');
 		dd($module);
+	}
+
+	public function testPath()
+	{
+		$this->assertEquals(base_path('framework'), app('path.framework'));
+		$this->assertEquals(base_path('modules'), app('path.module'));
 	}
 }
