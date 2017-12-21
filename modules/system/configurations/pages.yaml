@@ -1,0 +1,148 @@
+configurations:
+    initialization:
+        name: 参数配置
+        path: configurations
+        tabs: true
+        target: global
+    tabs:
+        configuration:
+            default: true
+            show: true
+            submit: api/setting/set
+            title: 全局设置
+            fields:
+                name:
+                    default: ''
+                    description: ''
+                    label: 网站名称
+                    key: site.name
+                    placeholder: 请输入网站名称
+                    required: true
+                    type: input
+                    validates:
+                        -
+                            message: 请输入网站名称
+                            required: true
+                            trigger: change
+                            type: string
+                enabled:
+                    default: false
+                    description: '关闭后网站将不能访问'
+                    format: boolean
+                    label: 站点开启
+                    key: site.enabled
+                    required: false
+                    type: switch
+                domain:
+                    default: ''
+                    description: '不带 http:// 或 https://'
+                    label: 网站域名
+                    key: site.domain
+                    required: false
+                    type: input
+                multidomain:
+                    default: false
+                    description: '由于前后端分离机制，官方不对多域名做特殊支持，可能导致其他未知问题'
+                    format: boolean
+                    label: 开启多域名
+                    key: site.multidomain
+                    required: false
+                    type: switch
+                beian:
+                    default: ''
+                    label: 备案信息
+                    key: site.beian
+                    required: false
+                    type: input
+                company:
+                    default: ''
+                    label: 公司名称
+                    key: site.company
+                    required: false
+                    type: input
+                copyright:
+                    default: ''
+                    label: 版权信息
+                    key: site.copyright
+                    required: false
+                    type: input
+                statistics:
+                    default: ''
+                    label: 统计代码
+                    key: site.statistics
+                    required: false
+                    type: textarea
+multify:
+    initialization:
+        name: 多元化
+        path: multify
+        tabs: true
+        target: global
+    tabs:
+        configuration:
+            default: true
+            show: true
+            submit: api/setting/set
+            title: 全局设置
+            fields:
+                name:
+                    default: ''
+                    description: ''
+                    label: 网站名称
+                    key: site.name
+                    placeholder: 请输入网站名称
+                    required: true
+                    type: input
+                    validates:
+                        -
+                            message: 请输入网站名称
+                            required: true
+                            trigger: change
+                            type: string
+                enabled:
+                    default: false
+                    description: '关闭后网站将不能访问'
+                    format: boolean
+                    label: 站点开启
+                    key: site.enabled
+                    required: false
+                    type: switch
+                domain:
+                    default: ''
+                    description: '不带 http:// 或 https://'
+                    label: 网站域名
+                    key: site.domain
+                    required: false
+                    type: input
+                multidomain:
+                    default: false
+                    description: '由于前后端分离机制，官方不对多域名做特殊支持，可能导致其他未知问题'
+                    format: boolean
+                    label: 开启多域名
+                    key: site.multidomain
+                    required: false
+                    type: switch
+                beian:
+                    default: ''
+                    label: 备案信息
+                    key: site.beian
+                    required: false
+                    type: input
+                company:
+                    default: ''
+                    label: 公司名称
+                    key: site.company
+                    required: false
+                    type: input
+                copyright:
+                    default: ''
+                    label: 版权信息
+                    key: site.copyright
+                    required: false
+                    type: input
+                statistics:
+                    default: ''
+                    label: 统计代码
+                    key: site.statistics
+                    required: false
+                    type: textarea

@@ -1,0 +1,71 @@
+-
+    description: 全局权限
+    identification: global
+    name: 全局
+    groups:
+        -
+            description: 插件权限定义
+            identification: addon
+            name: 插件权限
+            permissions:
+                -
+                    default: false
+                    description: 全局插件管理权限
+                    identification: manage
+        -
+            description: 邮件权限定义
+            identification: mail
+            name: 邮件权限
+            permissions:
+                -
+                    default: false
+                    description: 全局邮件配置管理权限
+                    identification: manage
+        -
+            description: 模块权限定义
+            identification: module
+            name: 模块权限
+            permissions:
+                -
+                    default: false
+                    description: 全局模块管理权限
+                    identification: manage
+        -
+            description: 导航权限定义
+            identification: navigation
+            name: 导航权限
+            permissions:
+                -
+                    default: false
+                    description: 全局导航分组管理权限
+                    identification: group
+                -
+                    default: false
+                    description: 全局导航项管理权限
+                    identification: item
+        -
+            description: 搜索引擎权限定义
+            identification: search-engine
+            name: 搜索引擎权限
+            permissions:
+                -
+                    default: false
+                    description: 获取全局 SEO 配置项
+                    identification: get
+                -
+                    default: false
+                    description: 设置全局 SEO 配置项
+                    identification: set
+        -
+            description: 全局权限定义
+            identification: global
+            name: 全局权限
+            permissions:
+                -
+                    default: false
+                    description: 获取全局配置项
+                    identification: get
+                -
+                    default: false
+                    description: 设置全局配置项
+                    identification: set

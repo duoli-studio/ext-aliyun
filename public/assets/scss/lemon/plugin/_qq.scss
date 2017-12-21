@@ -1,0 +1,92 @@
+@charset "UTF-8";
+@import "../../variables";
+/**
+ * Sour Lemon Custom Plugin
+ */
+.sl-plugin_qq {
+	a {
+		text-decoration : none;
+	}
+	ul {
+		list-style   : none;
+		padding-left : 0;
+	}
+	position  : fixed;
+	right     : 0;
+	top       : 20%;
+	z-index   : 100;
+	_position : absolute;
+	_top      : expression(eval(document.documentElement.scrollTop+100));
+	.kefu-open {
+		position          : absolute;
+		top               : 0;
+		right             : 0;
+		width             : 138px;
+		padding           : 46px 0 0 0;
+		background        : url('#{$css_images-plugin}lemon.plugin/qq/kefu_icon.png') no-repeat -46px 0;
+		_background-image : url('#{$css_images-plugin}lemon.plugin/qq/kefu_icon.gif');
+		overflow          : hidden;
+		.close {
+			display     : block;
+			position    : absolute;
+			width       : 22px;
+			height      : 22px;
+			right       : 0;
+			top         : 0;
+			text-indent : -9999px;
+		}
+		div {
+			padding-bottom : 5px;
+			width          : 134px;
+		}
+		ul {
+			background : #939393;
+		}
+		li {
+			height      : 32px;
+			line-height : 32px;
+			padding     : 0 15px 2px;
+			a {
+				color        : #ffffff;
+				display      : block;
+				position     : relative;
+				zoom         : 1;
+				padding-left : 35px;
+				&:hover {
+					text-decoration : none;
+				}
+				i {
+					display           : inline-block;
+					position          : absolute;
+					left              : 10px;
+					top               : 6px;
+					width             : 21px;
+					height            : 21px;
+					background        : url('#{$css_images-plugin}lemon.plugin/qq/kefu_icon.png') no-repeat 9999px 9999px;
+					_background-image : url('#{$css_images-plugin}lemon.plugin/qq/kefu_icon.gif');
+					&.qq {
+						background-position : -86px -56px;
+					}
+					&.online {
+						background-position : -56px -56px;
+					}
+					&.txt {
+						background-position : -56px -86px;
+					}
+				}
+			}
+		}
+	}
+	.kefu-close {
+		position          : absolute;
+		top               : 5px;
+		right             : 0;
+		width             : 0;
+		height            : 127px;
+		padding           : 0;
+		background        : url('#{$css_images-plugin}lemon.plugin/qq/kefu_icon.png') no-repeat 0 0;
+		_background-image : url('#{$css_images-plugin}lemon.plugin/qq/kefu_icon.gif');
+		cursor            : pointer;
+		overflow          : hidden;
+	}
+}

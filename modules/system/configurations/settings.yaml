@@ -1,0 +1,14 @@
+system::settings.image:
+    type: string
+    default:
+        - .png
+        - .jpg
+        - .jpeg
+        - .gif
+        - .bmp
+system::settings.engine:
+    type: string
+    default: gd
+system::settings.video:
+    type: integer
+    default: 2048

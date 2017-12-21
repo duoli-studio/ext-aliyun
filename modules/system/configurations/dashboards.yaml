@@ -1,0 +1,27 @@
+-
+    identification: systeminfo
+    title: 系统信息
+    template: Notadd\Administration\SystemInformation@handler
+-
+    identification: development
+    title: 开发团队
+    template:
+        -
+            tag: team
+            props:
+                auxiliaryList:
+                    -
+                        name: 半缕阳光
+                        url: https://github.com/ganlanshu0211
+                    -
+                        name: 加菲猫
+                        url: https://github.com/mustangzhong
+                list:
+                    -
+                        image: https://ww4.sinaimg.cn/large/0060lm7Tly1flat9vypmpj302o02odg7.jpg
+                        name: 寻风
+                        url: https://github.com/twilroad
+                    -
+                        image: https://ww3.sinaimg.cn/large/0060lm7Tly1flata92g2gj302o02ojrd.jpg
+                        name: 依剑听雨
+                        url: https://www.zuohuadong.cn/

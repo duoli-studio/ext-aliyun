@@ -1,0 +1,20 @@
+blog:
+  title: 博客
+  param:
+  groups:
+    - blog
+hunt:
+  title: 帮助
+  param:
+  groups:
+    - help
+home:
+  title: 主页
+  param:
+  groups:
+    - home
+user:
+  title: 用户
+  param:
+  groups:
+    - user

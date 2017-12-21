@@ -1,0 +1,47 @@
+home:
+  title: 网站面板
+  param: ''
+  icon: '<em class="fa fa-home"></em>'
+  groups:
+  - dsk_lemon_home
+  - dsk_lemon_site
+platform:
+  title: 游戏平台
+  param: ''
+  icon: '<em class="fa fa-soccer-ball-o"></em>'
+  groups:
+#  - dsk_platform_order
+#  - dsk_platform_repeat
+#  - dsk_platform_account
+#  - dsk_platform_sync_log
+#  - dsk_platform_statics
+employee:
+  title: 员工单
+  param: ''
+  icon: '<em class="fa fa-sellsy"></em>'
+  groups:
+#  - dsk_platform_employee
+user:
+  title: 用户列表
+  param: type=desktop
+  icon: '<em class="fa fa-user"></em>'
+  groups:
+#  - dsk_pam_account
+#  - dsk_pam_role
+game:
+  title: 游戏设置
+  param: ''
+  icon: '<em class="fa fa-gamepad"></em>'
+  groups:
+#  - dsk_game_name
+#  - dsk_game_server
+#  - dsk_game_type
+#  - dsk_game_source
+node:
+  title: 扩展功能
+  param: ''
+  icon: '<em class="fa fa-internet-explorer"></em>'
+  groups:
+#  - dsk_plugin_ip
+#  - dsk_lemon_system
+#  - dsk_billing_price

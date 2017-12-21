@@ -1,0 +1,76 @@
+@charset "UTF-8";
+@import "../../variables";
+/**
+ * Sour Lemon Custom Plugin
+ */
+.sl-plugin_rbmenu {
+	position       : fixed;
+	right          : 0;
+	margin-right   : 20px;
+	bottom         : 20px;
+	padding-bottom : 20px;
+	z-index        : 999;
+	.sj-btn {
+		width         : 73px;
+		height        : 73px;
+		margin-bottom : 1px;
+		cursor        : pointer;
+		position      : relative;
+		display       : block;
+	}
+	.btn-qq {
+		background : url('#{$css_images-plugin}lemon.plugin/rbmenu/r_qq.png') #6da9de 0 0 no-repeat;
+		&:hover {
+			background-color : #488bc7;
+		}
+	}
+	a.btn-qq {
+		background      : url('#{$css_images-plugin}lemon.plugin/rbmenu/r_qq.png') #6da9de 0 0 no-repeat;
+		text-decoration : none;
+		display         : block;
+		&:visited {
+			background      : url('#{$css_images-plugin}lemon.plugin/rbmenu/r_qq.png') #6da9de 0 0 no-repeat;
+			text-decoration : none;
+			display         : block;
+		}
+	}
+	.btn-wx {
+		background : url('#{$css_images-plugin}lemon.plugin/rbmenu/r_wx.png') #78c340 0 0 no-repeat;
+		&:hover {
+			background-color : #58a81c;
+		}
+		.pic {
+			position : absolute;
+			left     : -160px;
+			top      : 0;
+			display  : none;
+			width    : 160px;
+			height   : 160px;
+		}
+	}
+	.btn-phone {
+		background : url('#{$css_images-plugin}lemon.plugin/rbmenu/r_phone.png') #fbb01f 0 0 no-repeat;
+		&:hover {
+			background-color : #ff811b;
+		}
+		.phone {
+			background-color : #ff811b;
+			position         : absolute;
+			width            : 160px;
+			left             : -160px;
+			top              : 0;
+			line-height      : 73px;
+			color            : #ffffff;
+			font-size        : 18px;
+			text-align       : center;
+			display          : none;
+		}
+	}
+	.btn-top {
+		background : url('#{$css_images-plugin}lemon.plugin/rbmenu/r_top.png') #666666 0 0 no-repeat;
+		display    : none;
+		&:hover {
+			background-color : #444444;
+		}
+	}
+}

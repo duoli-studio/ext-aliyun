@@ -1,0 +1,22 @@
+@charset "utf-8";
+/**
+ * 皮肤
+ * @author : Mark
+ */
+@import "../variables";
+@import "shopnc/variables";
+// reset
+@import "../component/init";
+// layout
+@import "../component/layout/liquid";
+@import "../component/doc";
+@import "../component/layout";
+@import "shopnc/common";
+@import "shopnc/form";
+@import "shopnc/frame";
+@import "shopnc/pagination";
+@import "shopnc/progress-bar";
+@import "shopnc/side-bar";
+@import "shopnc/table";
+@import "shopnc/plugin";
+

@@ -1,0 +1,305 @@
+<?php namespace System\Request\Backend\Controllers;
+
+use App\Http\Requests;
+use App\Http\Requests\Desktop\PamAccountRequest;
+use App\Lemon\Dailian\Application\App\AppWeb;
+use App\Lemon\Repositories\Exceptions\TransactionException;
+use App\Lemon\Repositories\System\SysCrypt;
+use App\Models\AccountDesktop;
+use App\Models\AccountDevelop;
+use App\Models\AccountFront;
+use App\Models\BaseConfig;
+use App\Models\DailianOrder;
+use App\Models\FinanceMoney;
+use App\Models\PamAccount;
+use App\Models\PamLog;
+use App\Models\PamRole;
+use App\Models\PamRoleAccount;
+use Illuminate\Http\Request;
+
+/**
+ * 账户管理
+ * Class PamAccountController
+ * @package App\Http\Controllers\Desktop
+ */
+class PamAccountController extends InitController {
+
+	public function __construct(Request $request) {
+		parent::__construct($request);
+		$this->middleware('lm_desktop.auth');
+	}
+
+	/**
+	 * Display a listing of the resource.
+	 * @param Request $request
+	 * @return \Response
+	 */
+	public function getIndex(Request $request) {
+		$account_type = $request->input('type', PamAccount::ACCOUNT_TYPE_DESKTOP);
+
+		$Db = PamAccount::where('account_type', $account_type);
+
+		$account_name = $request->input('account_name');
+		if ($account_name) {
+			$Db->where('account_name', 'like', '%' . $account_name . '%');
+		}
+
+		$role_id = $request->input('role_id');
+		if ($role_id) {
+			$account_ids = PamRoleAccount::where('role_id', $role_id)->lists('account_id');
+			$Db->whereIn('account_id', $account_ids);
+		}
+
+		// with
+		if (in_array($account_type, [
+			PamAccount::ACCOUNT_TYPE_DESKTOP,
+			PamAccount::ACCOUNT_TYPE_DEVELOP,
+			PamAccount::ACCOUNT_TYPE_FRONT,
+		])) {
+			$Db->with($account_type);
+		}
+
+
+		$items = $Db->paginate($this->pagesize);
+		$items->appends($request->input());
+		return view('desktop.pam_account.index', [
+			'items'        => $items,
+			'account_type' => $account_type,
+			'roles'        => PamRole::getLinear($account_type),
+		]);
+	}
+
+
+	/**
+	 * Show the form for creating a new resource.
+	 * @param Request $request
+	 * @return \Response
+	 */
+	public function getCreate(Request $request) {
+		$account_type = $request->input('type');
+		return view('desktop.pam_account.item', [
+			'account_type' => $account_type,
+			'roles'        => PamRole::getLinear($account_type),
+		]);
+	}
+
+	/**
+	 * 存储
+	 * @param PamAccountRequest $request
+	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+	 */
+	public function postCreate(PamAccountRequest $request) {
+		$account_name = $request->input('account_name');
+		$password     = $request->input('password');
+		$account_type = $request->input('account_type');
+		$role_id      = $request->input('role_id');
+		$account_id   = PamAccount::register($account_name, $password, $account_type, $role_id);
+		if ($account_id) {
+			if ($account_type == PamAccount::ACCOUNT_TYPE_DESKTOP) {
+				$desktop               = $request->input('desktop');
+				$desktop['account_id'] = $account_id;
+				AccountDesktop::create($desktop);
+			}
+			if ($account_type == PamAccount::ACCOUNT_TYPE_FRONT) {
+				$front               = $request->input('front');
+				$front['account_id'] = $account_id;
+				AccountFront::create($front);
+			}
+			if ($account_type == PamAccount::ACCOUNT_TYPE_DEVELOP) {
+				$develop               = $request->input('develop');
+				$develop['account_id'] = $account_id;
+				AccountDevelop::create($develop);
+			}
+			return AppWeb::resp(AppWeb::SUCCESS, '用户添加成功', 'location|' . route('dsk_pam_account.index', ['type' => $account_type]));
+		} else {
+			return AppWeb::resp(AppWeb::ERROR, '用户添加失败');
+		}
+	}
+
+	/**
+	 * Remove the specified resource from storage.
+	 * @param Request $request
+	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+	 */
+	public function postDestroy(Request $request) {
+		$id      = $request->input('id');
+		$account = PamAccount::find($id);
+
+		\DB::transaction(function() use ($account) {
+			// 删除 pam
+
+			$id           = $account->account_id;
+			$account_type = $account->account_type;
+			PamAccount::destroy($id);
+
+			// 删除 pam 附属资料
+			if ($account_type == PamAccount::ACCOUNT_TYPE_DESKTOP) {
+				AccountDesktop::destroy($id);
+			}
+			if ($account_type == PamAccount::ACCOUNT_TYPE_FRONT) {
+				AccountFront::destroy($id);
+			}
+			if ($account_type == PamAccount::ACCOUNT_TYPE_DEVELOP) {
+				AccountDevelop::destroy($id);
+			}
+
+			// 删除 role_account 关联
+			PamRoleAccount::where('account_id', $id)->delete();
+		});
+
+		return AppWeb::resp(AppWeb::SUCCESS, '删除用户成功', 'location|' . route('dsk_pam_account.index', ['type' => $account['account_type']]));
+	}
+
+	/**
+	 * Show the form for editing the specified resource.
+	 * @param  int $id
+	 * @return \Response
+	 */
+	public function getEdit($id) {
+		$item = PamAccount::info($id, true);
+		return view('desktop.pam_account.item', [
+			'account_type' => $item['account_type'],
+			'item'         => $item,
+			'roles'        => PamRole::getLinear($item['account_type']),
+		]);
+	}
+
+	public function getAuth($id) {
+		$user = PamAccount::info($id);
+		if ($user['account_type'] != PamAccount::ACCOUNT_TYPE_FRONT) {
+			return AppWeb::resp(AppWeb::ERROR, '用户类型不正确!');
+		}
+
+		// set cookie
+		\Session::set('dsk_auth', SysCrypt::encode('desktop_id|' . \Auth::id() . ';front_id|' . $id));
+		\Auth::logout();
+		\Auth::loginUsingId($id);
+		// show and redirect
+		return AppWeb::resp(AppWeb::SUCCESS, '用户授权成功!', [
+			'location' => route('home.cp'),
+			'time'     => '3000',
+		]);
+	}
+
+	/**
+	 * 更新
+	 * @param Request $request
+	 * @param  int    $id
+	 * @return \Response
+	 */
+	public function postEdit(Request $request, $id) {
+		$pam = PamAccount::find($id);
+
+		// 修改密码
+		$password = $request->input('password');
+		if ($password) {
+			PamAccount::changePassword($id, $password);
+		}
+
+		// 更新附属信息
+		$account_type = $pam['account_type'];
+		if ($account_type == PamAccount::ACCOUNT_TYPE_DESKTOP) {
+			AccountDesktop::where('account_id', $id)->update($request->input('desktop'));
+		}
+		if ($account_type == PamAccount::ACCOUNT_TYPE_FRONT) {
+			$front = $request->input('front');
+			if (isset($front['payword']) && $front['payword']) {
+				AccountFront::changePayword($id, $front['payword']);
+			}
+			unset($front['payword'], $front['payword_confirmation']);
+			AccountFront::where('account_id', $id)->update($front);
+		}
+		if ($account_type == PamAccount::ACCOUNT_TYPE_DEVELOP) {
+			AccountDevelop::where('account_id', $id)->update($request->input('develop'));
+		}
+
+		// 更新角色id
+		$role_id = $request->input('role_id');
+		PamRoleAccount::where('account_id', $id)->update([
+			'role_id' => $role_id,
+		]);
+
+		$account_type = $request->input('account_type');
+
+		return AppWeb::resp(AppWeb::SUCCESS, '用户资料编辑成功', 'location|' . route('dsk_pam_account.index', ['type' => $account_type]));
+	}
+
+	public function postDisable(Request $request) {
+		$accountId = $request->input('account_id');
+		if (!$accountId) {
+			return AppWeb::resp(AppWeb::ERROR, '您尚未选择用户!');
+		}
+		PamAccount::whereIn('account_id', $accountId)->update(['is_enable' => 'N']);
+		return AppWeb::resp(AppWeb::SUCCESS, '状态修改成功', 'reload|1');
+	}
+
+	public function postEnable(Request $request) {
+		$accountId = $request->input('account_id');
+		if (!$accountId) {
+			return AppWeb::resp(AppWeb::ERROR, '您尚未选择用户!');
+		}
+		PamAccount::whereIn('account_id', $accountId)->update(['is_enable' => 'Y']);
+		return AppWeb::resp(AppWeb::SUCCESS, '状态修改成功', 'reload|1');
+	}
+
+
+	/**
+	 * 改变账户状态
+	 * @param Request $request
+	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+	 */
+	public function postStatus(Request $request) {
+		$field  = $request->input('field');
+		$status = $request->input('status');
+		$id     = $request->input('id');
+		$user   = PamAccount::find($id);
+		if ($user->hasRole('root')) {
+			return AppWeb::resp(AppWeb::ERROR, '账号是超级管理员', 'reload|1');
+		}
+		PamAccount::where('account_id', $id)->update([
+			$field => $status,
+		]);
+		return AppWeb::resp(AppWeb::SUCCESS, '状态修改成功', 'reload|1');
+	}
+
+	/**
+	 * @return \Illuminate\View\View
+	 */
+	public function getLog() {
+		$items = PamLog::orderBy('created_at', 'desc')->paginate($this->pagesize);
+		return view('desktop.pam_account.log', [
+			'items' => $items,
+		]);
+	}
+
+	/**
+	 * @param $id
+	 * @return \Illuminate\View\View
+	 */
+	public function getAcl($id) {
+		$acl  = BaseConfig::getCache('acl');
+		$auth = array_get($acl, 'account_id_' . $id);
+		if ($auth) {
+			$auth = json_decode($auth);
+		} else {
+			$auth = [];
+		}
+		return view('desktop.pam_account.acl', [
+			'id'   => $id,
+			'auth' => ['auth' => $auth],
+		]);
+	}
+
+	public function postAcl() {
+		$id = \Input::get('account_id');
+		if (!$id) {
+			return AppWeb::resp(AppWeb::ERROR, '用户信息不存在');
+		}
+		$auth = json_encode(\Input::get('auth'));
+		BaseConfig::configUpdate(['account_id_' . $id => $auth], 'acl');
+		BaseConfig::reCache('acl');
+		return AppWeb::resp(AppWeb::SUCCESS, '保存成功', 'reload|1');
+	}
+
+
+}

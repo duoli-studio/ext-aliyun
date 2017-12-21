@@ -1,0 +1,102 @@
+.login-layout {
+	background-color : #3399ff;
+	height           : 100%;
+	left             : 0;
+	position         : absolute;
+	top              : 0;
+	width            : 100%;
+	> .background {
+		height   : 100%;
+		left     : 0;
+		position : absolute;
+		top      : 0;
+		width    : 100%;
+		&.one {
+			background      : url("../images/background-1.svg") center 100% no-repeat;
+			background-size : 100% auto;
+			z-index         : 1;
+		}
+		&.two {
+			background      : url("../images/background-2.svg") center 100% no-repeat;
+			background-size : 100% auto;
+			z-index         : 2;
+		}
+		&.three {
+			background      : url("../images/background-3.svg") center 100% no-repeat;
+			background-size : 100% auto;
+			z-index         : 3;
+		}
+		&.four {
+			background      : url("../images/background-4.svg") center 100% no-repeat;
+			background-size : 100% auto;
+			z-index         : 4;
+		}
+		&.five {
+			background      : url("../images/background-5.svg") center 100% no-repeat;
+			background-size : 100% auto;
+			z-index         : 5;
+		}
+		&.six {
+			background      : url("../images/background-6.svg") center 100% no-repeat;
+			background-size : 100% auto;
+			z-index         : 6;
+		}
+	}
+	> .ivu-form {
+		background    : #fff;
+		border-radius : 10px;
+		box-shadow    : 0 10px 60px 0 rgba(2, 19, 37, 0.15);
+		height        : 450px;
+		left          : 50%;
+		margin-left   : -313px;
+		margin-top    : -225px;
+		padding       : 60px;
+		position      : absolute;
+		top           : 50%;
+		width         : 626px;
+		z-index       : 10;
+		> .ivu-form-item {
+			padding-top : 24px;
+			&.ivu-form-item-required .ivu-form-item-label:before {
+				display : none;
+			}
+			> .ivu-form-item-content {
+				text-align : right;
+				> .ivu-btn {
+					background-color : #3399ff;
+					border-color     : #3399ff;
+					border-radius    : 25px;
+					box-shadow       : 0 10px 30px 0 rgba(6, 91, 233, 0.5);
+					font-size        : 18px;
+					height           : 50px;
+					margin-top       : 10px;
+					width            : 160px;
+				}
+				.ivu-input {
+					border-left   : none;
+					border-radius : 0;
+					border-right  : none;
+					border-top    : none;
+					font-size     : 14px;
+					height        : 34px;
+					line-height   : 34px;
+					padding-left  : 0;
+					&:focus {
+						border-color : #3399ff;
+						box-shadow   : none;
+						outline      : none;
+					}
+				}
+			}
+		}
+		> .title {
+			color         : #657180;
+			font-size     : 24px;
+			font-weight   : 500;
+			height        : 24px;
+			line-height   : 24px;
+			margin-bottom : 60px;
+			text-align    : center;
+		}
+	}
+}

@@ -1,0 +1,280 @@
+.member-warp {
+    .clearfix {
+        *zoom: 1;
+        &:after {
+            content: '';
+            display: block;
+            clear: both;
+            height: 0;
+        }
+    }
+    .ivu-tabs-nav-container {
+        line-height: 2;
+        .ivu-tabs-nav-scroll {
+            background: #fff;
+            padding: 0 20px;
+        }
+    }
+    .return-link-title {
+        background-color: #fff;
+        height: 44px;
+        line-height: 44px;
+        margin-bottom: 10px;
+        font-size: 14px;
+        .ivu-btn {
+            padding-right: 6px;
+            padding-left: 18px;
+            span {
+                font-size: 14px;
+            }
+        }
+    }
+    .tab-pane-title {
+        color: #2d8cf0;
+        padding: 0 20px;
+        span {
+            margin-right: 16px;
+            padding: 8px 16px;
+            position: relative;
+            &:after {
+                content: '';
+                display: block;
+                position: absolute;
+                height: 2px;
+                width: 100%;
+                box-sizing: border-box;
+                background-color: #2d8cf0;
+                left: 0;
+                bottom: -7px;
+                z-index: 1;
+                transition: transform .3s ease-in-out;
+                transform-origin: 0 0;
+            }
+        }
+    }
+    .ivu-card {
+        .ivu-card-body {
+            padding: 20px;
+            .top-tip-content {
+                background-color: #f5f7f9;
+                color: #657180;
+                font-size: 12px;
+                margin-bottom: 20px;
+                padding: 19px 20px;
+            }
+            .top-btn-action {
+                height: 32px;
+                margin-bottom: 10px;
+                .btn-action {
+                    width: 80px;
+                    margin-right: 5px;
+                }
+                .goods-body-header-right {
+                    float: right;
+                    .ivu-input-group-append .ivu-btn,
+                    .ivu-input-group-prepend .ivu-btn {
+                        background-color: #39f;
+                        color: #fff;
+                        border-top-left-radius: 0;
+                        border-bottom-left-radius: 0;
+                    }
+                    .ivu-input-group {
+                        top: 0;
+                        .ivu-input {
+                            width: 204px;
+                        }
+                    }
+                }
+            }
+            .ivu-table-wrapper {
+                border: 0 none;
+                border-top: 1px solid #e3e8ee;
+                .ivu-table:after {
+                    width: 0;
+                }
+                thead {
+                    th {
+                        span {
+                            font-size: 14px;
+                            color: #657180;
+                        }
+                    }
+                }
+                .ivu-btn-small {
+                    width: 64px;
+                    height: 24px;
+                    line-height: 24px;
+                    padding: 0;
+                    border-radius: 4px;
+                }
+                .ivu-dropdown {
+                    .ivu-btn-small {
+                        width: 64px;
+                        height: 24px;
+                        line-height: 24px;
+                        padding: 0;
+                        border-radius: 4px;
+                        i {
+                            padding-left: 6px;
+                        }
+                    }
+                }
+            }
+            .ivu-page-wrap {
+                .ivu-page-item-active {
+                    background-color: #39f;
+                    border-color: #39f;
+                }
+                .ivu-page-options-elevator {
+                    input {
+                        text-align: center;
+                    }
+                }
+            }
+            .tip {
+                color: rgba(101, 113, 128, 0.5);
+                line-height: 18px;
+            }
+        }
+    }
+}
+.setting-modal-delete {
+    .ivu-modal {
+        top: 200px;
+        width: 772px !important;
+        background-color: #fff;
+        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
+        .ivu-modal-content {
+            width: 100%;
+            height: 100%;
+            padding: 16px  20px;
+            .ivu-modal-close {
+                width: 16px;
+                height: 16px;
+                line-height: 16px;
+                text-align: center;
+                background-color: #e3e8ee;
+                border-radius: 50%;
+                margin-top: 14px;
+                .ivu-icon-ios-close-empty {
+                    font-size: 20px;
+                    top: -1.5px;
+                    color: #657180;
+                }
+            }
+        }
+        .ivu-modal-header {
+            padding: 11px 0;
+        }
+        .ivu-modal-footer {
+            border-top: 0;
+            display: none;
+        }
+        .ivu-form {
+            .btn-group {
+                text-align: center;
+                margin: 8px 0;
+                textarea {
+                    resize: none;
+                }
+                textarea.ivu-input {
+                    width: 80%;
+                }
+                .cancel-btn {
+                    min-width: 80px;
+                }
+                .ivu-btn-ghost {
+                    margin-right: 10px;
+                }
+            }
+            .first-row-title {
+                margin-bottom: 60px;
+                margin-top: 60px;
+                text-align: center;
+            }
+            .account-row-rime {
+                padding-left: 74px;
+                margin: 16px 0 40px;
+            }
+            .delete-file-tip {
+                .ivu-form-item-error-tip {
+                    left: 50%;
+                    margin-left: -42px;
+                }
+            }
+        }
+    }
+}
+.setting-modal-action {
+    .ivu-modal-body {
+        margin-top: 16px;
+        .ivu-form {
+            .ivu-row {
+                .ivu-form-item {
+                    margin-bottom: 30px;
+                    .ivu-btn {
+                        margin-bottom: 60px;
+                    }
+                }
+            }
+        }
+    }
+}
+.vue-scrollbar-transition, .vue-scrollbar__scrollbar-vertical, .vue-scrollbar__scrollbar-horizontal {
+    transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+}
+.vue-scrollbar-transition--scrollbar {
+    transition: opacity 0.5s linear;
+    -moz-transition: opacity 0.5s linear;
+    -webkit-transition: opacity 0.5s linear;
+    -o-transition: opacity 0.5s linear;
+}
+
+.vue-scrollbar__wrapper {
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    background: white;
+}
+.vue-scrollbar__wrapper:hover .vue-scrollbar__scrollbar-vertical, .vue-scrollbar__wrapper:hover .vue-scrollbar__scrollbar-horizontal {
+    opacity: 1;
+}
+.vue-scrollbar__scrollbar-vertical, .vue-scrollbar__scrollbar-horizontal {
+    opacity: 0.5;
+    position: absolute;
+    background: transparent;
+}
+.vue-scrollbar__scrollbar-vertical .scrollbar, .vue-scrollbar__scrollbar-horizontal .scrollbar {
+    position: relative;
+    background-color: rgb(153, 162, 175);
+    cursor: default;
+}
+.vue-scrollbar__scrollbar-vertical {
+    width: 8px;
+    height: 100%;
+    top: 0;
+    right: -2px;
+}
+.vue-scrollbar__scrollbar-vertical .scrollbar {
+    width: 8px;
+}
+.vue-scrollbar__scrollbar-horizontal {
+    height: 10px;
+    width: 100%;
+    bottom: 0;
+    right: 0;
+}
+.vue-scrollbar__scrollbar-horizontal .scrollbar {
+    height: 10px;
+}
+.my-scrollbar {
+    max-height: 476px;
+    min-width: 100%;
+    width: 100%;
+}
+.scroll-me {
+    min-width: 100%;
+}

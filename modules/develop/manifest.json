@@ -1,0 +1,9 @@
+{
+	"name": "Develop",
+	"slug": "develop",
+	"version": "1.0",
+	"description": "This is the description for the poppy Develop module.",
+	"autoload": [
+		"Support/functions.php"
+	]
+}

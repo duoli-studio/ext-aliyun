@@ -1,0 +1,12 @@
+name: 后台管理
+slug: system
+description: 'Poppy后台管理模块'
+authors:
+    -
+        name: Notadd
+        email: notadd@ibenchu.com
+version: 2.0.0
+csrf:
+    - 'admin*'
+    - 'api*'
+    - 'editor*'

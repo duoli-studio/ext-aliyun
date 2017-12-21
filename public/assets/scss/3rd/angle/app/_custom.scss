@@ -1,0 +1,54 @@
+.mark-color {
+	width   : 10px;
+	height  : 10px;
+	border  : 1px solid #cccccc;
+	display : inline-block;
+	&.mark-color-red {
+		background : #cc0000;
+	}
+	&.mark-color-green {
+		background : darkgreen;
+	}
+	&.mark-color-brown {
+		background : saddlebrown;
+	}
+	&.mark-color-blue {
+		background : blue;
+	}
+	&.mark-color-cancel {
+		background : #ffffff;
+		border     : 1px solid #000000;
+	}
+}
+.show-color-red {
+	color : red;
+	a {
+		color : red;
+	}
+}
+.show-color-green {
+	color : darkgreen;
+	a {
+		color : darkgreen;
+	}
+}
+.show-color-brown {
+	color : saddlebrown;
+	a {
+		color : saddlebrown;
+	}
+}
+.show-color-blue {
+	color : blue;
+	a {
+		color : blue;
+	}
+}
+.show-color-cancel {
+	// no style
+}
+.btn {
+	label {
+		margin-bottom : 0;
+	}
+}
