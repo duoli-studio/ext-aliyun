@@ -1,11 +1,9 @@
 <?php namespace Poppy\Extension\ApiDoc\Http;
 
-use Duoli\ExtBase\Helper\EnvHelper;
-use Duoli\ExtBase\Helper\FileHelper;
-use Duoli\ExtBase\Helper\StrHelper;
-use Duoli\ExtBase\Support\Resp;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Poppy\Framework\Classes\Resp;
+use Poppy\Framework\Helper\FileHelper;
 
 class ApiDocController
 {
@@ -48,7 +46,7 @@ class ApiDocController
 	{
 		$catalog = config('duoli-api_doc.catalog');
 		if (!$catalog) {
-			return Resp::web("尚未配置 apidoc 生成目录");
+			return Resp::web(Resp::ERROR, "尚未配置 apidoc 生成目录");
 		}
 		if (!$type) {
 			$keys = array_keys($catalog);
@@ -83,7 +81,7 @@ class ApiDocController
 			$user  = [];
 			$front = [];
 			if (!isset($data['current'])) {
-				return Resp::web("没有找到对应 URL 地址");
+				return Resp::web(Resp::ERROR, "没有找到对应 URL 地址");
 			}
 			return view('l5-api_doc::auto', [
 				'data'    => $data,
@@ -93,7 +91,7 @@ class ApiDocController
 				'api_url' => (config('api.domain') ? 'http://' . config('api.domain') : config('app.url')) . '/' . config('api.prefix'),
 			]);
 		} catch (\Exception $e) {
-			return Resp::web($e->getMessage());
+			return Resp::web(Resp::ERROR, $e->getMessage());
 		}
 	}
 

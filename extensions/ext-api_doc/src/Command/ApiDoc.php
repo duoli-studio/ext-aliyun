@@ -9,7 +9,7 @@ use Symfony\Component\Process\Process;
 class ApiDoc extends Command
 {
 
-	protected $signature = 'duoli:apidoc';
+	protected $signature = 'ext:apidoc';
 
 	protected $description = 'Generate Api Doc Document';
 
@@ -24,7 +24,7 @@ class ApiDoc extends Command
 			$this->error("apidoc 命令不存在");
 		}
 		else {
-			$catalog = config('duoli-api_doc.catalog');
+			$catalog = config('ext-api_doc.catalog');
 			if (!$catalog) {
 				$this->error("尚未配置 apidoc 生成目录");
 				return;
