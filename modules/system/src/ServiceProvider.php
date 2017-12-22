@@ -6,22 +6,21 @@
 
 use Illuminate\Console\Scheduling\Schedule;
 use Poppy\Framework\Classes\Traits\PoppyTrait;
+use Poppy\Framework\Exceptions\ModuleNotFoundException;
+use Poppy\Framework\Support\ModuleServiceProvider as ModuleServiceProviderBase;
 use System\Addon\AddonServiceProvider;
-use System\Extension\Extension;
 use System\Backend\BackendServiceProvider;
 use System\Classes\AuthProvider;
 use System\Extension\ExtensionServiceProvider;
-use System\Rbac\Rbac;
 use System\Models\PamAccount;
-use Poppy\Framework\Exceptions\ModuleNotFoundException;
-use Poppy\Framework\Support\ModuleServiceProvider as ModuleServiceProviderBase;
+use System\Module\ModuleServiceProvider;
+use System\Rbac\Rbac;
 use System\Request\MiddlewareServiceProvider;
 use System\Request\RouteServiceProvider;
 use System\Setting\ConfServiceProvider;
 
 class ServiceProvider extends ModuleServiceProviderBase
 {
-	use PoppyTrait;
 	/**
 	 * @var string Module name
 	 */
@@ -55,6 +54,7 @@ class ServiceProvider extends ModuleServiceProviderBase
 		$this->app->register(BackendServiceProvider::class);
 		$this->app->register(ExtensionServiceProvider::class);
 		$this->app->register(AddonServiceProvider::class);
+		$this->app->register(ModuleServiceProvider::class);
 
 		$this->registerAuth();
 		$this->registerRbac();

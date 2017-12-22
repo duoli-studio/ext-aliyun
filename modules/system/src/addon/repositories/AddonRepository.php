@@ -2,17 +2,18 @@
 
 namespace System\Addon\Repositories;
 
-use Illuminate\Cache\TaggableStore;
 use Illuminate\Support\Collection;
-use System\Addon\Addon;
-use Poppy\Framework\Classes\Abstracts\CollectRepository;
+use Poppy\Framework\Support\Abstracts\Repository;
 use Symfony\Component\Yaml\Yaml;
+use System\Addon\Addon;
+use System\Classes\Traits\SystemTrait;
 
 /**
  * Class ExtensionRepository.
  */
-class AddonRepository extends CollectRepository
+class AddonRepository extends Repository
 {
+	use SystemTrait;
 	/**
 	 * @var bool
 	 */

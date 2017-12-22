@@ -39,7 +39,6 @@ class Application extends ApplicationBase
 		$this->register(ParseServiceProvider::class);
 		$this->register(TranslationServiceProvider::class);
 		$this->register(GraphQLServiceProvider::class);
-		$this->register(ModuleServiceProvider::class);
 	}
 
 

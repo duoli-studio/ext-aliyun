@@ -1,4 +1,4 @@
-<?php namespace Poppy\Framework\Module;
+<?php namespace System\Module;
 
 use Illuminate\Support\ServiceProvider;
 

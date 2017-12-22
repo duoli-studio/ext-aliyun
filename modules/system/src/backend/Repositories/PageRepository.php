@@ -1,13 +1,16 @@
 <?php namespace System\Backend\Repositories;
 
 use Illuminate\Support\Collection;
-use Poppy\Framework\Classes\Abstracts\CollectRepository;
+use Poppy\Framework\Support\Abstracts\Repository;
+use System\Classes\Traits\SystemTrait;
 
 /**
  * Class PageRepository.
  */
-class PageRepository extends CollectRepository
+class PageRepository extends Repository
 {
+	use SystemTrait;
+
 	/**
 	 * Initialize.
 	 * @param Collection $collection

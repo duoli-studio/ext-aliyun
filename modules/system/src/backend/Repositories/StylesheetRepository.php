@@ -1,13 +1,15 @@
 <?php namespace System\Backend\Repositories;
 
 use Illuminate\Support\Collection;
-use Poppy\Framework\Classes\Abstracts\CollectRepository;
+use Poppy\Framework\Support\Abstracts\Repository;
+use System\Classes\Traits\SystemTrait;
 
 /**
  * Class StylesheetRepository.
  */
-class StylesheetRepository extends CollectRepository
+class StylesheetRepository extends Repository
 {
+	use SystemTrait;
 	/**
 	 * Initialize.
 	 * @param Collection $collection

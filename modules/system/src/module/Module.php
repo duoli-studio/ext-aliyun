@@ -1,4 +1,4 @@
-<?php namespace Poppy\Framework\Module;
+<?php namespace System\Module;
 
 use ArrayAccess;
 use Illuminate\Container\Container;

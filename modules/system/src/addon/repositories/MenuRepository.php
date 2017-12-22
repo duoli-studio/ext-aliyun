@@ -1,21 +1,18 @@
-<?php
-
-namespace System\Addon\Repositories;
+<?php namespace System\Addon\Repositories;
 
 use Illuminate\Support\Collection;
-use Poppy\Framework\Classes\Abstracts\CollectRepository;
+use Poppy\Framework\Support\Abstracts\Repository;
 
 /**
  * Class MenuRepository.
  */
-class MenuRepository extends CollectRepository
+class MenuRepository extends Repository
 {
-    /**
-     * Initialize.
-     *
-     * @param \Illuminate\Support\Collection $data
-     */
-    public function initialize(Collection $data)
-    {
-    }
+	/**
+	 * Initialize.
+	 * @param \Illuminate\Support\Collection $data
+	 */
+	public function initialize(Collection $data)
+	{
+	}
 }

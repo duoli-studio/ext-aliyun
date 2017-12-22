@@ -1,14 +1,16 @@
-<?php namespace Poppy\Framework\Module\Repositories;
+<?php namespace System\Module\Repositories;
 
 use Illuminate\Cache\TaggableStore;
 use Illuminate\Support\Collection;
-use Poppy\Framework\Classes\Abstracts\CollectRepository;
+use Poppy\Framework\Classes\Traits\PoppyTrait;
+use Poppy\Framework\Support\Abstracts\Repository;
 
 /**
  * Class AssetsRepository.
  */
-class AssetsRepository extends CollectRepository
+class AssetsRepository extends Repository
 {
+	use PoppyTrait;
 	/**
 	 * Initialize.
 	 * @param \Illuminate\Support\Collection $data

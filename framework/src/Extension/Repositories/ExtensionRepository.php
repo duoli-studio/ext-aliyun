@@ -1,16 +1,16 @@
-<?php
-
-namespace Poppy\Framework\Extension\Repositories;
+<?php namespace Poppy\Framework\Extension\Repositories;
 
 use Illuminate\Support\Collection;
-use Poppy\Framework\Classes\Abstracts\CollectRepository;
 use Poppy\Framework\Extension\Extension;
+use Poppy\Framework\Support\Abstracts\Repository;
+use System\Classes\Traits\SystemTrait;
 
 /**
  * Class ExpandRepository.
  */
-class ExtensionRepository extends CollectRepository
+class ExtensionRepository extends Repository
 {
+	use SystemTrait;
 	/**
 	 * @var bool
 	 */

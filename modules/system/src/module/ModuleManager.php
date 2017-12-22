@@ -1,11 +1,11 @@
-<?php namespace Poppy\Framework\Module;
+<?php namespace System\Module;
 
 use Illuminate\Support\Collection;
 use Poppy\Framework\Classes\Traits\PoppyTrait;
-use Poppy\Framework\Module\Repositories\AssetsRepository;
-use Poppy\Framework\Module\Repositories\MenuRepository;
-use Poppy\Framework\Module\Repositories\ModuleRepository;
-use Poppy\Framework\Module\Repositories\PageRepository;
+use System\Module\Repositories\AssetsRepository;
+use System\Module\Repositories\MenuRepository;
+use System\Module\Repositories\ModuleRepository;
+use System\Module\Repositories\PageRepository;
 
 /**
  * Class ModuleManager.

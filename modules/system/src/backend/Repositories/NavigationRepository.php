@@ -2,13 +2,16 @@
 
 use Illuminate\Cache\TaggableStore;
 use Illuminate\Support\Collection;
-use Poppy\Framework\Classes\Abstracts\CollectRepository;
+use Poppy\Framework\Support\Abstracts\Repository;
+use System\Classes\Traits\SystemTrait;
 
 /**
  * Class NavigationRepository.
  */
-class NavigationRepository extends CollectRepository
+class NavigationRepository extends Repository
 {
+	use SystemTrait;
+
 	/**
 	 * Initialize.
 	 * @param Collection $data

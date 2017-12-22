@@ -1,16 +1,18 @@
-<?php namespace Poppy\Framework\Module\Repositories;
+<?php namespace System\Module\Repositories;
 
 use Illuminate\Cache\TaggableStore;
 use Illuminate\Support\Collection;
-use Poppy\Framework\Classes\Abstracts\CollectRepository;
-use Poppy\Framework\Module\Module;
+use Poppy\Framework\Support\Abstracts\Repository;
+use System\Classes\Traits\SystemTrait;
+use System\Module\Module;
 use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class ModuleRepository.
  */
-class ModuleRepository extends CollectRepository
+class ModuleRepository extends Repository
 {
+	use SystemTrait;
 	/**
 	 * @var bool
 	 */

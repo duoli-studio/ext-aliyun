@@ -1,12 +1,10 @@
 <?php namespace Poppy\Framework;
 
 use Illuminate\Support\ServiceProvider;
-use Poppy\Framework\Classes\Traits\PoppyTrait;
-use Poppy\Framework\Extension\Extension;
+
 
 class FrameworkServiceProvider extends ServiceProvider
 {
-	use PoppyTrait;
 
 	/**
 	 * Indicates if loading of the provider is deferred.
@@ -37,12 +35,14 @@ class FrameworkServiceProvider extends ServiceProvider
 	/**
 	 * Register the service provider.
 	 * @return void
+	 * @throws Exceptions\ModuleNotFoundException
 	 */
 	public function register()
 	{
 		$this->mergeConfigFrom(
 			__DIR__ . '/../config/poppy.php', 'poppy'
 		);
+
 	}
 
 	/**
@@ -67,7 +67,7 @@ class FrameworkServiceProvider extends ServiceProvider
 		foreach ($modules as $module) {
 			$serviceProvider = poppy_class($module['slug'], 'ServiceProvider');
 			if (class_exists($serviceProvider)) {
-				$files = array_merge($files, $serviceProvider);
+				$files[] = $serviceProvider;
 			}
 		}
 

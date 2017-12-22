@@ -19,13 +19,9 @@ use League\Flysystem\Filesystem as Flysystem;
 use League\Flysystem\MountManager;
 use Poppy\Framework\Config\Repository;
 use Poppy\Framework\Foundation\Application;
-use Poppy\Framework\Module\ModuleManager;
-use Poppy\Framework\Extension\ExtensionManager;
-use Poppy\Framework\Addon\AddonManager;
 use Poppy\Framework\Poppy\Poppy;
 use Poppy\Framework\Translation\Translator;
 use Psr\Log\LoggerInterface;
-use System\Setting\Repository\SettingRepository;
 
 trait PoppyTrait
 {
@@ -95,14 +91,7 @@ trait PoppyTrait
 		return $this->getContainer()->make('mailer');
 	}
 
-	/**
-	 * Get mailer instance.
-	 * @return ModuleManager
-	 */
-	protected function getModule(): ModuleManager
-	{
-		return $this->getContainer()->make('module');
-	}
+
 
 
 	/**
@@ -216,23 +205,6 @@ trait PoppyTrait
 	{
 		return $this->getContainer()->make('view');
 	}
-
-	/**
-	 * @return ExtensionManager
-	 */
-	protected function getExtension(): ExtensionManager
-	{
-		return $this->getContainer()->make('extension');
-	}
-
-	/**
-	 * @return AddonManager
-	 */
-	protected function getAddon(): AddonManager
-	{
-		return $this->getContainer()->make('addon');
-	}
-
 
 	/**
 	 * Publish the file to the given path.

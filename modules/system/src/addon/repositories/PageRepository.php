@@ -1,21 +1,21 @@
-<?php
-
-namespace System\Addon\Repositories;
+<?php namespace System\Addon\Repositories;
 
 use Illuminate\Support\Collection;
-use Poppy\Framework\Classes\Abstracts\CollectRepository;
+use Poppy\Framework\Support\Abstracts\Repository;
+use System\Classes\Traits\SystemTrait;
 
 /**
  * Class PageRepository.
  */
-class PageRepository extends CollectRepository
+class PageRepository extends Repository
 {
-    /**
-     * Initialize.
-     *
-     * @param \Illuminate\Support\Collection $data
-     */
-    public function initialize(Collection $data)
-    {
-    }
+	use SystemTrait;
+
+	/**
+	 * Initialize.
+	 * @param \Illuminate\Support\Collection $data
+	 */
+	public function initialize(Collection $data)
+	{
+	}
 }
