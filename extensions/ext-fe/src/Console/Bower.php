@@ -5,7 +5,6 @@ use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Poppy\Framework\Classes\Traits\PoppyTrait;
 use Poppy\Framework\Helper\FileHelper;
-use Poppy\Framework\Helper\StrHelper;
 use Sabberworm\CSS\OutputFormat;
 use Sabberworm\CSS\Parser;
 use Sabberworm\CSS\Value\CSSString;
@@ -390,7 +389,7 @@ if (typeof appends != 'undefined' && typeof appends == 'object') {
 
 // require js config
 requirejs.config({
-	baseUrl: "/{$this->jsPath}/",
+	baseUrl: "/",
 	paths  : alias,
 	shim   : shim
 });
