@@ -35,12 +35,15 @@ class Bower extends Command
 	 */
 	private $bowerComponentsDir;
 
-	private $libPath    = '';
-	private $scssPath   = '';
-	private $configFile = '';
-	private $force      = false;
-	private $mapData    = [];
-	private $dbData     = [];
+	private $libPath;
+	private $jsPath;
+	private $scssPath;
+	private $configFile;
+	private $requireFile;
+	private $globalFile;
+	private $force   = false;
+	private $mapData = [];
+	private $dbData  = [];
 
 	/** @var string Js main 文件位置 保留原来位置(默认保留) */
 	private $preserveJsPath;
@@ -65,9 +68,12 @@ class Bower extends Command
 	 */
 	public function handle()
 	{
-		$this->libPath    = config('ext-fe.folder.lib_dir', 'assets/js/libs');
-		$this->scssPath   = config('ext-fe.folder.scss_dir', 'assets/sass/libs');
-		$this->configFile = config('ext-fe.folder.config_file', 'assets/js/config.js');
+		$this->jsPath      = config('ext-fe.folder.js_dir', 'assets/js');
+		$this->libPath     = $this->jsPath . '/libs';
+		$this->scssPath    = config('ext-fe.folder.scss_dir', 'assets/sass') . '/libs';
+		$this->configFile  = $this->jsPath . '/config.js';
+		$this->requireFile = $this->jsPath . '/require.js';
+		$this->globalFile  = $this->jsPath . '/global.js';
 
 		$this->force = (bool) $this->option('force');
 
@@ -105,6 +111,8 @@ class Bower extends Command
 			$this->error('Directory is empty.');
 		}
 
+		$this->disposeRequire();
+		$this->writeGlobal();
 
 	}
 
@@ -124,7 +132,7 @@ class Bower extends Command
 		$this->name      = array_get($this->bowerData, 'name');
 
 		// progress
-		$this->line('[' . $this->name . '] Handle ... ');
+		$this->line('[Extension-fe:' . $this->name . '] Handle ... ');
 
 		// do
 		$this->disposeJs();
@@ -132,6 +140,22 @@ class Bower extends Command
 		// progress
 		$mark = str_pad('>', $progress, '>');
 		$this->line(str_pad($mark, 100, '='));
+	}
+
+
+	/**
+	 * @throws FileNotFoundException
+	 */
+	private function disposeRequire()
+	{
+		// progress
+		$this->line('[Extension-fe:require] Handle ... ');
+		// progress
+
+		if (!$this->disk->exists($this->requireFile)) {
+			$this->disk->put($this->requireFile, $this->getFile()->get(__DIR__ . '/../../resources/mixes/require.js'));
+		}
+		$this->line(str_pad('', 100, '='));
 	}
 
 	/**
@@ -469,12 +493,23 @@ if (typeof appends != 'undefined' && typeof appends == 'object') {
 
 // require js config
 requirejs.config({
-	baseUrl: '/assets/js',
+	baseUrl: "/{$this->jsPath}/",
 	paths  : alias,
 	shim   : shim
 });
 CONFIG;
 		$this->disk->put($this->configFile, $config);
+	}
+
+	private function writeGlobal()
+	{
+		$global = json_encode(data_get($this->mapData, 'global'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+		$js     = <<<JS
+define(function(){
+	return $global;
+});
+JS;
+		$this->disk->put($this->globalFile, $js);
 	}
 
 	private function getMainJsPath()
