@@ -10,8 +10,9 @@ class MiddlewareServiceProvider extends ServiceProvider
 
 	public function boot(Router $router)
 	{
-		$router->aliasMiddleware('system.auth', 'System\Request\Middleware\Auth');
-		$router->middlewareGroup('system', [
+		// backend is normal auth
+		$router->aliasMiddleware('backend.auth', 'System\Request\Middleware\Auth');
+		$router->middlewareGroup('backend', [
 			'Illuminate\Cookie\Middleware\EncryptCookies',
 			'Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse',
 			'Illuminate\Session\Middleware\StartSession',
@@ -22,7 +23,7 @@ class MiddlewareServiceProvider extends ServiceProvider
 
 		if (env('APP_ENV', 'production') === 'local') {
 			$router->pushMiddlewareToGroup('web', ClockworkMiddleware::class);
-			$router->pushMiddlewareToGroup('system', ClockworkMiddleware::class);
+			$router->pushMiddlewareToGroup('backend', ClockworkMiddleware::class);
 		}
 	}
 }

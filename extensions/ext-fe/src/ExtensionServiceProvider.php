@@ -19,7 +19,8 @@ class ExtensionServiceProvider extends ModuleServiceProvider
 	public function boot()
 	{
 		$this->publishes([
-			__DIR__ . '/../config/fe.php' => config_path('ext-fe.php'),
+			__DIR__ . '/../config/fe.php'              => config_path('ext-fe.php'),
+			__DIR__ . '/../resources/css/be_login.css' => public_path('assets/css/poppy-ext-fe/be_login.css'),
 		], 'poppy-extension');
 	}
 

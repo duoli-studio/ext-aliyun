@@ -36,11 +36,11 @@ return [
 	*/
 
 	'guards' => [
-		'web' => [
+		'web'     => [
 			'driver'   => 'session',
 			'provider' => 'pam',
 		],
-		'be'  => [
+		'backend' => [
 			'driver'   => 'session',
 			'provider' => 'pam',
 		],
@@ -65,7 +65,7 @@ return [
 
 	'providers' => [
 		'pam' => [
-			'driver' => 'poppy.pam',
+			'driver' => 'system.pam',
 		],
 
 		// 'users' => [
