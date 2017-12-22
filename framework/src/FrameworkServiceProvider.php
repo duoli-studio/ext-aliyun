@@ -35,7 +35,6 @@ class FrameworkServiceProvider extends ServiceProvider
 	/**
 	 * Register the service provider.
 	 * @return void
-	 * @throws Exceptions\ModuleNotFoundException
 	 */
 	public function register()
 	{

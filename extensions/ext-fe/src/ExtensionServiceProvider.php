@@ -1,7 +1,7 @@
 <?php namespace Poppy\Extension\Fe;
 
+use Poppy\Extension\Fe\Console\Bower;
 use Poppy\Framework\Support\ModuleServiceProvider;
-use Sour\System\Command\Bower;
 
 class ExtensionServiceProvider extends ModuleServiceProvider
 {
@@ -19,7 +19,7 @@ class ExtensionServiceProvider extends ModuleServiceProvider
 	public function boot()
 	{
 		$this->publishes([
-			__DIR__ . '/config/fe.php' => config_path('fe.php'),
+			__DIR__ . '/../config/fe.php' => config_path('ext-fe.php'),
 		], 'poppy-extension');
 	}
 
@@ -30,7 +30,7 @@ class ExtensionServiceProvider extends ModuleServiceProvider
 	public function register()
 	{
 		// 配置文件合并
-		$this->mergeConfigFrom(__DIR__ . '/../config/fe.php', 'fe');
+		$this->mergeConfigFrom(__DIR__ . '/../config/fe.php', 'ext-fe');
 		$this->registerConsoleCommand('extension.fe.bower', Bower::class);
 
 	}
@@ -41,10 +41,7 @@ class ExtensionServiceProvider extends ModuleServiceProvider
 	 */
 	public function provides()
 	{
-		return [
-			'duoli.alipay.web-direct',
-			'duoli.alipay.mobile',
-		];
+		return [];
 	}
 
 }

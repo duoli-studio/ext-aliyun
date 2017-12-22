@@ -15,6 +15,15 @@ class ExtensionManager
 	 */
 	protected $repository;
 
+	public function register()
+	{
+		$this->repository()->each(function (Extension $extension) {
+			if (isset($extension['service']) && $extension['service']) {
+				$this->getContainer()->register($extension->service());
+			}
+		});
+	}
+
 	/**
 	 * @param $identification
 	 * @return bool

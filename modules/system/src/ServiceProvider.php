@@ -40,6 +40,10 @@ class ServiceProvider extends ModuleServiceProviderBase
 
 		// rbac
 		$this->bootRbacBladeDirectives();
+
+		// register extension
+		$this->app['extension']->register();
+
 	}
 
 	/**

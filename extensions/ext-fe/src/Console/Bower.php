@@ -1,28 +1,20 @@
-<?php namespace Sour\System\Command;
+<?php namespace Poppy\Extension\Fe\Console;
 
-/**
- * rbac
- * ---- 初始化
- * php artisan lemon:bower init
- * @author     Mark <zhaody901@126.com>
- * @copyright  Copyright (c) 2013-2016 Sour Lemon Team
- */
 
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Poppy\Framework\Classes\Traits\PoppyTrait;
+use Poppy\Framework\Helper\FileHelper;
+use Poppy\Framework\Helper\StrHelper;
 use Sabberworm\CSS\OutputFormat;
 use Sabberworm\CSS\Parser;
 use Sabberworm\CSS\Value\CSSString;
 use Sabberworm\CSS\Value\RuleValueList;
 use Sabberworm\CSS\Value\URL;
-use Sour\Lemon\Helper\FileHelper;
-use Sour\Lemon\Helper\StrHelper;
 
-/**
- * Class Rbac
- * @package Sour\Lemon\Console
- */
 class Bower extends Command
 {
+	use PoppyTrait;
 
 	/**
 	 * 前端部署.
@@ -43,9 +35,9 @@ class Bower extends Command
 	 */
 	private $bowerComponentsDir;
 
-	private $libPath    = 'assets/js/libs';
-	private $scssPath   = 'assets/sass/libs';
-	private $configFile = 'assets/js/config.js';
+	private $libPath    = '';
+	private $scssPath   = '';
+	private $configFile = '';
 	private $force      = false;
 	private $mapData    = [];
 	private $dbData     = [];
@@ -69,17 +61,31 @@ class Bower extends Command
 
 	/**
 	 * Execute the console command.
+	 * @throws FileNotFoundException
 	 */
 	public function handle()
 	{
+		$this->libPath    = config('ext-fe.folder.lib_dir', 'assets/js/libs');
+		$this->scssPath   = config('ext-fe.folder.scss_dir', 'assets/sass/libs');
+		$this->configFile = config('ext-fe.folder.config_file', 'assets/js/config.js');
 
 		$this->force = (bool) $this->option('force');
 
-		$this->bowerComponentsDir = FileHelper::path(base_path($this->bowerDir()), false);
+		$this->bowerComponentsDir = base_path($this->bowerDir());
+		$this->mapData            = config('ext-fe');
 
-		$this->disk = \Storage::disk('web');
+		$disk = config('ext-fe.disk');
+		try {
+			if (!$disk) {
+				$this->error('[Extension-fe]: No disk defined at `ext-fe` config file');
+				return;
+			}
+			$this->disk = \Storage::disk($disk);
+		} catch (\Exception $e) {
+			$this->error('[Extension-fe]: No disk `' . $disk . '` defined at `filesystems` config file');
+			return;
+		}
 
-		$this->mapData = json_decode($this->disk->get('assets/fe_map.json'), true);;
 
 		$directories = FileHelper::listDirectory($this->bowerComponentsDir);
 		if (count($directories)) {
@@ -420,6 +426,7 @@ class Bower extends Command
 	/**
 	 * 获取 bower 的路径
 	 * @return string
+	 * @throws FileNotFoundException
 	 */
 	private function bowerDir()
 	{
@@ -429,13 +436,13 @@ class Bower extends Command
 			// 默认的目录
 			return 'bower_components/';
 		}
-		$arrBowerRc = FileHelper::getJson($bowerRc);
-		$bowerDir   = base_path(array_get($arrBowerRc, 'directory'));
-		if (!FileHelper::isDir($bowerDir)) {
+		$arrBowerRc = json_decode($this->getFile()->get($bowerRc));
+		$bowerDir   = base_path(data_get($arrBowerRc, 'directory'));
+		if (!$this->getFile()->isDirectory($bowerDir)) {
 			$this->error('Path ' . $bowerDir . ' not exist.');
 		}
 		$this->info('Bower Path : ' . $bowerDir);
-		return array_get($arrBowerRc, 'directory');
+		return data_get($arrBowerRc, 'directory');
 	}
 
 	/**
