@@ -1,9 +1,7 @@
-<?php namespace Slt\Request\Web\Controllers;
+<?php namespace Slt\Request\Web;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Sour\Lemon\Support\Resp;
-use Sour\System\Action\SystemUpload;
+use Poppy\Framework\Application\Controller;
+use Poppy\Framework\Classes\Resp;
 
 /**
  * 工具
@@ -14,12 +12,16 @@ class ToolController extends Controller
 {
 
 
+	/**
+	 * @param string $type
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector|\Illuminate\View\View
+	 */
 	public function index($type = 'xml')
 	{
 		if (!in_array($type, ['xml', 'json', 'css', 'sql'])) {
-			return Resp::web('格式化类型不正确');
+			return Resp::web(Resp::ERROR, '格式化类型不正确');
 		}
-		return view('web.tool.index', [
+		return view('slt::tool.index', [
 			'type' => $type,
 		]);
 	}

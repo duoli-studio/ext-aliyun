@@ -31,8 +31,14 @@ return [
 	| key      : config key
 	*/
 	'bower'   => [
-
-		"bootstrap" => [
+		"ace-builds" => [
+			"js"  => [
+				'main' => 'src-min/ace.js',
+				'aim'  => 'ace/{VERSION}/ace.js',
+			],
+			'key' => 'ace',
+		],
+		"bootstrap"  => [
 			"js"   => [
 				'main'    => 'dist/js/bootstrap.js',
 				'aim'     => 'bt3/{VERSION}/bootstrap.js',
@@ -70,7 +76,7 @@ return [
 			'shim' => ['jquery'],
 		],
 
-		"layer"       => [
+		"layer" => [
 			"js"   => [
 				'main' => 'src/layer.js',
 				'aim'  => 'jquery/layer/{VERSION}/jquery.layer.js',

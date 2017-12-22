@@ -1,5 +1,6 @@
 <?php namespace Slt;
 
+use Poppy\Framework\Exceptions\ModuleNotFoundException;
 use Poppy\Framework\Support\ModuleServiceProvider as ModuleServiceProviderBase;
 use Slt\Models\PrdBook;
 use Slt\Models\PrdContent;
@@ -11,6 +12,7 @@ use Slt\Request\RouteServiceProvider;
 class ServiceProvider extends ModuleServiceProviderBase
 {
 
+	protected $name = 'slt';
 
 	protected $policies = [
 		PrdContent::class => PrdContentPolicy::class,
@@ -19,10 +21,13 @@ class ServiceProvider extends ModuleServiceProviderBase
 
 	/**
 	 * Bootstrap the application events.
+	 * @throws ModuleNotFoundException
 	 */
 	public function boot()
 	{
-		parent::boot('slt');
+		$modulePath = poppy_path($this->name);
+		$this->loadViewsFrom($modulePath . '/resources/views', $this->name);
+		$this->loadTranslationsFrom($modulePath . '/resources/lang', $this->name);
 		// policies
 		$this->bootPolicies();
 	}

@@ -1,4 +1,4 @@
-@extends('web.inc.tpl')
+@extends('slt::inc.tpl')
 @section('body-class', 'tool--editor')
 @section('tpl-main')
     <div class="container mb20 mt20">
@@ -6,16 +6,16 @@
             <div class="col-sm-3">
                 <ul class="list-group">
                     <li class="list-group-item {!! $type == 'xml' ? 'active' : '' !!}">
-                        <a href="{!! route('web:tool.index', ['xml']) !!}">Xml 格式化</a>
+                        <a href="{!! route('slt:tool', ['xml']) !!}">Xml 格式化</a>
                     </li>
                     <li class="list-group-item {!! $type == 'json' ? 'active' : '' !!}">
-                        <a href="{!! route('web:tool.index', ['json']) !!}">Json 格式化</a>
+                        <a href="{!! route('slt:tool', ['json']) !!}">Json 格式化</a>
                     </li>
                     <li class="list-group-item {!! $type == 'sql' ? 'active' : '' !!}">
-                        <a href="{!! route('web:tool.index', ['sql']) !!}">Sql 格式化</a>
+                        <a href="{!! route('slt:tool', ['sql']) !!}">Sql 格式化</a>
                     </li>
                     <li class="list-group-item {!! $type == 'css' ? 'active' : '' !!}">
-                        <a href="{!! route('web:tool.index', ['css']) !!}">Css 格式化</a>
+                        <a href="{!! route('slt:tool', ['css']) !!}">Css 格式化</a>
                     </li>
                 </ul>
             </div>
@@ -79,5 +79,5 @@
             </div>
         </div>
     </div>
-    @include('web.inc.footer')
+    @include('slt::inc.footer')
 @endsection

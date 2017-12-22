@@ -7,9 +7,6 @@
 	@section('head-meta') @show
 	@section('head-css') @show
 	@include('lemon.inc.requirejs')
-		<!--[if lt IE 9]>
-	<script>requirejs(['h5shiv'])</script>
-	<![endif]-->
 </head>
 @section('body-start')<body>@show
 

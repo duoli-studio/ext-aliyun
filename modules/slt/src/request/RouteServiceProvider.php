@@ -4,6 +4,7 @@
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Route;
 use Slt\Request\Web\HomeController;
+use Slt\Request\Web\ToolController;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -47,6 +48,7 @@ class RouteServiceProvider extends ServiceProvider
 			'prefix' => 'slt',
 		], function ($router) {
 			$router->get('/', HomeController::class . '@index');
+			$router->get('/tool', ToolController::class . '@index')->name('slt:tool');
 		});
 	}
 

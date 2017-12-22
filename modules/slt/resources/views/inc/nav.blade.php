@@ -17,6 +17,7 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                    {{--
                     <li class="{!! route_current( ['web:fe.js'], 'active') !!}">
                         <a href="{!! route('web:fe.js') !!}">前端</a>
                     </li>
@@ -26,11 +27,12 @@
                     <li class="{!! route_current( ['web:prd.my_book'], 'active') !!}">
                         <a href="{!! route('web:prd.my_book') !!}">文库</a>
                     </li>
-                    <li class="{!! route_current( ['web:tool.index'], 'active') !!}">
-                        <a href="{!! route('web:tool.index') !!}">工具</a>
+                    --}}
+                    <li class="{!! route_current( ['slt:tool'], 'active') !!}">
+                        <a href="{!! route('slt:tool') !!}">工具</a>
                     </li>
                 </ul>
-                @include('slt::inc.user_status')
+                {{--@include('slt::inc.user_status')--}}
             </div>
 
         </div>
