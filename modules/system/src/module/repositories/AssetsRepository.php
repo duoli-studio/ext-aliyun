@@ -11,6 +11,7 @@ use Poppy\Framework\Support\Abstracts\Repository;
 class AssetsRepository extends Repository
 {
 	use PoppyTrait;
+
 	/**
 	 * Initialize.
 	 * @param \Illuminate\Support\Collection $data

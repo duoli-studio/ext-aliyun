@@ -1,7 +1,9 @@
 <?php namespace System\Tests\Module;
 
 
-class ModuleManagerTest extends \TestCase
+use Poppy\Framework\Application\TestCase;
+
+class ModuleManagerTest extends TestCase
 {
 	public function testRepository()
 	{
@@ -20,6 +22,7 @@ class ModuleManagerTest extends \TestCase
 		// dd(get_included_files());
 		dd(app('module')->assets());
 	}
+
 	public function testPages()
 	{
 		// dd(get_included_files());

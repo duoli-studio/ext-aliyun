@@ -1,8 +1,6 @@
-<?php
+<?php namespace System\Extension\Commands;
 
-namespace System\Extension\Commands;
-
-use Poppy\Framework\Console\Abstracts\Command;
+use Illuminate\Console\Command;
 use System\Extension\Abstracts\Installer;
 use System\Extension\Extension;
 

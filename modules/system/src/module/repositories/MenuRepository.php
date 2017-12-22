@@ -34,7 +34,8 @@ class MenuRepository extends Repository
 		if ($cache instanceof TaggableStore) {
 			$cache->tags('poppy');
 		}
-		$this->items = $cache->rememberForever('module.menu.repository', function () use ($slugs) {
+		$this->items = $cache->rememberForever(
+			'module.menu.repository', function () use ($slugs) {
 			$collection = collect();
 			$slugs      = $slugs->map(function ($definition, $key) {
 				if ($key == 'system') {
@@ -47,7 +48,7 @@ class MenuRepository extends Repository
 											$children = isset($definition['children']) ? collect((array) $definition['children']) : collect();
 											switch ($definition['injection']) {
 												case 'addon':
-													$this->getPlugin()->navigations()->each(function ($definition) use ($children) {
+													$this->getAddon()->navigations()->each(function ($definition) use ($children) {
 														$children->push([
 															'path' => $definition['path'] ?? '/',
 															'text' => $definition['text'] ?? '未定义',

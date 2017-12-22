@@ -18,13 +18,12 @@ class NavigationRepository extends Repository
 	 */
 	public function initialize(Collection $data)
 	{
-		$cache = $this->getCache();
-		if ($cache instanceof TaggableStore) {
-			$cache->tags('poppy');
-		}
 
-		$this->items = $cache->rememberForever('backend.navigation.repository', function () use ($data) {
-			return $data->all();
-		});
+		$this->items = $this->getCache('poppy')->rememberForever(
+			'backend.navigation.repository',
+			function () use ($data) {
+				return $data->all();
+			}
+		);
 	}
 }

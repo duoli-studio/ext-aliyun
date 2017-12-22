@@ -10,6 +10,7 @@ use System\Classes\Traits\SystemTrait;
 class StylesheetRepository extends Repository
 {
 	use SystemTrait;
+
 	/**
 	 * Initialize.
 	 * @param Collection $collection
@@ -25,7 +26,7 @@ class StylesheetRepository extends Repository
 			$definition['file'] = $this->getUrl()->asset($definition['file']);
 			$this->items[]      = $definition;
 		});
-		$this->getPlugin()->assets()->filter(function ($definition) {
+		$this->getAddon()->assets()->filter(function ($definition) {
 			return isset($definition['entry'])
 				&& isset($definition['type'])
 				&& $definition['entry'] == 'administration'
