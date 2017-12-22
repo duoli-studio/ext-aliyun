@@ -9,20 +9,17 @@
 
     <title>Login V3 | Remark Admin Template</title>
 
-    @include('lemon.inc.requirejs')
+@include('poppy-fe::requirejs')
 
-    <!-- Stylesheets -->
-    {!! Html::style('assets/css/3rd/bt3.css') !!}
-    {!! Html::style('assets/css/3rd/remark/bt3-extend.css') !!}
-    {!! Html::style('assets/css/3rd/remark/site.css') !!}
-
-
-    {!! Html::style('assets/css/3rd/remark/login-v3.css') !!}
+<!-- Stylesheets -->
+    {!! Html::style('assets/css/libs/bt3/3.3.7/bootstrap.min.css') !!}
+    {!! Html::style('assets/css/poppy-ext-fe/be_login.css') !!}
 
 </head>
-<body class="page-login-v3 layout-full">
+<body class="backend_login layout-full">
 <!--[if lt IE 8]>
-<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+    your
     browser</a> to improve your experience.</p>
 <![endif]-->
 
@@ -77,7 +74,7 @@
     </div>
 </div>
 <script>
-require(['jquery', 'lemon/cp', 'bt3'])
+	require(['jquery', 'lemon/cp', 'bt3'])
 </script>
 </body>
 </html>

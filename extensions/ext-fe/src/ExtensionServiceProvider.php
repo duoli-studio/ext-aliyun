@@ -19,9 +19,17 @@ class ExtensionServiceProvider extends ModuleServiceProvider
 	public function boot()
 	{
 		$this->publishes([
-			__DIR__ . '/../config/fe.php'              => config_path('ext-fe.php'),
-			__DIR__ . '/../resources/css/be_login.css' => public_path('assets/css/poppy-ext-fe/be_login.css'),
+			__DIR__ . '/../config/fe.php'                         => config_path('ext-fe.php'),
+			__DIR__ . '/../resources/css/be_login.css'            => public_path('assets/css/poppy-ext-fe/be_login.css'),
+			__DIR__ . '/../resources/mixes/lemon/cp.js'           => public_path('assets/js/lemon/cp.js'),
+			__DIR__ . '/../resources/mixes/lemon/doc.js'          => public_path('assets/js/lemon/doc.js'),
+			__DIR__ . '/../resources/mixes/lemon/plugin.js'       => public_path('assets/js/lemon/plugin.js'),
+			__DIR__ . '/../resources/mixes/lemon/util.js'         => public_path('assets/js/lemon/util.js'),
+			__DIR__ . '/../resources/mixes/lemon/backend/cp.js'   => public_path('assets/js/lemon/backend/cp.js'),
+			__DIR__ . '/../resources/mixes/lemon/backend/util.js' => public_path('assets/js/lemon/backend/util.js'),
 		], 'poppy-extension');
+
+		$this->loadViewsFrom(__DIR__ . '/../resources/views/', 'poppy-fe');
 	}
 
 	/**
