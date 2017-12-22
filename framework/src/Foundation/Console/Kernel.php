@@ -15,7 +15,6 @@ class Kernel extends ConsoleKernel
 		'Illuminate\Foundation\Bootstrap\SetRequestForConsole',
 		'Illuminate\Foundation\Bootstrap\RegisterProviders',
 		'Illuminate\Foundation\Bootstrap\BootProviders',
-
 	];
 
 	/**

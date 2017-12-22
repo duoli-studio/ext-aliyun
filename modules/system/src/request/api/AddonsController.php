@@ -1,10 +1,10 @@
 <?php
-namespace Poppy\Framework\Addon\Controllers;
+namespace System\Addon\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Poppy\Framework\Addon\Addon;
+use System\Addon\Addon;
 use Poppy\Framework\Routing\Abstracts\Controller;
 use Poppy\Framework\Validation\Rule;
 use Symfony\Component\Console\Input\ArrayInput;

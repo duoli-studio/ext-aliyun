@@ -1,15 +1,15 @@
 <?php
 
-namespace Poppy\Framework\Addon\Handlers;
+namespace System\Addon\Handlers;
 
 use Carbon\Carbon;
 use Illuminate\Container\Container;
-use Poppy\Framework\Addon\Addon;
-use Poppy\Framework\Addon\AddonManager;
+use System\Addon\Addon;
+use System\Addon\AddonManager;
 use Poppy\Framework\Router\Abstracts\Handler;
 use Poppy\Framework\Validation\Rule;
 use Symfony\Component\Yaml\Yaml;
-use System\Conf\Repository\ConfRepository;
+use System\Setting\Repository\SettingRepository;
 
 /**
  * Class ExportsHandler.
@@ -17,7 +17,7 @@ use System\Conf\Repository\ConfRepository;
 class ExportsHandler extends Handler
 {
 	/**
-	 * @var \Poppy\Framework\Addon\AddonManager
+	 * @var \System\Addon\AddonManager
 	 */
 	protected $extension;
 
@@ -29,10 +29,10 @@ class ExportsHandler extends Handler
 	/**
 	 * ExportsHandler constructor.
 	 * @param \Illuminate\Container\Container                       $container
-	 * @param \Poppy\Framework\Addon\AddonManager                   $extension
+	 * @param \System\Addon\AddonManager                   $extension
 	 * @param \Poppy\Framework\Setting\Contracts\SettingsRepository $setting
 	 */
-	public function __construct(Container $container, AddonManager $extension, ConfRepository $setting)
+	public function __construct(Container $container, AddonManager $extension, SettingRepository $setting)
 	{
 		parent::__construct($container);
 		$this->extension = $extension;

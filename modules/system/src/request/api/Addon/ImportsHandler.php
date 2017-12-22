@@ -1,6 +1,6 @@
 <?php
 
-namespace Poppy\Framework\Addon\Handlers;
+namespace System\Addon\Handlers;
 
 use Poppy\Framework\Routing\Abstracts\Handler;
 

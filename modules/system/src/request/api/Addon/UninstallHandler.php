@@ -1,10 +1,10 @@
 <?php
-namespace Poppy\Framework\Addon\Handlers;
+namespace System\Addon\Handlers;
 
 use Closure;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Console\Kernel;
-use Poppy\Framework\Addon\AddonManager;
+use System\Addon\AddonManager;
 use Poppy\Framework\Routing\Abstracts\Handler;
 use Poppy\Framework\Setting\Contracts\SettingsRepository;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\BufferedOutput;
 class UninstallHandler extends Handler
 {
     /**
-     * @var \Poppy\Framework\Addon\AddonManager
+     * @var \System\Addon\AddonManager
      */
     protected $manager;
 
@@ -29,7 +29,7 @@ class UninstallHandler extends Handler
      * UninstallHandler constructor.
      *
      * @param \Illuminate\Container\Container                         $container
-     * @param \Poppy\Framework\Addon\AddonManager                   $manager
+     * @param \System\Addon\AddonManager                   $manager
      * @param \Poppy\Framework\Setting\Contracts\SettingsRepository $settings
      */
     public function __construct(Container $container, AddonManager $manager, SettingsRepository $settings)

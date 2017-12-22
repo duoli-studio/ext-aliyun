@@ -25,7 +25,7 @@ use Poppy\Framework\Addon\AddonManager;
 use Poppy\Framework\Poppy\Poppy;
 use Poppy\Framework\Translation\Translator;
 use Psr\Log\LoggerInterface;
-use System\Conf\Repository\ConfRepository;
+use System\Setting\Repository\SettingRepository;
 
 trait PoppyTrait
 {
@@ -39,13 +39,6 @@ trait PoppyTrait
 		return $this->getContainer()->make('auth');
 	}
 
-	/**
-	 * @return ConfRepository
-	 */
-	protected function getSetting(): ConfRepository
-	{
-		return $this->getContainer()->make('system.conf');
-	}
 
 	/**
 	 * @return Translator

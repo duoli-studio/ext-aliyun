@@ -1,5 +1,5 @@
 <?php
-namespace Poppy\Framework\Addon\Controllers;
+namespace System\Addon\Controllers;
 
 use Poppy\Framework\Routing\Abstracts\Controller;
 

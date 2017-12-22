@@ -1,8 +1,8 @@
 <?php
-namespace Poppy\Framework\Addon\Handlers;
+namespace System\Addon\Handlers;
 
 use Illuminate\Container\Container;
-use Poppy\Framework\Addon\AddonManager;
+use System\Addon\AddonManager;
 use Poppy\Framework\Routing\Abstracts\Handler;
 
 /**
@@ -12,7 +12,7 @@ class UpdateHandler extend
 s Handler
 {
     /**
-     * @var \Poppy\Framework\Addon\AddonManager
+     * @var \System\Addon\AddonManager
      */
     protected $manager;
 
@@ -20,7 +20,7 @@ s Handler
      * UpdateHandler constructor.
      *
      * @param \Illuminate\Container\Container       $container
-     * @param \Poppy\Framework\Addon\AddonManager $manager
+     * @param \System\Addon\AddonManager $manager
      */
     public function __construct(Container $container, AddonManager $manager)
     {

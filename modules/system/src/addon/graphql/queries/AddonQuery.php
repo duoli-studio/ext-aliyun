@@ -1,5 +1,5 @@
 <?php
-namespace Poppy\Framework\Addon\GraphQL\Queries;
+namespace System\Addon\GraphQL\Queries;
 
 use GraphQL\Type\Definition\ListOfType;
 use GraphQL\Type\Definition\Type;

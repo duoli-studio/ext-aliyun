@@ -1,12 +1,9 @@
 <?php namespace Poppy\Framework\Foundation;
 
 use Closure;
-use Exception;
 use Illuminate\Foundation\Application as ApplicationBase;
-use Poppy\Framework\Addon\AddonServiceProvider;
 use Poppy\Framework\Console\ConsoleServiceProvider;
 use Poppy\Framework\Console\GeneratorServiceProvider;
-use Poppy\Framework\Extension\ExtensionServiceProvider;
 use Poppy\Framework\GraphQL\GraphQLServiceProvider;
 use Poppy\Framework\Module\ModuleServiceProvider;
 use Poppy\Framework\Parse\ParseServiceProvider;
@@ -19,8 +16,6 @@ use Throwable;
 
 class Application extends ApplicationBase
 {
-
-	const VERSION = '0.1.0';
 
 	/**
 	 * 请求执行上下文
@@ -45,8 +40,6 @@ class Application extends ApplicationBase
 		$this->register(TranslationServiceProvider::class);
 		$this->register(GraphQLServiceProvider::class);
 		$this->register(ModuleServiceProvider::class);
-		$this->register(AddonServiceProvider::class);
-		$this->register(ExtensionServiceProvider::class);
 	}
 
 

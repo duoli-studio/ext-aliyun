@@ -146,9 +146,6 @@ return [
 		Mews\Captcha\CaptchaServiceProvider::class,                                  // captcha
 		Maatwebsite\Excel\ExcelServiceProvider::class,                               // excel
 		Tymon\JWTAuth\Providers\LaravelServiceProvider::class,                       // jwt
-
-		// poppy
-		Poppy\Framework\PoppyServiceProvider::class,
 	],
 
 	/*
