@@ -1,0 +1,509 @@
+@charset "utf-8";
+@import "variables";
+// reset blueprint
+body {
+	background : #ffffff;
+	&.body-login {
+		line-height : 24px;
+		background  : #cfdfec url('#{$css_images-shopnc}login_bg.png') repeat-x center top;
+	}
+}
+ul, ol, li {
+	list-style : none;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-size : 12px;
+}
+em, cite, th {
+	font-style  : normal;
+	font-weight : normal;
+}
+table {
+	border-collapse : collapse;
+}
+label, .pointer {
+	cursor : pointer;
+}
+.big {
+	font-size   : 120% !important;
+	line-height : 120%;
+}
+pre, code {
+	font-family : "Consolas", "Monaco", "Bitstream Vera Sans Mono", "Courier New", Courier, monospace;
+}
+small .small {
+	font-size : 11px !important;
+}
+abbr {
+	border-bottom : 1px #cccccc dashed;
+	padding       : 0 3px;
+}
+/* 宽度\高度\尺寸
+------------------------------------------------------------------- */
+
+.size-64x64 {
+	width  : 64px;
+	height : 64px;
+}
+.size-44x44 {
+	width  : 44px;
+	height : 44px;
+}
+.size-106x106 {
+	width  : 106px;
+	height : 106px;
+}
+/* Base
+---------------------------------------------------------------------*/
+
+h1, h2, h3, h4, h5, h6 {
+	color        : #4d5762;
+	position     : relative;
+	word-spacing : -0.1em;
+}
+h4, h5, h6 {
+	font-weight : bold;
+}
+h1, h2 {
+	line-height   : 28px;
+	margin-bottom : 18px;
+}
+h1, h2, h3, h4 {
+	margin-top : 18px;
+}
+h3, h4, h5, h6 {
+	line-height   : 18px;
+	margin-bottom : 10px;
+}
+h1 {
+	font-size : 18px;
+}
+h2 {
+	font-size : 16px;
+}
+h3 {
+	font-size : 15px;
+	color     : #0099cc;
+}
+h4 {
+	font-size : 14px;
+}
+h5 {
+	font-size : 13px;
+	color     : #0099cc;
+}
+h6 {
+	font-size : 12px;
+}
+/* color
+---------------------------------------------------------------------*/
+
+// 链接
+.link-page {
+	color : #666666;
+}
+.link-hover {
+	color : #ff6000;
+}
+.link-page, .link-hover {
+	font-weight     : bold;
+	text-decoration : none;
+	padding         : 2px 5px 0;
+	font-size       : 16px;
+	&:hover {
+		text-decoration : underline;
+	}
+}
+.link-tips {
+	color            : #ffffff;
+	background-color : #ff6600;
+	padding          : 2px 4px;
+	margin           : 0 4px;
+	border           : 1px solid #ff3300;
+	@include border-radius(4px);
+	&:hover {
+		color : #eeeeee;
+	}
+}
+.link-do {
+	color            : #ffffff;
+	background-color : #329ed1;
+	padding          : 2px 4px;
+	margin           : 0 4px;
+	border           : 1px solid #006699;
+	@include border-radius(4px);
+	&:hover {
+		color : #eeeeee;
+	}
+}
+.link-delete {
+	color            : #ffffff;
+	background-color : #e76f6f;
+	padding          : 2px 4px;
+	margin           : 0 4px;
+	border           : 1px solid red;
+	@include border-radius(4px);
+	&:hover {
+		color : #eeeeee;
+	}
+}
+// block style and inline - style
+.blk-trace {
+	background : white;
+	margin     : 6px;
+	font-size  : 14px;
+	border     : 1px dashed silver;
+	padding    : 8px;
+}
+.inline-nonce {
+	border          : 1px solid #dddddd;
+	display         : block;
+	height          : 17px;
+	text-decoration : none;
+	color           : #a3a3a3;
+	line-height     : 17px;
+	padding         : 0 5px;
+}
+.inline-stat {
+	height          : 20px;
+	line-height     : 20px;
+	color           : #a3a3a3;
+	text-decoration : none;
+}
+.blk-help {
+	line-height      : 24px;
+	color            : #666666;
+	background-color : #f6f6f6;
+	padding          : 6px;
+	border           : 1px dashed #cccccc;
+}
+.blk-intro {
+	font-size        : 14px;
+	color            : #555555;
+	background-color : #f9f9f9;
+	width            : 94%;
+	padding          : 9px;
+	margin           : 0 10px;
+	border           : dotted 1px #e7e7e7;
+}
+.blk-msg {
+	background : url('#{$css_images-shopnc}System.gif') scroll no-repeat 80px 0px;
+	width      : 250px;
+}
+.blk-tips {
+	color         : #333333;
+	background    : none repeat scroll 0 0 #fefeda;
+	border        : 1px solid #ffe8c2 !important;
+	padding       : 4px;
+	margin-bottom : 6px;
+	i {
+		background     : url($bgSky) no-repeat scroll -270px -630px;
+		vertical-align : middle;
+		display        : inline-block;
+		width          : 16px;
+		height         : 16px;
+	}
+}
+/* Page title
+---------------------------------------------------------------------*/
+
+// 图片预览窗口
+.preview {
+	margin-bottom : 8px;
+	width         : 570px;
+	height        : 340px;
+	border        : 1px solid #0099cc;
+	@include box-shadow(3px 3px 3px #eeeeee);
+}
+/* Buttons
+---------------------------------------------------------------------*/
+
+.thumblists li {
+	float        : left;
+	width        : 80px;
+	height       : 100px;
+	margin-right : 10px;
+	&.picture {
+		div {
+			background  : #ffffff;
+			float       : left;
+			/* if IE7/8/9*/
+			*text-align : center;
+			display     : inline;
+			border      : dotted 1px #cbe9f3;
+			padding     : 2px;
+			margin      : 5px;
+		}
+		p {
+			clear       : both;
+			line-height : 20px;
+			height      : 20px;
+			width       : 70px;
+			margin      : 0 5px;
+			span {
+				display    : inline-block;
+				width      : 40%;
+				text-align : center;
+			}
+		}
+	}
+}
+th.picture div, td.picture div {
+	background  : #ffffff;
+	float       : left;
+	/* if IE7/8/9*/
+	*text-align : center;
+	display     : inline;
+	border      : dotted 1px #cbe9f3;
+	padding     : 2px;
+}
+/* 动态列表中分享商品内容样式 */
+
+.oper-tips {
+	position    : fixed;
+	top         : 0;
+	right       : 0;
+	z-index     : 1000;
+	border      : 1px solid #dddddd;
+	line-height : 30px;
+	background  : ivory;
+	padding     : 0 15px;
+	font-weight : 600;
+}
+.oper-tip {
+	@extend .oper-tips;
+	color : #000000;
+}
+.oper-error {
+	@extend .oper-tips;
+	color      : #ffffff;
+	background : #b43234;
+}
+.oper-ok {
+	@extend .oper-tips;
+	color : #ff6600;
+}
+.oper-notice {
+	@extend .oper-tips;
+	color : red;
+}
+/**
+ * 公共样式
+ * @author : Mark
+ */
+@import "compass/css3";
+/* page [(Mark Zhao) 2014/11/21]
+------------------------------------------------------ */
+.page {
+	padding    : 9px 20px 20px;
+	text-align : left;
+}
+.page-fixed {
+	padding : 70px 20px 20px;
+}
+.page-dialog {
+	padding : 0;
+}
+/* bar [(Mark Zhao) 2014/11/21]
+------------------------------------------------------ */
+.bar {
+	background : white url($bgBar) repeat-x center bottom;
+	padding    : 8px 0;
+	margin     : 0 20px;
+}
+.bar-fixed {
+	@extend .bar;
+	position : fixed;
+	top      : 0;
+	left     : 0;
+	z-index  : 99;
+	width    : 98%;
+}
+/* title [(Mark Zhao) 2014/11/21]
+------------------------------------------------------ */
+
+// div.title-bar>h3
+// 为了里边能够放 tab 而放置的浮动
+.title-bar {
+	line-height     : 20px;
+	margin-bottom   : 0 !important;
+	clear           : both;
+	overflow        : hidden;
+	_padding-bottom : 10px;
+	h3 {
+		float       : left;
+		color       : $color-title;
+		font-size   : 15px;
+		margin      : 18px 20px 10px 0;
+		line-height : 18px;
+	}
+}
+/* tab 样式 [(Mark Zhao)2014/9/10]
+------------------------------------------------------ */
+.tab-base {
+	float       : left;
+	overflow    : hidden;
+	padding-top : 16px;
+	li {
+		float       : left;
+		margin-left : 3px;
+	}
+	a {
+		font-weight  : 700;
+		line-height  : 20px;
+		background   : white url($bgSky) no-repeat -1px -200px;
+		height       : 20px;
+		float        : left;
+		padding-left : 8px;
+		margin-right : 2px;
+		cursor       : pointer;
+		&:hover {
+			color               : #0099cc;
+			background-position : -1px -220px;
+		}
+		span {
+			color         : #555555;
+			background    : url($bgSky) no-repeat 9999px 9999px;
+			float         : left;
+			padding-right : 9px;
+		}
+		&:hover span {
+			background-position : 100% -220px;
+		}
+		&.current, &:hover.current {
+			background-position : -1px -240px;
+			cursor              : default;
+		}
+		&.current span, &:hover.current span {
+			color               : #ffffff;
+			background-position : 100% -240px;
+		}
+	}
+}
+.tab-subinfo {
+	padding : 5px 10px;
+}
+// tab 分组
+.tab-group {
+	float       : right;
+	overflow    : hidden;
+	padding-top : 23px;
+	li {
+		float       : left;
+		margin-left : 3px;
+	}
+	a {
+		font-weight   : 700;
+		line-height   : 22px;
+		height        : 22px;
+		float         : left;
+		padding-left  : 8px;
+		margin-right  : 2px;
+		cursor        : pointer;
+		background    : #cbe9f3;
+		border        : 1px solid #cbe9f3;
+		border-bottom : 0;
+		@include border-radius(3px 3px 0 0);
+		&:hover {
+			border        : 1px solid #68d7fc;
+			border-bottom : 0;
+			color         : #0099cc;
+		}
+		span {
+			color         : #777777;
+			float         : left;
+			padding-right : 9px;
+		}
+		&.current, &:hover.current {
+			border        : 1px solid #68d7fc;
+			cursor        : default;
+			border-bottom : 0;
+		}
+		&.current span, &:hover.current span {
+			color : #333333;
+		}
+	}
+}
+.preview_content {
+	border  : 1px solid #cccccc;
+	@include border-radius(3px);
+	padding : 5px;
+	.emoji {
+		width  : 15px;
+		height : 15px;
+	}
+}
+.green {
+	color : #1ab394;
+}
+.grey {
+	color : #cccccc;
+}
+.blue {
+	color : #337ab7;
+}
+.red {
+	color : red;
+}
+.center-block {
+	padding : 35px 20px;
+	&.flash-success {
+		color : shade(#00ff00, 15);
+	}
+	&.flash-danger {
+		color : shade(#ff0000, 15);
+	}
+	p {
+		font-size  : 16px;
+		text-align : center;
+	}
+}
+.mark-color {
+	width   : 10px;
+	height  : 10px;
+	border  : 1px solid #cccccc;
+	display : inline-block;
+	&.mark-color-red {
+		background : #cc0000;
+	}
+	&.mark-color-green {
+		background : darkgreen;
+	}
+	&.mark-color-brown {
+		background : saddlebrown;
+	}
+	&.mark-color-blue {
+		background : blue;
+	}
+	&.mark-color-cancel {
+		background : #ffffff;
+		border     : 1px solid #000000;
+	}
+}
+.show-color-red {
+	color : red;
+	a {
+		color : red;
+	}
+}
+.show-color-green {
+	color : darkgreen;
+	a {
+		color : darkgreen;
+	}
+}
+.show-color-brown {
+	color : saddlebrown;
+	a {
+		color : saddlebrown;
+	}
+}
+.show-color-blue {
+	color : blue;
+	a {
+		color : blue;
+	}
+}
+.show-color-cancel {
+	// no style
+}

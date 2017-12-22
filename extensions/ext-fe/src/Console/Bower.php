@@ -30,23 +30,16 @@ class Bower extends Command
 	 */
 	protected $description = 'bower handler.';
 
-	/**
-	 * @var string
-	 */
-	private $bowerComponentsDir;
 
 	private $libPath;
 	private $jsPath;
 	private $scssPath;
+	private $fontPath;
 	private $configFile;
 	private $requireFile;
 	private $globalFile;
 	private $force   = false;
 	private $mapData = [];
-	private $dbData  = [];
-
-	/** @var string Js main 文件位置 保留原来位置(默认保留) */
-	private $preserveJsPath;
 
 	/** @var  string 当前处理的Js在 bower 中的 name 值 */
 	protected $name;
@@ -71,29 +64,30 @@ class Bower extends Command
 		$this->jsPath      = config('ext-fe.folder.js_dir', 'assets/js');
 		$this->libPath     = $this->jsPath . '/libs';
 		$this->scssPath    = config('ext-fe.folder.scss_dir', 'assets/sass') . '/libs';
+		$this->fontPath    = config('ext-fe.folder.font_dir', 'assets/font');
 		$this->configFile  = $this->jsPath . '/config.js';
 		$this->requireFile = $this->jsPath . '/require.js';
 		$this->globalFile  = $this->jsPath . '/global.js';
 
 		$this->force = (bool) $this->option('force');
 
-		$this->bowerComponentsDir = base_path($this->bowerDir());
-		$this->mapData            = config('ext-fe');
+
+		$this->mapData = config('ext-fe');
 
 		$disk = config('ext-fe.disk');
 		try {
 			if (!$disk) {
-				$this->error('[Extension-fe]: No disk defined at `ext-fe` config file');
+				$this->error($this->getKey('fe') . 'No disk defined at `ext-fe` config file');
 				return;
 			}
 			$this->disk = \Storage::disk($disk);
 		} catch (\Exception $e) {
-			$this->error('[Extension-fe]: No disk `' . $disk . '` defined at `filesystems` config file');
+			$this->error($this->getKey('fe') . 'No disk `' . $disk . '` defined at `filesystems` config file');
 			return;
 		}
 
 
-		$directories = FileHelper::listDirectory($this->bowerComponentsDir);
+		$directories = $this->getFile()->directories($this->bowerDir());
 		if (count($directories)) {
 			// 多少个任务
 			foreach ($directories as $index => $folder) {
@@ -123,19 +117,22 @@ class Bower extends Command
 	 * - image : {css_copy}/plugin/{mapped dir}/{*.png|*.jpg}
 	 * {mapped dir}
 	 *      .  =>  -
-	 * @param     $plugin_name
+	 * @param     $folder
 	 * @param int $progress
+	 * @throws FileNotFoundException
 	 */
-	private function dispose($plugin_name, $progress = 0)
+	private function dispose($folder, $progress = 0)
 	{
-		$this->bowerData = FileHelper::getJson($this->bowerComponentsDir . '/' . $plugin_name . '/.bower.json', true);
+		$this->bowerData = FileHelper::getJson($folder . '/.bower.json', true);
 		$this->name      = array_get($this->bowerData, 'name');
 
 		// progress
-		$this->line('[Extension-fe:' . $this->name . '] Handle ... ');
+		$this->line($this->getKey($this->name) . ' Handle ... ');
 
 		// do
-		$this->disposeJs();
+		$this->disposeJs($folder);
+		$this->disposeCss($folder);
+		$this->disposeFont($folder);
 
 		// progress
 		$mark = str_pad('>', $progress, '>');
@@ -143,254 +140,160 @@ class Bower extends Command
 	}
 
 
+	private function getBowerName()
+	{
+		return array_get($this->bowerData, 'name');
+	}
+
 	/**
 	 * @throws FileNotFoundException
 	 */
 	private function disposeRequire()
 	{
-		// progress
-		$this->line('[Extension-fe:require] Handle ... ');
-		// progress
+		$key = $this->getKey('requirejs');
+		$this->line($key . ' Handle ... ');
 
 		if (!$this->disk->exists($this->requireFile)) {
 			$this->disk->put($this->requireFile, $this->getFile()->get(__DIR__ . '/../../resources/mixes/require.js'));
 		}
-		$this->line(str_pad('', 100, '='));
+
+		$this->info($key . ' Write Ok');
 	}
 
 	/**
 	 * 处理JS 文件
+	 * @param $folder
+	 * @throws FileNotFoundException
 	 */
-	private function disposeJs()
+	private function disposeJs($folder)
 	{
-		$this->dbData = [];
-
-
-		$this->preserveJsPath = false;
+		$key = $this->getKey($this->name);
 
 		// has main config
 		$oriMainJsPath = $this->getMainJsPath();
-		if (!$oriMainJsPath) {
-			$this->error('Does not has main file');
-			return;
-		}
-
-		// 指定多个 main 文件
-		if (is_array($oriMainJsPath)) {
-
-			foreach ($oriMainJsPath as $part_key => $part_path) {
-				$oriJsPath = FileHelper::path($this->bowerComponentsDir . '/' . $this->name . '/' . $part_path, false);
-				if (!file_exists($oriJsPath) && !$this->force) {
-					$this->error('Main File not exist in ' . $oriJsPath);
-				}
-
-
-				// aim path
-				$aimFolderName     = $this->aimFolder($this->name);
-				$version           = array_get($this->bowerData, 'version') ?: '';
-				$aimRelativeFolder = $aimFolderName . '/' . $version;
-				$diskMainJsPath    = $this->libPath . '/' . $aimRelativeFolder . '/' . ($this->preserveJsPath ? $oriMainJsPath : basename($oriJsPath));
-
-				// push config
-				$aimKeyName                                          = $this->aimName($this->name);
-				$aimMainJsPath                                       = str_replace([dirname($this->libPath) . '/', '.js'], '', $diskMainJsPath);
-				$this->config['path'][$aimKeyName . '.' . $part_key] = $aimMainJsPath;
-
-				// check main file
-				if ($this->disk->exists($diskMainJsPath) && !$this->force) {
-					$this->warn('Skip: ' . $diskMainJsPath . '. File exists!');
-					continue;
-				}
-				// copy main js
-				$content = FileHelper::get($oriJsPath);
-				$this->disk->put($diskMainJsPath, $content);
-				$this->info('Write ' . $diskMainJsPath . ' Success.');
-			}
-			return;
-		}
-
-		$oriJsPath = FileHelper::path($this->bowerComponentsDir . '/' . $this->name . '/' . $oriMainJsPath, false);
-		if (!file_exists($oriJsPath) && !$this->force) {
-			$this->error('Main File not exist in ' . $oriJsPath);
+		$aimJsPath     = $this->getAimPath();
+		if (!$oriMainJsPath || !$aimJsPath) {
+			$this->error($key . ' Does not has main file or aim path');
 			return;
 		}
 
 
-		// aim path
-		$aimFolderName     = $this->aimFolder($this->name);
-		$version           = array_get($this->bowerData, 'version') ?: '';
-		$aimRelativeFolder = $aimFolderName . ($version ? '/' . $version : '');
-		$diskMainJsPath    = $this->libPath . '/'
-			. ($aimRelativeFolder ? $aimRelativeFolder . '/' : '')
-			. ($this->preserveJsPath ? $oriMainJsPath : basename($oriJsPath));
+		$realJsPath = $folder . '/' . $oriMainJsPath;
+		if (!$this->getFile()->exists($realJsPath) && !$this->force) {
+			$this->error($key . ' Main File not exist in ' . $realJsPath);
+		}
 
-		// push config
-		$aimKeyName                        = $this->aimName($this->name);
-		$aimMainJsPath                     = str_replace([dirname($this->libPath) . '/'], '', $diskMainJsPath);
-		$this->config['path'][$aimKeyName] = FileHelper::removeExtension($aimMainJsPath);
+		// check main file
+		if ($this->disk->exists($aimJsPath) && !$this->force) {
+			$this->warn($key . ' Skip: ' . $aimJsPath . '. File exists!');
+		}
+		else {
+			$this->disk->put($aimJsPath, $this->getFile()->get($realJsPath));
+			$this->info($key . ' Write ' . $aimJsPath . ' Success.');
+		}
+
+		$configKey                        = $this->getConfigKey();
+		$this->config['path'][$configKey] = FileHelper::removeExtension($aimJsPath);
 
 		// get shim/dep info
-		$shim = '';
 		if (isset($this->mapData['bower'][$this->name])) {
 			$shim = array_get($this->mapData['bower'][$this->name], 'shim');
 			if ($shim) {
-				$this->config['shim'][$aimKeyName] = $shim;
-			}
-		}
-
-		$this->cacheDb(1, $aimKeyName, $aimMainJsPath, $shim);
-
-		// get append info
-		if (isset($this->mapData['bower'][$this->name])) {
-			$append = array_get($this->mapData['bower'][$this->name], 'append');
-			if ($append) {
-				foreach ($append as $key => $value) {
-					// path
-					$path                             = str_replace([dirname($this->libPath) . '/'], '', $this->libPath . '/' . $aimRelativeFolder . '/' . $value);
-					$appendKey                        = $aimKeyName . '.' . $key;
-					$appendPath                       = FileHelper::path($path, false);
-					$this->config['path'][$appendKey] = $appendPath;
-					$this->cacheDb(0, $appendKey, $appendPath);
-				}
-			}
-		}
-
-
-		// check main file
-		if ($this->disk->exists($diskMainJsPath) && !$this->force) {
-			$this->warn('Skip: ' . $diskMainJsPath . '. File exists!');
-			return;
-		}
-
-		// copy addon
-		$this->disposeAddon($this->bowerComponentsDir . '/' . $this->name, $aimRelativeFolder);
-
-		// copy readme
-		$oriJsFolder = dirname($oriJsPath);
-		$content     = '';
-		if (file_exists($oriJsFolder . '/README.md')) {
-			$content = FileHelper::get($oriJsFolder . '/README.md');
-		}
-		elseif (file_exists($oriJsFolder . '/readme.md')) {
-			$content = FileHelper::get($oriJsFolder . '/readme.md');
-		}
-		if ($content) {
-			$this->disk->put($this->libPath . '/' . $aimFolderName . '/README.md', $content);
-		}
-
-		// copy main js
-		$content = FileHelper::get($oriJsPath);
-		$this->disk->put($diskMainJsPath, $content);
-		$this->info('Write ' . $diskMainJsPath . ' Success.');
-	}
-
-
-	/**
-	 * 对扩展进行处理
-	 * addon/|js;lib/|css:1
-	 * {key}|{extension}:{remove level}
-	 * @param $ori_folder
-	 * @param $version_folder
-	 */
-	private function disposeAddon($ori_folder, $version_folder)
-	{
-		// get plugin info
-		if (!isset($this->mapData['bower'][$this->name])) {
-			return;
-		}
-		$addon = array_get($this->mapData['bower'][$this->name], 'addon');
-		if (!$addon) {
-			return;
-		}
-		$arrAddon = StrHelper::parseKey($addon);
-
-		$files = FileHelper::listFile($ori_folder);
-
-		// get all files
-		foreach ($files as $file) {
-			$relative = str_replace($ori_folder . '/', '', $file);
-
-			// filter folder
-			foreach ($arrAddon as $folder => $extension) {
-				if (
-					(strpos($relative, '/') !== false && substr($relative, 0, strlen($folder)) == $folder) ||
-					(strpos($relative, '/') === false)
-				) {
-
-					if (strpos($extension, ':') !== false) {
-						$level     = substr($extension, -1, 1);
-						$extension = rtrim($extension, ':' . $level);
-					}
-					else {
-						$level = 0;
-					}
-					$extensions = explode(',', $extension);
-					if (is_file($file)) {
-
-						// filter extension
-						if (!$extension || in_array(pathinfo($file, PATHINFO_EXTENSION), $extensions)) {
-
-
-							for ($l = 0; $l < $level; $l++) {
-								$trim     = substr($relative, 0, strpos($relative, '/') + 1);
-								$trimLen  = strlen($trim);
-								$relative = substr($relative, $trimLen);
-							}
-
-							// copy to project folder
-							$cssPath = $this->libPath . '/' . $version_folder . '/' . $relative;
-							if (!$this->disk->exists($cssPath) || $this->force) {
-								$this->cacheDb(false, '', $cssPath);
-								$content = FileHelper::get($file);
-								$this->disk->put($cssPath, $content);
-								$this->info('Put ' . $cssPath . ' Success ');
-							}
-
-							// write copy file for scss use
-							if (pathinfo($file, PATHINFO_EXTENSION) == 'css') {
-								$scssPath = $this->scssPath . '/' . $version_folder . '/' . $relative;
-								$basename = basename($scssPath);
-
-								// scss file has '_' prefix
-								$scssName = '_' . str_replace('.css', '.scss', $basename);
-								$scssPath = str_replace($basename, $scssName, $scssPath);
-								if (!$this->disk->exists($scssPath) || $this->force) {
-									$this->cacheDb(false, '', $cssPath);
-									$content = $this->disposeCss($file, dirname($cssPath));
-									$this->disk->put($scssPath, $content);
-									$this->info('Put ' . $scssPath . ' Success ');
-								}
-							}
-						}
-					}
-				}
+				$this->config['shim'][$configKey] = $shim;
 			}
 		}
 	}
+
 
 	/**
 	 * css
-	 * @param $css_file
-	 * @param $version_folder
-	 * @return string
+	 * @param $folder
+	 * @return string|void
+	 * @throws FileNotFoundException
 	 */
-	private function disposeCss($css_file, $version_folder)
+	private function disposeCss($folder)
 	{
-		$content = file_get_contents($css_file);
-		$content = preg_replace_callback('/url\(([\'"]?)(.*?)\1\)/i', function ($matches) use ($version_folder) {
-			$match = $matches[2];
-			if ($match == 'about:blank' || strpos($match, 'data:image/png') !== false) {
-				return 'url("' . $match . '")';
+		$cssMap = data_get($this->mapData, 'bower.' . $this->name . '.css');
+		if (!$cssMap) {
+			return;
+		}
+		foreach ($cssMap as $key => $item) {
+			$isFile = (bool) $this->getFile()->extension($item);
+			$aim    = $this->getVersion($this->scssPath . '/' . $item);
+			if ($isFile) {
+				$content = $this->getFile()->get($folder . '/' . $key);
+				if ($this->disk->exists($aim)) {
+					$this->warn($this->getKey($this->name) . 'Skip: File `' . $aim . '` exists!');
+					continue;
+				}
+				$this->disk->put($aim, $content);
 			}
 			else {
-				return 'url("/' . $version_folder . '/' . $match . '")';
+				$files = $this->getFile()->glob($folder . '/' . $key);
+				foreach ($files as $res_file) {
+					$aimFile = $aim . '/' . basename($res_file);
+					if ($this->disk->exists($aimFile)) {
+						$this->warn($this->getKey($this->name) . 'Skip: File `' . $aimFile . '` exists!');
+						continue;
+					}
+					$content = $this->getFile()->get($res_file);
+					$this->disk->put($aimFile, $content);
+				}
 			}
-		}, $content);
+		}
 
-		$opc     = new Parser($content);
-		$oCss    = $opc->parse();
-		$oFormat = OutputFormat::create()->indentWithSpaces(4)->setSpaceBetweenRules("\n");
-		return $oCss->render($oFormat);
+		$mapUrlContent = function ($content, $version) {
+			$content = preg_replace_callback('/url\(([\'"]?)(.*?)\1\)/i', function ($matches) use ($version) {
+				$match = $matches[2];
+				if ($match == 'about:blank' || strpos($match, 'data:image/png') !== false) {
+					return 'url("' . $match . '")';
+				}
+				else {
+					return 'url("/' . $version . '/' . $match . '")';
+				}
+			}, $content);
+
+			$opc     = new Parser($content);
+			$oCss    = $opc->parse();
+			$oFormat = OutputFormat::create()->indentWithSpaces(4)->setSpaceBetweenRules("\n");
+			return $oCss->render($oFormat);
+		};
+	}
+
+	/**
+	 * @param $folder
+	 * @throws FileNotFoundException
+	 */
+	private function disposeFont($folder)
+	{
+		$cssMap = data_get($this->mapData, 'bower.' . $this->name . '.font');
+		if (!$cssMap) {
+			return;
+		}
+		foreach ($cssMap as $key => $item) {
+			$isFile = (bool) $this->getFile()->extension($item);
+			$aim    = $this->getVersion($this->fontPath . '/' . $item);
+			if ($isFile) {
+				$content = $this->getFile()->get($folder . '/' . $key);
+				if ($this->disk->exists($aim)) {
+					$this->warn($this->getKey($this->name) . 'Skip: File `' . $aim . '` exists!');
+					continue;
+				}
+				$this->disk->put($aim, $content);
+			}
+			else {
+				$files = $this->getFile()->glob($folder . '/' . $key);
+				foreach ($files as $res_file) {
+					$aimFile = $aim . '/' . basename($res_file);
+					if ($this->disk->exists($aimFile)) {
+						$this->warn($this->getKey($this->name) . 'Skip: File `' . $aimFile . '` exists!');
+						continue;
+					}
+					$content = $this->getFile()->get($res_file);
+					$this->disk->put($aimFile, $content);
+				}
+			}
+		}
 	}
 
 	/**
@@ -441,12 +344,6 @@ class Bower extends Command
 		return str_replace(['.', '_'], ['-'], $folder);
 	}
 
-	private function aimName($folder)
-	{
-		$folder = $this->aimFolder($folder);
-		return str_replace('/', '.', $folder);
-	}
-
 	/**
 	 * 获取 bower 的路径
 	 * @return string
@@ -458,7 +355,7 @@ class Bower extends Command
 		$bowerRc = base_path('.bowerrc');
 		if (!file_exists($bowerRc)) {
 			// 默认的目录
-			return 'bower_components/';
+			return base_path('bower_components');
 		}
 		$arrBowerRc = json_decode($this->getFile()->get($bowerRc));
 		$bowerDir   = base_path(data_get($arrBowerRc, 'directory'));
@@ -466,7 +363,7 @@ class Bower extends Command
 			$this->error('Path ' . $bowerDir . ' not exist.');
 		}
 		$this->info('Bower Path : ' . $bowerDir);
-		return data_get($arrBowerRc, 'directory');
+		return base_path(data_get($arrBowerRc, 'directory'));
 	}
 
 	/**
@@ -514,70 +411,45 @@ JS;
 
 	private function getMainJsPath()
 	{
-		$main          = array_get($this->bowerData, 'main');
-		$oriMainJsPath = array_get($this->mapData, 'bower.' . $this->name . '.main');
-		if ($oriMainJsPath) {
-			if (is_string($oriMainJsPath) && strpos($oriMainJsPath, '|') !== false) {
-				$oriMainJsPath        = substr($oriMainJsPath, 0, strpos($oriMainJsPath, '|'));
-				$this->preserveJsPath = true;
-			}
+		$main   = data_get($this->bowerData, 'main');
+		$jsData = data_get($this->mapData, 'bower.' . $this->name . '.js');
+		if (isset($jsData['main'])) {
+			return $jsData['main'];
+		}
 
-			if (is_array($oriMainJsPath)) {
-				return $oriMainJsPath;
-			}
+		// ori path
+		if (is_string($main)) {
+			// 检查 key map
+			return $main;
 		}
-		if (!$oriMainJsPath) {
-			// ori path
-			if (is_string($main)) {
-				// 检查 key map
-				$oriMainJsPath = $main;
-			}
-			elseif (is_array($main)) {
-				$jsCount = 0;
-				$jsFiles = [];
-				foreach ($main as $js) {
-					if (strpos($js, '.js') !== false) {
-						$jsCount   += 1;
-						$jsFiles[] = $js;
-					}
-				}
-				// 数量多, 需要指定一个 main file
-				if (count($jsFiles) > 1) {
-					$this->warn('Has Many Main File , You Must define one by your self!');
-					$oriMainJsPath = array_get($this->mapData, 'bower.' . $this->name . '.main');
-				}
-				else {
-					$oriMainJsPath = $jsFiles[0];
-				}
-			}
-		}
-		return $oriMainJsPath;
+		return '';
 	}
 
-	/**
-	 * @param bool   $is_main
-	 * @param string $key
-	 * @param string $path
-	 * @param string $shim
-	 */
-	private function cacheDb($is_main, $key, $path, $shim = '')
+	private function getAimPath()
 	{
-		$extension      = pathinfo($path, PATHINFO_EXTENSION);
-		$this->dbData[] = [
-			'group'       => $this->name,
-			'is_main'     => (int) $is_main,
-			'shim'        => $shim ? serialize($shim) : '',
-			'extension'   => $extension,
-			'key'         => $key,
-			'path'        => $path,
-			'description' => '',
-			'github_url'  => '',
-			'cat_id'      => 0,
-			'tag_ids'     => '',
-			'readme_ori'  => '',
-			'readme_zh'   => '',
-		];
+		$jsData = data_get($this->mapData, 'bower.' . $this->name . '.js');
+		if (isset($jsData['aim'])) {
+			return $this->getVersion($this->libPath . '/' . $jsData['aim']);
+		}
+		return '';
 	}
+
+
+	private function getVersion($item)
+	{
+		$version = array_get($this->bowerData, 'version') ?: '';
+		return str_replace('{VERSION}', $version, $item);
+	}
+
+	private function getConfigKey()
+	{
+		$key = data_get($this->mapData, 'bower.' . $this->name . '.key');
+		if ($key) {
+			return $key;
+		}
+		return $this->name;
+	}
+
 
 	private function disposeRefactor()
 	{
@@ -595,4 +467,8 @@ JS;
 		}
 	}
 
+	private function getKey($key = '')
+	{
+		return '[Extension-fe' . ($key ? ':' . $key : '') . '] ';
+	}
 }

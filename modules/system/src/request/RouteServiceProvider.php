@@ -11,6 +11,7 @@ use System\Request\Api\ConfigurationController;
 use System\Request\Api\ConfigurationsController;
 use System\Request\Api\DashboardsController;
 use System\Request\Api\InformationController;
+use System\Request\Backend\BeHomeController;
 use System\Request\System\HomeController;
 
 class RouteServiceProvider extends ServiceProvider
@@ -58,6 +59,12 @@ class RouteServiceProvider extends ServiceProvider
 		], function (Router $router) {
 			$router->get('/', HomeController::class . '@layout');
 			$router->get('/graphi', HomeController::class . '@graphi');
+		});
+		\Route::group([
+			'middleware' => 'backend',
+			'prefix'     => 'backend',
+		], function (Router $router) {
+			$router->get('/login', BeHomeController::class . '@login');
 		});
 	}
 
