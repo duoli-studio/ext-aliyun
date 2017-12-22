@@ -1,26 +1,14 @@
 var alias = {
-    "bt3": "assets/js/libs/bt3/3.3.7/bootstrap",
+    "bootstrap": "assets/js/libs/bt3/3.3.7/bootstrap",
     "jquery": "assets/js/libs/jquery/1.9.1/jquery.min",
-    "jquery.form": "assets/js/libs/jquery/form/4.2.2/jquery.form",
-    "jquery.layer": "assets/js/libs/jquery/layer/3.1.1/jquery.layer",
-    "jquery.toastr": "assets/js/libs/jquery/toastr/2.1.3/jquery.toastr",
-    "jquery.validation": "assets/js/libs/jquery/validation/1.17.0/jquery.validation"
+    "jquery.toastr": "assets/js/libs/jquery/toastr/2.1.3/jquery.toastr"
 };
 
 var shim  = {
-    "bt3": [
-        "jquery"
-    ],
-    "jquery.form": [
-        "jquery"
-    ],
-    "jquery.layer": [
+    "bootstrap": [
         "jquery"
     ],
     "jquery.toastr": [
-        "jquery"
-    ],
-    "jquery.validation": [
         "jquery"
     ]
 };
@@ -35,7 +23,7 @@ if (typeof appends != 'undefined' && typeof appends == 'object') {
 
 // require js config
 requirejs.config({
-	baseUrl: "/",
+	baseUrl: "/assets/js/",
 	paths  : alias,
 	shim   : shim
 });

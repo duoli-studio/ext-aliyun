@@ -34,7 +34,6 @@ class Bower extends Command
 	private $libPath;
 	private $jsPath;
 	private $scssPath;
-	private $cssPath;
 	private $fontPath;
 	private $configFile;
 	private $requireFile;
@@ -65,7 +64,6 @@ class Bower extends Command
 		$this->jsPath      = config('ext-fe.folder.js_dir', 'assets/js');
 		$this->libPath     = $this->jsPath . '/libs';
 		$this->scssPath    = config('ext-fe.folder.scss_dir', 'assets/sass') . '/libs';
-		$this->cssPath     = config('ext-fe.folder.css_dir', 'assets/css') . '/libs';
 		$this->fontPath    = config('ext-fe.folder.font_dir', 'assets/font');
 		$this->configFile  = $this->jsPath . '/config.js';
 		$this->requireFile = $this->jsPath . '/require.js';
@@ -221,7 +219,7 @@ class Bower extends Command
 		}
 		foreach ($cssMap as $key => $item) {
 			$isFile = (bool) $this->getFile()->extension($item);
-			$aim    = $this->getVersion($this->cssPath . '/' . $item);
+			$aim    = $this->getVersion($this->scssPath . '/' . $item);
 			if ($isFile) {
 				$content = $this->getFile()->get($folder . '/' . $key);
 				if ($this->disk->exists($aim)) {
@@ -392,7 +390,7 @@ if (typeof appends != 'undefined' && typeof appends == 'object') {
 
 // require js config
 requirejs.config({
-	baseUrl: "/",
+	baseUrl: "/{$this->jsPath}/",
 	paths  : alias,
 	shim   : shim
 });
