@@ -155,6 +155,7 @@ class SettingRepository implements SettingContract
 			'group'     => $group,
 		])->get()->map(function ($item) {
 			$item->value = unserialize($item->value);
+			$item->key   = $item->namespace . "::" . $item->group;
 			return $item;
 		})->toArray();
 	}

@@ -35,11 +35,11 @@ class SettingMutation extends Mutation
 		return [
 			'key'   => [
 				'type'        => Type::nonNull(Type::string()),
-				'description' => trans('system::conf.graphql.item_key'),
+				'description' => trans('system::setting.graphql.key'),
 			],
 			'value' => [
 				'type'        => Type::nonNull(Type::string()),
-				'description' => trans('system::conf.graphql.item_value'),
+				'description' => trans('system::setting.graphql.value'),
 			],
 		];
 	}

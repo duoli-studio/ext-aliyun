@@ -2,8 +2,6 @@
 ```
 配置项目的约定
    namespace::group.key
-
-
    system::setting/site.name
 ```
 
