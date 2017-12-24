@@ -33,7 +33,7 @@ export const information = ({commit}) => {
 };
 
 export const setting = ({commit}) => (new Promise((resolve, reject) => {
-	injection.http.post(`${window.api}/administration`, {
+	injection.http.post(`${window.api}/system/graphql`, {
 		query : 'query {settings{key,value}}',
 	}).then(response => {
 		const settings = [];

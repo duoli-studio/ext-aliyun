@@ -157,7 +157,6 @@ class Bower extends Command
 		}
 
 		$key = $this->getKey($this->name);
-		$this->line($key . 'Handle Js ...');
 
 		$main = data_get($this->bowerData, 'main');
 
@@ -189,11 +188,11 @@ class Bower extends Command
 
 		// check main file
 		if ($this->disk->exists($aimJsPath) && !$this->force) {
-			$this->warn($key . 'Skip: ' . $aimJsPath . '. File exists!');
+			$this->warn($key . 'Skip Js ' . $aimJsPath . '. file exists!');
 		}
 		else {
 			$this->disk->put($aimJsPath, $this->getFile()->get($realJsPath));
-			$this->info($key . 'Write ' . $aimJsPath . ' Success.');
+			$this->info($key . 'Write Js' . $aimJsPath . ' Success.');
 		}
 
 		$this->disposeReadme($folder, dirname($aimJsPath));
@@ -243,12 +242,10 @@ class Bower extends Command
 		if (!$cssMap) {
 			return;
 		}
-		$this->line($this->getKey($this->name) . 'Handle Css ...');
 		foreach ($cssMap as $ori_path => $aim_path) {
 			$relative_path = $this->getVersion($aim_path);
 			$this->disposeItem($this->scssPath, $relative_path, $ori_folder, $ori_path);
 		}
-
 		$this->info($this->getKey($this->name) . 'Handle Css Success');
 	}
 
@@ -550,20 +547,5 @@ JS;
 	private function getKey($key = '')
 	{
 		return '[Extension-fe' . ($key ? ':' . $key : '') . '] ';
-	}
-
-	private function getRelativelyPath($file_aim, $file_relative)
-	{
-		$file_aim      = explode('/', $file_aim);
-		$file_relative = explode('/', $file_relative);
-		$c             = array_values(array_diff($file_aim, $file_relative));
-		$d             = array_values(array_diff($file_relative, $file_aim));
-		array_pop($c);
-		foreach ($c as &$v) {
-			$v = '..';
-		}
-		$arr = array_merge($c, $d);
-		$str = implode("/", $arr);
-		return $str;
 	}
 }
