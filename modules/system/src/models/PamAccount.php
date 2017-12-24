@@ -34,8 +34,8 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 	const ACCOUNT_TYPE_BACKEND = 'backend';
 	const ACCOUNT_TYPE_USER    = 'user';
 
-	const GUARD_WEB = 'web';
-	const GUARD_BE  = 'be';
+	const GUARD_WEB     = 'web';
+	const GUARD_BACKEND = 'backend';
 
 	const REG_PLATFORM_IOS     = 'ios';
 	const REG_PLATFORM_ANDROID = 'android';
@@ -124,9 +124,7 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 
 	/**
 	 * 根据账户名称/类型获取账户ID
-	 *
 	 * @param $account_name
-	 *
 	 * @return mixed
 	 */
 	public static function getAccountIdByAccountName($account_name)
@@ -166,9 +164,7 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 
 	/**
 	 * 用户账户类型描述
-	 *
 	 * @param $key
-	 *
 	 * @return string
 	 */
 	public static function userTypeDesc($key)
@@ -207,9 +203,7 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 
 	/**
 	 * 检查用户名是否存在
-	 *
 	 * @param $accountName
-	 *
 	 * @return mixed
 	 */
 	public static function accountNameExists($accountName)
@@ -219,9 +213,7 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 
 	/**
 	 * 允许缓存, 获取账户类型, 因为账户类型不会变化
-	 *
 	 * @param $account_id
-	 *
 	 * @return mixed
 	 */
 	public static function getAccountTypeByAccountId($account_id)
@@ -249,9 +241,7 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 
 	/**
 	 * 账户类型描述
-	 *
 	 * @param $key
-	 *
 	 * @return string
 	 */
 	public static function accountTypeDesc($key)
@@ -262,9 +252,7 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 
 	/**
 	 * 根据账户名称/类型获取账户ID
-	 *
 	 * @param $account_id
-	 *
 	 * @return mixed
 	 */
 	public static function getAccountNameByAccountId($account_id)
@@ -275,10 +263,8 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 
 	/**
 	 * 检测账户密码是否正确
-	 *
 	 * @param PamAccount $pam      用户账户信息
 	 * @param String     $password 用户传入的密码
-	 *
 	 * @return bool
 	 */
 	public static function checkPassword($pam, $password)
@@ -292,11 +278,9 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 
 	/**
 	 * 生成账户密码
-	 *
 	 * @param String $password  原始密码
 	 * @param String $regTime   注册时间/ unix 时间戳
 	 * @param String $randomKey 六位随机值
-	 *
 	 * @return string
 	 */
 	public static function genPassword($password, $regTime, $randomKey)
@@ -306,12 +290,10 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 
 	/**
 	 * 创建用户账户
-	 *
 	 * @param $accountName
 	 * @param $password
 	 * @param $accountType
 	 * @param $roleId
-	 *
 	 * @return bool|mixed
 	 */
 	public static function register($accountName, $password, $accountType, $roleId)
@@ -343,7 +325,6 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 
 	/**
 	 * 更改密码
-	 *
 	 * @param int    $account_id
 	 * @param String $newPassword
 	 */
@@ -361,10 +342,8 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 
 	/**
 	 * 根据账户ID 来获取账户的信息
-	 *
 	 * @param      $account_id
 	 * @param bool $profile
-	 *
 	 * @return mixed
 	 */
 	public static function info($account_id, $profile = false)
@@ -392,9 +371,7 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 
 	/**
 	 * 通过账户名称获取信息, 没有返回 null
-	 *
 	 * @param $account_name
-	 *
 	 * @return PamAccount
 	 */
 	public static function getByAccountName($account_name)
@@ -405,12 +382,10 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 
 	/**
 	 * 绑定社会化组件
-	 *
 	 * @param      $account_id
 	 * @param      $field
 	 * @param      $key
 	 * @param null $head_pic
-	 *
 	 * @return bool
 	 */
 	public static function bindSocialite($account_id, $field, $key, $head_pic = null)
@@ -431,10 +406,8 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 
 	/**
 	 * 获取定义的 kv 值
-	 *
 	 * @param null|string $key       需要获取的key, 默认返回整个定义
 	 * @param bool        $check_key 检测当前key 是否存在
-	 *
 	 * @return array|string
 	 */
 	public static function kvRegType($key = null, $check_key = false)
@@ -450,10 +423,8 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 
 	/**
 	 * 注册平台
-	 *
 	 * @param null $key
 	 * @param bool $check_exists
-	 *
 	 * @return array|string
 	 */
 	public static function kvRegPlatform($key = null, $check_exists = false)
@@ -469,10 +440,8 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 
 	/**
 	 * 账户类型
-	 *
 	 * @param null $key
 	 * @param bool $check_exists
-	 *
 	 * @return array|string
 	 */
 	public static function kvAccountType($key = null, $check_exists = false)

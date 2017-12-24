@@ -22,7 +22,7 @@ class Auth
 	 */
 	public function __construct(AuthFactory $auth)
 	{
-		$this->guard = $auth->guard(PamAccount::GUARD_BE);
+		$this->guard = $auth->guard(PamAccount::GUARD_BACKEND);
 	}
 
 	/**

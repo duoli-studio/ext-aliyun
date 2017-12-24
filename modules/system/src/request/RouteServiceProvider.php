@@ -7,6 +7,7 @@
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Routing\Router;
 use Poppy\Framework\GraphQL\GraphQLController;
+use System\Request\Api\AuthController;
 use System\Request\Api\ConfigurationController;
 use System\Request\Api\DashboardsController;
 use System\Request\Api\InformationController;
@@ -74,14 +75,19 @@ class RouteServiceProvider extends ServiceProvider
 	protected function mapApiRoutes()
 	{
 		\Route::group([
-			// todo auth
-			// 'middleware' => 'system',
 			'prefix' => 'api/system',
 		], function (Router $route) {
 			$route->any('/graphql/{schema?}', GraphQLController::class . '@query');
+			$route->any('/token', AuthController::class . '@token');
 			$route->any('/information', InformationController::class . '@list');
-			$route->any('/dashboard', DashboardsController::class . '@list');
-			$route->any('/configuration/{path?}', ConfigurationController::class . '@definition');
+			$route->group([
+				'middleware' => ['auth:backend', 'web'],
+			], function (Router $route) {
+				$route->any('/access', AuthController::class . '@access');
+				$route->any('/dashboard', DashboardsController::class . '@list');
+				$route->any('/configuration/{path?}', ConfigurationController::class . '@definition');
+			});
+
 		});
 	}
 }

@@ -23,7 +23,7 @@ class InitController extends Controller
 	{
 		parent::__construct();
 		$questionCreateNum = 0;
-		$this->pam         = $request->user(PamAccount::GUARD_BE);
+		$this->pam         = $request->user(PamAccount::GUARD_BACKEND);
 
 		$menus = AclHelper::getMenuCache('backend', $this->pam, true);
 

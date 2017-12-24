@@ -135,7 +135,7 @@
 		},
 		mounted() {
 			const self = this;
-			self.$http.post(`${window.api}/administration/access`).then(response => {
+			self.$http.post(`${window.api}/system/access`).then(response => {
 				self.$store.commit('username', response.data.data.name);
 			});
 			self.mappingPages(self.pages);

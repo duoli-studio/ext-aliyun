@@ -6,6 +6,7 @@ use System\Backend\BackendManager;
 use System\Extension\ExtensionManager;
 use System\Module\ModuleManager;
 use System\Setting\Repository\SettingRepository;
+use Tymon\JWTAuth\JWTAuth;
 
 /**
  * Class Helpers.
@@ -28,6 +29,14 @@ trait SystemTrait
 	protected function getSetting(): SettingRepository
 	{
 		return $this->getContainer()->make('system.setting');
+	}
+
+	/**
+	 * @return JWTAuth
+	 */
+	protected function getJwt(): JWTAuth
+	{
+		return $this->getContainer()->make('tymon.jwt.auth');
 	}
 
 	/**
