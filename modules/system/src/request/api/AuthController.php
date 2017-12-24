@@ -38,10 +38,10 @@ class AuthController extends Controller
 	public function token(): JsonResponse
 	{
 		$this->validate($this->getRequest(), [
-			'name'     => Rule::required(),
+			'username' => Rule::required(),
 			'password' => Rule::required(),
 		], [
-			'name.required'     => '用户名必须填写',
+			'username.required' => '用户名必须填写',
 			'password.required' => '用户密码必须填写',
 		]);
 		if ($this->hasTooManyLoginAttempts($this->getRequest())) {
