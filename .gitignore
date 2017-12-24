@@ -49,7 +49,6 @@ Thumbs.db
 # Project User #
 ################
 .sass-cache
-/node_modules
 /bootstrap/cache/compiled.php
 /bootstrap/cache/services.json
 /bootstrap/cache/routes.php
