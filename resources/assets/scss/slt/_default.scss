@@ -1,0 +1,220 @@
+@charset "UTF-8";
+@import 'variables';
+
+/*
+|--------------------------------------------------------------------------
+| 公共样式文件
+|--------------------------------------------------------------------------
+|
+| 基本定义
+| 公共样式定义使用 `sour`前缀
+*/
+body {
+	font-family : "wryh", "微软雅黑", "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	background  : #ffffff;
+	font-size   : 13px;
+}
+
+a {
+	color : $purple;
+	&:hover {
+		color : $light-purple;
+	}
+}
+
+// fix media query
+@media (max-width : 768px) {
+	.form-horizontal .control-label {
+		text-align    : right;
+		margin-bottom : 0;
+		padding-top   : 7px;
+	}
+}
+
+.sour--page_dialog {
+	margin : 10px 0;
+}
+
+.sour--header_top {
+	.navbar {
+		margin-bottom : 0;
+	}
+	.navbar .navbar-brand {
+		font-size   : 12px;
+		height      : auto;
+		margin-top  : 8px;
+		color       : #fff;
+		display     : block;
+		margin-left : 0;
+		padding     : 0;
+	}
+	.navbar-header {
+		margin-right : 15px;
+	}
+	.navbar-default {
+		background : #fff;
+		.navbar-toggle {
+			&:hover, &:focus {
+				background : $color-green;
+				.icon-bar {
+					background-color : #fff !important;
+				}
+			}
+			
+		}
+		.navbar-nav {
+			> li, > li > a {
+				height : 55px;
+			}
+			> .active {
+				> a, > a:hover, > a:focus {
+					background-color : transparent;
+					color            : $color-green;
+					border           : none;
+				}
+			}
+		}
+		li a {
+			font-size   : 14px;
+			font-weight : 600;
+			padding     : 15px 15px;
+			color       : $color-dark;
+			&:hover {
+				border-bottom : none;
+			}
+		}
+	}
+	
+	.brand-desc {
+		color  : $color-dark;
+		margin : 17px 10px 0 90px;
+		width  : 180px;
+	}
+	
+	/*
+	border           : none;
+	height           : $nav-height;
+	min-height       : $nav-height;
+	background-color : #ffffff;
+	border-bottom    : 1px solid $light-grey;
+	@include border-radius(0);
+	
+	
+	.nav > li > a, .navbar-brand {
+		line-height : $nav-height;
+		height      : $nav-height;
+		padding     : 0 12px;
+		color       : $black;
+		&:hover, &:focus {
+			background    : none;
+			border-bottom : 3px solid $purple;
+		}
+	}
+	.nav li {
+		&.active {
+			a {
+				border-bottom : 3px solid $purple;
+			}
+		}
+	}
+	&.navbar {
+		margin-bottom : 0;
+	}
+	.navbar-brand {
+		color : $purple;
+		&:hover {
+			color         : $dark-purple;
+			border-bottom : none;
+		}
+	}
+	*/
+	.header_top-user_status {
+		margin-bottom : 0;
+		> li {
+			float       : left;
+			text-align  : center;
+			white-space : nowrap;
+			list-style  : none;
+			position    : relative;
+			a {
+				text-decoration : none;
+			}
+		}
+		.dropdown-menu {
+			left      : 50%;
+			right     : auto;
+			transform : translate(-50%, 0);
+			min-width : 60px;
+			font-size : 12px;
+			top       : 118%;
+			a {
+				padding : 8px 16px;
+			}
+			&:before {
+				content      : '';
+				position     : absolute;
+				border       : 8px solid #ffffff;
+				border-color : transparent transparent #cccccc;
+				top          : -16px;
+				left         : 50%;
+				right        : auto;
+				transform    : translate(-50%, 0);
+			}
+		}
+		
+		// first level
+		> li > a {
+			display : inline-block;
+			> i {
+				color : #cfcfcf;
+			}
+		}
+	}
+}
+
+.sour--footer {
+	height      : 50px;
+	line-height : 50px;
+	text-align  : center;
+	background  : #ffffff;
+	color       : #999999;
+	font-size   : 12px;
+	width       : 100%;
+	margin-top  : 20px;
+	display     : block;
+	a {
+		color      : #379856;
+		text-align : right;
+		padding    : 0 5px;
+	}
+}
+
+.sour--my_title {
+	border     : 1px solid #cccccc;;
+	background : #f2f2f2;
+	padding    : 10px;
+	.btn {
+		.iconfont {
+			font-size : 12px;
+		}
+	}
+	h3 {
+		font-weight : normal;
+		height      : 30px;
+		line-height : 30px;
+		font-size   : 14px;
+		margin      : 0;
+		color       : #000000;
+		small {
+			font-size    : 12px;
+			padding-left : 1em;
+			color        : #ccc;
+		}
+		em {
+			padding-left : 4px;
+			color        : #ccc;
+			font-weight  : normal;
+			font-style   : normal;
+		}
+	}
+}

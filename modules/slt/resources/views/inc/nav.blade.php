@@ -10,7 +10,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a href="{!! config('app.url') !!}" class="navbar-brand">
-                    {!! Html::image('project/sour/images/logo/200x100.png', '为代码服务', [
+                    {!! slt_image('logo/200x100.png', '为代码服务', [
                         'width'=>65,'style'=> 'margin-top:3px;'
                     ]) !!}
                 </a>

@@ -56,10 +56,12 @@ Thumbs.db
 /storage/framework/*.php
 /public/assets/js/global.js
 /public/uploads/*
+/public/mix-manifest.json
 /vendor
 !/public/uploads/.gitkeep
 .env
 composer.lock
+package-lock.json
 yarn.lock
 _ide_helper.php
 _ide_helper_models.php

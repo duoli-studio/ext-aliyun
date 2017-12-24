@@ -6,7 +6,7 @@
                 {{--{{conf('backend::site.copyright')}}--}}
             </div>
             <div class="col-sm-4">
-                {!! Html::image('project/sour/images/logo/200x100.png', 'wulicode', [
+                {!! slt_image('logo/200x100.png', 'wulicode', [
                     'width'=>80,'style'=> 'opacity:0.4'
                 ]) !!}
             </div>

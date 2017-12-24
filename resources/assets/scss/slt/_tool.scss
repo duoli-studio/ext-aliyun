@@ -1,0 +1,18 @@
+@charset "UTF-8";
+@import 'variables';
+
+.tool--editor {
+	.editor-wrapper {
+		position : relative;
+		padding  : 0;
+	}
+	.editor-main_area {
+		border        : none;
+		border-bottom : 1px solid #ccc;
+		height        : 500px;
+		margin        : 0;
+	}
+	.editor-handle {
+		margin : 10px;
+	}
+}

@@ -1,0 +1,15 @@
+/*
+|--------------------------------------------------------------------------
+| 颜色
+|--------------------------------------------------------------------------
+|
+*/
+$light-grey : #eeeeee; // 淡灰色 : 边框颜色, 取自 vue
+$purple : #985cbe; // 标准紫色
+$light-purple : lighten($purple, 10%);
+$dark-purple : darken($purple, 10%);
+$black : #333333;
+$dark-black : darken($black, 10%);
+$light-black : lighten($black, 10%);
+$color-green : #62cb31;
+$color-dark : #455463;

@@ -1,0 +1,14 @@
+@charset "UTF-8";
+@import 'variables';
+.list-group-item {
+	&.active, &.active:hover, &.active:focus {
+		z-index          : 2;
+		background-color : #fff;
+		border           : 1px solid #ddd;
+		border-left      : 3px purple solid;
+		a {
+			color       : #333;
+			font-weight : bold;
+		}
+	}
+}

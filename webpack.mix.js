@@ -4,7 +4,7 @@
  * Proprietary and confidential
  */
 
-let mix = require('laravel-mix');
+var mix = require('laravel-mix');
 
 /*
  |--------------------------------------------------------------------------
@@ -16,4 +16,12 @@ let mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
-mix.browserSync('l.fadan.sour-lemon.com');
+mix.sass(
+	'resources/assets/scss/basic.scss',
+	'public/assets/css'
+).sass(
+	'resources/assets/scss/slt.scss',
+	'public/assets/css'
+).browserSync({
+	proxy : 'l.play.sour-lemon.com'
+});
