@@ -34,7 +34,7 @@
 				self.$refs.form.validate(valid => {
 					if (valid) {
 						self.$http.post(`${window.api}/system/token`, {
-							name     : self.form.username,
+							username : self.form.username,
 							password : self.form.password,
 						}).then(response => {
 							self.$notice.open({
