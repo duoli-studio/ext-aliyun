@@ -1,7 +1,7 @@
 <?php namespace Slt\Classes;
 
-
-use User\Models\PamAccount;
+use System\Models\BaseConfig;
+use System\Models\PamAccount;
 use Slt\Models\UserProfile;
 
 /**

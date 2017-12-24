@@ -58,7 +58,7 @@ return [
 		],
 
 
-		"bootstrap"                => [
+		"bootstrap" => [
 			"js"   => [
 				'main' => 'dist/js/bootstrap.js',
 				'aim'  => 'bt3/{VERSION}/bootstrap.js',
@@ -110,6 +110,9 @@ return [
 			"js"   => [
 				'main' => 'toastr.min.js',
 				'aim'  => 'jquery/toastr/{VERSION}/jquery.toastr.js',
+			],
+			"css"  => [
+				'toastr.css' => 'jquery/toastr/toastr.css',
 			],
 			"key"  => 'jquery.toastr',
 			'shim' => ['jquery'],

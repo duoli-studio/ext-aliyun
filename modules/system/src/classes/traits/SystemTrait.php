@@ -27,7 +27,7 @@ trait SystemTrait
 	 */
 	protected function getSetting(): SettingRepository
 	{
-		return $this->getContainer()->make('system.conf');
+		return $this->getContainer()->make('system.setting');
 	}
 
 	/**

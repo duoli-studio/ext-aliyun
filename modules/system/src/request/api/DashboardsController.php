@@ -2,8 +2,8 @@
 
 use Illuminate\Http\JsonResponse;
 use Poppy\Framework\Application\Controller;
-use Poppy\Framework\Module\Module;
 use System\Classes\Traits\SystemTrait;
+use System\Module\Module;
 
 /**
  * Class DashboardsController.

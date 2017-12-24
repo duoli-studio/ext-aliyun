@@ -1,9 +1,9 @@
 -
-    identification: systeminfo
+    slug: slug
     title: 系统信息
     template: Notadd\Administration\SystemInformation@handler
 -
-    identification: development
+    slug: slug
     title: 开发团队
     template:
         -

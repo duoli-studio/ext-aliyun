@@ -5,7 +5,6 @@
  */
 
 use Illuminate\Console\Scheduling\Schedule;
-use Poppy\Framework\Classes\Traits\PoppyTrait;
 use Poppy\Framework\Exceptions\ModuleNotFoundException;
 use Poppy\Framework\Support\ModuleServiceProvider as ModuleServiceProviderBase;
 use System\Addon\AddonServiceProvider;
@@ -14,10 +13,10 @@ use System\Classes\AuthProvider;
 use System\Extension\ExtensionServiceProvider;
 use System\Models\PamAccount;
 use System\Module\ModuleServiceProvider;
-use System\Rbac\Rbac;
+use System\Rbac\RbacServiceProvider;
 use System\Request\MiddlewareServiceProvider;
 use System\Request\RouteServiceProvider;
-use System\Setting\ConfServiceProvider;
+use System\Setting\SettingServiceProvider;
 
 class ServiceProvider extends ModuleServiceProviderBase
 {
@@ -38,9 +37,6 @@ class ServiceProvider extends ModuleServiceProviderBase
 		$path = poppy_path($this->name);
 		$this->mergeConfigFrom($path . '/resources/config/graphql.php', 'graphql');
 
-		// rbac
-		$this->bootRbacBladeDirectives();
-
 		// register extension
 		$this->app['extension']->register();
 
@@ -54,14 +50,14 @@ class ServiceProvider extends ModuleServiceProviderBase
 	{
 		$this->app->register(MiddlewareServiceProvider::class);
 		$this->app->register(RouteServiceProvider::class);
-		$this->app->register(ConfServiceProvider::class);
+		$this->app->register(SettingServiceProvider::class);
 		$this->app->register(BackendServiceProvider::class);
 		$this->app->register(ExtensionServiceProvider::class);
 		$this->app->register(AddonServiceProvider::class);
 		$this->app->register(ModuleServiceProvider::class);
+		$this->app->register(RbacServiceProvider::class);
 
 		$this->registerAuth();
-		$this->registerRbac();
 		$this->registerSchedule();
 		$this->registerConsole();
 	}
@@ -76,16 +72,6 @@ class ServiceProvider extends ModuleServiceProviderBase
 		});
 	}
 
-	/**
-	 * register rbac and alias
-	 */
-	private function registerRbac()
-	{
-		$this->app->bind('system.rbac', function ($app) {
-			return new Rbac($app);
-		});
-		$this->app->alias('system.rbac', 'System\Rbac\Rbac');
-	}
 
 
 	private function registerSchedule()
@@ -105,44 +91,10 @@ class ServiceProvider extends ModuleServiceProviderBase
 		$this->registerConsoleCommand('system.sample', 'System\Console\Sample');
 	}
 
-	/**
-	 * Register the blade directives
-	 * @return void
-	 */
-	private function bootRbacBladeDirectives()
-	{
-		// Call to Entrust::hasRole
-		\Blade::directive('role', function ($expression) {
-			return "<?php if (\\Rbac::hasRole{$expression}) : ?>";
-		});
-
-		\Blade::directive('endrole', function ($expression) {
-			return "<?php endif; // Rbac::hasRole ?>";
-		});
-
-		// Call to Entrust::capable
-		\Blade::directive('permission', function ($expression) {
-			return "<?php if (\\Rbac::capable{$expression}) : ?>";
-		});
-
-		\Blade::directive('endpermission', function ($expression) {
-			return "<?php endif; // Rbac::capable ?>";
-		});
-
-		// Call to Entrust::ability
-		\Blade::directive('ability', function ($expression) {
-			return "<?php if (\\Rbac::ability{$expression}) : ?>";
-		});
-
-		\Blade::directive('endability', function ($expression) {
-			return "<?php endif; // Rbac::ability ?>";
-		});
-	}
 
 	public function provides()
 	{
 		return [
-			'system.rbac',
 			'system.backend.manager',
 		];
 	}

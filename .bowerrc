@@ -1,5 +1,5 @@
 {
-	"directory": "resources/bower_components/",
+	"directory": "storage/bower/",
 	"timeout": 120000,
 	"registry": {
 		"search": [

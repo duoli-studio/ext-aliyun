@@ -135,7 +135,7 @@ class AddonManager
 	{
 		if (!$this->assetsRepository instanceof AssetsRepository) {
 			$collection = collect();
-			$this->repository->enabled()->each(function (Addon $addon) use ($collection) {
+			$this->repository()->enabled()->each(function (Addon $addon) use ($collection) {
 				$collection->put($addon->identification(), $addon->get('assets', []));
 			});
 			$this->assetsRepository = new AssetsRepository();

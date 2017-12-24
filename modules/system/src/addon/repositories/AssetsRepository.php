@@ -18,7 +18,8 @@ class AssetsRepository extends Repository
 	 */
 	public function initialize(Collection $data)
 	{
-		$this->items = $this->cache->tags('notadd')->rememberForever('addon.assets.repository', function () use ($data) {
+		$this->items = $this->getCache('poppy')->rememberForever(
+			'addon.assets.repository', function () use ($data) {
 			$collection = collect();
 			$data->each(function ($items, $module) use ($collection) {
 				$items = collect($items);

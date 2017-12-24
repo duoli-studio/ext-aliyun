@@ -1,15 +1,28 @@
 var alias = {
+    "ace": "assets/js/libs/ace/1.2.9",
     "bt3": "assets/js/libs/bt3/3.3.7/bootstrap",
+    "bt3.hover-dropdown": "assets/js/libs/bt3/hover-dropdown/2.2.1/bt3.hover-dropdown",
+    "clipboard": "assets/js/libs/clipboard/1.7.1/clipboard.min",
     "jquery": "assets/js/libs/jquery/1.9.1/jquery.min",
     "jquery.form": "assets/js/libs/jquery/form/4.2.2/jquery.form",
     "jquery.layer": "assets/js/libs/jquery/layer/3.1.1/jquery.layer",
     "jquery.toastr": "assets/js/libs/jquery/toastr/2.1.3/jquery.toastr",
-    "jquery.validation": "assets/js/libs/jquery/validation/1.17.0/jquery.validation"
+    "jquery.validation": "assets/js/libs/jquery/validation/1.17.0/jquery.validation",
+    "pace": "assets/js/libs/pace/1.0.2/pace.min",
+    "smooth-scroll": "assets/js/libs/smooth-scroll/1.4.0/smooth-scroll",
+    "vkbeautify": "assets/js/libs/vkbeautify/vkbeautify"
 };
 
 var shim  = {
+    "ace": {
+        "exports": "ace"
+    },
     "bt3": [
         "jquery"
+    ],
+    "bt3.hover-dropdown": [
+        "jquery",
+        "bt3"
     ],
     "jquery.form": [
         "jquery"
@@ -22,7 +35,10 @@ var shim  = {
     ],
     "jquery.validation": [
         "jquery"
-    ]
+    ],
+    "vkbeautify": {
+        "exports": "vkbeautify"
+    }
 };
 
 // appends for single project

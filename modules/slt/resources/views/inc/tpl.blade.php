@@ -5,7 +5,7 @@
 @endsection
 @section('body-main')
     @include('slt::inc.nav')
-    <div style="margin-top:55px;"></div>
+    <div style="margin-top:70px;"></div>
     @yield('tpl-main')
     <script>
 		require(['jquery', 'bt3', 'slt/cp'])

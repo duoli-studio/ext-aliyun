@@ -16,7 +16,8 @@ class InformationController extends Controller
 	 */
 	public function list()
 	{
-		return $this->getResponse()->json([
+
+		$data = $this->getResponse()->json([
 			'data'    => [
 				'navigation'  => $this->getBackend()->navigations()->toArray(),
 				'pages'       => $this->getBackend()->pages()->toArray(),
@@ -25,5 +26,7 @@ class InformationController extends Controller
 			],
 			'message' => '获取模块和插件信息成功！',
 		]);
+		\Artisan::call('cache:clear');
+		return $data;
 	}
 }

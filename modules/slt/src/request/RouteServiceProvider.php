@@ -48,7 +48,7 @@ class RouteServiceProvider extends ServiceProvider
 			'prefix' => 'slt',
 		], function ($router) {
 			$router->get('/', HomeController::class . '@index');
-			$router->get('/tool', ToolController::class . '@index')->name('slt:tool');
+			$router->get('/tool/{type?}', ToolController::class . '@index')->name('slt:tool');
 		});
 	}
 

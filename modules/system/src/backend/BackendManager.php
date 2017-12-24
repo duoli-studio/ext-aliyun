@@ -86,7 +86,6 @@ class BackendManager
 			$this->navigationRepository = new NavigationRepository();
 			$this->navigationRepository->initialize($this->getModule()->menus()->structures());
 		}
-
 		return $this->navigationRepository;
 	}
 

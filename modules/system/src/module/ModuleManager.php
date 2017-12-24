@@ -2,10 +2,10 @@
 
 use Illuminate\Support\Collection;
 use Poppy\Framework\Classes\Traits\PoppyTrait;
-use System\Module\Repositories\AssetsRepository;
-use System\Module\Repositories\MenuRepository;
-use System\Module\Repositories\ModuleRepository;
-use System\Module\Repositories\PageRepository;
+use System\Module\Repositories\ModulesAssets;
+use System\Module\Repositories\ModulesMenu;
+use System\Module\Repositories\Modules;
+use System\Module\Repositories\ModulesPage;
 
 /**
  * Class ModuleManager.
@@ -15,7 +15,7 @@ class ModuleManager
 	use PoppyTrait;
 
 	/**
-	 * @var AssetsRepository
+	 * @var ModulesAssets
 	 */
 	protected $assetsRepository;
 
@@ -25,17 +25,17 @@ class ModuleManager
 	protected $excepts;
 
 	/**
-	 * @var MenuRepository
+	 * @var ModulesMenu
 	 */
 	protected $menuRepository;
 
 	/**
-	 * @var PageRepository
+	 * @var ModulesPage
 	 */
 	protected $pageRepository;
 
 	/**
-	 * @var ModuleRepository
+	 * @var Modules
 	 */
 	protected $repository;
 
@@ -56,12 +56,12 @@ class ModuleManager
 	}
 
 	/**
-	 * @return ModuleRepository
+	 * @return Modules
 	 */
-	public function repository(): ModuleRepository
+	public function repository(): Modules
 	{
-		if (!$this->repository instanceof ModuleRepository) {
-			$this->repository = new ModuleRepository();
+		if (!$this->repository instanceof Modules) {
+			$this->repository = new Modules();
 			$slugs            = app('poppy')->enabled()->pluck('slug');
 			$this->repository->initialize($slugs);
 		}
@@ -75,7 +75,7 @@ class ModuleManager
 	 */
 	public function get($name): Module
 	{
-		return $this->repository->get($name);
+		return $this->repository()->get($name);
 	}
 
 	/**
@@ -85,7 +85,7 @@ class ModuleManager
 	 */
 	public function has($name): bool
 	{
-		return $this->repository->has($name);
+		return $this->repository()->has($name);
 	}
 
 	/**
@@ -97,16 +97,16 @@ class ModuleManager
 	}
 
 	/**
-	 * @return MenuRepository
+	 * @return ModulesMenu
 	 */
-	public function menus(): MenuRepository
+	public function menus(): ModulesMenu
 	{
-		if (!$this->menuRepository instanceof MenuRepository) {
+		if (!$this->menuRepository instanceof ModulesMenu) {
 			$collection = collect();
 			$this->repository()->enabled()->each(function (Module $module) use ($collection) {
 				$collection->put($module->slug(), $module->get('menus', []));
 			});
-			$this->menuRepository = new MenuRepository();
+			$this->menuRepository = new ModulesMenu();
 			$this->menuRepository->initialize($collection);
 		}
 
@@ -114,16 +114,16 @@ class ModuleManager
 	}
 
 	/**
-	 * @return PageRepository
+	 * @return ModulesPage
 	 */
-	public function pages(): PageRepository
+	public function pages(): ModulesPage
 	{
-		if (!$this->pageRepository instanceof PageRepository) {
+		if (!$this->pageRepository instanceof ModulesPage) {
 			$collection = collect();
 			$this->repository()->enabled()->each(function (Module $module) use ($collection) {
 				$collection->put($module->slug(), $module->get('pages', []));
 			});
-			$this->pageRepository = new PageRepository();
+			$this->pageRepository = new ModulesPage();
 			$this->pageRepository->initialize($collection);
 		}
 
@@ -131,16 +131,16 @@ class ModuleManager
 	}
 
 	/**
-	 * @return AssetsRepository
+	 * @return ModulesAssets
 	 */
-	public function assets(): AssetsRepository
+	public function assets(): ModulesAssets
 	{
-		if (!$this->assetsRepository instanceof AssetsRepository) {
+		if (!$this->assetsRepository instanceof ModulesAssets) {
 			$collection = collect();
 			$this->repository()->enabled()->each(function (Module $module) use ($collection) {
 				$collection->put($module->slug(), $module->get('assets', []));
 			});
-			$this->assetsRepository = new AssetsRepository();
+			$this->assetsRepository = new ModulesAssets();
 			$this->assetsRepository->initialize($collection);
 		}
 

@@ -8,13 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use JsonSerializable;
 use Poppy\Framework\Classes\Traits\HasAttributesTrait;
+use Poppy\Framework\Classes\Traits\PoppyTrait;
 
 /**
  * Class Module.
  */
 class Module implements Arrayable, ArrayAccess, JsonSerializable
 {
-	use HasAttributesTrait;
+	use HasAttributesTrait, PoppyTrait;
 
 	/**
 	 * Module constructor.
@@ -23,12 +24,11 @@ class Module implements Arrayable, ArrayAccess, JsonSerializable
 	 */
 	public function __construct($slug)
 	{
-		$poppy            = app('poppy');
 		$this->attributes = [
 			'directory' => poppy_path($slug),
 			'namespace' => poppy_class($slug),
 			'slug'      => $slug,
-			'enabled'   => $poppy->isEnabled($slug),
+			'enabled'   => $this->getPoppy()->isEnabled($slug),
 		];
 	}
 
@@ -72,7 +72,6 @@ class Module implements Arrayable, ArrayAccess, JsonSerializable
 		return collect($this->get('pages', []))->map(function ($definition, $identification) {
 			$definition['initialization']['identification'] = $identification;
 			unset($definition['initialization']['tabs']);
-
 			return $definition['initialization'];
 		})->groupBy('target');
 	}
