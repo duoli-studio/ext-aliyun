@@ -8,7 +8,6 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Routing\Router;
 use Poppy\Framework\GraphQL\GraphQLController;
 use System\Request\Api\ConfigurationController;
-use System\Request\Api\ConfigurationsController;
 use System\Request\Api\DashboardsController;
 use System\Request\Api\InformationController;
 use System\Request\Backend\BeHomeController;
@@ -54,8 +53,7 @@ class RouteServiceProvider extends ServiceProvider
 	protected function mapWebRoutes()
 	{
 		\Route::group([
-			'middleware' => 'system',
-			'prefix'     => 'system',
+			'prefix' => 'system',
 		], function (Router $router) {
 			$router->get('/', HomeController::class . '@layout');
 			$router->get('/graphi', HomeController::class . '@graphi');

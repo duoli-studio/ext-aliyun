@@ -1,3 +1,12 @@
+## 系统配置约定
+```
+配置项目的约定
+   namespace::group.key
+
+
+   system::setting/site.name
+```
+
 ## 系统部署
 - [F]php 7.0+
 - [P]php-bcmath(*inx)

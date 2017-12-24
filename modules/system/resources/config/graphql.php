@@ -5,10 +5,11 @@ return [
 	'schemas' => [
 		'default' => [
 			'mutation' => [
-				'config' => \System\Setting\Graphql\Mutation\ConfigMutation::class,
+				\System\Setting\Graphql\Mutation\SettingMutation::class,
 			],
 			'query'    => [
-				'config' => \System\Setting\Graphql\Queries\ConfigQuery::class,
+				\System\Setting\Graphql\Queries\SettingQuery::class,
+				\System\Setting\Graphql\Queries\SettingsQuery::class,
 			],
 		],
 	],
@@ -22,8 +23,8 @@ return [
 		/* query
 		 -------------------------------------------- */
 		// config
-		\System\Setting\GraphQL\Types\ConfItemType::class,
-		
+		\System\Setting\GraphQL\Types\SettingType::class,
+
 		// resp
 		\System\Setting\GraphQL\Types\RespType::class,
 

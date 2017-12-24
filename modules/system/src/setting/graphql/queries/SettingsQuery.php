@@ -4,17 +4,23 @@ use GraphQL\Type\Definition\ListOfType;
 use GraphQL\Type\Definition\Type;
 use Poppy\Framework\GraphQL\Exception\TypeNotFound;
 use Poppy\Framework\GraphQL\Support\Query;
+use System\Classes\Traits\SystemTrait;
 
 
 /**
  * Class SettingQuery.
  */
-class ConfigQuery extends Query
+class SettingsQuery extends Query
 {
-	protected $attributes = [
-		'name'        => 'config',
-		'description' => 'Config Query.',
-	];
+	use SystemTrait;
+
+
+	public function __construct($attributes = [])
+	{
+		parent::__construct($attributes);
+		$this->attributes['name']        = 'settings';
+		$this->attributes['description'] = trans('system::setting.graphql.queries_desc');
+	}
 
 	/**
 	 * @return ListOfType
@@ -22,7 +28,7 @@ class ConfigQuery extends Query
 	 */
 	public function type(): ListOfType
 	{
-		return Type::listOf($this->getGraphQL()->type('conf_item'));
+		return Type::listOf($this->getGraphQL()->type('setting'));
 	}
 
 	/**
@@ -31,13 +37,13 @@ class ConfigQuery extends Query
 	public function args()
 	{
 		return [
-			'module' => [
+			'namespace' => [
 				'type'        => Type::nonNull(Type::string()),
-				'description' => trans('system::conf.graphql.conf_module'),
+				'description' => trans('system::setting.graphql.namespace'),
 			],
-			'group'  => [
+			'group'     => [
 				'type'        => Type::nonNull(Type::string()),
-				'description' => trans('system::conf.graphql.conf_group'),
+				'description' => trans('system::setting.graphql.group'),
 			],
 		];
 	}
@@ -49,7 +55,7 @@ class ConfigQuery extends Query
 	 */
 	public function resolve($root, $args)
 	{
-		return $this->getSetting()->getNsGroup($args['module'], $args['group']);
+		return $this->getSetting()->getNsGroup($args['namespace'], $args['group']);
 	}
 
 

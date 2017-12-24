@@ -2,11 +2,20 @@
 
 return [
 	'graphql' => [
-		// conf
-		'conf_module' => '模块名称',
-		'conf_group'  => '分组名称',
+		'query_desc'    => '配置查询',
+		'queries_desc'  => '多条配置查询',
+		'mutation_desc' => '配置项修改',
+		'type_desc'     => '配置项',
+		'namespace'     => '配置项命名空间',
+		'group'         => '配置项分组名称',
+		'key'           => '配置项键',
+		'value'         => '配置项值',
+		'description'   => '配置项描述',
 
-		'group'                => '分组名称',
+		// conf
+		'conf_module'   => '模块名称',
+		'conf_group'    => '分组名称',
+
 		'children'             => '分组设置项目',
 
 		// children

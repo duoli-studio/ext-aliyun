@@ -32,10 +32,13 @@ class ServiceProvider extends ModuleServiceProviderBase
 	 */
 	public function boot()
 	{
-		parent::boot($this->name);
 
 		$path = poppy_path($this->name);
 		$this->mergeConfigFrom($path . '/resources/config/graphql.php', 'graphql');
+		
+		$this->loadViewsFrom($path . '/resources/views', $this->name);
+		$this->loadTranslationsFrom($path . '/resources/lang', $this->name);
+		$this->loadMigrationsFrom($path . '/resources/database/migrations');
 
 		// register extension
 		$this->app['extension']->register();

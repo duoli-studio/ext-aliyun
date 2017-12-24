@@ -71,7 +71,7 @@ class SettingRepository implements SettingContract
 
 		$record = $this->findRecord($key);
 		if (!$record) {
-			static::$cache[$key] = $default;
+			static::$cache[$key] = serialize($default);
 			$this->writeCache();
 			return static::$cache[$key];
 		}
