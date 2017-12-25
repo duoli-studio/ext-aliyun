@@ -3,8 +3,8 @@ import injection from '../helpers/injection';
 export const information = ({commit}) => {
 	commit('loading', true);
 	injection.http.post(`${window.api}/system/graphql`, {
-		query : 'query {  config(module : "system", group : "setting") {\n' +
-		'    item,\n' +
+		query : 'query {  setting(module : "system", group : "setting/site") {\n' +
+		'    key,\n' +
 		'    value\n' +
 		'}}'
 	}).then(response => {

@@ -29,7 +29,7 @@
 			clearCache() {
 				const self = this;
 				self.loading = true;
-				self.$http.post(`${window.api}/administration/cache/clear`).then(() => {
+				self.$http.post(`${window.api}/system/cache/clear`).then(() => {
 					self.$notice.open({
 						title : '缓存清除成功！',
 					});
@@ -44,7 +44,7 @@
 			enableDebug(status) {
 				const self = this;
 				self.$loading.start();
-				self.$http.post(`${window.api}/administration`, {
+				self.$http.post(`${window.api}/system/graphql`, {
 					query : `mutation {settings(key:"debug.enabled",value:"${status === true ? '1' : '0'}"){key,value}}`,
 				}).then(() => {
 					self.$loading.finish();
