@@ -4,6 +4,8 @@
 use Clockwork\Support\Laravel\ClockworkMiddleware;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Contracts\Http\Kernel as KernelContract;
+use Poppy\Framework\Http\Middlewares\CrossPreflight;
 
 class MiddlewareServiceProvider extends ServiceProvider
 {
@@ -24,6 +26,11 @@ class MiddlewareServiceProvider extends ServiceProvider
 		if (env('APP_ENV', 'production') === 'local') {
 			$router->pushMiddlewareToGroup('web', ClockworkMiddleware::class);
 			$router->pushMiddlewareToGroup('backend', ClockworkMiddleware::class);
+		}
+
+		// add options
+		if ($this->app->make('request')->getMethod() == 'OPTIONS') {
+			$this->app->make(KernelContract::class)->prependMiddleware(CrossPreflight::class);
 		}
 	}
 }

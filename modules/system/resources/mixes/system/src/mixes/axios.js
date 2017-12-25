@@ -1,8 +1,25 @@
 import axios from 'axios';
+// import qs from 'qs';
 
 export default function(injection, Vue) {
 	axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
 	axios.interceptors.request.use(configuration => configuration, error => Promise.reject(error));
+
+	/*
+	axios.interceptors.request.use(configuration => {
+		// configuration.headers.Accept = 'application/json, text/plain, * / *';
+		// configuration.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+		configuration.headers['Content-Type'] = 'application/json';
+		if (configuration.method === 'post') {
+			configuration.data = qs.stringify({
+				...configuration.data
+			});
+		}
+		return configuration;
+	}, error => Promise.reject(error));
+	*/
+
 	axios.interceptors.response.use(response => response, error => {
 		window.console.log(error.response);
 		window.console.log(error.response.data);

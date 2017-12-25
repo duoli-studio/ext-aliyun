@@ -10,6 +10,7 @@ use Poppy\Framework\Support\ModuleServiceProvider as ModuleServiceProviderBase;
 use System\Addon\AddonServiceProvider;
 use System\Backend\BackendServiceProvider;
 use System\Classes\AuthProvider;
+use System\Events\EventServiceProvider;
 use System\Extension\ExtensionServiceProvider;
 use System\Models\PamAccount;
 use System\Module\ModuleServiceProvider;
@@ -35,7 +36,7 @@ class ServiceProvider extends ModuleServiceProviderBase
 
 		$path = poppy_path($this->name);
 		$this->mergeConfigFrom($path . '/resources/config/graphql.php', 'graphql');
-		
+
 		$this->loadViewsFrom($path . '/resources/views', $this->name);
 		$this->loadTranslationsFrom($path . '/resources/lang', $this->name);
 		$this->loadMigrationsFrom($path . '/resources/database/migrations');
@@ -59,6 +60,7 @@ class ServiceProvider extends ModuleServiceProviderBase
 		$this->app->register(AddonServiceProvider::class);
 		$this->app->register(ModuleServiceProvider::class);
 		$this->app->register(RbacServiceProvider::class);
+		$this->app->register(EventServiceProvider::class);
 
 		$this->registerAuth();
 		$this->registerSchedule();
@@ -74,7 +76,6 @@ class ServiceProvider extends ModuleServiceProviderBase
 			return new AuthProvider(PamAccount::class);
 		});
 	}
-
 
 
 	private function registerSchedule()

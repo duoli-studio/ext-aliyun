@@ -2,8 +2,9 @@
 
 
 use Poppy\Framework\Helper\EnvHelper;
-use User\Models\PamAccount;
-use User\Models\PamLog;
+use System\Models\PamAccount;
+use System\Models\PamLog;
+
 
 /**
  * 失败日志
@@ -25,6 +26,7 @@ class FailedLog
 	 */
 	public function handle($credentials)
 	{
+		return;
 		$account      = PamAccount::getByAccountName($credentials['account_name']);
 		$account_id   = '';
 		$account_name = $credentials['account_name'];

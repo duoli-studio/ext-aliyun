@@ -45,6 +45,8 @@
 							});
 							self.$store.commit('token', response.data.data);
 							window.location = window.admin;
+						}).then(error => {
+							console.log(error);
 						}).finally(() => {
 							self.loading = false;
 						});

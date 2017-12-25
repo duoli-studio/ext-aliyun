@@ -1,11 +1,7 @@
 <?php namespace User\Events\Listeners;
 
-
 use Poppy\Framework\Helper\EnvHelper;
 use Illuminate\Auth\Events\Login;
-use User\Models\PamAccount;
-use User\Models\PamLog;
-
 
 class LoginLog
 {
@@ -16,6 +12,7 @@ class LoginLog
 	 */
 	public function handle($event)
 	{
+		return;
 		// 后台授权登录不计入日志
 		if (\Session::has('desktop_auth')) {
 			return;

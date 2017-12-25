@@ -3,7 +3,7 @@
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider;
-use System\Skeleton\Models\PamAccount;
+use System\Models\PamAccount;
 
 class AuthProvider implements UserProvider
 {

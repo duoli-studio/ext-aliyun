@@ -75,13 +75,14 @@ class RouteServiceProvider extends ServiceProvider
 	protected function mapApiRoutes()
 	{
 		\Route::group([
-			'prefix' => 'api/system',
+			'middleware' => ['cross', 'web'],
+			'prefix'     => 'api/system',
 		], function (Router $route) {
 			$route->any('/graphql/{schema?}', GraphQLController::class . '@query');
 			$route->any('/token', AuthController::class . '@token');
 			$route->any('/information', InformationController::class . '@list');
 			$route->group([
-				'middleware' => ['auth:api', 'web'],
+				'middleware' => ['auth:api'],
 			], function (Router $route) {
 				$route->any('/access', AuthController::class . '@access');
 				$route->any('/dashboard', DashboardsController::class . '@list');
