@@ -1,7 +1,7 @@
 <?php namespace Slt\Models;
 
 use Carbon\Carbon;
-use User\Models\PamAccount;
+use System\Models\PamAccount;
 
 
 /**

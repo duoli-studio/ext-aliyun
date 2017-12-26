@@ -15,7 +15,6 @@ use Carbon\Carbon;
  * @property int               $account_id      账号ID
  * @property Carbon            $created_at
  * @property Carbon            $updated_at
- * @property-read BaseCategory $category
  * @mixin \Eloquent
  */
 class SiteUserUrl extends \Eloquent

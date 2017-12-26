@@ -3,7 +3,6 @@
 
 /**
  * App\Models\PamBind
- *
  * @property integer        $account_id
  * @property string         $qq_key      QQ 绑定ID
  * @property string         $qq_union_id QQ Union ID

@@ -2,8 +2,10 @@
 
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 use Slt\Request\Web\HomeController;
+use Slt\Request\Web\NavController;
 use Slt\Request\Web\ToolController;
 
 class RouteServiceProvider extends ServiceProvider
@@ -46,9 +48,30 @@ class RouteServiceProvider extends ServiceProvider
 	{
 		\Route::group([
 			'prefix' => 'slt',
-		], function ($router) {
-			$router->get('/', HomeController::class . '@index');
-			$router->get('/tool/{type?}', ToolController::class . '@index')->name('slt:tool');
+		], function (Router $router) {
+			$router->get('/', HomeController::class . '@index')
+				->name('slt');
+			$router->get('tool/{type?}', ToolController::class . '@index')
+				->name('slt:tool');
+
+			$router->any('nav', NavController::class . '@index')
+				->name('web:nav.index');
+			$router->get('nav/jump/{id?}', NavController::class . '@jump')
+				->name('web:nav.jump');
+			$router->get('nav/jump_user/{id?}', NavController::class . '@jumpUser')
+				->name('web:nav.jump_user');
+			$router->any('nav/collection/{id?}', NavController::class . '@collection')
+				->name('web:nav.collection');
+			$router->any('nav/collection_destroy/{id?}', NavController::class . '@collectionDestroy')
+				->name('web:nav.collection_destroy');
+			$router->any('nav/url/{id?}', NavController::class . '@url')
+				->name('web:nav.url');
+			$router->any('nav/url_destroy/{id?}', NavController::class . '@urlDestroy')
+				->name('web:nav.url_destroy');
+			$router->any('nav/title', NavController::class . '@title')
+				->name('web:nav.title');
+			$router->any('nav/tag', NavController::class . '@tag')
+				->name('web:nav.tag');
 		});
 	}
 

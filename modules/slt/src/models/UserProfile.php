@@ -1,11 +1,11 @@
 <?php namespace Slt\Models;
 
 use Carbon\Carbon;
+use System\Models\PamAccount;
 
 
 /**
  * Sour\Sour\Models\UserProfile
- *
  * @property int             $account_id           账户id
  * @property int             $invite_account_id    邀请人账号ID
  * @property string          $invite_code          邀请码

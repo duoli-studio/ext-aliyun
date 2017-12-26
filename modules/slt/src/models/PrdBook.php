@@ -1,12 +1,11 @@
 <?php namespace Slt\Models;
 
 use Carbon\Carbon;
-use User\Models\PamAccount;
+use System\Models\PamAccount;
 
 
 /**
- * Sour\Sour\Models\PrdBook
- *
+ * Slt\Models\PrdBook
  * @property int             $id
  * @property string          $title      书籍标题
  * @property int             $account_id User Id

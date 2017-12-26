@@ -2,7 +2,6 @@
 
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
-use Sour\System\Models\BaseCategory;
 
 
 /**

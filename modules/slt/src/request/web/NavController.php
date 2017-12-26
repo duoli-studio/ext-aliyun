@@ -1,7 +1,6 @@
-<?php namespace Slt\Request\Web\Controllers;
+<?php namespace Slt\Request\Web;
 
 use Curl\Curl;
-use Illuminate\Cookie\CookieJar;
 use Illuminate\Http\Request;
 use Sour\Poppy\Models\SiteTag;
 use Sour\Poppy\Models\SiteUrlRelTag;
