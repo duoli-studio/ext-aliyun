@@ -31,8 +31,8 @@ trait SystemAppTrait
 		if (!$this->bePam) {
 			return $this->setError(trans('system::act.check_be_need_login'));
 		}
-		$roles = $this->bePam->capable('backend:global.role.manage');
-		dd($roles);
+
+		// check permission
 		if ($permission && !$this->bePam->capable($permission)) {
 			return $this->setError(trans('system::act.check_permission_failed'));
 		}

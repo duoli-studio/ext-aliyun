@@ -75,9 +75,9 @@ class Role
 				]),
 			],
 		], [], [
-			'name'  => trans('system.db.role.name'),
-			'title' => trans('system.db.role.title'),
-			'type'  => trans('system.db.role.type'),
+			'name'  => trans('system::db.role.name'),
+			'title' => trans('system::db.role.title'),
+			'type'  => trans('system::db.role.type'),
 		]);
 		if ($validator->fails()) {
 			return $this->setError($validator->messages());
