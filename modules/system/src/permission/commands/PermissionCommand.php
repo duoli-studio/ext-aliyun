@@ -13,10 +13,9 @@ class PermissionCommand extends Command
 {
 	use SystemTrait;
 
-	protected $signature = 'system:permission
+	protected $signature   = 'system:permission
 		{action : The permission action to handle, allow <lists,init>}
 		';
-
 	protected $description = 'Permission manage list.';
 
 	/**
@@ -31,7 +30,9 @@ class PermissionCommand extends Command
 	 */
 	public function handle()
 	{
-		$action = $this->argument('action');
+
+		$action    = $this->argument('action');
+		$this->key = $this->key($action);
 		switch ($action) {
 			case 'lists':
 				$this->lists();
@@ -39,8 +40,11 @@ class PermissionCommand extends Command
 			case 'init':
 				$this->init();
 				break;
+			default:
+				$this->error($this->key . ' Command Not Exists!');
+				break;
 		}
-		$this->key = $this->key($action);
+
 		return true;
 	}
 
@@ -49,12 +53,13 @@ class PermissionCommand extends Command
 		$data = new Collection();
 		$this->getPermission()->permissions()->each(function (Permission $permission) use ($data) {
 			$data->push([
+				$permission->type(),
 				$permission->id(),
 				$permission->description(),
 			]);
 		});
 		$this->table(
-			['Identification', 'Description'],
+			['Type', 'Identification', 'Description'],
 			$data->toArray()
 		);
 	}
@@ -90,6 +95,7 @@ class PermissionCommand extends Command
 			], [
 				'name'        => $key,
 				'title'       => $permission->description(),
+				'type'        => $permission->type(),
 				'group'       => $permission->group(),
 				'module'      => $permission->module(),
 				'root'        => $permission->root(),
@@ -111,7 +117,7 @@ class PermissionCommand extends Command
 
 	private function key($action)
 	{
-		return '[System:Permission' . $action . '] ';
+		return '[System:Permission (action:' . $action . ')] ';
 	}
 
 }

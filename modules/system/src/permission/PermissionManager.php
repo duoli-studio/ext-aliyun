@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Collection;
 use System\Classes\Traits\SystemTrait;
+use System\Models\PamAccount;
 use System\Module\Module;
 use System\Permission\Repositories\PermissionRepository;
 
@@ -18,13 +19,19 @@ class PermissionManager
 	protected $repository;
 
 	/**
-	 * @param $identification
-	 * @param $group
+	 * check permission
+	 * @param $permission
+	 * @param $guard
 	 * @return bool
 	 */
-	public function check($identification, $group)
+	public function check($permission, $guard)
 	{
-		return true;
+		/** @var PamAccount $user */
+		$user = $this->getAuth()->guard($guard)->user();
+		if (!$user) {
+			return false;
+		}
+		return $user->capable($permission);
 	}
 
 	/**
@@ -60,27 +67,48 @@ class PermissionManager
 				if (!$rootSlug) {
 					return;
 				}
+				$typeSlug = PamAccount::GUARD_BACKEND;
+				if (strpos($rootSlug, ':') !== false) {
+					list($typeSlug, $rootSlug) = explode(':', $rootSlug);
+				}
 				$groups = collect($root['groups'] ?? []);
-				$groups->each(function ($group) use ($perms, $module, $rootSlug) {
+				$groups->each(function ($group) use ($perms, $module, $typeSlug, $rootSlug) {
 					$groupSlug = $group['slug'] ?? '';
 					if (!$groupSlug) {
 						return;
 					}
 					$permissions = collect($group['permissions'] ?? []);
-					$permissions->each(function ($permission) use ($perms, $module, $rootSlug, $groupSlug) {
+					$permissions->each(function ($permission) use ($perms, $module, $typeSlug, $rootSlug, $groupSlug) {
 						$permissionSlug = $permission['slug'] ?? '';
 						if (!$permissionSlug) {
 							return;
 						}
 						$permission['module'] = $module;
 						$permission['root']   = $rootSlug;
+						$permission['type']   = $typeSlug;
 						$permission['group']  = $groupSlug;
-						$id                   = "{$rootSlug}.{$groupSlug}.{$permissionSlug}";
+						$id                   = "{$typeSlug}:{$rootSlug}.{$groupSlug}.{$permissionSlug}";
 						$perms->put($id, new Permission($permission, $id));
 					});
 				});
 			});
 		});
 		return $perms;
+	}
+
+	/**
+	 * Get default permission by guard
+	 * @param $group
+	 * @return Collection
+	 */
+	public function defaultPermissions($group)
+	{
+		$permissions = collect([]);
+		$this->permissions()->each(function (Permission $permission) use ($permissions, $group) {
+			if ($permission->type() == $group && $permission->isDefault()) {
+				$permissions->push($permission->id());
+			}
+		});
+		return $permissions;
 	}
 }

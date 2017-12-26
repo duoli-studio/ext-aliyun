@@ -23,6 +23,7 @@ class PamPermission extends \Eloquent implements RbacPermissionContract
 		'group',
 		'root',
 		'module',
+		'type',
 	];
 
 

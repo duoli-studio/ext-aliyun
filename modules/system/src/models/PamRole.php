@@ -1,6 +1,5 @@
 <?php namespace System\Models;
 
-use App\Lemon\Repositories\Sour\LmArr;
 use Carbon\Carbon;
 use System\Rbac\Contracts\RbacRoleContract;
 use System\Rbac\Traits\RbacRoleTrait;
@@ -20,8 +19,9 @@ class PamRole extends \Eloquent implements RbacRoleContract
 
 	use RbacRoleTrait;
 
-	const BE_ROOT = 'root';
-	const FE_USER = 'user';
+	const BE_ROOT  = 'root';      // admin user
+	const FE_USER  = 'user';      // web user
+	const DEV_USER = 'develop';   // developer
 
 	protected $table = 'pam_role';
 
@@ -29,7 +29,7 @@ class PamRole extends \Eloquent implements RbacRoleContract
 		'name',
 		'title',
 		'description',
-		'account_type',
+		'type',
 	];
 
 

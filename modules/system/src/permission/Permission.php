@@ -1,5 +1,6 @@
 <?php namespace System\Permission;
 
+use System\Models\PamAccount;
 use System\Permission\Repositories\PermissionRepository;
 
 /**
@@ -34,6 +35,11 @@ class Permission
 	protected $module = '';
 
 	/**
+	 * @var string permission type
+	 */
+	protected $type = PamAccount::GUARD_BACKEND;
+
+	/**
 	 * @var string Permission description;
 	 */
 	protected $description = '';
@@ -43,6 +49,7 @@ class Permission
 		$this->isDefault   = $permission['default'] ?? false;
 		$this->description = $permission['description'] ?? '';
 		$this->root        = $permission['root'] ?? '';
+		$this->type        = $permission['type'] ?? '';
 		$this->group       = $permission['group'] ?? '';
 		$this->module      = $permission['module'] ?? '';
 		$this->id          = $id;
@@ -51,6 +58,11 @@ class Permission
 	public function id()
 	{
 		return $this->id;
+	}
+
+	public function type()
+	{
+		return $this->type;
 	}
 
 	public function isDefault()

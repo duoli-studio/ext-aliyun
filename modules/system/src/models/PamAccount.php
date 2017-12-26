@@ -36,6 +36,7 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 
 	const GUARD_WEB     = 'web';
 	const GUARD_BACKEND = 'backend';
+	const GUARD_DEVELOP = 'develop';
 
 	const REG_PLATFORM_IOS     = 'ios';
 	const REG_PLATFORM_ANDROID = 'android';

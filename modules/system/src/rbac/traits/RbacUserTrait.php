@@ -11,6 +11,9 @@ trait RbacUserTrait
 {
 
 	//Big block of caching functionality.
+	/**
+	 * @return \Illuminate\Database\Eloquent\Collection|PamRole[]
+	 */
 	public function cachedRoles()
 	{
 		$userPrimaryKey = $this->primaryKey;
@@ -151,7 +154,7 @@ trait RbacUserTrait
 			foreach ($this->cachedRoles() as $role) {
 				// Validate against the Permission table
 				foreach ($role->cachedPermissions() as $perm) {
-					if (str_is($permission, $perm->permission_name)) {
+					if (str_is($permission, $perm->name)) {
 						return true;
 					}
 				}

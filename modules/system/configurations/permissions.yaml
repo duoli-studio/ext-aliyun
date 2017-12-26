@@ -1,6 +1,6 @@
 -
     description: 全局权限
-    slug: global
+    slug: backend:global
     title: 全局
     groups:
         -
@@ -69,3 +69,12 @@
                     default: false
                     description: 设置全局配置项
                     slug: set
+        -
+            description: 用户角色管理
+            slug: role
+            title: 角色权限
+            permissions:
+                -
+                    default: false
+                    description: 管理用户角色
+                    slug: manage

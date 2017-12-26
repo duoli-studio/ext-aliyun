@@ -10,11 +10,11 @@ use Poppy\Framework\Support\ModuleServiceProvider as ModuleServiceProviderBase;
 use System\Addon\AddonServiceProvider;
 use System\Backend\BackendServiceProvider;
 use System\Classes\AuthProvider;
-use System\Console\CommandServiceProvider;
 use System\Events\ListenerServiceProvider;
 use System\Extension\ExtensionServiceProvider;
 use System\Models\PamAccount;
 use System\Module\ModuleServiceProvider;
+use System\Pam\PamServiceProvider;
 use System\Permission\Commands\PermissionCommand;
 use System\Permission\PermissionServiceProvider;
 use System\Rbac\RbacServiceProvider;
@@ -65,6 +65,7 @@ class ServiceProvider extends ModuleServiceProviderBase
 		$this->app->register(RbacServiceProvider::class);
 		$this->app->register(ListenerServiceProvider::class);
 		$this->app->register(PermissionServiceProvider::class);
+		$this->app->register(PamServiceProvider::class);
 
 		$this->registerAuth();
 		$this->registerSchedule();
