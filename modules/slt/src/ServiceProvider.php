@@ -2,6 +2,8 @@
 
 use Poppy\Framework\Exceptions\ModuleNotFoundException;
 use Poppy\Framework\Support\ModuleServiceProvider as ModuleServiceProviderBase;
+use Slt\Console\FeCommand;
+use Slt\Console\SampleCommand;
 use Slt\Models\PrdBook;
 use Slt\Models\PrdContent;
 use Slt\Policies\PrdBookPolicy;
@@ -41,7 +43,8 @@ class ServiceProvider extends ModuleServiceProviderBase
 
 	private function registerCommand()
 	{
-		$this->registerConsoleCommand('slt.fe', 'Slt\Console\Fe');
+		$this->registerConsoleCommand('slt.fe', FeCommand::class);
+		$this->registerConsoleCommand('slt.sample', SampleCommand::class);
 	}
 
 }

@@ -10,10 +10,13 @@ use Poppy\Framework\Support\ModuleServiceProvider as ModuleServiceProviderBase;
 use System\Addon\AddonServiceProvider;
 use System\Backend\BackendServiceProvider;
 use System\Classes\AuthProvider;
-use System\Events\EventServiceProvider;
+use System\Console\CommandServiceProvider;
+use System\Events\ListenerServiceProvider;
 use System\Extension\ExtensionServiceProvider;
 use System\Models\PamAccount;
 use System\Module\ModuleServiceProvider;
+use System\Permission\Commands\PermissionCommand;
+use System\Permission\PermissionServiceProvider;
 use System\Rbac\RbacServiceProvider;
 use System\Request\MiddlewareServiceProvider;
 use System\Request\RouteServiceProvider;
@@ -60,7 +63,8 @@ class ServiceProvider extends ModuleServiceProviderBase
 		$this->app->register(AddonServiceProvider::class);
 		$this->app->register(ModuleServiceProvider::class);
 		$this->app->register(RbacServiceProvider::class);
-		$this->app->register(EventServiceProvider::class);
+		$this->app->register(ListenerServiceProvider::class);
+		$this->app->register(PermissionServiceProvider::class);
 
 		$this->registerAuth();
 		$this->registerSchedule();
@@ -92,7 +96,7 @@ class ServiceProvider extends ModuleServiceProviderBase
 
 	private function registerConsole()
 	{
-		$this->registerConsoleCommand('system.sample', 'System\Console\Sample');
+		$this->registerConsoleCommand('system.permission', PermissionCommand::class);
 	}
 
 

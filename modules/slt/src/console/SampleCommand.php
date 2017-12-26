@@ -1,15 +1,15 @@
-<?php namespace System\Console;
+<?php namespace Slt\Console;
 
 use Illuminate\Console\Command;
 
-class Sample extends Command
+class SampleCommand extends Command
 {
 
 	/**
 	 * The name and signature of the console command.
 	 * @var string
 	 */
-	protected $signature = 'system:sample';
+	protected $signature = 'fe:sample';
 
 	/**
 	 * The console command description.

@@ -1,12 +1,12 @@
 <?php namespace System\Events;
 
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Illuminate\Foundation\Support\Providers\EventServiceProvider;
 
 /**
  * 事件监听
  * 这里不要使用 Class::class 这种形式, 无法判定是否重复KEY
  */
-class EventServiceProvider extends ServiceProvider
+class ListenerServiceProvider extends EventServiceProvider
 {
 
 	/**

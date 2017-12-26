@@ -5,6 +5,7 @@ use System\Addon\AddonManager;
 use System\Backend\BackendManager;
 use System\Extension\ExtensionManager;
 use System\Module\ModuleManager;
+use System\Permission\PermissionManager;
 use System\Setting\Repository\SettingRepository;
 use Tymon\JWTAuth\JWTAuth;
 
@@ -24,11 +25,19 @@ trait SystemTrait
 	}
 
 	/**
+	 * @return PermissionManager
+	 */
+	protected function getPermission(): PermissionManager
+	{
+		return $this->getContainer()->make('permission');
+	}
+
+	/**
 	 * @return SettingRepository
 	 */
 	protected function getSetting(): SettingRepository
 	{
-		return $this->getContainer()->make('system.setting');
+		return $this->getContainer()->make('setting');
 	}
 
 	/**

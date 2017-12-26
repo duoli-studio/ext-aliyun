@@ -2,7 +2,7 @@
 
 use Illuminate\Console\Command;
 
-class Fe extends Command
+class FeCommand extends Command
 {
 
 	/**

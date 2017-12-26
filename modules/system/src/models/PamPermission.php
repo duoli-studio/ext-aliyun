@@ -1,8 +1,8 @@
 <?php namespace System\Models;
 
 
-use User\Rbac\Contracts\RbacPermissionContract;
-use User\Rbac\Traits\RbacPermissionTrait;
+use System\Rbac\Contracts\RbacPermissionContract;
+use System\Rbac\Traits\RbacPermissionTrait;
 
 /**
  * permission
@@ -14,13 +14,15 @@ class PamPermission extends \Eloquent implements RbacPermissionContract
 
 	protected $table = 'pam_permission';
 
+	public $timestamps = false;
+
 	protected $fillable = [
 		'name',
 		'title',
 		'description',
 		'group',
+		'root',
 		'module',
-		'is_menu',
 	];
 
 

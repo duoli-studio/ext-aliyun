@@ -4,9 +4,6 @@ use Illuminate\Support\ServiceProvider;
 use System\Setting\Repository\SettingRepository;
 
 
-/**
- * Class SettingServiceProvider.
- */
 class SettingServiceProvider extends ServiceProvider
 {
 	/**
@@ -19,7 +16,7 @@ class SettingServiceProvider extends ServiceProvider
 	 */
 	public function provides()
 	{
-		return ['system.setting'];
+		return ['setting'];
 	}
 
 	/**
@@ -27,7 +24,7 @@ class SettingServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
-		$this->app->singleton('system.setting', function () {
+		$this->app->singleton('setting', function () {
 			return new SettingRepository();
 		});
 	}
