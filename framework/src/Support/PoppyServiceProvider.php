@@ -33,8 +33,14 @@ abstract class PoppyServiceProvider extends ServiceProviderBase
 			$this->loadTranslationsFrom($modulePath . '/resources/lang', $module);
 			$this->loadMigrationsFrom($modulePath . '/resources/database/migrations');
 
-			$this->bootListener();
-			$this->bootPolicies();
+			if ($this->listens) {
+				$this->bootListener();
+			}
+
+			if ($this->policies) {
+				$this->bootPolicies();
+			}
+
 		}
 	}
 
@@ -96,5 +102,6 @@ abstract class PoppyServiceProvider extends ServiceProviderBase
 			}
 		}
 	}
+
 
 }

@@ -3,10 +3,11 @@
 
 use Illuminate\Console\Scheduling\Schedule;
 use Order\Request\RouteServiceProvider;
-use Poppy\Framework\Support\ModuleServiceProvider as ModuleServiceProviderBase;
+use Poppy\Framework\Support\PoppyServiceProvider;
 
-class ServiceProvider extends ModuleServiceProviderBase
+class ServiceProvider extends PoppyServiceProvider
 {
+	private   $name    = 'order';
 	protected $listens = [
 
 	];
@@ -21,21 +22,15 @@ class ServiceProvider extends ModuleServiceProviderBase
 
 	/**
 	 * Bootstrap the application events.
+	 * @throws \Poppy\Framework\Exceptions\ModuleNotFoundException
 	 */
 	public function boot()
 	{
-
-		// policies
-		$this->bootPolicies();
-
-		// listener
-		$this->bootListener();
-		parent::boot('order');
+		parent::boot($this->name);
 	}
 
 	/**
 	 * Register the service provider.
-	 *
 	 * @return void
 	 */
 	public function register()

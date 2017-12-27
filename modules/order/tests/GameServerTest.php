@@ -6,26 +6,25 @@
 
 use Poppy\Framework\Application\TestCase;
 
-class ActGameServer extends TestCase
+class GameServerTest extends TestCase
 {
-    //
+	//
 	public function testCreate()
 	{
 		// $game = app('act.actGameServer');
 		$game = new \Order\Action\ActGameServer();
 		$item = $game->establish([
-			'title' => '微信大区',
+			'title'     => '微信大区2',
 			'parent_id' => '6',
 		]);
-
 		dd($game->getError());
 	}
 
 	public function testGenId()
 	{
 		$game = new \Order\Action\ActGameServer();
-		$id = $game->genId('2');
-		dd($id);
+		$code = $game->genCode(4);
+		dd($code);
 	}
 
 	/*public function testUpdate()

@@ -3,14 +3,13 @@
 /**
  * 游戏服务器操作
  */
-use Poppy\Framework\Helper\UtilHelper;
 use Poppy\Framework\Validation\Rule;
 use Order\Models\GameServer;
-use System\Classes\Traits\SystemAppTrait;
+use System\Classes\Traits\SystemTrait;
 
 class ActGameServer
 {
-	use SystemAppTrait;
+	use SystemTrait;
 
 	/**
 	 * @var
@@ -48,7 +47,7 @@ class ActGameServer
 		$validator = \Validator::make($initDb, [
 			'title'     => [
 				Rule::required(),
-				Rule::unique($this->gameServerTable, 'title')->where(function($query) use ($id) {
+				Rule::unique($this->gameServerTable, 'title')->where(function ($query) use ($id) {
 					if ($id) {
 						$query->where('id', '!=', $id);
 					}
@@ -77,11 +76,31 @@ class ActGameServer
 		}
 		else {
 			$this->item = GameServer::create($initDb);
-			GameServer::genCode();
 		}
 		return true;
 	}
 
+
+	public function genCode($id)
+	{
+		$allPid = (array) $this->parentId($id, $ids);
+		array_unshift($allPid, $id);
+		if (is_null($ids)) {
+			$formatId = [$id, 0, 0];
+		}
+		else {
+			$ids = array_reverse($allPid);
+			if (count($ids) > 3) {
+				return $this->setError('级别错误');
+			}
+			$formatId = [];
+			for ($i = 0; $i <= 2; $i++) {
+				$formatId[] = $ids[$i] ?? 0;
+			}
+		}
+
+		return sprintf("%'.04d%'.04d%'.04d", $formatId[0], $formatId[1], $formatId[2]);
+	}
 
 	public function init($id)
 	{
@@ -96,16 +115,29 @@ class ActGameServer
 
 	public function genId($pid)
 	{
-		$id = GameServer::where('id',$pid)->value('id');
-		$parent_id = GameServer::where('id',$id)->value('parent_id');
+		$id        = GameServer::where('id', $pid)->value('id');
+		$parent_id = GameServer::where('id', $id)->value('parent_id');
 
-		if ($parent_id === 0){
+		if ($parent_id === 0) {
 			return $id;
 		}
-		else{
-			$id = GameServer::where('id',$pid)->value('id');
+		else {
+			$id = GameServer::where('id', $pid)->value('id');
 			return $id;
 		}
 
 	}
+
+	public function parentId($id, &$ids)
+	{
+		$parentId = GameServer::where('id', $id)->value('parent_id');
+		if ($parentId) {
+			$ids[] = $parentId;
+			return $this->parentId($parentId, $ids);
+		}
+		else {
+			return $ids;
+		}
+	}
+
 }
