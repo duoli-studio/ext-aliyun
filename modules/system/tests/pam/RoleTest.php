@@ -16,6 +16,7 @@ class RoleTest extends TestCase
 		$item = $role->establish([
 			'name'  => 'abc',
 			'title' => 'abc',
+			'type' => 'backend',
 		]);
 
 		dd($role->getError());

@@ -1,7 +1,7 @@
 <?php namespace Slt;
 
 use Poppy\Framework\Exceptions\ModuleNotFoundException;
-use Poppy\Framework\Support\ModuleServiceProvider as ModuleServiceProviderBase;
+use Poppy\Framework\Support\PoppyServiceProvider as ModuleServiceProviderBase;
 use Slt\Console\FeCommand;
 use Slt\Console\SampleCommand;
 use Slt\Models\PrdBook;

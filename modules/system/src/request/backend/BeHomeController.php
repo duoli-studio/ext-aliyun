@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Poppy\Framework\Application\Controller;
 use Poppy\Framework\Classes\Resp;
-use System\Models\BaseConfig;
+use System\Models\SysConfig;
 use System\Models\PamAccount;
 use System\Models\PamRole;
 
@@ -39,7 +39,7 @@ class BeHomeController extends Controller
 				$account = $auth->user();
 				if (!$account->hasRole(PamRole::BE_ROOT)) {
 					// check is_enable
-					if ($account->is_enable == BaseConfig::NO) {
+					if ($account->is_enable == SysConfig::NO) {
 						return Resp::web(Resp::ERROR, '用户被禁用');
 					}
 				}
@@ -146,7 +146,7 @@ class BeHomeController extends Controller
 	 */
 	public function cache()
 	{
-		BaseConfig::cacheClear();
+		SysConfig::cacheClear();
 		SysAcl::reCache();
 		return Resp::web(Resp::SUCCESS, '更新缓存成功', 'location|message');
 	}

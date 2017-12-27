@@ -10,10 +10,13 @@ use Poppy\Framework\GraphQL\Support\Type as AbstractType;
  */
 class RespType extends AbstractType
 {
-	protected $attributes = [
-		'name'        => 'resp',
-		'description' => 'Response message',
-	];
+
+	public function __construct($attributes = [])
+	{
+		parent::__construct($attributes);
+		$this->attributes['name']        = 'resp';
+		$this->attributes['description'] = trans('system::act.graphql.resp_desc');
+	}
 
 	/**
 	 * @return array
@@ -23,12 +26,12 @@ class RespType extends AbstractType
 		return [
 			'status'  => [
 				'type'         => Type::nonNull(Type::int()),
-				'description'  => trans('system::conf.graphql.resp_status'),
+				'description'  => trans('system::act.graphql.resp_status'),
 				'defaultValue' => Resp::SUCCESS,
 			],
 			'message' => [
 				'type'        => Type::nonNull(Type::string()),
-				'description' => trans('system::conf.graphql.resp_message'),
+				'description' => trans('system::act.graphql.resp_message'),
 			],
 		];
 	}

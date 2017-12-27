@@ -58,6 +58,7 @@ class RouteServiceProvider extends ServiceProvider
 		], function (Router $router) {
 			$router->get('/', HomeController::class . '@layout');
 			$router->get('/graphi', HomeController::class . '@graphi');
+			$router->get('/test', HomeController::class . '@test');
 		});
 		\Route::group([
 			'middleware' => 'backend',

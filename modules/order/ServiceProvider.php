@@ -2,7 +2,7 @@
 
 
 use Illuminate\Console\Scheduling\Schedule;
-use Poppy\Framework\Support\ModuleServiceProvider as ModuleServiceProviderBase;
+use Poppy\Framework\Support\PoppyServiceProvider as ModuleServiceProviderBase;
 
 class ServiceProvider extends ModuleServiceProviderBase
 {

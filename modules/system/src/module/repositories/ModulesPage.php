@@ -18,7 +18,7 @@ class ModulesPage extends Repository
 	public function initialize(Collection $slugs)
 	{
 		$this->items = $this->getCache('poppy')->rememberForever(
-			'module.page.repository', function () use ($slugs) {
+			'modules.page', function () use ($slugs) {
 			$collection = collect();
 			$slugs->each(function ($items, $module) use ($collection) {
 				collect($items)->each(function ($definition, $identification) use ($collection, $module) {

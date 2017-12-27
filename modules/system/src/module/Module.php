@@ -1,21 +1,19 @@
 <?php namespace System\Module;
 
 use ArrayAccess;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Auth\Factory;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use JsonSerializable;
 use Poppy\Framework\Classes\Traits\HasAttributesTrait;
-use Poppy\Framework\Classes\Traits\PoppyTrait;
+use System\Classes\Traits\SystemTrait;
+use System\Models\PamAccount;
 
 /**
  * Class Module.
  */
 class Module implements Arrayable, ArrayAccess, JsonSerializable
 {
-	use HasAttributesTrait, PoppyTrait;
+	use HasAttributesTrait, SystemTrait;
 
 	/**
 	 * Module constructor.
@@ -87,7 +85,7 @@ class Module implements Arrayable, ArrayAccess, JsonSerializable
 		$exists = collect(data_get($this->attributes, 'assets.' . $entry));
 		$exists->isNotEmpty() && $exists->each(function ($definitions, $identification) use ($data) {
 			if (isset($definitions['permissions']) && $definitions['permissions']) {
-				if ($this->checkPermission($definitions['permissions'])) {
+				if ($this->checkPermission($definitions['permissions'], PamAccount::GUARD_BACKEND)) {
 					$scripts = $definitions['scripts'];
 				}
 				else {
@@ -107,24 +105,16 @@ class Module implements Arrayable, ArrayAccess, JsonSerializable
 
 	/**
 	 * @param $identification
+	 * @param $guard
 	 * @return bool
 	 */
-	protected function checkPermission($identification): bool
+	protected function checkPermission($identification, $guard): bool
 	{
 		if (!$identification) {
 			return true;
 		}
-		$user = Container::getInstance()->make(Factory::class)->guard('api')->user();
-		if ((!$user instanceof Model) || (!Member::hasMacro('groups'))) {
-			return false;
-		}
-		foreach (collect($user->load('groups')->getAttribute('groups'))->toArray() as $group) {
-			if (Container::getInstance()->make(PermissionManager::class)->check($identification, $group['identification'])) {
-				return true;
-			}
-		}
 
-		return false;
+		return $this->getPermission()->check($identification, $guard);
 	}
 
 	/**
@@ -137,7 +127,7 @@ class Module implements Arrayable, ArrayAccess, JsonSerializable
 		$exists = collect(data_get($this->attributes, 'assets.' . $entry));
 		$exists->isNotEmpty() && $exists->each(function ($definitions, $identification) use ($data) {
 			if (isset($definitions['permissions']) && $definitions['permissions']) {
-				if ($this->checkPermission($definitions['permissions'])) {
+				if ($this->checkPermission($definitions['permissions'], PamAccount::GUARD_BACKEND)) {
 					$scripts = $definitions['stylesheets'];
 				}
 				else {

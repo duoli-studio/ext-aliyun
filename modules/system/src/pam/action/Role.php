@@ -4,14 +4,14 @@
  * 基本账户操作
  */
 use Poppy\Framework\Validation\Rule;
-use System\Classes\Traits\SystemAppTrait;
+use System\Classes\Traits\SystemTrait;
 use System\Models\PamAccount;
 use System\Models\PamRole;
 
 class Role
 {
 
-	use SystemAppTrait;
+	use SystemTrait;
 
 	/** @var PamRole */
 	protected $role;
@@ -75,9 +75,9 @@ class Role
 				]),
 			],
 		], [], [
-			'name'  => trans('system::db.role.name'),
-			'title' => trans('system::db.role.title'),
-			'type'  => trans('system::db.role.type'),
+			'name'  => trans('system::role.db.name'),
+			'title' => trans('system::role.db.title'),
+			'type'  => trans('system::role.db.type'),
 		]);
 		if ($validator->fails()) {
 			return $this->setError($validator->messages());
