@@ -1,18 +1,7 @@
-system::site.name:
-    type: string
-    description:网站名称
-system::settings.image:
-    type: string
-    default:
-        - .png
-        - .jpg
-        - .jpeg
-        - .gif
-        - .bmp
-    description:
-system::settings.engine:
-    type: string
-    default: gd
-system::settings.video:
-    type: integer
-    default: 2048
+system::site.name :
+    type : string
+    description : 网站名称
+system::site.is_open :
+    type : int
+    default : 1
+    description : 是否开启

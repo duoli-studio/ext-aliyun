@@ -4,14 +4,14 @@
  * 基本账户操作
  */
 use Poppy\Framework\Validation\Rule;
-use System\Classes\Traits\SystemAppTrait;
+use System\Classes\Traits\SystemTrait;
 use System\Models\PamAccount;
 use System\Models\PamRole;
 
 class Role
 {
 
-	use SystemAppTrait;
+	use SystemTrait;
 
 	/** @var PamRole */
 	protected $role;

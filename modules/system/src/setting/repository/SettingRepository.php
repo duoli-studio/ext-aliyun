@@ -1,8 +1,8 @@
 <?php namespace System\Setting\Repository;
 
 use Illuminate\Support\Collection;
-use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Classes\Traits\KeyParserTrait;
+use System\Classes\Traits\SystemTrait;
 use System\Models\SysConfig;
 use System\Setting\Contracts\SettingContract;
 
@@ -11,7 +11,7 @@ use System\Setting\Contracts\SettingContract;
  */
 class SettingRepository implements SettingContract
 {
-	use KeyParserTrait, AppTrait;
+	use KeyParserTrait, SystemTrait;
 
 	private        $table;
 	private        $cacheName;
@@ -149,13 +149,16 @@ class SettingRepository implements SettingContract
 
 	public function getNsGroup($namespace, $group)
 	{
+		$settings = $this->getModule()->settings();
 		/** @var Collection|SysConfig[] $items */
 		return SysConfig::where([
 			'namespace' => $namespace,
 			'group'     => $group,
-		])->get()->map(function ($item) {
-			$item->value = unserialize($item->value);
-			$item->key   = $item->namespace . "::" . $item->group;
+		])->get()->map(function ($item) use ($settings) {
+			$item->value       = unserialize($item->value);
+			$item->key         = $item->namespace . "::" . $item->group;
+			$setting           = (array) $settings->get($item->key);
+			$item->description = data_get($setting, 'description');
 			return $item;
 		})->toArray();
 	}
