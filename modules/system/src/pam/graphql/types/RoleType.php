@@ -1,4 +1,4 @@
-<?php namespace System\Setting\GraphQL\Types;
+<?php namespace System\Pam\GraphQL\Types;
 
 use GraphQL\Type\Definition\Type;
 use Poppy\Framework\GraphQL\Support\Type as AbstractType;
@@ -24,14 +24,14 @@ class RoleType extends AbstractType
 		return [
 			'name'  => [
 				'type'        => Type::string(),
-				'description' => trans('system::db.role.name'),
+				'description' => trans('system::role.db.name'),
 			],
 			'title' => [
-				'description' => trans('system::db.role.title'),
+				'description' => trans('system::role.db.title'),
 				'type'        => Type::string(),
 			],
 			'type'  => [
-				'description' => trans('system::db.role.type'),
+				'description' => trans('system::role.db.type'),
 				'type'        => Type::string(),
 			],
 		];
