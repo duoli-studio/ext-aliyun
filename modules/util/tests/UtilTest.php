@@ -5,12 +5,20 @@
  */
 
 use Poppy\Framework\Application\TestCase;
-use Util\Action\ActUtil;
+
 class UtilTest extends TestCase
 {
-    //
-	public function testUtil(){
-		$util = new ActUtil();
-		$util->getCaptcha('10','123456789@qq.com','');
+	//
+	public function testUtil()
+	{
+
+		$util = app('act.util');
+		if (!$util->sendCaptcha('15566647473')) {
+			dd($util->getError());
+		}
+		else {
+			dd($util->getSuccess());
+		}
+
 	}
 }

@@ -1,15 +1,18 @@
-<?php namespace Util\Action;
+<?php namespace Util\Util\Action;
 
 /**
  * 基本账户操作
  */
 
 use Carbon\Carbon;
-use Poppy\Framework\Traits\AppTrait;
-use Util\Models\Captcha;
+use Poppy\Framework\Helper\StrHelper;
+use Poppy\Framework\Helper\UtilHelper;
+use System\Classes\Traits\SystemTrait;
+use Util\Models\PamCaptcha;
 
-class ActUtil
+class Util
 {
+	use SystemTrait;
 
 	/**
 	 * 生成验证码
@@ -41,7 +44,8 @@ class ActUtil
 				}
 			}
 			$data[$key] = $str;
-		} else {
+		}
+		else {
 			$data = [
 				$key => $str,
 			];
@@ -50,47 +54,59 @@ class ActUtil
 		return openssl_encrypt($str, self::CRYPT_METHOD, substr(config('app.key'), 0, 32));
 	}
 
-	public function getCaptcha($expired, $passport, $captcha)
+	public function sendCaptcha($passport)
 	{
-		//
-		$now  = Carbon::now();
-		$unix = Carbon::now()->addMinute($expired);
-		if (!$captcha) {
-			for ($i = 0; $i < 6; $i++) {
-				$captcha .= rand(0, 9);
-			}
+		// 验证数据格式
+		if (UtilHelper::isEmail($passport)) {
+			$type       = PamCaptcha::TYPE_MAIL;
+			$expiredMin = $this->getSetting()->get('util::captcha.mail_expired_minute');
 		}
-		//发送验证码
-		//如果发送成功就写入数据库
-		if (preg_match('/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/', $passport)) {
-			$type = 'email';
-		} else if (preg_match('/^1[3|4|5|8][0-9]\d{4,8}$/', $passport)) {
-			$type = 'mobile';
-		} else {
-			return AppTrait::setError('发送失败');
+		elseif (UtilHelper::isMobile($passport)) {
+			$type       = PamCaptcha::TYPE_MOBILE;
+			$expiredMin = $this->getSetting()->get('util::captcha.sms_expired_minute');
 		}
-		$count = Captcha::where('passport', $passport)
-			->whereDay('created_at','=',date('d'))
-			->count();
-		if ($count > 0) {
-			$num = $count + 1;
-		} else {
-			$num = 1;
+		else {
+			return $this->setError(trans('util::act.util.send_captcha_passport_format_error'));
 		}
-		$data   = [
-			'passport'    => $passport,
-			'captcha'     => $captcha,
-			'type'        => $type,
-			'num'         => $num,
-			'created_at'  => $now,
-			'disabled_at' => $unix,
-		];
-		$result = Captcha::create($data);
-		if ($result) {
-			return '发送成功';
-		} else {
-			return AppTrait::setError('发送失败');
+
+		// 生成验证码
+
+
+		// 发送验证码
+		// todo
+
+
+		// 发送验证码数据库操作
+		$expired = Carbon::now()->addMinute($expiredMin);
+		$captcha = PamCaptcha::updateOrCreate([
+			'passport' => $passport,
+		]);
+
+		if ($captcha->num == 3) {
+			$captcha->num = 0;
 		}
+		// Not Send
+		if ($captcha->num == 0) {
+			$captcha->num     = 1;
+			$captcha->type    = $type;
+			$captcha->captcha = StrHelper::randomCustom(6, '0123456789');
+		}
+		else {
+			$captcha->num  += 1;
+			$captcha->type = $type;
+		}
+
+		// Captcha In Db or Re Generate.
+		// todo : send captcha
+		$randNo               = $captcha->captcha;
+
+
+		$captcha->disabled_at = $expired;
+		$captcha->save();
+
+		// 超出指定时间的验证码需要删除
+		// todo 事件
+		return true;
 	}
 
 	/**
@@ -113,13 +129,15 @@ class ActUtil
 			// dd($data[$key]);
 			if (!isset($data[$key])) {
 				return $this->setError('安全校验已经过期, 请重新请求');
-			} else {
+			}
+			else {
 				unset($data[$key]);
 				$this->hiddenStr = $split[2];
 				\Cache::forever($cacheKey, $data);
 				return true;
 			}
-		} else {
+		}
+		else {
 			return $this->setError('非法请求');
 		}
 	}

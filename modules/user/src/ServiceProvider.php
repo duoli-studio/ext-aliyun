@@ -39,12 +39,6 @@ class ServiceProvider extends PoppyServiceProvider
 
 		parent::boot($this->name);
 
-		// policies
-		$this->bootPolicies();
-
-		// listener
-		$this->bootListener();
-
 	}
 
 	/**

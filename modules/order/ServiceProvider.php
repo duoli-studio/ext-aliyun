@@ -36,12 +36,6 @@ class ServiceProvider extends ModuleServiceProviderBase
 	public function boot()
 	{
 		parent::boot('order');
-
-		// policies
-		$this->bootPolicies();
-
-		// listener
-		$this->bootListener();
 	}
 
 	/**

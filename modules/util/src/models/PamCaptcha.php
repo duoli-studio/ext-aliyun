@@ -1,26 +1,27 @@
-<?php namespace Util\models;
+<?php namespace Util\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
  *
  */
-class Captcha extends Model
+class PamCaptcha extends Model
 {
-    //
+	const TYPE_MOBILE = 'mobile';
+	const TYPE_MAIL   = 'mail';
+
 	protected $table = 'pam_captcha';
 
-	protected $primaryKey = 'id';
+	protected $dates = [
+		'disabled_at',
+	];
+
 
 	protected $fillable = [
-		'id',
 		'type',
 		'num',
 		'passport',
 		'captcha',
-		'careated_at',
 		'disabled_at',
-		'updated_at',
 	];
-
 }
