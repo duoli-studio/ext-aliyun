@@ -1,7 +1,7 @@
 <?php namespace System\Extension;
 
 use Poppy\Framework\Classes\Traits\PoppyTrait;
-use System\Extension\Repositories\ExtensionRepository;
+use System\Extension\Repositories\Extensions;
 
 /**
  * Class ExtensionManager.
@@ -11,7 +11,7 @@ class ExtensionManager
 	use PoppyTrait;
 
 	/**
-	 * @var ExtensionRepository
+	 * @var Extensions
 	 */
 	protected $repository;
 
@@ -34,12 +34,12 @@ class ExtensionManager
 	}
 
 	/**
-	 * @return ExtensionRepository
+	 * @return Extensions
 	 */
 	public function repository()
 	{
-		if (!$this->repository instanceof ExtensionRepository) {
-			$this->repository = new ExtensionRepository();
+		if (!$this->repository instanceof Extensions) {
+			$this->repository = new Extensions();
 			$this->repository->initialize(collect($this->getFile()->directories($this->getExtensionPath())));
 		}
 

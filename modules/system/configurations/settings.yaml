@@ -1,12 +1,6 @@
 system::site.name:
     type: string
-    default:
-        - .png
-        - .jpg
-        - .jpeg
-        - .gif
-        - .bmp
-    description:
+    description:网站名称
 system::settings.image:
     type: string
     default:

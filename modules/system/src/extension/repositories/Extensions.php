@@ -8,7 +8,7 @@ use System\Extension\Extension;
 /**
  * Class ExpandRepository.
  */
-class ExtensionRepository extends Repository
+class Extensions extends Repository
 {
 	use SystemTrait;
 	/**
@@ -23,7 +23,8 @@ class ExtensionRepository extends Repository
 	public function initialize(Collection $data)
 	{
 
-		$this->items = $this->getCache('poppy')->rememberForever('extension.repository', function () use ($data) {
+		$this->items = $this->getCache('poppy')->rememberForever(
+			'extensions', function () use ($data) {
 			$collection = collect();
 			$data->each(function ($directory, $index) use ($collection) {
 				$extension = new Extension([

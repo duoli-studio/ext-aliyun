@@ -6,7 +6,7 @@
 
 use Illuminate\Console\Scheduling\Schedule;
 use Poppy\Framework\Exceptions\ModuleNotFoundException;
-use Poppy\Framework\Support\ModuleServiceProvider as ModuleServiceProviderBase;
+use Poppy\Framework\Support\PoppyServiceProvider;
 use System\Addon\AddonServiceProvider;
 use System\Backend\BackendServiceProvider;
 use System\Classes\AuthProvider;
@@ -22,8 +22,17 @@ use System\Request\MiddlewareServiceProvider;
 use System\Request\RouteServiceProvider;
 use System\Setting\SettingServiceProvider;
 
-class ServiceProvider extends ModuleServiceProviderBase
+class ServiceProvider extends PoppyServiceProvider
 {
+
+	protected $listens = [
+		'Poppy\Framework\Poppy\Events\PoppyOptimized' => [
+			'System\Module\Listeners\ClearCacheListener',
+			'System\Extension\Listeners\ClearCacheListener',
+		],
+	];
+
+
 	/**
 	 * @var string Module name
 	 */
@@ -36,17 +45,12 @@ class ServiceProvider extends ModuleServiceProviderBase
 	 */
 	public function boot()
 	{
-
+		parent::boot($this->name);
 		$path = poppy_path($this->name);
 		$this->mergeConfigFrom($path . '/resources/config/graphql.php', 'graphql');
 
-		$this->loadViewsFrom($path . '/resources/views', $this->name);
-		$this->loadTranslationsFrom($path . '/resources/lang', $this->name);
-		$this->loadMigrationsFrom($path . '/resources/database/migrations');
-
 		// register extension
 		$this->app['extension']->register();
-
 	}
 
 	/**
@@ -103,8 +107,6 @@ class ServiceProvider extends ModuleServiceProviderBase
 
 	public function provides()
 	{
-		return [
-			'system.backend.manager',
-		];
+		return [];
 	}
 }

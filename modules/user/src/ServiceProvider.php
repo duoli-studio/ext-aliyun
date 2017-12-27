@@ -3,7 +3,7 @@
 
 use Poppy\Framework\Exceptions\ModuleNotFoundException;
 use Poppy\Framework\Helper\UtilHelper;
-use Poppy\Framework\Support\ModuleServiceProvider as ModuleServiceProviderBase;
+use Poppy\Framework\Support\PoppyServiceProvider as ModuleServiceProviderBase;
 
 # use Sour\Lemon\Support\Resp;
 # use Sour\System\Command\Rbac as LemonRbac;
