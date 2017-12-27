@@ -38,6 +38,10 @@ class RoleMutation extends Mutation
 				'type'        => Type::nonNull(Type::string()),
 				'description' => trans('system::role.db.title'),
 			],
+			'id'          => [
+				'type'        => Type::int(),
+				'description' => trans('system::role.db.id'),
+			],
 			'name'        => [
 				'type'        => Type::nonNull(Type::string()),
 				'description' => trans('system::role.db.name'),
@@ -60,8 +64,7 @@ class RoleMutation extends Mutation
 	 */
 	public function resolve($root, $args)
 	{
-		$id = $args['id'] ?? null;
-
+		$id   = $args['id'] ?? null;
 		$role = app('act.role');
 		if (!$role->establish($args, $id)) {
 			return $role->getError()->toArray();
