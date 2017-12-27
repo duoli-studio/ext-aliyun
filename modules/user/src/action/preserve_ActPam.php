@@ -10,7 +10,7 @@ use User\Classes\PamHelper;
 use Carbon\Carbon;
 use User\Models\PamAccount;
 
-class ActPam
+class PreserveActPam
 {
 
 	use BaseTrait;

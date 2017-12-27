@@ -63,6 +63,8 @@ return [
 	],
 	"unique"           => ":attribute 已经存在了",
 	"url"              => ":attribute 格式不正确",
+	"mobile"           => ":attribute 格式不正确",
+	"password"         => ":attribute 格式不正确",
 
 	/*
 	|--------------------------------------------------------------------------
@@ -89,35 +91,12 @@ return [
 	*/
 
 	'attributes' => [
-		'password'              => '密码',
-		// admin/login
-		'adm_name'              => '用户名',
-		'adm_pwd'               => '密码',
-		'node_title'            => '菜单标题',
-		'node_route'            => '路由地址',
-		'game_name'             => '游戏名称',
+		// pam
+		'password' => '密码',
+		'mobile'   => '手机',
 
-		// db field
-		'role_name'             => '角色标识',
-		'order_price'           => '订单价格',
-		'order_content'         => '订单内容',
-		'order_hours'           => '代练时限',
-		'order_get_in_price'    => '接单价格',
-		'order_get_in_number'   => '淘宝订单号',
-		'order_get_in_wangwang' => '接单旺旺',
-		'question_type'         => '问题类型',
-		'question_description'  => '问题描述',
-
-		// 代练猫
-		'safedeposit'           => '安全保证金',
-		'efficiency'            => '信用保证金',
-		'unitprice'             => '订单价格',
-		'ordertitle'            => '订单标题',
-		'accountvalue'          => '游戏账号',
-		'rolename'              => '游戏角色',
-		'accountpwd'            => '游戏密码',
-		'dlcontent'             => '代练内容',
-		'otherdesc'             => '其他描述',
+		// cat
+		'cat_id'   => '分类ID',
 	],
 
 ];

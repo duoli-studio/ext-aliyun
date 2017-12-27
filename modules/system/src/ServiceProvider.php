@@ -90,9 +90,6 @@ class ServiceProvider extends PoppyServiceProvider
 	private function registerSchedule()
 	{
 		$this->app['events']->listen('console.schedule', function (Schedule $schedule) {
-			$schedule->command('system:sample')
-				->everyMinute()
-				->appendOutputTo(storage_path('console/system.log'));
 
 			$schedule->command('clockwork:clean')->everyThirtyMinutes();
 		});

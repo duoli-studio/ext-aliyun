@@ -1,4 +1,4 @@
-<?php namespace Order;
+<?php namespace Order\Providers;
 
 
 use Illuminate\Console\Scheduling\Schedule;
@@ -30,6 +30,7 @@ class ServiceProvider extends ModuleServiceProviderBase
 
 		// listener
 		$this->bootListener();
+		parent::boot('order');
 	}
 
 	/**

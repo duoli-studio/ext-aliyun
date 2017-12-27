@@ -2,16 +2,19 @@
 
 
 use Poppy\Framework\Exceptions\ModuleNotFoundException;
-use Poppy\Framework\Helper\UtilHelper;
-use Poppy\Framework\Support\PoppyServiceProvider as ModuleServiceProviderBase;
+use User\Pam\PamServiceProvider;
+use User\Request\RouteServiceProvider;
+use Poppy\Framework\Support\PoppyServiceProvider;
 
 # use Sour\Lemon\Support\Resp;
 # use Sour\System\Command\Rbac as LemonRbac;
 # use Sour\System\Command\Fe as LemonFe;
 
-class ServiceProvider extends ModuleServiceProviderBase
+class ServiceProvider extends PoppyServiceProvider
 {
 	private $name = 'user';
+
+	protected $policies = [];
 
 	protected $listens = [
 		'Illuminate\Auth\Events\Failed' => [
@@ -20,6 +23,9 @@ class ServiceProvider extends ModuleServiceProviderBase
 		'Illuminate\Auth\Events\Login'  => [
 			'User\Events\Listeners\LoginLog',
 			'User\Events\Listeners\LoginNum',
+		],
+		'User\Pam\Events\PamRegistered' => [
+			// 统计
 		],
 	];
 
@@ -33,15 +39,6 @@ class ServiceProvider extends ModuleServiceProviderBase
 
 		parent::boot($this->name);
 
-		// policies
-		$this->bootPolicies();
-
-		// listener
-		$this->bootListener();
-
-		// validation
-		$this->bootValidation();
-
 	}
 
 	/**
@@ -50,9 +47,9 @@ class ServiceProvider extends ModuleServiceProviderBase
 	 */
 	public function register()
 	{
-
 		$this->registerCommand();
-
+		$this->app->register(RouteServiceProvider::class);
+		$this->app->register(PamServiceProvider::class);
 	}
 
 
@@ -61,31 +58,12 @@ class ServiceProvider extends ModuleServiceProviderBase
 	 */
 	private function registerCommand()
 	{
-		$this->registerConsoleCommand('pam.rbac', 'User\Console\Rbac');
-		$this->registerConsoleCommand('pam.init', 'User\Console\Init');
-		$this->registerConsoleCommand('pam.user', 'User\Console\User');
+		$this->registerConsoleCommand('user.rbac', 'User\Console\Rbac');
+		$this->registerConsoleCommand('user.init', 'User\Console\Init');
+		$this->registerConsoleCommand('user.user', 'User\Console\User');
 		// $this->registerConsoleCommand('lemon.fe', LemonFe::class);
 	}
 
-
-	private function bootValidation()
-	{
-		\Validator::extend('mobile', function ($attribute, $value, $parameters) {
-			return UtilHelper::isMobile($value);
-		});
-		\Validator::extend('json', function ($attribute, $value, $parameters) {
-			return UtilHelper::isJson($value);
-		});
-		\Validator::extend('date', function ($attribute, $value, $parameters) {
-			return UtilHelper::isDate($value);
-		});
-		\Validator::extend('chid', function ($attribute, $value, $parameters) {
-			return UtilHelper::isChId($value);
-		});
-		\Validator::extend('pwd', function ($attribute, $value, $parameters) {
-			return UtilHelper::isPwd($value);
-		});
-	}
 
 	public function provides()
 	{
