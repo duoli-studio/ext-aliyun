@@ -19,6 +19,7 @@ class ClearCacheListener
 			'modules.assets',
 			'modules.menu',
 			'modules.page',
+			'modules.setting',
 		])->each(function ($item) {
 			$this->getCache()->forget($item);
 		});

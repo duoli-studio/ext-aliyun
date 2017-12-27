@@ -32,6 +32,6 @@ class ModuleManagerTest extends TestCase
 	public function testSettings()
 	{
 		// dd(get_included_files());
-		dd(app('module')->settings()->get('system::site.name'));
+		dd(app('module')->settings());
 	}
 }
