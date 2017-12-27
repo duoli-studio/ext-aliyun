@@ -1,9 +1,11 @@
 <?php namespace System\Classes\Traits;
 
+use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Classes\Traits\PoppyTrait;
 use System\Addon\AddonManager;
 use System\Backend\BackendManager;
 use System\Extension\ExtensionManager;
+use System\Models\PamAccount;
 use System\Module\ModuleManager;
 use System\Permission\PermissionManager;
 use System\Setting\Repository\SettingRepository;
@@ -14,7 +16,55 @@ use Tymon\JWTAuth\JWTAuth;
  */
 trait SystemTrait
 {
-	use PoppyTrait;
+	use PoppyTrait, AppTrait;
+
+	/**
+	 * @var PamAccount;
+	 */
+	protected $bePam;
+
+	/**
+	 * @var PamAccount
+	 */
+	protected $webPam;
+
+	/**
+	 * Check Backend User login and permission.
+	 * @param string $permission
+	 * @return bool
+	 */
+	public function checkBe($permission = '')
+	{
+		$this->bePam = $this->getAuth()->guard(PamAccount::GUARD_BACKEND)->user();
+		if (!$this->bePam) {
+			return $this->setError(trans('system::act.check_be_need_login'));
+		}
+
+		// check permission
+		if ($permission && !$this->bePam->capable($permission)) {
+			return $this->setError(trans('system::act.check_permission_failed'));
+		}
+		return true;
+	}
+
+
+	/**
+	 * Check Web User Permission
+	 * @param string $permission
+	 * @return bool
+	 */
+	public function checkWeb($permission = '')
+	{
+		$this->webPam = $this->getAuth()->guard(PamAccount::GUARD_WEB)->user();
+		if (!$this->webPam) {
+			return $this->setError(trans('system::act.check_web_need_login'));
+		}
+		if ($permission && !$this->bePam->capable($permission)) {
+			return $this->setError(trans('system::act.check_permission_failed'));
+		}
+		return true;
+	}
+
 
 	/**
 	 * @return BackendManager

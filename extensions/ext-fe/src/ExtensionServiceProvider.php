@@ -1,9 +1,9 @@
 <?php namespace Poppy\Extension\Fe;
 
 use Poppy\Extension\Fe\Console\Bower;
-use Poppy\Framework\Support\ModuleServiceProvider;
+use Poppy\Framework\Support\PoppyServiceProvider;
 
-class ExtensionServiceProvider extends ModuleServiceProvider
+class ExtensionServiceProvider extends PoppyServiceProvider
 {
 
 	/**

@@ -26,11 +26,4 @@ interface SettingContract
 	 * @param $value
 	 */
 	public function set($key, $value);
-
-	/**
-	 * Get namespace groups and values.
-	 * @param $namespace
-	 * @return array
-	 */
-	public function getNs($namespace);
 }

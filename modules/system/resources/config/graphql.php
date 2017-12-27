@@ -6,10 +6,12 @@ return [
 		'default' => [
 			'mutation' => [
 				\System\Setting\Graphql\Mutation\SettingMutation::class,
+				\System\Pam\GraphQL\Mutation\RoleMutation::class,
 			],
 			'query'    => [
 				\System\Setting\Graphql\Queries\SettingQuery::class,
 				\System\Setting\Graphql\Queries\SettingsQuery::class,
+				\System\Pam\Graphql\Queries\RoleQuery::class,
 			],
 		],
 	],
@@ -27,6 +29,12 @@ return [
 
 		// resp
 		\System\Setting\GraphQL\Types\RespType::class,
+
+		/* role
+		 -------------------------------------------- */
+		\System\Pam\Graphql\Input\RoleFilterType::class,
+		\System\Pam\GraphQL\Types\RoleType::class,
+		\System\Pam\GraphQL\Types\RoleGuardType::class,
 
 	],
 ];

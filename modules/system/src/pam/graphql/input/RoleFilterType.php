@@ -24,11 +24,11 @@ class RoleFilterType extends InputType
 		return [
 			'type' => [
 				'type'        => Type::nonNull(Type::string()),
-				'description' => trans('system::db.role.type'),
+				'description' => trans('system::role.db.type'),
 			],
 			'id'   => [
 				'type'        => Type::string(),
-				'description' => trans('system::db.role.id'),
+				'description' => trans('system::role.db.id'),
 			],
 		];
 	}

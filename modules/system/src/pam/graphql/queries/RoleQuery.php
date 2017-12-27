@@ -21,7 +21,7 @@ class RoleQuery extends Query
 	{
 		parent::__construct($attributes);
 		$this->attributes['name']        = 'role';
-		$this->attributes['description'] = trans('system::role.graphql.query_desc');
+		$this->attributes['description'] = trans('system::role.graphql.queries_desc');
 	}
 
 	/**

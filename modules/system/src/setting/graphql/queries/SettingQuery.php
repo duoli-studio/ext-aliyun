@@ -1,6 +1,5 @@
 <?php namespace System\Setting\Graphql\Queries;
 
-use GraphQL\Type\Definition\ListOfType;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Poppy\Framework\GraphQL\Exception\TypeNotFound;
@@ -52,11 +51,12 @@ class SettingQuery extends Query
 	 */
 	public function resolve($root, $args)
 	{
-		$value = $this->getSetting()->get($args['key']);
+		$value   = $this->getSetting()->get($args['key']);
+		$setting = (array) $this->getModule()->settings()->get($args['key']);
 		return [
 			'key'         => $args['key'],
 			'value'       => $value,
-			'description' => '',
+			'description' => data_get($setting, 'description'),
 		];
 	}
 

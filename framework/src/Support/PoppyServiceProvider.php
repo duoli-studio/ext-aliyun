@@ -3,7 +3,7 @@
 use Poppy\Framework\Exceptions\ModuleNotFoundException;
 use Illuminate\Support\ServiceProvider as ServiceProviderBase;
 
-abstract class ModuleServiceProvider extends ServiceProviderBase
+abstract class PoppyServiceProvider extends ServiceProviderBase
 {
 	/**
 	 * event listener
@@ -32,6 +32,9 @@ abstract class ModuleServiceProvider extends ServiceProviderBase
 			$this->loadViewsFrom($modulePath . '/resources/views', $module);
 			$this->loadTranslationsFrom($modulePath . '/resources/lang', $module);
 			$this->loadMigrationsFrom($modulePath . '/resources/database/migrations');
+
+			$this->bootListener();
+			$this->bootPolicies();
 		}
 	}
 
