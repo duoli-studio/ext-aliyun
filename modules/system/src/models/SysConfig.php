@@ -12,9 +12,9 @@ use Poppy\Framework\Classes\Traits\KeyParserTrait;
  * @property string  $value       配置值
  * @property string  $description 配置介绍
  * @mixin \Eloquent
- * @method static Builder|BaseConfig applyKey($key)
+ * @method static Builder|SysConfig applyKey($key)
  */
-class BaseConfig extends \Eloquent
+class SysConfig extends \Eloquent
 {
 	use KeyParserTrait;
 
@@ -23,7 +23,7 @@ class BaseConfig extends \Eloquent
 	const NO  = 0;
 
 
-	protected $table = 'base_config';
+	protected $table = 'sys_config';
 
 	protected static $cache = [];
 

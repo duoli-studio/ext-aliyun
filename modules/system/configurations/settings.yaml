@@ -1,3 +1,12 @@
+system::site.name:
+    type: string
+    default:
+        - .png
+        - .jpg
+        - .jpeg
+        - .gif
+        - .bmp
+    description:
 system::settings.image:
     type: string
     default:
@@ -6,6 +15,7 @@ system::settings.image:
         - .jpeg
         - .gif
         - .bmp
+    description:
 system::settings.engine:
     type: string
     default: gd

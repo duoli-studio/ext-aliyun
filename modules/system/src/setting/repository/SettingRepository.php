@@ -3,7 +3,7 @@
 use Illuminate\Support\Collection;
 use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Classes\Traits\KeyParserTrait;
-use System\Models\BaseConfig;
+use System\Models\SysConfig;
 use System\Setting\Contracts\SettingContract;
 
 /**
@@ -20,7 +20,7 @@ class SettingRepository implements SettingContract
 
 	public function __construct()
 	{
-		$this->table       = (new BaseConfig())->getTable();
+		$this->table       = (new SysConfig())->getTable();
 		$this->cacheName   = cache_name(__CLASS__);
 		$this->cacheMinute = 60;
 		self::$cache       = (array) \Cache::get($this->cacheName);
@@ -104,7 +104,7 @@ class SettingRepository implements SettingContract
 
 		$record = $this->findRecord($key);
 		if (!$record) {
-			$record = new BaseConfig;
+			$record = new SysConfig;
 			list($namespace, $group, $item) = $this->parseKey($key);
 			$record->namespace = $namespace;
 			$record->group     = $group;
@@ -125,8 +125,8 @@ class SettingRepository implements SettingContract
 	 */
 	public function getNs($namespace)
 	{
-		/** @var Collection|BaseConfig[] $items */
-		$items = BaseConfig::where('namespace', $namespace)->get();
+		/** @var Collection|SysConfig[] $items */
+		$items = SysConfig::where('namespace', $namespace)->get();
 		// group
 		$data = [];
 		if ($items->count()) {
@@ -149,8 +149,8 @@ class SettingRepository implements SettingContract
 
 	public function getNsGroup($namespace, $group)
 	{
-		/** @var Collection|BaseConfig[] $items */
-		return BaseConfig::where([
+		/** @var Collection|SysConfig[] $items */
+		return SysConfig::where([
 			'namespace' => $namespace,
 			'group'     => $group,
 		])->get()->map(function ($item) {
@@ -163,12 +163,12 @@ class SettingRepository implements SettingContract
 	/**
 	 * Returns a record (cached)
 	 * @param $key
-	 * @return BaseConfig
+	 * @return SysConfig
 	 */
 	private function findRecord($key)
 	{
-		/** @var BaseConfig $record */
-		$record = BaseConfig::query();
+		/** @var SysConfig $record */
+		$record = SysConfig::query();
 		return $record->applyKey($key)->first();
 	}
 
