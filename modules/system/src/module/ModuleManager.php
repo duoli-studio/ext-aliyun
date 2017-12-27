@@ -6,6 +6,7 @@ use System\Module\Repositories\ModulesAssets;
 use System\Module\Repositories\ModulesMenu;
 use System\Module\Repositories\Modules;
 use System\Module\Repositories\ModulesPage;
+use System\Module\Repositories\ModulesSetting;
 
 /**
  * Class ModuleManager.
@@ -33,6 +34,11 @@ class ModuleManager
 	 * @var ModulesPage
 	 */
 	protected $pageRepository;
+
+	/**
+	 * @var ModulesSetting
+	 */
+	protected $settingRepository;
 
 	/**
 	 * @var Modules
@@ -145,6 +151,23 @@ class ModuleManager
 		}
 
 		return $this->assetsRepository;
+	}
+
+	/**
+	 * @return ModulesSetting
+	 */
+	public function settings(): ModulesSetting
+	{
+		if (!$this->settingRepository instanceof ModulesSetting) {
+			$collection = collect();
+			$this->repository()->enabled()->each(function (Module $module) use ($collection) {
+				$collection->put($module->slug(), $module->get('settings', []));
+			});
+			$this->settingRepository = new ModulesSetting();
+			$this->settingRepository->initialize($collection);
+		}
+
+		return $this->settingRepository;
 	}
 
 	/**

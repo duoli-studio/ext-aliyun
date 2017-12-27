@@ -1,6 +1,7 @@
 <?php namespace System\Models;
 
 use Carbon\Carbon;
+use EloquentFilter\Filterable;
 use System\Rbac\Contracts\RbacRoleContract;
 use System\Rbac\Traits\RbacRoleTrait;
 
@@ -17,13 +18,15 @@ use System\Rbac\Traits\RbacRoleTrait;
 class PamRole extends \Eloquent implements RbacRoleContract
 {
 
-	use RbacRoleTrait;
+	use RbacRoleTrait, Filterable;
 
 	const BE_ROOT  = 'root';      // admin user
 	const FE_USER  = 'user';      // web user
 	const DEV_USER = 'develop';   // developer
 
 	protected $table = 'pam_role';
+
+	public $timestamps = false;
 
 	protected $fillable = [
 		'name',

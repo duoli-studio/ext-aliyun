@@ -1,6 +1,6 @@
 <?php namespace Slt\Classes;
 
-use System\Models\BaseConfig;
+use System\Models\SysConfig;
 use System\Models\PamAccount;
 use Slt\Models\UserProfile;
 
@@ -84,7 +84,7 @@ class FeUser
 	 */
 	public function pamIsEnable()
 	{
-		return ($this->pam->is_enable == BaseConfig::YES);
+		return ($this->pam->is_enable == SysConfig::YES);
 	}
 
 	/**

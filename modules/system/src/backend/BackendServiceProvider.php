@@ -12,13 +12,6 @@ class BackendServiceProvider extends ServiceProvider
 	 */
 	protected $defer = true;
 
-	/**
-	 * @return array
-	 */
-	public function provides()
-	{
-		return ['backend'];
-	}
 
 	/**
 	 * Register for service provider.
@@ -28,5 +21,13 @@ class BackendServiceProvider extends ServiceProvider
 		$this->app->singleton('backend', function () {
 			return new BackendManager();
 		});
+	}
+
+	/**
+	 * @return array
+	 */
+	public function provides()
+	{
+		return ['backend'];
 	}
 }

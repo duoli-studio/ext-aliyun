@@ -28,4 +28,10 @@ class ModuleManagerTest extends TestCase
 		// dd(get_included_files());
 		dd(app('module')->pages());
 	}
+
+	public function testSettings()
+	{
+		// dd(get_included_files());
+		dd(app('module')->settings());
+	}
 }
