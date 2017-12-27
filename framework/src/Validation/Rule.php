@@ -126,4 +126,12 @@ class Rule extends IlluminateRule
 	{
 		return 'between:' . $start . ',' . $end;
 	}
+
+	/**
+	 * @return string
+	 */
+	public static function integer()
+	{
+		return 'integer';
+	}
 }
