@@ -1,0 +1,21 @@
+<?php namespace User\Pam\Events;
+
+
+use User\Models\PamAccount;
+
+class PamRegistered
+{
+
+	/** @var PamAccount */
+	private $pam;
+
+	public function __construct(PamAccount $pam)
+	{
+		$this->pam = $pam;
+	}
+
+	public function pam()
+	{
+		return $this->pam;
+	}
+}

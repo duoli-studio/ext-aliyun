@@ -2,6 +2,7 @@
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use System\Rbac\Traits\RbacUserTrait;
 
 /**
  * @property int    $id                 id
@@ -12,6 +13,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class PamAccount extends Model
 {
+	use RbacUserTrait;
+
 	protected $table = 'pam_account';
 
 	protected $dates = [

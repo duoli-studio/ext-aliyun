@@ -24,6 +24,9 @@ class ServiceProvider extends PoppyServiceProvider
 			'User\Events\Listeners\LoginLog',
 			'User\Events\Listeners\LoginNum',
 		],
+		'User\Pam\Events\PamRegistered' => [
+			// 统计
+		],
 	];
 
 
@@ -66,8 +69,6 @@ class ServiceProvider extends PoppyServiceProvider
 		$this->registerConsoleCommand('user.user', 'User\Console\User');
 		// $this->registerConsoleCommand('lemon.fe', LemonFe::class);
 	}
-
-
 
 
 	public function provides()
