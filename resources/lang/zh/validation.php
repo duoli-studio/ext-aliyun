@@ -63,6 +63,8 @@ return [
 	],
 	"unique"           => ":attribute 已经存在了",
 	"url"              => ":attribute 格式不正确",
+	"mobile"           => ":attribute 格式不正确",
+	"password"         => ":attribute 格式不正确",
 
 	/*
 	|--------------------------------------------------------------------------
