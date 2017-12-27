@@ -71,7 +71,27 @@ class SettingRepository implements SettingContract
 
 		$record = $this->findRecord($key);
 		if (!$record) {
-			static::$cache[$key] = serialize($default);
+			// get default by setting.yaml
+			$settingItem = $this->getModule()->settings()->get($key);
+			if ($settingItem) {
+				$type           = $settingItem['type'] ?? 'string';
+				$defaultSetting = $settingItem['default'] ?? '';
+				switch ($type) {
+					case 'string':
+					default:
+						$default = strval($defaultSetting);
+						break;
+					case 'int':
+						$default = intval($defaultSetting);
+						break;
+					case 'bool':
+					case 'boolean':
+						$default = boolval($defaultSetting);
+						break;
+				}
+			}
+
+			static::$cache[$key] = $default;
 			$this->writeCache();
 			return static::$cache[$key];
 		}
@@ -120,47 +140,29 @@ class SettingRepository implements SettingContract
 	}
 
 	/**
-	 * @param $namespace
-	 * @return array
+	 * Get setting via namespace and group.
+	 * @param string $namespace
+	 * @param string $group
+	 * @return Collection
 	 */
-	public function getNs($namespace)
-	{
-		/** @var Collection|SysConfig[] $items */
-		$items = SysConfig::where('namespace', $namespace)->get();
-		// group
-		$data = [];
-		if ($items->count()) {
-			$groups = [];
-			$items->each(function ($item) use (&$data, $items, &$groups) {
-				$group_name = $item->group;
-				if (!in_array($group_name, $groups)) {
-					$groups[] = $group_name;
-					$data[]   = [
-						'group'    => $item->group,
-						'children' => $items->filter(function ($item) use ($group_name) {
-							return $item->group = $group_name;
-						})->toArray(),
-					];
-				}
-			});
-		}
-		return $data;
-	}
-
 	public function getNsGroup($namespace, $group)
 	{
-		$settings = $this->getModule()->settings();
-		/** @var Collection|SysConfig[] $items */
-		return SysConfig::where([
-			'namespace' => $namespace,
-			'group'     => $group,
-		])->get()->map(function ($item) use ($settings) {
-			$item->value       = unserialize($item->value);
-			$item->key         = $item->namespace . "::" . $item->group;
-			$setting           = (array) $settings->get($item->key);
-			$item->description = data_get($setting, 'description');
-			return $item;
-		})->toArray();
+		$collection = collect([]);
+		$this->getModule()->settings()->each(
+			function ($define, $settingKey) use ($namespace, $group, $collection) {
+				$key = $namespace . '::' . $group;
+				if (str_start($settingKey, $key)) {
+					$value       = $this->get($settingKey);
+					$collection->push([
+						'value'       => $value,
+						'type'        => data_get($define, 'type') ?: 'string',
+						'key'         => $settingKey,
+						'description' => data_get($define, 'description'),
+					]);
+				}
+			}
+		);
+		return $collection;
 	}
 
 	/**

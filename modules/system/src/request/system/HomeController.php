@@ -30,6 +30,6 @@ class HomeController extends Controller
 
 	public function test()
 	{
-		$this->getSetting();
+		$this->getSetting()->getNsGroup('system', 'site');
 	}
 }
