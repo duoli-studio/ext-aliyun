@@ -3,6 +3,7 @@
 
 use Poppy\Framework\Exceptions\ModuleNotFoundException;
 use Poppy\Framework\Helper\UtilHelper;
+use User\Request\RouteServiceProvider;
 use Poppy\Framework\Support\ModuleServiceProvider as ModuleServiceProviderBase;
 
 # use Sour\Lemon\Support\Resp;
@@ -50,9 +51,8 @@ class ServiceProvider extends ModuleServiceProviderBase
 	 */
 	public function register()
 	{
-
 		$this->registerCommand();
-
+		$this->app->register(RouteServiceProvider::class);
 	}
 
 
