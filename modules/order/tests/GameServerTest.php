@@ -11,8 +11,7 @@ class GameServerTest extends TestCase
 	//
 	public function testCreate()
 	{
-		// $game = app('act.actGameServer');
-		$game = new \Order\Action\ActGameServer();
+		$game = app('act.game');
 		$item = $game->establish([
 			'title'     => '微信大区2',
 			'parent_id' => '6',
@@ -22,7 +21,7 @@ class GameServerTest extends TestCase
 
 	public function testGenId()
 	{
-		$game = new \Order\Action\ActGameServer();
+		$game = app('act.game');
 		$code = $game->genCode(4);
 		dd($code);
 	}

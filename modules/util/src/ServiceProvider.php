@@ -8,7 +8,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Util\Request\RouteServiceProvider;
 use Poppy\Framework\Exceptions\ModuleNotFoundException;
 use Poppy\Framework\Support\PoppyServiceProvider;
-use Util\Util\UtilServiceProvider;
+
 
 class ServiceProvider extends PoppyServiceProvider
 {
@@ -39,7 +39,7 @@ class ServiceProvider extends PoppyServiceProvider
 	public function register()
 	{
 		$this->app->register(RouteServiceProvider::class);
-		$this->app->register(UtilServiceProvider::class);
+
 
 		$this->registerConsoleCommand('util.clear_captcha', 'Util\Util\Console\ClearCaptchaCommand');
 

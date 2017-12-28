@@ -1,4 +1,4 @@
-<?php namespace Order\Action;
+<?php namespace Order\Game\Action;
 
 /**
  * 游戏服务器操作
@@ -7,7 +7,7 @@ use Poppy\Framework\Validation\Rule;
 use Order\Models\GameServer;
 use System\Classes\Traits\SystemTrait;
 
-class ActGameServer
+class Server
 {
 	use SystemTrait;
 
@@ -47,7 +47,7 @@ class ActGameServer
 		$validator = \Validator::make($initDb, [
 			'title'     => [
 				Rule::required(),
-				Rule::unique($this->gameServerTable, 'title')->where(function ($query) use ($id) {
+				Rule::unique($this->gameServerTable, 'title')->where(function($query) use ($id) {
 					if ($id) {
 						$query->where('id', '!=', $id);
 					}
@@ -80,7 +80,11 @@ class ActGameServer
 		return true;
 	}
 
-
+	/**
+	 * 生成游戏服务器编码
+	 * @param int $id
+	 * @return bool|string
+	 */
 	public function genCode($id)
 	{
 		$allPid = (array) $this->parentId($id, $ids);
@@ -113,21 +117,12 @@ class ActGameServer
 		}
 	}
 
-	public function genId($pid)
-	{
-		$id        = GameServer::where('id', $pid)->value('id');
-		$parent_id = GameServer::where('id', $id)->value('parent_id');
-
-		if ($parent_id === 0) {
-			return $id;
-		}
-		else {
-			$id = GameServer::where('id', $pid)->value('id');
-			return $id;
-		}
-
-	}
-
+	/**
+	 * 递归查找所有父ID
+	 * @param int   $id
+	 * @param array $ids
+	 * @return array
+	 */
 	public function parentId($id, &$ids)
 	{
 		$parentId = GameServer::where('id', $id)->value('parent_id');
