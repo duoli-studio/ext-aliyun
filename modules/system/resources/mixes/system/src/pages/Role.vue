@@ -4,90 +4,90 @@
     export default {
         data() {
             return {
-                form : {
-                    canManagementFileExtension : '',
+                form    : {
+                    canManagementFileExtension  : '',
                     canManagementImageExtension : '',
-                    canUploadCatcherExtension : '',
-                    canUploadFileExtension : '',
-                    canUploadImageExtension : '',
-                    canUploadVideoExtension : '',
-                    fileMaxSize : 0,
-                    imageMaxSize : 0,
-                    imageProcessingEngine : 'gd',
-                    videoMaxSize : 0,
+                    canUploadCatcherExtension   : '',
+                    canUploadFileExtension      : '',
+                    canUploadImageExtension     : '',
+                    canUploadVideoExtension     : '',
+                    fileMaxSize                 : 0,
+                    imageMaxSize                : 0,
+                    imageProcessingEngine       : 'gd',
+                    videoMaxSize                : 0,
                 },
                 loading : false,
-                rules : {
-                    canManagementFileExtension : [
+                rules   : {
+                    canManagementFileExtension  : [
                         {
                             required : true,
-                            type : 'string',
-                            message : '请输入允许管理文件的扩展名',
-                            trigger : 'change',
+                            type     : 'string',
+                            message  : '请输入允许管理文件的扩展名',
+                            trigger  : 'change',
                         },
                     ],
                     canManagementImageExtension : [
                         {
                             required : true,
-                            type : 'string',
-                            message : '请输入允许管理图片的扩展名',
-                            trigger : 'change',
+                            type     : 'string',
+                            message  : '请输入允许管理图片的扩展名',
+                            trigger  : 'change',
                         },
                     ],
-                    canUploadCatcherExtension : [
+                    canUploadCatcherExtension   : [
                         {
                             required : true,
-                            type : 'string',
-                            message : '请输入允许管理截图的扩展名',
-                            trigger : 'change',
+                            type     : 'string',
+                            message  : '请输入允许管理截图的扩展名',
+                            trigger  : 'change',
                         },
                     ],
-                    canUploadFileExtension : [
+                    canUploadFileExtension      : [
                         {
                             required : true,
-                            type : 'string',
-                            message : '请输入允许上传文件的扩展名',
-                            trigger : 'change',
+                            type     : 'string',
+                            message  : '请输入允许上传文件的扩展名',
+                            trigger  : 'change',
                         },
                     ],
-                    canUploadImageExtension : [
+                    canUploadImageExtension     : [
                         {
                             required : true,
-                            type : 'string',
-                            message : '请输入允许管理图片的扩展名',
-                            trigger : 'change',
+                            type     : 'string',
+                            message  : '请输入允许管理图片的扩展名',
+                            trigger  : 'change',
                         },
                     ],
-                    canUploadVideoExtension : [
+                    canUploadVideoExtension     : [
                         {
                             required : true,
-                            type : 'string',
-                            message : '请输入允许上传视频的扩展名',
-                            trigger : 'change',
+                            type     : 'string',
+                            message  : '请输入允许上传视频的扩展名',
+                            trigger  : 'change',
                         },
                     ],
-                    fileMaxSize : [
+                    fileMaxSize                 : [
                         {
                             required : true,
-                            type : 'integer',
-                            message : '请输入附件大小',
-                            trigger : 'change',
+                            type     : 'integer',
+                            message  : '请输入附件大小',
+                            trigger  : 'change',
                         },
                     ],
-                    imageMaxSize : [
+                    imageMaxSize                : [
                         {
                             required : true,
-                            type : 'integer',
-                            message : '请输入图片大小',
-                            trigger : 'change',
+                            type     : 'integer',
+                            message  : '请输入图片大小',
+                            trigger  : 'change',
                         },
                     ],
-                    videoMaxSize : [
+                    videoMaxSize                : [
                         {
                             required : true,
-                            type : 'integer',
-                            message : '请输入视频大小',
-                            trigger : 'change',
+                            type     : 'integer',
+                            message  : '请输入视频大小',
+                            trigger  : 'change',
                         },
                     ],
                 },
@@ -171,7 +171,7 @@
         <i-form :label-width="200" :model="form" ref="form" :rules="rules">
             <row>
                 <i-col span="12">
-                    <form-item label="图片处理引擎" prop="imageProcessingEngine">
+                    <form-item label="图片处理引擎33333" prop="imageProcessingEngine">
                         <radio-group v-model="form.imageProcessingEngine">
                             <radio label="gd">GD 库</radio>
                         </radio-group>
