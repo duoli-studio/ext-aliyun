@@ -45,6 +45,7 @@ return [
 			'provider' => 'pam',
 		],
 		'api'     => [
+			'driver'   => 'session',
 			'provider' => 'pam',
 		],
 	],

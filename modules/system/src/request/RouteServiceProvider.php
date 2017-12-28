@@ -82,11 +82,11 @@ class RouteServiceProvider extends ServiceProvider
 			$route->any('/graphql/{schema?}', GraphQLController::class . '@query');
 			$route->any('/token', AuthController::class . '@token');
 			$route->any('/information', InformationController::class . '@list');
+			$route->any('/dashboard', DashboardsController::class . '@list');
 			$route->group([
 				'middleware' => ['auth:api'],
 			], function (Router $route) {
 				$route->any('/access', AuthController::class . '@access');
-				$route->any('/dashboard', DashboardsController::class . '@list');
 				$route->any('/configuration/{path?}', ConfigurationController::class . '@definition');
 			});
 
