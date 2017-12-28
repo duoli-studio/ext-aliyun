@@ -3,7 +3,7 @@
 use Illuminate\Console\Command;
 
 /**
- * 获取代练妈妈列表
+ * 清除失效验证码
  */
 class ClearCaptchaCommand extends Command
 {

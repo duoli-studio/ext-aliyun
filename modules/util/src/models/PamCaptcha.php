@@ -1,9 +1,15 @@
 <?php namespace Util\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- *
+ * @property int    $id                 id
+ * @property string $type               验证类型
+ * @property string $num                发送次数
+ * @property string $passport           手机号或邮箱
+ * @property string $captcha            验证码
+ * @property Carbon $disabled_at        失效时间
  */
 class PamCaptcha extends Model
 {
