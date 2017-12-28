@@ -170,6 +170,8 @@ return [
 		'url_site' => env('URL_SITE'),
 	],
 	'appends' => [
-		'lemon' => "/assets/js/lemon",
+		'poppy'   => env('URL_SITE') . "/assets/js/poppy",
+		'slt'     => env('URL_SITE') . "/modules/slt/js",
+		'develop' => env('URL_SITE') . "/modules/develop/js",
 	],
 ];

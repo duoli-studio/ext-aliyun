@@ -30,8 +30,8 @@
         </div>
     </div>
     <script>
-		require(['jquery', 'lemon/util', 'jquery.validate', 'jquery.form'], function($, util) {
-			var conf = util.validate_conf({
+		require(['jquery', 'poppy/util', 'jquery.validation', 'jquery.form'], function($, util) {
+			var conf = util.validate_config({
 				submitHandler : function(form) {
 					$(form).ajaxSubmit({
 						success : util.splash

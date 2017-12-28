@@ -64,7 +64,7 @@ class AuthProvider implements UserProvider
 	{
 		$plain = $credentials['password'];
 		/** @type PamAccount $user */
-		return PamAccount::checkPassword($user, $plain);
+		return app('act.pam')->checkPassword($user, $plain);
 	}
 
 

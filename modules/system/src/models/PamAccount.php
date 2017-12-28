@@ -1,12 +1,11 @@
 <?php namespace System\Models;
 
 use Carbon\Carbon;
-use Poppy\Framework\Helper\EnvHelper;
 use Illuminate\Auth\Authenticatable as TraitAuthenticatable;
-use System\Rbac\Traits\RbacUserTrait;
-use Tymon\JWTAuth\Contracts\JWTSubject as JWTSubjectAuthenticatable;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Collection;
+use System\Rbac\Traits\RbacUserTrait;
+use Tymon\JWTAuth\Contracts\JWTSubject as JWTSubjectAuthenticatable;
 
 
 /**
@@ -46,9 +45,9 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 	const REG_PLATFORM_WEB     = 'web';
 	const REG_PLATFORM_PC      = 'pc';
 
-	const REG_TYPE_ACCOUNT = 'account_name';
-	const REG_TYPE_MOBILE  = 'mobile';
-	const REG_TYPE_EMAIL   = 'email';
+	const REG_TYPE_USERNAME = 'username';
+	const REG_TYPE_MOBILE   = 'mobile';
+	const REG_TYPE_EMAIL    = 'email';
 
 	const IS_ENABLE_YES = 1;
 	const IS_ENABLE_NO  = 0;
@@ -98,31 +97,6 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 			'desc' => '系统后台主动操控',
 		],
 	];
-
-
-	public function desktop()
-	{
-		return $this->hasOne('App\Models\AccountDesktop', 'account_id');
-	}
-
-	public function front()
-	{
-		return $this->hasOne('App\Models\AccountFront', 'account_id', 'account_id');
-	}
-
-	public function develop()
-	{
-		return $this->hasOne('App\Models\AccountDevelop', 'account_id', 'account_id');
-	}
-
-	/**
-	 * Get the password for the user.
-	 * @return string
-	 */
-	public function getAuthPassword()
-	{
-		return $this->account_pwd;
-	}
 
 
 	/**
@@ -199,16 +173,6 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 
 
 	/**
-	 * 检查用户名是否存在
-	 * @param $accountName
-	 * @return mixed
-	 */
-	public static function accountNameExists($accountName)
-	{
-		return PamAccount::where('account_name', $accountName)->value('account_id');
-	}
-
-	/**
 	 * 允许缓存, 获取账户类型, 因为账户类型不会变化
 	 * @param $account_id
 	 * @return mixed
@@ -247,110 +211,6 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 		return isset($linear[$key]) ? $linear[$key] : '';
 	}
 
-	/**
-	 * 根据账户名称/类型获取账户ID
-	 * @param $account_id
-	 * @return mixed
-	 */
-	public static function getAccountNameByAccountId($account_id)
-	{
-		return PamAccount::where('account_id', $account_id)->value('account_name');
-	}
-
-
-	/**
-	 * 检测账户密码是否正确
-	 * @param PamAccount $pam      用户账户信息
-	 * @param String     $password 用户传入的密码
-	 * @return bool
-	 */
-	public static function checkPassword($pam, $password)
-	{
-		$accountKey   = $pam->account_key;
-		$regTime      = strtotime($pam->created_at);
-		$authPassword = $pam->getAuthPassword();
-		$gendPassword = self::genPassword($password, $regTime, $accountKey);
-		return (bool) ($authPassword === $gendPassword);
-	}
-
-
-
-	/**
-	 * 创建用户账户
-	 * @param $accountName
-	 * @param $password
-	 * @param $accountType
-	 * @param $roleId
-	 * @return bool|mixed
-	 */
-	public static function register($accountName, $password, $accountType, $roleId)
-	{
-		$key           = str_random(6);
-		$PamAccount    = PamAccount::create([
-			'account_name' => $accountName,
-			'account_key'  => $key,
-			'account_type' => $accountType,
-			'reg_ip'       => EnvHelper::ip(),
-		]);
-		$createdAtUnix = strtotime($PamAccount->created_at);
-		$gendPwd       = self::genPassword($password, $createdAtUnix, $key);
-
-		PamAccount::where('account_id', $PamAccount->id)->update([
-			'account_pwd' => $gendPwd,
-		]);
-		if (!$PamAccount->id) {
-			return false;
-		}
-		else {
-			PamRoleAccount::create([
-				'role_id'    => $roleId,
-				'account_id' => $PamAccount->id,
-			]);
-			return $PamAccount->id;
-		}
-	}
-
-
-
-	/**
-	 * 根据账户ID 来获取账户的信息
-	 * @param      $account_id
-	 * @param bool $profile
-	 * @return mixed
-	 */
-	public static function info($account_id, $profile = false)
-	{
-
-		$account = PamAccount::find($account_id)->toArray();
-		if ($profile) {
-			$account_type = $account['account_type'];
-			if ($account_type == PamAccount::ACCOUNT_TYPE_DESKTOP) {
-				$detail                                    = AccountDesktop::findOrFail($account_id)->toArray();
-				$account[PamAccount::ACCOUNT_TYPE_DESKTOP] = $detail;
-			}
-			if ($account_type == PamAccount::ACCOUNT_TYPE_FRONT) {
-				$detail                                  = AccountFront::findOrFail($account_id)->toArray();
-				$account[PamAccount::ACCOUNT_TYPE_FRONT] = $detail;
-			}
-			if ($account_type == PamAccount::ACCOUNT_TYPE_DEVELOP) {
-				$detail                                    = AccountDevelop::findOrFail($account_id)->toArray();
-				$account[PamAccount::ACCOUNT_TYPE_DEVELOP] = $detail;
-			}
-			return $account;
-		}
-		return $account;
-	}
-
-	/**
-	 * 通过账户名称获取信息, 没有返回 null
-	 * @param $account_name
-	 * @return PamAccount
-	 */
-	public static function getByAccountName($account_name)
-	{
-		return PamAccount::where('account_name', $account_name)->first();
-	}
-
 
 	/**
 	 * 绑定社会化组件
@@ -385,9 +245,9 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 	public static function kvRegType($key = null, $check_key = false)
 	{
 		$desc = [
-			self::REG_TYPE_ACCOUNT => '用户名',
-			self::REG_TYPE_MOBILE  => '手机号',
-			self::REG_TYPE_EMAIL   => '邮箱',
+			self::REG_TYPE_USERNAME => '用户名',
+			self::REG_TYPE_MOBILE   => '手机号',
+			self::REG_TYPE_EMAIL    => '邮箱',
 		];
 		return kv($desc, $key, $check_key);
 	}

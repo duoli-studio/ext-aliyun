@@ -50,7 +50,8 @@ class RouteServiceProvider extends ServiceProvider
 	protected function mapWebRoutes()
 	{
 		Route::group([
-			'prefix' => 'dev',
+			'middleware' => 'web',
+			'prefix'     => 'dev',
 		], function (Router $router) {
 			$router->any('login', HomeController::class . '@login')->name('develop:home.login');
 			$router->group([

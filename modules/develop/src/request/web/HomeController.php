@@ -32,14 +32,14 @@ class HomeController extends Controller
 
 			/** @var Pam $pam */
 			$pam = app('act.pam');
-			if ($pam->loginCheck($username, $password, PamAccount::GUARD_WEB, true)) {
-				return Resp::web(Resp::SUCCESS, '登录成功！', 'location|' . route('dev_home.cp'));
+			if ($pam->loginCheck($username, $password, PamAccount::GUARD_DEVELOP, true)) {
+				return Resp::web(Resp::SUCCESS, '登录成功！', 'location|' . route('develop:home.cp'));
 			}
 			else {
-				return Resp::web(Resp::ERROR, '登录失败, 请重试！');
+				return Resp::web(Resp::ERROR, $pam->getError());
 			}
 		}
-		$guard = $this->getAuth()->guard(PamAccount::GUARD_WEB)->user();
+		$guard = $this->getAuth()->guard(PamAccount::GUARD_DEVELOP)->user();
 		// todo check guard permission
 		if ($guard) {
 			return Resp::web(Resp::SUCCESS, '您已登录', [

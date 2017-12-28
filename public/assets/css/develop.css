@@ -1,0 +1,14 @@
+@charset "UTF-8";
+
+/* 引入样式
+ -------------------------------------------- */
+
+.colorgraph {
+  height: 5px;
+  border-top: 0;
+  background: #c4e17f;
+  border-radius: 5px;
+  background-image: -webkit-gradient(linear, left top, right top, from(#c4e17f), color-stop(12.5%, #c4e17f), color-stop(12.5%, #f7fdca), color-stop(25%, #f7fdca), color-stop(25%, #fecf71), color-stop(37.5%, #fecf71), color-stop(37.5%, #f0776c), color-stop(50%, #f0776c), color-stop(50%, #db9dbe), color-stop(62.5%, #db9dbe), color-stop(62.5%, #c49cde), color-stop(75%, #c49cde), color-stop(75%, #669ae1), color-stop(87.5%, #669ae1), color-stop(87.5%, #62c2e4), to(#62c2e4));
+  background-image: linear-gradient(to right, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
+}
+

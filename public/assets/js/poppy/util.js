@@ -634,24 +634,26 @@ define(function(require, exports) {
 	exports.splash = function(resp, append_callback) {
 		var obj_resp = exports.to_json(resp);
 		var obj_init = {
-			time     : 0,
-			message  : 'No Message Send By Server!',
-			status   : 1,
-			callback : '',
-			show     : 'tip'
+			message : 'No Message Send By Server!',
+			status  : 1,
+			data    : {
+				callback : '',
+				show     : 'tip',
+				time     : 0
+			}
 		};
 
 		obj_resp = $.extend(obj_init, obj_resp);
-		if (obj_resp.show === 'tip') {
-			obj_resp.time = parseInt(obj_resp.time) ? parseInt(obj_resp.time) : 0;
+		if (obj_resp.data.show === 'tip') {
+			obj_resp.data.time = parseInt(obj_resp.data.time) ? parseInt(obj_resp.data.time) : 0;
 			var jump_time;
-			if (obj_resp.location) {
+			if (obj_resp.data.location) {
 				jump_time = 800;
 			}
-			if (obj_resp.reload) {
+			if (obj_resp.data.reload) {
 				jump_time = 800;
 			}
-			if (obj_resp.reload_opener) {
+			if (obj_resp.data.reload_opener) {
 				jump_time = 800;
 			}
 			setTimeout(function() {

@@ -84,7 +84,7 @@ class BeHomeController extends Controller
 
 			$old_password = $request->input('old_password');
 			if ($old_password) {
-				if (!PamAccount::checkPassword($this->pam, $old_password)) {
+				if (!app('act.pam')->checkPassword($this->pam, $old_password)) {
 					return Resp::web(Resp::ERROR, '原密码错误!');
 				}
 			}

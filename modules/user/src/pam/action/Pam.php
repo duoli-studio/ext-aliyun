@@ -90,8 +90,8 @@ class Pam
 		}
 
 		// 自动设置前缀
-		$prefix = strtoupper(strtolower($this->getSetting()->get('backend::site.account_prefix')));
-		if ($type != PamAccount::REG_TYPE_ACCOUNT) {
+		$prefix = strtoupper(strtolower($this->getSetting()->get('system::site.account_prefix')));
+		if ($type != PamAccount::REG_TYPE_USERNAME) {
 			$hasAccountName = false;
 			// 检查是否设置了前缀
 			if (!$prefix) {
@@ -119,7 +119,7 @@ class Pam
 				// 如果没有设置账号, 则根据规范生成用户名
 				if (!$hasAccountName) {
 					$formatAccountName = sprintf("%s_%'.09d", $prefix, $pam->id);
-					$pam->account_name = $formatAccountName;
+					$pam->username     = $formatAccountName;
 					$pam->save();
 				}
 
@@ -128,6 +128,7 @@ class Pam
 
 				// 触发注册成功的事件
 				$this->getEvent()->dispatch(new PamRegistered($pam));
+				return true;
 			});
 		} catch (\Exception $e) {
 			return $this->setError($e->getMessage());
@@ -164,6 +165,7 @@ class Pam
 		if ($validator->fails()) {
 			return $this->setError($validator->errors());
 		}
+
 
 		/** @var \Auth $guard */
 		$guard = \Auth::guard($guard_type);
@@ -224,6 +226,21 @@ class Pam
 	}
 
 	/**
+	 * 检测账户密码是否正确
+	 * @param PamAccount $pam      用户账户信息
+	 * @param String     $password 用户传入的密码
+	 * @return bool
+	 */
+	public function checkPassword($pam, $password)
+	{
+		$key           = $pam->password_key;
+		$regTime       = $pam->created_at->toDateTimeString();
+		$authPassword  = $pam->getAuthPassword();
+		$cryptPassword = $this->cryptPassword($password, $regTime, $key);
+		return (bool) ($authPassword === $cryptPassword);
+	}
+
+	/**
 	 * 生成账户密码
 	 * @param String $password    原始密码
 	 * @param String $regDatetime 注册时间(datetime) 类型
@@ -249,8 +266,10 @@ class Pam
 			$type = PamAccount::REG_TYPE_EMAIL;
 		}
 		else {
-			$type = PamAccount::REG_TYPE_ACCOUNT;
+			$type = PamAccount::REG_TYPE_USERNAME;
 		}
 		return $type;
 	}
+
+
 }

@@ -94,6 +94,7 @@ return [
 		// pam
 		'password' => '密码',
 		'mobile'   => '手机',
+		'username' => '用户名',
 
 		// cat
 		'cat_id'   => '分类ID',

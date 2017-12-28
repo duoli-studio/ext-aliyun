@@ -9,18 +9,19 @@ use User\Pam\Action\Pam;
 
 class PamTest extends TestCase
 {
+	/**
+	 * @throws \Throwable
+	 */
 	public function testRegister()
 	{
 		/** @var Pam $pam */
 		$pam = app('act.pam');
-		try {
-			if ($pam->register('19254958693', '()*kshkfskfhk')) {
-				dd($pam->getSuccess());
-			}
-			else {
-				dd($pam->getError());
-			}
-		} catch (\Throwable $e) {
+
+		if ($pam->register('develop', 'develop')) {
+			dd($pam->getSuccess());
+		}
+		else {
+			dd($pam->getError());
 		}
 	}
 

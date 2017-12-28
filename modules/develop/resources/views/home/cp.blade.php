@@ -1,5 +1,5 @@
-@extends('system::template.bt3')
-@section('bootstrap-main')
+@extends('system::tpl.develop')
+@section('develop-main')
 	<nav class="navbar navbar-default">
 		<div class="navbar-header">
 			<a class="navbar-brand" href="#">
