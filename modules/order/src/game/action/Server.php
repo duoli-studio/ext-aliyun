@@ -76,6 +76,8 @@ class Server
 		}
 		else {
 			$this->item = GameServer::create($initDb);
+			$this->item->code = $this->genCode($this->item->id);
+			$this->item->save();
 		}
 		return true;
 	}

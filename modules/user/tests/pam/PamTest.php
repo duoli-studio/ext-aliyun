@@ -13,11 +13,14 @@ class PamTest extends TestCase
 	{
 		/** @var Pam $pam */
 		$pam = app('act.pam');
-		if ($pam->register('19954958694', '()*kshkfskfhk')) {
-			dd($pam->getSuccess());
-		}
-		else {
-			dd($pam->getError());
+		try {
+			if ($pam->register('19254958693', '()*kshkfskfhk')) {
+				dd($pam->getSuccess());
+			}
+			else {
+				dd($pam->getError());
+			}
+		} catch (\Throwable $e) {
 		}
 	}
 

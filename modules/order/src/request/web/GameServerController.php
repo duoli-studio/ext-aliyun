@@ -16,7 +16,11 @@ class GameServerController extends Controller
 	public function create(Request $request)
 	{
 		if (is_post()){
+			$input = $request->input();
+			$game = app('act.game');
+			if($game->establish($input)){
 
+			}
 		}
 	}
 }

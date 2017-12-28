@@ -11,18 +11,26 @@ class GameServerTest extends TestCase
 	//
 	public function testCreate()
 	{
-		$game = app('act.game');
+		$game = app('act.server');
 		$item = $game->establish([
-			'title'     => '微信大区2',
-			'parent_id' => '6',
+			'title'     => 'sdfsdfs',
+			'parent_id' => '15',
 		]);
 		dd($game->getError());
 	}
 
+
 	public function testGenId()
 	{
 		$game = app('act.server');
-		$code = $game->genCode(3);
+		$code = $game->parentId(14,0);
+		dd($code);
+	}
+
+	public function testGenCode()
+	{
+		$game = app('act.server');
+		$code = $game->genCode(9);
 		dd($code);
 	}
 
