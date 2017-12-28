@@ -3,7 +3,7 @@
 
 use System\Models\PamAccount;
 
-class PamRegistered
+class LoginSuccess
 {
 
 	/** @var PamAccount */

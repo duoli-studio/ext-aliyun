@@ -1,9 +1,15 @@
 <?php
 
 return [
-	'schema'  => 'default',
-	'schemas' => [
+	'schema'            => 'default',
+	'schemas'           => [
 		'default' => [
+			'mutation' => [],
+			'query'    => [
+				\System\Setting\Graphql\Queries\SettingsQuery::class,
+			],
+		],
+		'backend' => [
 			'mutation' => [
 				\System\Setting\Graphql\Mutation\SettingMutation::class,
 				\System\Pam\GraphQL\Mutation\RoleMutation::class,
@@ -17,13 +23,11 @@ return [
 			],
 		],
 	],
-	'types'   => [
-		/* input
-		 -------------------------------------------- */
-		// config
-		\System\Setting\GraphQL\Input\ConfigItemType::class,
-
-
+	'middleware_schema' => [
+		'default' => '',
+		'backend' => 'jwt',
+	],
+	'types'             => [
 		/* query
 		 -------------------------------------------- */
 		// config

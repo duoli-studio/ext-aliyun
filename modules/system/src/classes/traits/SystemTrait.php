@@ -18,6 +18,7 @@ trait SystemTrait
 {
 	use PoppyTrait, AppTrait;
 
+
 	/**
 	 * @var PamAccount;
 	 */

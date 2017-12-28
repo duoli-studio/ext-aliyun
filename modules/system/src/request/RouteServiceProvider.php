@@ -57,7 +57,8 @@ class RouteServiceProvider extends ServiceProvider
 			'prefix' => 'system',
 		], function (Router $router) {
 			$router->get('/', HomeController::class . '@layout');
-			$router->get('/graphi', HomeController::class . '@graphi');
+			$router->get('/graphi/{schema?}', HomeController::class . '@graphi');
+			$router->get('/login', HomeController::class . '@login');
 			$router->get('/test', HomeController::class . '@test');
 		});
 		\Route::group([
@@ -79,13 +80,14 @@ class RouteServiceProvider extends ServiceProvider
 			'middleware' => ['cross', 'web'],
 			'prefix'     => 'api/system',
 		], function (Router $route) {
-			$route->any('/graphql/{schema?}', GraphQLController::class . '@query');
+			$route->any('/graphql', GraphQLController::class . '@query');
 			$route->any('/token', AuthController::class . '@token');
 			$route->any('/information', InformationController::class . '@list');
 			$route->any('/dashboard', DashboardsController::class . '@list');
 			$route->group([
 				'middleware' => ['auth:api'],
 			], function (Router $route) {
+				$route->any('/graphql/backend', GraphQLController::class . '@query');
 				$route->any('/access', AuthController::class . '@access');
 				$route->any('/configuration/{path?}', ConfigurationController::class . '@definition');
 			});

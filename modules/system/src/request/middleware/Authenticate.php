@@ -23,7 +23,7 @@ class Authenticate extends IlluminateAuthenticate
 		}
 		foreach ($guards as $guard) {
 			// 开启调试模式
-			if ($this->getSetting()->get('system::setting/site.debug_testing', false) && $guard == 'api') {
+			if ($this->getSetting()->get('system::site.debug_testing', false) && $guard == 'api') {
 				return null;
 			}
 			if ($this->getAuth()->guard($guard)->check()) {

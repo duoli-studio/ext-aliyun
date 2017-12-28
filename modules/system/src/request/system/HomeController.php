@@ -21,10 +21,10 @@ class HomeController extends Controller
 		return view('system::layout');
 	}
 
-	public function graphi()
+	public function graphi($schema = 'default')
 	{
 		return view('system::graphql.graphiql', [
-			'graphqlPath' => url('api/system/graphql'),
+			'graphqlPath' => url('api/system/graphql/' . $schema),
 		]);
 	}
 

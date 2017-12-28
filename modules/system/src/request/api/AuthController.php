@@ -52,7 +52,7 @@ class AuthController extends Controller
 			], 403);
 		}
 		if (!$this->getAuth()->guard(PamAccount::GUARD_BACKEND)->attempt($this->getRequest()->only([
-			'name',
+			'username',
 			'password',
 		], $this->getRequest()->has('remember', true)))) {
 			return $this->getResponse()->json([
@@ -87,6 +87,6 @@ class AuthController extends Controller
 	 */
 	public function username()
 	{
-		return 'name';
+		return 'username';
 	}
 }

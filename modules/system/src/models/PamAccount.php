@@ -1,5 +1,6 @@
 <?php namespace System\Models;
 
+use Carbon\Carbon;
 use Poppy\Framework\Helper\EnvHelper;
 use Illuminate\Auth\Authenticatable as TraitAuthenticatable;
 use System\Rbac\Traits\RbacUserTrait;
@@ -9,17 +10,19 @@ use Illuminate\Database\Eloquent\Collection;
 
 
 /**
- * @property integer                   $id
- * @property string                    $account_name 账号名称， 支持中文
- * @property string                    $account_pwd  账号密码
- * @property string                    $account_key  账号注册时候随机生成的6位key
- * @property string                    $account_type 账户类型
- * @property integer                   $login_times  登录次数
- * @property string                    $reg_ip       注册IP
+ * @property int                       $id
+ * @property string                    $mobile             手机号
+ * @property string                    $username           用户名称
+ * @property string                    $password           用户密码
+ * @property Carbon                    $logined_at         注册时间
+ * @property string                    $account_name       账号名称， 支持中文
+ * @property string                    $account_pwd        账号密码
+ * @property string                    $account_key        账号注册时候随机生成的6位key
+ * @property string                    $account_type       账户类型
+ * @property integer                   $login_times        登录次数
+ * @property string                    $reg_ip             注册IP
  * @property string                    $is_enable
  * @property \Carbon\Carbon            $created_at
- * @property string                    $deleted_at
- * @property string                    $logined_at   上次登录时间
  * @property \Carbon\Carbon            $updated_at
  * @property string                    $remember_token
  * @property-read PamRoleAccount       $role
@@ -55,17 +58,21 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 	const ACCOUNT_TYPE_FRONT   = 'front';
 	const ACCOUNT_TYPE_DEVELOP = 'develop';
 	const DESKTOP_SYSTEM       = 'system';  // 后台类型
-	const FRONT_SUBUSER        = 'subuser'; // 子账号
 
 	protected $table = 'pam_account';
 
 	protected $primaryKey = 'id';
 
+	protected $dates = [
+		'logined_at',
+	];
+
 	protected $fillable = [
-		'account_name',
-		'account_pwd',
-		'account_key',
-		'account_type',
+		'mobile',
+		'username',
+		'password',
+		'logined_at',
+		'password_key',
 		'reg_ip',
 	];
 
@@ -89,11 +96,6 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 			'name' => '系统',
 			'type' => 'desktop',
 			'desc' => '系统后台主动操控',
-		],
-		self::FRONT_SUBUSER        => [
-			'name' => '子账号',
-			'type' => 'front',
-			'desc' => '子账号操作',
 		],
 	];
 
@@ -140,12 +142,6 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 			return self::DESKTOP_SYSTEM;
 		}
 		$accountType = self::getAccountTypeByAccountId($account_id);
-		if ($accountType == self::ACCOUNT_TYPE_FRONT) {
-			$parentId = AccountFront::where('account_id', $account_id)->value('parent_id');
-			if ($parentId) { // 子账号
-				$accountType = self::FRONT_SUBUSER;
-			}
-		}
 		return $accountType;
 	}
 
@@ -277,17 +273,7 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 		return (bool) ($authPassword === $gendPassword);
 	}
 
-	/**
-	 * 生成账户密码
-	 * @param String $password  原始密码
-	 * @param String $regTime   注册时间/ unix 时间戳
-	 * @param String $randomKey 六位随机值
-	 * @return string
-	 */
-	public static function genPassword($password, $regTime, $randomKey)
-	{
-		return md5(sha1($password . $regTime) . $randomKey);
-	}
+
 
 	/**
 	 * 创建用户账户
@@ -324,22 +310,7 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 		}
 	}
 
-	/**
-	 * 更改密码
-	 * @param int    $account_id
-	 * @param String $newPassword
-	 */
-	public static function changePassword($account_id, $newPassword)
-	{
-		/** @type PamAccount $user */
-		$user              = PamAccount::find($account_id);
-		$key               = str_random(6);
-		$regTime           = strtotime($user->created_at);
-		$gendPassword      = PamAccount::genPassword($newPassword, $regTime, $key);
-		$user->account_pwd = $gendPassword;
-		$user->account_key = $key;
-		$user->save();
-	}
+
 
 	/**
 	 * 根据账户ID 来获取账户的信息

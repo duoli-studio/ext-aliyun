@@ -16,11 +16,10 @@ class VerifyCsrfToken extends BaseVerifier
 
 	/**
 	 * Handle an incoming request.
-	 *
 	 * @param  \Illuminate\Http\Request $request
 	 * @param  \Closure                 $next
-	 *
 	 * @return mixed
+	 * @throws \Illuminate\Session\TokenMismatchException
 	 */
 	public function handle($request, Closure $next)
 	{

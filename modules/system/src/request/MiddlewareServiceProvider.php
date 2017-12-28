@@ -12,8 +12,6 @@ class MiddlewareServiceProvider extends ServiceProvider
 
 	public function boot(Router $router)
 	{
-		// backend is normal auth
-		$router->aliasMiddleware('backend.auth', 'System\Request\Middleware\Auth');
 		$router->middlewareGroup('backend', [
 			'Illuminate\Cookie\Middleware\EncryptCookies',
 			'Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse',

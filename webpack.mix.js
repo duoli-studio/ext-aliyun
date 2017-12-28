@@ -22,6 +22,9 @@ mix.sass(
 ).sass(
 	'resources/assets/scss/slt.scss',
 	'public/assets/css'
+).sass(
+	'resources/assets/scss/develop.scss',
+	'public/assets/css'
 ).browserSync({
 	proxy : 'l.play.sour-lemon.com'
 });

@@ -1,4 +1,4 @@
-<?php namespace Develop\Providers;
+<?php namespace Develop\Request;
 
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
