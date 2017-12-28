@@ -21,8 +21,8 @@ class GameServerTest extends TestCase
 
 	public function testGenId()
 	{
-		$game = app('act.game');
-		$code = $game->genCode(4);
+		$game = app('act.server');
+		$code = $game->genCode(3);
 		dd($code);
 	}
 

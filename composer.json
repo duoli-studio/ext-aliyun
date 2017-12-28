@@ -40,7 +40,8 @@
 		"psr-4": {
 			"App\\": "app/",
 			"Poppy\\Framework\\": "framework/src",
-			"System\\": "modules/system/src"
+			"System\\": "modules/system/src",
+			"Order\\": "modules/order/src"
 		},
 		"files": [
 			"framework/src/Support/functions.php"

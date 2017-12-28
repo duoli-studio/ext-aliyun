@@ -1,4 +1,4 @@
-<?php namespace Order\Providers;
+<?php namespace Order;
 
 
 use Illuminate\Console\Scheduling\Schedule;
@@ -40,7 +40,6 @@ class ServiceProvider extends PoppyServiceProvider
 		$this->app->register(GameServiceProvider::class);
 
 		$this->registerCommand();
-
 		$this->registerSchedule();
 	}
 
@@ -51,7 +50,7 @@ class ServiceProvider extends PoppyServiceProvider
 
 	private function registerSchedule()
 	{
-		$this->app['events']->listen('console.schedule', function(Schedule $schedule) {
+		$this->app['events']->listen('console.schedule', function (Schedule $schedule) {
 			// 同步详细
 			$schedule->command('order:sync-detail')
 				->everyMinute()

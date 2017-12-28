@@ -17,7 +17,7 @@ class GameServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
-		$this->app->bind('act.game', function ($app) {
+		$this->app->bind('act.server', function ($app) {
 			return new Server();
 		});
 	}
@@ -28,7 +28,7 @@ class GameServiceProvider extends ServiceProvider
 	public function provides()
 	{
 		return [
-			'act.game',
+			'act.server',
 		];
 	}
 }
