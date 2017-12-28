@@ -16,6 +16,7 @@ import SeoRule from '../pages/SeoRule.vue';
 import SeoRuleTemplate from '../pages/SeoRuleTemplate.vue';
 import Template from '../pages/Template.vue';
 import Upload from '../pages/Upload.vue';
+import Role from '../pages/Role.vue';
 
 import requireAuth from '../middlewares/auth';
 import store from '../stores';
@@ -82,6 +83,10 @@ const configuration = [
 		beforeEnter : requireAuth,
 		component   : Upload,
 		path        : 'upload',
+	},
+	{
+		component   : Role,
+		path        : 'role',
 	},
 ];
 
