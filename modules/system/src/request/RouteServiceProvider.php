@@ -89,6 +89,7 @@ class RouteServiceProvider extends ServiceProvider
 				'middleware' => 'auth:develop',
 			], function (Router $router) {
 				$router->get('/', DevController::class . '@cp')->name('system:develop.cp');
+				$router->get('/phpinfo', DevController::class . '@phpinfo')->name('system:develop.phpinfo');
 			});
 
 		});

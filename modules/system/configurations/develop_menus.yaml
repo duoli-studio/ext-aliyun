@@ -4,3 +4,9 @@ graphql:
         -
             title : GraphQL 状态
             route : system:develop.login
+system:
+    title : 系统
+    children :
+        -
+            title : PHP状态
+            route : system:develop.phpinfo

@@ -50,4 +50,9 @@ class DevController extends Controller
 		}
 		return view('system::develop.login');
 	}
+
+	public function phpinfo()
+	{
+		return view('system::develop.phpinfo');
+	}
 }
