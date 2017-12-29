@@ -33,7 +33,6 @@ class Authenticate extends IlluminateAuthenticate
 				return $this->getAuth()->shouldUse($guard);
 			}
 		}
-
 		throw new AuthenticationException('Unauthenticated.', $guards);
 	}
 

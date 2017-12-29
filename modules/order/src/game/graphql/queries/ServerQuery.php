@@ -24,6 +24,13 @@ class ServerQuery extends Query
 		$this->attributes['description'] = trans('order::server.graphql.queries_desc');
 	}
 
+
+	public function authorize($root, $args)
+	{
+		// true, if logged in
+		return !$this->getAuth()->guard('api')->guest();
+	}
+
 	/**
 	 * @return ListOfType
 	 * @throws TypeNotFound
@@ -38,9 +45,7 @@ class ServerQuery extends Query
 	 */
 	public function args()
 	{
-		return [
-
-		];
+		return [];
 	}
 
 	/**

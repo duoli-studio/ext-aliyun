@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Poppy\Framework\Application\Controller;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Classes\Traits\ViewTrait;
+use Poppy\Framework\Helper\RawCookieHelper;
 use System\Classes\Traits\SystemTrait;
 use System\Models\PamAccount;
 use User\Pam\Action\Pam;
@@ -18,7 +19,10 @@ class SystemController extends Controller
 
 	public function status(Request $request)
 	{
-		$tokenUrl = route('system:api.token');
+		$tokenUrl       = route('system:api.token');
+		$graphqlUrl     = route('system:web.graphql');
+		$graphqlAuthUrl = route('system:web.graphql', 'backend');
+
 		if (is_post()) {
 			$username = $request->input('username');
 			$password = $request->input('password');
@@ -33,9 +37,15 @@ class SystemController extends Controller
 			}
 		}
 
-		$guard = $this->getAuth()->guard(PamAccount::GUARD_DEVELOP)->user();
+		$token = '';
+		if (RawCookieHelper::has('dev_dianjing#token')) {
+			$token = RawCookieHelper::get('dev_dianjing#token');
+		}
 		return view('system::develop.system.status', [
-			'token_url' => $tokenUrl
+			'token_url'         => $tokenUrl,
+			'token'             => $token,
+			'graphql_view'      => $graphqlUrl,
+			'graphql_auth_view' => $graphqlAuthUrl,
 		]);
 	}
 }

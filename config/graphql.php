@@ -24,8 +24,8 @@ return [
 		],
 	],
 	'middleware_schema' => [
-		'default' => '',
-		'backend' => 'jwt',
+		'default' => ['cross'],
+		'backend' => ['auth:api', 'cross'],
 	],
 	'types'             => [
 		/* query

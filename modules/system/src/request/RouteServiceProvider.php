@@ -62,7 +62,8 @@ class RouteServiceProvider extends ServiceProvider
 			'prefix' => 'system',
 		], function (Router $router) {
 			$router->get('/', HomeController::class . '@layout');
-			$router->get('/graphi/{schema?}', HomeController::class . '@graphi');
+			$router->get('/graphi/{schema?}', HomeController::class . '@graphi')
+				->name('system:web.graphql');
 			$router->get('/login', HomeController::class . '@login');
 			$router->get('/test', HomeController::class . '@test');
 		});
@@ -111,19 +112,24 @@ class RouteServiceProvider extends ServiceProvider
 	 */
 	protected function mapApiRoutes()
 	{
+
 		\Route::group([
 			'middleware' => ['cross'],
 			'prefix'     => 'api/system',
 		], function (Router $route) {
-			$route->any('/graphql', GraphQLController::class . '@query');
-			$route->any('/token', AuthController::class . '@token')->name('system:api.token');
+
+			$route->any('/token', AuthController::class . '@token')
+				->name('system:api.token');
+
 			$route->any('/information', InformationController::class . '@list');
 			$route->any('/dashboard', DashboardsController::class . '@list');
 			$route->group([
 				'middleware' => ['auth:api'],
 			], function (Router $route) {
-				$route->any('/graphql/backend', GraphQLController::class . '@query');
-				$route->any('/access', AuthController::class . '@access')->name('system:api.access');
+				\Route::any('graphql/{graphql_schema?}', GraphQLController::class . '@query')
+					->name('system:api.graphql');
+				$route->any('/access', AuthController::class . '@access')
+					->name('system:api.access');
 				$route->any('/configuration/{path?}', ConfigurationController::class . '@definition');
 			});
 

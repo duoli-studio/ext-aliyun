@@ -8,9 +8,23 @@
         </div>
     </nav>
     <div class="row">
+        <div class="col-sm-12" style="word-break: break-all;">
+            @if ($token)
+                <p class="alert alert-success">
+                    已经设置 token
+                    {!! $token !!} <br><br>
+                    <a target="_blank" href="{!! $graphql_view !!}">未授权</a>
+                    <a target="_blank" href="{!! $graphql_auth_view !!}">授权访问</a>
+                </p>
+            @endif
+        </div>
         <div class="col-sm-6">
             {!! Form::open(['url'=> $token_url, 'id'=> 'form_auto']) !!}
-            <p class="alert alert-warning">当前没有 Access Token , 登录自动设置</p>
+            @if (!$token)
+                <p class="alert alert-warning">
+                    当前没有 Access Token , 登录自动设置
+                </p>
+            @endif
             <div class="form-group">
                 <label for="username">账号</label>
                 ( String ) [username]
@@ -29,7 +43,7 @@
         <div class="col-sm-6">
             <div class="alert alert-success">
                 <input class="form-control" readonly="1" name="url" type="text"
-                       value="http://l.dailian.sour-lemon.com/api/dailian/account/login" id="url">
+                       value="{!! $token_url !!}" id="url">
             </div>
             <pre id="J_result" style="display: none;margin-top:20px;"></pre>
         </div>

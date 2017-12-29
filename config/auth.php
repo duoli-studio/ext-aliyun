@@ -75,11 +75,6 @@ return [
 		'pam' => [
 			'driver' => 'pam',
 		],
-
-		// 'users' => [
-		//     'driver' => 'database',
-		//     'table' => 'users',
-		// ],
 	],
 
 ];
