@@ -13,6 +13,7 @@ use System\Request\Api\DashboardsController;
 use System\Request\Api\InformationController;
 use System\Request\Backend\BeHomeController;
 use System\Request\Develop\DevController;
+use System\Request\Develop\SystemController;
 use System\Request\System\HomeController;
 
 class RouteServiceProvider extends ServiceProvider
@@ -80,6 +81,7 @@ class RouteServiceProvider extends ServiceProvider
 	 */
 	protected function mapDevRoutes()
 	{
+		// develop
 		\Route::group([
 			'middleware' => 'web',
 			'prefix'     => 'develop',
@@ -95,12 +97,10 @@ class RouteServiceProvider extends ServiceProvider
 		});
 
 		\Route::group([
-			'prefix' => 'develop/system',
+			'middleware' => 'web',
+			'prefix'     => 'develop/system',
 		], function (Router $router) {
-			$router->get('/', HomeController::class . '@layout');
-			$router->get('/graphi/{schema?}', HomeController::class . '@graphi');
-			$router->get('/login', HomeController::class . '@login');
-			$router->get('/test', HomeController::class . '@test');
+			$router->get('/status', SystemController::class . '@status');
 		});
 	}
 
@@ -116,14 +116,14 @@ class RouteServiceProvider extends ServiceProvider
 			'prefix'     => 'api/system',
 		], function (Router $route) {
 			$route->any('/graphql', GraphQLController::class . '@query');
-			$route->any('/token', AuthController::class . '@token');
+			$route->any('/token', AuthController::class . '@token')->name('system:api.token');
 			$route->any('/information', InformationController::class . '@list');
 			$route->any('/dashboard', DashboardsController::class . '@list');
 			$route->group([
 				'middleware' => ['auth:api'],
 			], function (Router $route) {
 				$route->any('/graphql/backend', GraphQLController::class . '@query');
-				$route->any('/access', AuthController::class . '@access');
+				$route->any('/access', AuthController::class . '@access')->name('system:api.access');
 				$route->any('/configuration/{path?}', ConfigurationController::class . '@definition');
 			});
 

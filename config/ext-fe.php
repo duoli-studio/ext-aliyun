@@ -135,6 +135,25 @@ return [
 			'shim' => ['jquery'],
 		],
 
+		"js-cookie" => [
+			"js"   => [
+				'main' => 'src/js.cookie.js',
+				'aim'  => 'js-cookie/{VERSION}/js-cookie.js',
+			],
+			'shim' => [
+				"exports" => "Cookies",
+			],
+		],
+
+		"json" => [
+			"js"   => [
+				'aim' => 'json/json2.js',
+			],
+			'shim' => [
+				"exports" => "JSON",
+			],
+		],
+
 
 		"smooth-scroll" => [
 			"js"  => [

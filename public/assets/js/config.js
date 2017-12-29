@@ -8,6 +8,8 @@ var alias = {
     "jquery.layer": "assets/js/libs/jquery/layer/3.1.1/jquery.layer",
     "jquery.toastr": "assets/js/libs/jquery/toastr/2.1.3/jquery.toastr",
     "jquery.validation": "assets/js/libs/jquery/validation/1.17.0/jquery.validation",
+    "js-cookie": "assets/js/libs/js-cookie/2.2.0/js-cookie",
+    "json": "assets/js/libs/json/json2",
     "pace": "assets/js/libs/pace/1.0.2/pace.min",
     "smooth-scroll": "assets/js/libs/smooth-scroll/1.4.0/smooth-scroll",
     "vkbeautify": "assets/js/libs/vkbeautify/vkbeautify"
@@ -36,6 +38,12 @@ var shim  = {
     "jquery.validation": [
         "jquery"
     ],
+    "js-cookie": {
+        "exports": "Cookies"
+    },
+    "json": {
+        "exports": "JSON"
+    },
     "vkbeautify": {
         "exports": "vkbeautify"
     }
