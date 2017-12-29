@@ -6,6 +6,7 @@ use Poppy\Framework\Validation\Rule;
 use System\Classes\Traits\SystemTrait;
 use System\Models\PamAccount;
 use System\Models\PamRole;
+use System\Models\SysConfig;
 use User\Pam\Events\LoginFailed;
 use User\Pam\Events\LoginSuccess;
 use User\Pam\Events\PamRegistered;
@@ -104,7 +105,8 @@ class Pam
 			$username       = $passport;
 		}
 
-		$initDb['username'] = $username;
+		$initDb['username']  = $username;
+		$initDb['is_enable'] = SysConfig::YES;
 
 
 		try {
@@ -166,21 +168,21 @@ class Pam
 			return $this->setError($validator->errors());
 		}
 
-
 		/** @var \Auth $guard */
 		$guard = \Auth::guard($guard_type);
 		if ($guard->attempt($credentials, $remember)) {
 			/** @var PamAccount $user */
 			$user = $guard->user();
-			if ($user->is_enable == 'N') {
+
+			if ($user->is_enable == SysConfig::NO) {
 				// 账户被禁用
 				$guard->logout();
 				return $this->setError('本账户被禁用, 不得登入');
 			}
 
 			$this->getEvent()->dispatch(new LoginSuccess($user));
-
 			$this->pam = $user;
+
 			return true;
 		}
 		else {
@@ -191,6 +193,7 @@ class Pam
 			$this->getEvent()->dispatch(new LoginFailed($credentials));
 			return $this->setError('登录失败, 请重试');
 		}
+
 	}
 
 	public function webLogout()

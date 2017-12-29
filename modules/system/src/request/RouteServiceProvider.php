@@ -12,6 +12,7 @@ use System\Request\Api\ConfigurationController;
 use System\Request\Api\DashboardsController;
 use System\Request\Api\InformationController;
 use System\Request\Backend\BeHomeController;
+use System\Request\Develop\DevController;
 use System\Request\System\HomeController;
 
 class RouteServiceProvider extends ServiceProvider
@@ -42,6 +43,9 @@ class RouteServiceProvider extends ServiceProvider
 	{
 		$this->mapWebRoutes();
 
+
+		$this->mapDevRoutes();
+
 		$this->mapApiRoutes();
 
 	}
@@ -66,6 +70,36 @@ class RouteServiceProvider extends ServiceProvider
 			'prefix'     => 'backend',
 		], function (Router $router) {
 			$router->get('/login', BeHomeController::class . '@login');
+		});
+	}
+
+	/**
+	 * Define the "web" routes for the module.
+	 * These routes all receive session state, CSRF protection, etc.
+	 * @return void
+	 */
+	protected function mapDevRoutes()
+	{
+		\Route::group([
+			'middleware' => 'web',
+			'prefix'     => 'develop',
+		], function (Router $router) {
+			$router->any('login', DevController::class . '@login')->name('system:develop.login');
+			$router->group([
+				'middleware' => 'auth:develop',
+			], function (Router $router) {
+				$router->get('/', DevController::class . '@cp')->name('system:develop.cp');
+			});
+
+		});
+
+		\Route::group([
+			'prefix' => 'develop/system',
+		], function (Router $router) {
+			$router->get('/', HomeController::class . '@layout');
+			$router->get('/graphi/{schema?}', HomeController::class . '@graphi');
+			$router->get('/login', HomeController::class . '@login');
+			$router->get('/test', HomeController::class . '@test');
 		});
 	}
 

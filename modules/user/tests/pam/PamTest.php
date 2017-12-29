@@ -17,7 +17,7 @@ class PamTest extends TestCase
 	{
 		/** @var Pam $pam */
 		$pam = app('act.pam');
-		if ($pam->register('root_user', '123456')) {
+		if ($pam->register('develop', 'develop')) {
 			dd($pam->getSuccess());
 		}
 		else {

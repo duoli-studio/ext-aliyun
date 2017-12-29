@@ -54,7 +54,7 @@ class Authenticate extends IlluminateAuthenticate
 				return response('Unauthorized.', 401);
 			}
 			elseif ($this->getPoppy()->exists('develop') && in_array('develop', $guards)) {
-				return Resp::web(Resp::ERROR, '无权限访问', 'location|' . route('develop:home.login'));
+				return Resp::web(Resp::ERROR, '无权限访问', 'location|' . route('system:develop.login'));
 			}
 		}
 

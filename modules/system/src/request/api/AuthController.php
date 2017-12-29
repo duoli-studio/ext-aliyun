@@ -6,6 +6,7 @@ use Poppy\Framework\Application\Controller;
 use Poppy\Framework\Validation\Rule;
 use System\Classes\Traits\SystemTrait;
 use System\Models\PamAccount;
+use System\Models\Resources\PamResource;
 
 /**
  * Class AdministrationController.
@@ -27,7 +28,7 @@ class AuthController extends Controller
 		}
 
 		return $this->getResponse()->json([
-			'data'    => $user,
+			'data'    => new PamResource($user),
 			'message' => '有效登录',
 		], 200, [], JSON_UNESCAPED_UNICODE);
 	}

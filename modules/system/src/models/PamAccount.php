@@ -71,6 +71,7 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 		'username',
 		'password',
 		'logined_at',
+		'is_enable',
 		'password_key',
 		'reg_ip',
 	];

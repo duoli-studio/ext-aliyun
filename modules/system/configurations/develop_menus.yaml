@@ -1,0 +1,6 @@
+graphql:
+    title : GraphQL
+    children :
+        -
+            title : GraphQL 状态
+            route : system:develop.login

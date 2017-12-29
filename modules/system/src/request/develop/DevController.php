@@ -1,17 +1,19 @@
-<?php namespace Develop\Request\Web;
-
+<?php namespace System\Request\Develop;
 
 use Illuminate\Http\Request;
 use Poppy\Framework\Application\Controller;
 use Poppy\Framework\Classes\Resp;
+use Poppy\Framework\Classes\Traits\ViewTrait;
 use System\Classes\Traits\SystemTrait;
 use System\Models\PamAccount;
 use User\Pam\Action\Pam;
 
-class HomeController extends Controller
+/**
+ * 后端入口
+ */
+class DevController extends Controller
 {
-
-	use SystemTrait;
+	use SystemTrait, ViewTrait;
 
 	/**
 	 * 字体
@@ -19,7 +21,7 @@ class HomeController extends Controller
 	 */
 	public function cp()
 	{
-		return view('develop::home.cp', [
+		return view('system::develop.cp', [
 			'menus' => $this->getModule()->navigation(),
 		]);
 	}
@@ -33,7 +35,7 @@ class HomeController extends Controller
 			/** @var Pam $pam */
 			$pam = app('act.pam');
 			if ($pam->loginCheck($username, $password, PamAccount::GUARD_DEVELOP, true)) {
-				return Resp::web(Resp::SUCCESS, '登录成功！', 'location|' . route('develop:home.cp'));
+				return Resp::web(Resp::SUCCESS, '登录成功！', 'location|' . route('system:develop.cp'));
 			}
 			else {
 				return Resp::web(Resp::ERROR, $pam->getError());
@@ -43,10 +45,9 @@ class HomeController extends Controller
 		// todo check guard permission
 		if ($guard) {
 			return Resp::web(Resp::SUCCESS, '您已登录', [
-				'location' => route('develop:home.cp'),
+				'location' => route('system:develop.cp'),
 			]);
 		}
-		return view('develop::home.login');
+		return view('system::develop.login');
 	}
-
 }
