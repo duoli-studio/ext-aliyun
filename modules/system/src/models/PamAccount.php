@@ -33,8 +33,9 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 
 	use TraitAuthenticatable, RbacUserTrait;
 
-	const ACCOUNT_TYPE_BACKEND = 'backend';
-	const ACCOUNT_TYPE_USER    = 'user';
+	const TYPE_BACKEND = 'backend';
+	const TYPE_USER    = 'user';
+	const TYPE_DEVELOP = 'develop';
 
 	const GUARD_WEB     = 'web';
 	const GUARD_BACKEND = 'backend';
@@ -281,8 +282,8 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 	{
 
 		$desc = [
-			self::ACCOUNT_TYPE_BACKEND => '后台',
-			self::ACCOUNT_TYPE_USER    => '用户',
+			self::TYPE_BACKEND => '后台',
+			self::TYPE_USER    => '用户',
 		];
 		return kv($desc, $key, $check_exists);
 	}

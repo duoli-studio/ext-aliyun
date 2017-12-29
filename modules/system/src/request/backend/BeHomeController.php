@@ -17,10 +17,10 @@ class BeHomeController extends Controller
 	 */
 	public function login()
 	{
-		$auth = \Auth::guard(PamAccount::ACCOUNT_TYPE_BACKEND);
+		$auth = \Auth::guard(PamAccount::TYPE_BACKEND);
 		if (is_post()) {
 			$credentials = [
-				'account_type' => PamAccount::ACCOUNT_TYPE_BACKEND,
+				'account_type' => PamAccount::TYPE_BACKEND,
 				'account_name' => \Input::get('adm_name'),
 				'password'     => \Input::get('adm_pwd'),
 			];
@@ -57,7 +57,7 @@ class BeHomeController extends Controller
 		if ($auth->check()) {
 			/** @var PamAccount $be */
 			$be = $auth->user();
-			if ($be->account_type == PamAccount::ACCOUNT_TYPE_BACKEND) {
+			if ($be->account_type == PamAccount::TYPE_BACKEND) {
 				return Resp::web(Resp::SUCCESS, '登录成功', 'location|' . route('be:home.welcome'));
 			}
 		}
@@ -114,7 +114,7 @@ class BeHomeController extends Controller
 	 */
 	public function getCp()
 	{
-		$menus = SysAcl::menu(PamAccount::ACCOUNT_TYPE_BACKEND, $this->pam, true);
+		$menus = SysAcl::menu(PamAccount::TYPE_BACKEND, $this->pam, true);
 		return view('backend.lemon_home.cp', [
 			'menus' => $menus,
 		]);

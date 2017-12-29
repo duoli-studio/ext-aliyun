@@ -1,11 +1,11 @@
-<?php namespace System\Pam\Auth;
+<?php namespace System\Pam\Auth\Provider;
 
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider as UserProviderBase;
 use System\Models\PamAccount;
 
-class UserProvider implements UserProviderBase
+class PamProvider implements UserProviderBase
 {
 
 	/**

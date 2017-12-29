@@ -14,6 +14,9 @@ use System\Extension\ExtensionServiceProvider;
 use System\Models\PamAccount;
 use System\Module\ModuleServiceProvider;
 use System\Pam\Auth\JwtAuthGuard;
+use System\Pam\Auth\Provider\BackendProvider;
+use System\Pam\Auth\Provider\DevelopProvider;
+use System\Pam\Auth\Provider\WebProvider;
 use System\Pam\Auth\UserProvider;
 use System\Pam\PamServiceProvider;
 use System\Permission\Commands\PermissionCommand;
@@ -82,8 +85,14 @@ class ServiceProvider extends PoppyServiceProvider
 	 */
 	private function registerAuth()
 	{
-		\Auth::provider('pam', function ($app) {
-			return new UserProvider(PamAccount::class);
+		\Auth::provider('pam.web', function ($app) {
+			return new WebProvider(PamAccount::class);
+		});
+		\Auth::provider('pam.backend', function ($app) {
+			return new BackendProvider(PamAccount::class);
+		});
+		\Auth::provider('pam.develop', function ($app) {
+			return new DevelopProvider(PamAccount::class);
 		});
 
 		$this->app['auth']->extend('jwt-auth', function ($app, $name, array $config) {

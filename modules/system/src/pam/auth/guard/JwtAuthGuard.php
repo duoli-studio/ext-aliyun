@@ -1,4 +1,4 @@
-<?php namespace System\Pam\Auth;
+<?php namespace System\Pam\Auth\Guard;
 
 use BadMethodCallException;
 use Illuminate\Auth\GuardHelpers;
