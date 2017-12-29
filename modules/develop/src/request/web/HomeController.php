@@ -20,7 +20,7 @@ class HomeController extends Controller
 	public function cp()
 	{
 		return view('develop::home.cp', [
-			'menus' => [],
+			'menus' => $this->getModule()->navigation(),
 		]);
 	}
 

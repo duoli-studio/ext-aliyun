@@ -5,6 +5,7 @@ use Poppy\Framework\Classes\Traits\PoppyTrait;
 use System\Module\Repositories\ModulesAssets;
 use System\Module\Repositories\ModulesMenu;
 use System\Module\Repositories\Modules;
+use System\Module\Repositories\ModulesDevelopMenu;
 use System\Module\Repositories\ModulesPage;
 use System\Module\Repositories\ModulesSetting;
 
@@ -39,6 +40,11 @@ class ModuleManager
 	 * @var ModulesSetting
 	 */
 	protected $settingRepository;
+
+	/**
+	 * @var ModulesDevelopMenu
+	 */
+	protected $navigation;
 
 	/**
 	 * @var Modules
@@ -168,6 +174,22 @@ class ModuleManager
 		}
 
 		return $this->settingRepository;
+	}
+
+	/**
+	 * @return ModulesDevelopMenu
+	 */
+	public function navigation(): ModulesDevelopMenu
+	{
+		if (!$this->navigation instanceof ModulesDevelopMenu) {
+			$collection = collect();
+			$this->repository()->enabled()->each(function (Module $module) use ($collection) {
+				$collection->put($module->slug(), $module->get('develop_menus', []));
+			});
+			$this->navigation = new ModulesDevelopMenu();
+			$this->navigation->initialize($collection);
+		}
+		return $this->navigation;
 	}
 
 	/**

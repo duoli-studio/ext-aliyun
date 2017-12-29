@@ -6,7 +6,6 @@
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Routing\Router;
-use User\Request\Web\RegisterController;
 
 
 class RouteServiceProvider extends ServiceProvider

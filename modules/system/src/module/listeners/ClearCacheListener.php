@@ -20,6 +20,7 @@ class ClearCacheListener
 			'modules.menu',
 			'modules.page',
 			'modules.setting',
+			'modules.develop_menus',
 		])->each(function ($item) {
 			$this->getCache()->forget($item);
 		});

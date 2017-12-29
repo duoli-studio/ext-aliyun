@@ -51,7 +51,7 @@ class RouteServiceProvider extends ServiceProvider
 	{
 		Route::group([
 			'middleware' => 'web',
-			'prefix'     => 'dev',
+			'prefix'     => 'develop',
 		], function (Router $router) {
 			$router->any('login', HomeController::class . '@login')->name('develop:home.login');
 			$router->group([
