@@ -49,7 +49,7 @@ return [
 			'provider' => 'pam',
 		],
 		'api'     => [
-			'driver'   => 'session',
+			'driver'   => 'jwt',
 			'provider' => 'pam',
 		],
 	],
@@ -73,7 +73,7 @@ return [
 
 	'providers' => [
 		'pam' => [
-			'driver' => 'system.pam',
+			'driver' => 'pam',
 		],
 
 		// 'users' => [

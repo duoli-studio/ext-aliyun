@@ -9,11 +9,12 @@ use Poppy\Framework\Exceptions\ModuleNotFoundException;
 use Poppy\Framework\Support\PoppyServiceProvider;
 use System\Addon\AddonServiceProvider;
 use System\Backend\BackendServiceProvider;
-use System\Classes\AuthProvider;
 use System\Events\ListenerServiceProvider;
 use System\Extension\ExtensionServiceProvider;
 use System\Models\PamAccount;
 use System\Module\ModuleServiceProvider;
+use System\Pam\Auth\JwtAuthGuard;
+use System\Pam\Auth\UserProvider;
 use System\Pam\PamServiceProvider;
 use System\Permission\Commands\PermissionCommand;
 use System\Permission\PermissionServiceProvider;
@@ -81,8 +82,18 @@ class ServiceProvider extends PoppyServiceProvider
 	 */
 	private function registerAuth()
 	{
-		\Auth::provider('system.pam', function ($app) {
-			return new AuthProvider(PamAccount::class);
+		\Auth::provider('pam', function ($app) {
+			return new UserProvider(PamAccount::class);
+		});
+
+		$this->app['auth']->extend('jwt-auth', function ($app, $name, array $config) {
+			$guard = new JwtAuthGuard(
+				$app['tymon.jwt'],
+				$app['auth']->createUserProvider($config['provider']),
+				$app['request']
+			);
+			$app->refresh('request', $guard, 'setRequest');
+			return $guard;
 		});
 	}
 
