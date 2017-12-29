@@ -5,6 +5,7 @@
  */
 
 use Poppy\Framework\Application\TestCase;
+use System\Models\PamAccount;
 use User\Pam\Action\Pam;
 
 class PamTest extends TestCase
@@ -16,8 +17,20 @@ class PamTest extends TestCase
 	{
 		/** @var Pam $pam */
 		$pam = app('act.pam');
+		if ($pam->register('root_user', '123456')) {
+			dd($pam->getSuccess());
+		}
+		else {
+			dd($pam->getError());
+		}
+	}
 
-		if ($pam->register('develop', 'develop')) {
+	public function testChangePwd()
+	{
+		/** @var Pam $pam */
+		$pam = app('act.pam');
+		$user = PamAccount::where('username', 'root')->first();
+		if ($pam->setPassword($user, '123456')) {
 			dd($pam->getSuccess());
 		}
 		else {

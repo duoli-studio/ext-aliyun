@@ -77,7 +77,7 @@ class RouteServiceProvider extends ServiceProvider
 	protected function mapApiRoutes()
 	{
 		\Route::group([
-			'middleware' => ['cross', 'web'],
+			'middleware' => ['cross'],
 			'prefix'     => 'api/system',
 		], function (Router $route) {
 			$route->any('/graphql', GraphQLController::class . '@query');

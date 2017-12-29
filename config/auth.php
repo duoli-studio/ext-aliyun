@@ -49,7 +49,7 @@ return [
 			'provider' => 'pam',
 		],
 		'api'     => [
-			'driver'   => 'jwt',
+			'driver'   => 'jwt-auth',
 			'provider' => 'pam',
 		],
 	],
