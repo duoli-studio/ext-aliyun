@@ -9,14 +9,11 @@ use Poppy\Framework\Exceptions\ModuleNotFoundException;
 use Poppy\Framework\Support\PoppyServiceProvider;
 use System\Addon\AddonServiceProvider;
 use System\Backend\BackendServiceProvider;
+use System\Console\InstallCommand;
 use System\Events\ListenerServiceProvider;
 use System\Extension\ExtensionServiceProvider;
-use System\Models\PamAccount;
 use System\Module\ModuleServiceProvider;
-use System\Pam\Auth\Guard\JwtAuthGuard;
-use System\Pam\Auth\Provider\BackendProvider;
-use System\Pam\Auth\Provider\DevelopProvider;
-use System\Pam\Auth\Provider\WebProvider;
+use System\Pam\Commands\UserCommand;
 use System\Pam\PamServiceProvider;
 use System\Permission\Commands\PermissionCommand;
 use System\Permission\PermissionServiceProvider;
@@ -91,6 +88,8 @@ class ServiceProvider extends PoppyServiceProvider
 	private function registerConsole()
 	{
 		$this->registerConsoleCommand('system.permission', PermissionCommand::class);
+		$this->registerConsoleCommand('system.user', UserCommand::class);
+		$this->registerConsoleCommand('system.install', InstallCommand::class);
 	}
 
 

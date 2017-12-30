@@ -47,9 +47,11 @@ class ServiceProvider extends PoppyServiceProvider
 	 */
 	public function register()
 	{
-		$this->registerCommand();
+
 		$this->app->register(RouteServiceProvider::class);
 		$this->app->register(PamServiceProvider::class);
+
+		$this->registerCommand();
 	}
 
 
@@ -58,10 +60,6 @@ class ServiceProvider extends PoppyServiceProvider
 	 */
 	private function registerCommand()
 	{
-		$this->registerConsoleCommand('user.rbac', 'User\Console\Rbac');
-		$this->registerConsoleCommand('user.init', 'User\Console\Init');
-		$this->registerConsoleCommand('user.user', 'User\Console\User');
-		// $this->registerConsoleCommand('lemon.fe', LemonFe::class);
 	}
 
 

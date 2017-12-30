@@ -33,6 +33,7 @@ class PamRole extends \Eloquent implements RbacRoleContract
 		'title',
 		'description',
 		'type',
+		'is_system',
 	];
 
 

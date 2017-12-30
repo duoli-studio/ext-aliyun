@@ -4,6 +4,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Collection;
 use System\Classes\Traits\SystemTrait;
 use System\Models\PamPermission;
+use System\Models\PamRole;
 use System\Permission\Permission;
 
 /**
@@ -14,7 +15,8 @@ class PermissionCommand extends Command
 	use SystemTrait;
 
 	protected $signature   = 'system:permission
-		{action : The permission action to handle, allow <lists,init>}
+		{do : The permission action to handle, allow <lists,init>}
+		{--permission= : The permission need to check}
 		';
 	protected $description = 'Permission manage list.';
 
@@ -31,7 +33,7 @@ class PermissionCommand extends Command
 	public function handle()
 	{
 
-		$action    = $this->argument('action');
+		$action    = $this->argument('do');
 		$this->key = $this->key($action);
 		switch ($action) {
 			case 'lists':
@@ -39,6 +41,13 @@ class PermissionCommand extends Command
 				break;
 			case 'init':
 				$this->init();
+				break;
+			case 'assign':
+				$this->assign();
+				break;
+			case 'check';
+				$permission = $this->option('permission');
+				$this->checkPermission($permission);
 				break;
 			default:
 				$this->error($this->key . ' Command Not Exists!');
@@ -113,6 +122,42 @@ class PermissionCommand extends Command
 			$str .= '`' . $createdNum . '` created;';
 		}
 		$this->info($this->key . "Import permission Success! " . $str);
+	}
+
+	/**
+	 * 将权限赋值给指定的用户组
+	 */
+	private function assign()
+	{
+		$name            = $this->ask('Which role you want assign permission ?');
+		$permission_type = $this->ask('Which permission you want to get ?');
+		$role            = PamRole::where('name', $name)->first();
+
+		if (!$role) {
+			$this->error($this->key . 'Role [' . $name . '] not exists in table !');
+			return;
+		}
+
+		$permissions = PamPermission::where('type', $permission_type)->get();
+		if (!$permissions) {
+			$this->error($this->key . 'Permission type [' . $permission_type . '] has no permissions !');
+			return;
+		}
+		$role->savePermissions($permissions);
+		$role->flushPermissionRole();
+		$this->info("\nSave [{$permission_type}] permission to role [{$name}] !");
+
+	}
+
+
+	private function checkPermission($permission)
+	{
+		if (PamPermission::where('name', $permission)->exists()) {
+			$this->info($this->key . 'Permission `' . $permission . '` in table ');
+		}
+		else {
+			$this->error($this->key . 'Permission `' . $permission . '` not in table');
+		}
 	}
 
 	private function key($action)

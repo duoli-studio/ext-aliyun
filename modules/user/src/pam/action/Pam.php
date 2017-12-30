@@ -37,7 +37,7 @@ class Pam
 	 * @return bool
 	 * @throws \Throwable
 	 */
-	public function register($passport, $password)
+	public function register($passport, $password, $role = PamRole::FE_USER)
 	{
 		// 组织数据 -> 根据数据库字段来组织
 		$passport = strtolower($passport);
@@ -85,7 +85,7 @@ class Pam
 
 		// 服务器处理
 		// role and account type
-		$role = PamRole::where('name', PamRole::FE_USER)->first();
+		$role = PamRole::where('name', $role)->first();
 		if (!$role) {
 			return $this->setError('给定的用户角色不存在');
 		}
@@ -106,6 +106,7 @@ class Pam
 		}
 
 		$initDb['username']  = $username;
+		$initDb['type']      = $role->type;
 		$initDb['is_enable'] = SysConfig::YES;
 
 

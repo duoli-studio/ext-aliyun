@@ -33,37 +33,35 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 
 	use TraitAuthenticatable, RbacUserTrait;
 
+	/* Register Type
+	 -------------------------------------------- */
 	const TYPE_BACKEND = 'backend';
 	const TYPE_USER    = 'user';
 	const TYPE_DEVELOP = 'develop';
 
+	/* Register By
+	 -------------------------------------------- */
+	const REG_TYPE_USERNAME = 'username';
+	const REG_TYPE_MOBILE   = 'mobile';
+	const REG_TYPE_EMAIL    = 'email';
+
+	/* Guard Type
+	 -------------------------------------------- */
 	const GUARD_WEB         = 'web';
 	const GUARD_BACKEND     = 'backend';
 	const GUARD_DEVELOP     = 'develop';
 	const GUARD_JWT_BACKEND = 'jwt_backend';
 	const GUARD_JWT_WEB     = 'jwt_web';
 
+	/* Register Platform
+	 -------------------------------------------- */
 	const REG_PLATFORM_IOS     = 'ios';
 	const REG_PLATFORM_ANDROID = 'android';
 	const REG_PLATFORM_WEB     = 'web';
 	const REG_PLATFORM_PC      = 'pc';
 
-	const REG_TYPE_USERNAME = 'username';
-	const REG_TYPE_MOBILE   = 'mobile';
-	const REG_TYPE_EMAIL    = 'email';
-
-	const IS_ENABLE_YES = 1;
-	const IS_ENABLE_NO  = 0;
-
-
-	const ACCOUNT_TYPE_DESKTOP = 'desktop';
-	const ACCOUNT_TYPE_FRONT   = 'front';
-	const ACCOUNT_TYPE_DEVELOP = 'develop';
-	const DESKTOP_SYSTEM       = 'system';  // 后台类型
 
 	protected $table = 'pam_account';
-
-	protected $primaryKey = 'id';
 
 	protected $dates = [
 		'logined_at',
@@ -73,172 +71,55 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 		'mobile',
 		'username',
 		'password',
+		'type',
 		'logined_at',
 		'is_enable',
 		'password_key',
 		'reg_ip',
 	];
 
-	protected static $userTypeDesc = [
-		self::ACCOUNT_TYPE_DESKTOP => [
-			'name' => '管理员',
-			'type' => 'desktop',
-			'desc' => '管理员',
-		],
-		self::ACCOUNT_TYPE_DEVELOP => [
-			'name' => '开发者账号',
-			'type' => 'develop',
-			'desc' => '开发者账号',
-		],
-		self::ACCOUNT_TYPE_FRONT   => [
-			'name' => '用户',
-			'type' => 'front',
-			'desc' => '前台用户',
-		],
-		self::DESKTOP_SYSTEM       => [
-			'name' => '系统',
-			'type' => 'desktop',
-			'desc' => '系统后台主动操控',
-		],
-	];
-
 
 	/**
-	 * 根据账户名称/类型获取账户ID
-	 * @param $account_name
+	 * 根据 Username 获取账户ID
+	 * @param string $username
 	 * @return mixed
 	 */
-	public static function getAccountIdByAccountName($account_name)
+	public static function getIdByUsername($username)
 	{
-		return self::where('account_name', $account_name)->value('account_id');
-	}
-
-
-	public static function userType($account_id)
-	{
-		if (!$account_id) {
-			return self::DESKTOP_SYSTEM;
-		}
-		$accountType = self::getAccountTypeByAccountId($account_id);
-		return $accountType;
-	}
-
-
-	/**
-	 * 用户所有类型
-	 * @return array
-	 */
-	public static function userTypeLinear()
-	{
-		$linear = [];
-		foreach (self::$userTypeDesc as $key => $val) {
-			$linear[$key] = $val['name'];
-		}
-		return $linear;
+		return self::where('username', $username)->value('id');
 	}
 
 	/**
-	 * 用户账户类型描述
-	 * @param $key
-	 * @return string
+	 * 获取定义的 kv 值
+	 * @param null|string $key       需要获取的key, 默认返回整个定义
+	 * @param bool        $check_key 检测当前key 是否存在
+	 * @return array|string
 	 */
-	public static function userTypeDesc($key)
+	public static function kvType($key = null, $check_key = false)
 	{
-		static $cache;
-		if (!$cache) {
-			$cache = self::userTypeLinear();
-		}
-		return isset($cache[$key]) ? $cache[$key] : '';
-	}
-
-	/**
-	 * 获取所有账户类型
-	 * @return array
-	 */
-	public static function accountTypeAll()
-	{
-		$accountTypeDesc = [];
-		$keys            = [
-			self::ACCOUNT_TYPE_FRONT,
-			self::ACCOUNT_TYPE_DESKTOP,
+		$desc = [
+			self::TYPE_USER    => '用户',
+			self::TYPE_BACKEND => '后台管理员',
+			self::TYPE_DEVELOP => '开发者',
 		];
-
-		// 启用系统账号管理
-		if (config('lemon.enable_develop')) {
-			$keys[] = self::ACCOUNT_TYPE_DEVELOP;
-		}
-		foreach (self::$userTypeDesc as $key => $val) {
-			if (in_array($key, $keys)) {
-				$accountTypeDesc[$key] = $val;
-			}
-		}
-		return $accountTypeDesc;
+		return kv($desc, $key, $check_key);
 	}
 
 
 	/**
 	 * 允许缓存, 获取账户类型, 因为账户类型不会变化
-	 * @param $account_id
+	 * @param $id
 	 * @return mixed
 	 */
-	public static function getAccountTypeByAccountId($account_id)
+	public static function getTypeById($id)
 	{
 		static $accountType;
-		if (!isset($accountType[$account_id])) {
-			$accountType[$account_id] = PamAccount::where('account_id', $account_id)->value('account_type');
+		if (!isset($accountType[$id])) {
+			$accountType[$id] = PamAccount::where('id', $id)->value('type');
 		}
-		return $accountType[$account_id];
+		return $accountType[$id];
 	}
 
-	/**
-	 * 账户类型
-	 * @return array
-	 */
-	public static function accountTypeLinear()
-	{
-		$linear       = [];
-		$accountTypes = self::accountTypeAll();
-		foreach ($accountTypes as $key => $val) {
-			$linear[$key] = $val['name'];
-		}
-		return $linear;
-	}
-
-	/**
-	 * 账户类型描述
-	 * @param $key
-	 * @return string
-	 */
-	public static function accountTypeDesc($key)
-	{
-		$linear = self::accountTypeLinear();
-		return isset($linear[$key]) ? $linear[$key] : '';
-	}
-
-
-	/**
-	 * 绑定社会化组件
-	 * @param      $account_id
-	 * @param      $field
-	 * @param      $key
-	 * @param null $head_pic
-	 * @return bool
-	 */
-	public static function bindSocialite($account_id, $field, $key, $head_pic = null)
-	{
-		if ($head_pic) {
-			/* 拖慢性能. 暂时不处理
-			$img         = \Image::make($head_pic);
-			$destination = 'uploads/avatar/' . $account_id . '.png';
-			$img->save(public_path($destination));
-			$head_pic = $destination;
-			 */
-			AccountFront::where('account_id', $account_id)->update([
-				'head_pic' => $head_pic,
-			]);
-		}
-		return true;
-	}
 
 	/**
 	 * 获取定义的 kv 值
