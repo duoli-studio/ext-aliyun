@@ -53,12 +53,13 @@ class UserCommand extends Command
 					$this->error('Your account not exists');
 				}
 				break;
-			case 'create_root':
-				$username = $this->option('account');
+			case 'create_user':
+				$username = $this->ask('Please input username!');
+				$password = $this->ask('Please input password!');
+				$role     = $this->ask('Please input role name!');
 				if (!PamAccount::getIdByUsername($username)) {
-					$pwd    = $this->option('pwd');
 					$actPam = app('act.pam');
-					if ($actPam->register($username, $pwd, PamRole::BE_ROOT)) {
+					if ($actPam->register($username, $password, $role)) {
 						$this->info('User ' . $username . ' created');
 					}
 					else {
