@@ -37,7 +37,7 @@ class Role
 	 */
 	public function establish($data, $id = null)
 	{
-		if (!$this->checkBe('backend:global.role.manage')) {
+		if (!$this->checkPermission('backend:global.role.manage')) {
 			return false;
 		}
 		$initDb    = [

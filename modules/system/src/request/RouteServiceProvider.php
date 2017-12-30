@@ -91,8 +91,10 @@ class RouteServiceProvider extends ServiceProvider
 			$router->group([
 				'middleware' => 'auth:develop',
 			], function (Router $router) {
-				$router->get('/', DevController::class . '@cp')->name('system:develop.cp');
-				$router->get('/phpinfo', DevController::class . '@phpinfo')->name('system:develop.phpinfo');
+				$router->get('/', DevController::class . '@cp')
+					->name('system:develop.cp');
+				$router->get('/phpinfo', DevController::class . '@phpinfo')
+					->name('system:develop.phpinfo');
 			});
 
 		});
@@ -101,7 +103,8 @@ class RouteServiceProvider extends ServiceProvider
 			'middleware' => 'web',
 			'prefix'     => 'develop/system',
 		], function (Router $router) {
-			$router->get('/status', SystemController::class . '@status');
+			$router->get('/status', SystemController::class . '@status')
+				->name('system:develop_system.status');
 		});
 	}
 
@@ -117,17 +120,15 @@ class RouteServiceProvider extends ServiceProvider
 			'middleware' => ['cross'],
 			'prefix'     => 'api/system',
 		], function (Router $route) {
-
 			$route->any('/token', AuthController::class . '@token')
 				->name('system:api.token');
-
+			$route->any('graphql/{graphql_schema?}', GraphQLController::class . '@query')
+				->name('system:api.graphql');
 			$route->any('/information', InformationController::class . '@list');
 			$route->any('/dashboard', DashboardsController::class . '@list');
 			$route->group([
 				'middleware' => ['auth:jwt_backend'],
 			], function (Router $route) {
-				\Route::any('graphql/{graphql_schema?}', GraphQLController::class . '@query')
-					->name('system:api.graphql');
 				$route->any('/access', AuthController::class . '@access')
 					->name('system:api.access');
 				$route->any('/configuration/{path?}', ConfigurationController::class . '@definition');

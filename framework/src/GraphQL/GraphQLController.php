@@ -90,7 +90,7 @@ class GraphQLController extends Controller
 	protected function queryContext($query, $variables, $schema)
 	{
 		try {
-			return app('auth')->guard('api')->user();
+			return app('auth')->guard('jwt_backend')->user();
 		} catch (\Exception $e) {
 			return null;
 		}

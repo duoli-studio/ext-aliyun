@@ -673,12 +673,15 @@ define(function(require, exports) {
 			}, jump_time);
 		}
 
-		if (obj_resp.show === 'dialog') {
+		if (obj_resp.data.show === 'dialog') {
 			delete obj_resp.show;
 			var conf = {};
-			conf.title = !conf.hasOwnProperty('title') ? conf.msg : conf.title;
-			conf.content = !conf.hasOwnProperty('content') ? conf.msg : conf.content;
-			dialog(conf).show();
+			var title = !conf.hasOwnProperty('title') ? conf.msg : conf.title;
+			var content = !conf.hasOwnProperty('content') ? conf.msg : conf.content;
+			layer.open({
+				title   : title,
+				content : content
+			});
 			return false;
 		}
 
@@ -689,41 +692,41 @@ define(function(require, exports) {
 			}, obj_init.time);
 		}
 
-		if (obj_resp.reload) {
+		if (obj_resp.data.reload) {
 			setTimeout(function() {
 				window.location.reload()
 			}, obj_init.time);
 			return;
 		}
-		if (obj_resp.top_reload) {
+		if (obj_resp.data.top_reload) {
 			setTimeout(function() {
 				top.window.location.reload()
 			}, obj_init.time);
 			return;
 		}
 
-		if (obj_resp.location) {
+		if (obj_resp.data.location) {
 			setTimeout(function() {
-				window.location.href = obj_resp.location;
+				window.location.href = obj_resp.data.location;
 			}, obj_init.time);
 		}
 
-		if (obj_resp.top_location) {
+		if (obj_resp.data.top_location) {
 			setTimeout(function() {
-				top.window.location.href = obj_resp.top_location;
+				top.window.location.href = obj_resp.data.top_location;
 			}, obj_init.time);
 		}
 
-		if (obj_resp.reload_opener) {
+		if (obj_resp.data.reload_opener) {
 			setTimeout(function() {
-				var opener = exports.opener(obj_resp.reload_opener);
+				var opener = exports.opener(obj_resp.data.reload_opener);
 				opener.location.reload();
 			}, obj_init.time);
 		}
 
-		if (obj_resp.iframe_close) {
+		if (obj_resp.data.iframe_close) {
 			setTimeout(function() {
-				var opener = exports.opener(obj_resp.iframe_close);
+				var opener = exports.opener(obj_resp.data.iframe_close);
 				opener.iframe.close();
 			}, obj_init.time);
 		}
@@ -805,13 +808,13 @@ define(function(require, exports) {
 	};
 
 	/**
-	 * 获取openner
+	 * 获取 openner
 	 * @param workspace
 	 * @returns {*}
 	 */
 	exports.opener = function(workspace) {
 		var opener = top.frames[workspace];
-		if (typeof opener == 'undefined') {
+		if (typeof opener === 'undefined') {
 			opener = top;
 		}
 		return opener;

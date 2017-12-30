@@ -5,6 +5,7 @@ use GraphQL\Type\Definition\Type;
 use Poppy\Framework\GraphQL\Exception\TypeNotFound;
 use Poppy\Framework\GraphQL\Support\Mutation;
 use System\Classes\Traits\SystemTrait;
+use System\Pam\Action\Role;
 
 class RoleMutation extends Mutation
 {
@@ -64,9 +65,11 @@ class RoleMutation extends Mutation
 	 */
 	public function resolve($root, $args)
 	{
-		$id   = $args['id'] ?? null;
+		$id = $args['id'] ?? null;
+
+		/** @var Role $role */
 		$role = app('act.role');
-		if (!$role->establish($args, $id)) {
+		if (!$role->setPam($this->getJwtBeUser())->establish($args, $id)) {
 			return $role->getError()->toArray();
 		}
 		else {

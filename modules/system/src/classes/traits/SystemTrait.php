@@ -22,48 +22,46 @@ trait SystemTrait
 	/**
 	 * @var PamAccount;
 	 */
-	protected $bePam;
-
-	/**
-	 * @var PamAccount
-	 */
-	protected $webPam;
+	protected $pam;
 
 	/**
 	 * Check Backend User login and permission.
 	 * @param string $permission
 	 * @return bool
 	 */
-	public function checkBe($permission = '')
+	public function checkPermission($permission = '')
 	{
-		$this->bePam = $this->getAuth()->guard(PamAccount::GUARD_BACKEND)->user();
-		if (!$this->bePam) {
-			return $this->setError(trans('system::act.check_be_need_login'));
+		if (!$this->pam) {
+			return $this->setError(trans('system::act.check_permission_need_login'));
 		}
 
 		// check permission
-		if ($permission && !$this->bePam->capable($permission)) {
+		if ($permission && !$this->pam->capable($permission)) {
 			return $this->setError(trans('system::act.check_permission_failed'));
 		}
 		return true;
 	}
 
+	public function setPam($pam)
+	{
+		$this->pam = $pam;
+		return $this;
+	}
+
 
 	/**
-	 * Check Web User Permission
-	 * @param string $permission
-	 * @return bool
+	 * Get Jwt Backend User
+	 * @return \Illuminate\Contracts\Auth\Authenticatable|null
 	 */
-	public function checkWeb($permission = '')
+	public function getJwtBeUser()
 	{
-		$this->webPam = $this->getAuth()->guard(PamAccount::GUARD_WEB)->user();
-		if (!$this->webPam) {
-			return $this->setError(trans('system::act.check_web_need_login'));
-		}
-		if ($permission && !$this->bePam->capable($permission)) {
-			return $this->setError(trans('system::act.check_permission_failed'));
-		}
-		return true;
+		return $this->getAuth()->guard(PamAccount::GUARD_JWT_BACKEND)->user();
+	}
+
+
+	public function getJwtWebUser()
+	{
+		return $this->getAuth()->guard(PamAccount::GUARD_JWT_WEB)->user();
 	}
 
 
