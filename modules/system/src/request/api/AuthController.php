@@ -53,7 +53,7 @@ class AuthController extends Controller
 				'message' => $message,
 			], 403, [], JSON_UNESCAPED_UNICODE);
 		}
-		if (!$this->getAuth()->guard(PamAccount::GUARD_BACKEND)->attempt($this->getRequest()->only([
+		if (!$this->guard()->attempt($this->getRequest()->only([
 			'username',
 			'password',
 		], $this->getRequest()->has('remember', true)))) {
@@ -65,7 +65,7 @@ class AuthController extends Controller
 		 -------------------------------------------- */
 		// $this->getRequest()->session()->regenerate();
 		$this->clearLoginAttempts($this->getRequest());
-		$user = $this->getAuth()->guard(PamAccount::GUARD_BACKEND)->user();
+		$user = $this->guard()->user();
 		if (!$token = $this->getJwt()->fromUser($user)) {
 			return $this->getResponse()->json([
 				'error' => 'invalid_credentials',
@@ -83,7 +83,7 @@ class AuthController extends Controller
 	 */
 	public function guard()
 	{
-		return $this->getAuth()->guard(PamAccount::GUARD_BACKEND);
+		return $this->getAuth()->guard(PamAccount::GUARD_JWT_BACKEND);
 	}
 
 	/**

@@ -124,7 +124,7 @@ class RouteServiceProvider extends ServiceProvider
 			$route->any('/information', InformationController::class . '@list');
 			$route->any('/dashboard', DashboardsController::class . '@list');
 			$route->group([
-				'middleware' => ['auth:api'],
+				'middleware' => ['auth:api_backend'],
 			], function (Router $route) {
 				\Route::any('graphql/{graphql_schema?}', GraphQLController::class . '@query')
 					->name('system:api.graphql');

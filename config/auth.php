@@ -14,8 +14,7 @@ return [
 	*/
 
 	'defaults' => [
-		'guard'     => 'web',
-		'passwords' => 'users',
+		'guard' => 'web',
 	],
 
 	/*
@@ -36,21 +35,21 @@ return [
 	*/
 
 	'guards' => [
-		'web'     => [
+		'web'         => [
 			'driver'   => 'session',
-			'provider' => 'pam',
+			'provider' => 'pam_web',
 		],
-		'backend' => [
+		'backend'     => [
 			'driver'   => 'session',
-			'provider' => 'pam',
+			'provider' => 'pam_backend',
 		],
-		'develop' => [
+		'develop'     => [
 			'driver'   => 'session',
-			'provider' => 'pam',
+			'provider' => 'pam_develop',
 		],
-		'api'     => [
-			'driver'   => 'jwt-auth',
-			'provider' => 'pam',
+		'jwt_backend' => [
+			'driver'   => 'jwt.backend',
+			'provider' => 'pam_backend',
 		],
 	],
 
@@ -72,8 +71,17 @@ return [
 	*/
 
 	'providers' => [
-		'pam' => [
-			'driver' => 'pam',
+		'pam_backend' => [
+			'driver' => 'pam.backend',
+		],
+		'pam_web'     => [
+			'driver' => 'pam.web',
+		],
+		'pam_develop' => [
+			'driver' => 'pam.develop',
+		],
+		'jwt_backend' => [
+			'driver' => 'pam.backend',
 		],
 	],
 

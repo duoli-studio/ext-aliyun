@@ -25,7 +25,7 @@ return [
 	],
 	'middleware_schema' => [
 		'default' => ['cross'],
-		'backend' => ['auth:api', 'cross'],
+		'backend' => ['auth:api_backend', 'cross'],
 	],
 	'types'             => [
 		/* query

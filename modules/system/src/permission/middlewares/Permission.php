@@ -42,7 +42,7 @@ class Permission
 	public function handle(Request $request, Closure $next, $identification = '')
 	{
 		$action = $request->route()->getAction();
-		if (in_array('auth:api', $action['middleware'])) {
+		if (in_array('auth:api_api', $action['middleware'])) {
 			$user = $this->auth->guard('api')->user();
 		}
 		else {

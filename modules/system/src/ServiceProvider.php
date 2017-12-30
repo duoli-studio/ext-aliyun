@@ -13,11 +13,10 @@ use System\Events\ListenerServiceProvider;
 use System\Extension\ExtensionServiceProvider;
 use System\Models\PamAccount;
 use System\Module\ModuleServiceProvider;
-use System\Pam\Auth\JwtAuthGuard;
+use System\Pam\Auth\Guard\JwtAuthGuard;
 use System\Pam\Auth\Provider\BackendProvider;
 use System\Pam\Auth\Provider\DevelopProvider;
 use System\Pam\Auth\Provider\WebProvider;
-use System\Pam\Auth\UserProvider;
 use System\Pam\PamServiceProvider;
 use System\Permission\Commands\PermissionCommand;
 use System\Permission\PermissionServiceProvider;
@@ -75,35 +74,8 @@ class ServiceProvider extends PoppyServiceProvider
 		$this->app->register(PermissionServiceProvider::class);
 		$this->app->register(PamServiceProvider::class);
 
-		$this->registerAuth();
 		$this->registerSchedule();
 		$this->registerConsole();
-	}
-
-	/**
-	 * 注册
-	 */
-	private function registerAuth()
-	{
-		\Auth::provider('pam.web', function ($app) {
-			return new WebProvider(PamAccount::class);
-		});
-		\Auth::provider('pam.backend', function ($app) {
-			return new BackendProvider(PamAccount::class);
-		});
-		\Auth::provider('pam.develop', function ($app) {
-			return new DevelopProvider(PamAccount::class);
-		});
-
-		$this->app['auth']->extend('jwt-auth', function ($app, $name, array $config) {
-			$guard = new JwtAuthGuard(
-				$app['tymon.jwt'],
-				$app['auth']->createUserProvider($config['provider']),
-				$app['request']
-			);
-			$app->refresh('request', $guard, 'setRequest');
-			return $guard;
-		});
 	}
 
 

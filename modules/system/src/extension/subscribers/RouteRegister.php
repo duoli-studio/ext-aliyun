@@ -15,7 +15,7 @@ class RouteRegister extends AbstractRouteRegister
      */
     public function handle()
     {
-        $this->router->group(['middleware' => ['auth:api', 'cross', 'web'], 'prefix' => 'api/administration'], function () {
+        $this->router->group(['middleware' => ['auth:api_backend', 'cross', 'web'], 'prefix' => 'api/administration'], function () {
             $this->router->resource('extensions', ExtensionsController::class)->methods([
                 'destroy' => 'uninstall',
                 'store' => 'install',
