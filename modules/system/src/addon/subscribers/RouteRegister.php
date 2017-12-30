@@ -16,7 +16,7 @@ class RouteRegister extends AbstractRouteRegister
 	 */
 	public function handle()
 	{
-		$this->router->group(['middleware' => ['auth:api_backend', 'cross', 'web'], 'prefix' => 'api/administration'], function () {
+		$this->router->group(['middleware' => ['auth:jwt_backend', 'cross', 'web'], 'prefix' => 'api/administration'], function () {
 			$this->router->resource('addons/{addon}/exports', AddonsExportsController::class)->methods([
 				'store' => 'export',
 			])->names([
