@@ -9,6 +9,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject as JWTSubjectAuthenticatable;
 
 
 /**
+ * System\Models\PamAccount
  * @property int                       $id
  * @property string                    $mobile             手机号
  * @property string                    $username           用户名称
@@ -27,6 +28,10 @@ use Tymon\JWTAuth\Contracts\JWTSubject as JWTSubjectAuthenticatable;
  * @property-read PamRoleAccount       $role
  * @property-read Collection|PamRole[] $roles
  * @mixin \Eloquent
+ * @property string|null               $email              邮箱
+ * @property string|null               $password_key       账号注册时候随机生成的6位key
+ * @property string|null               $type               邮箱
+ * @property string|null               $reg_platform       注册平台
  */
 class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthenticatable
 {
