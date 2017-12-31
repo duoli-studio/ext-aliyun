@@ -53,6 +53,7 @@ Thumbs.db
 /bootstrap/cache/services.json
 /bootstrap/cache/routes.php
 /storage/framework/*.php
+/modules/system/resources/mixes/system/index.html
 /public/assets/js/global.js
 /public/uploads/*
 /public/mix-manifest.json

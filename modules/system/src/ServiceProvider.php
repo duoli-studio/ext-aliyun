@@ -9,6 +9,7 @@ use Poppy\Framework\Exceptions\ModuleNotFoundException;
 use Poppy\Framework\Support\PoppyServiceProvider;
 use System\Addon\AddonServiceProvider;
 use System\Backend\BackendServiceProvider;
+use System\Console\DevHtmlCommand;
 use System\Console\InstallCommand;
 use System\Events\ListenerServiceProvider;
 use System\Extension\ExtensionServiceProvider;
@@ -90,6 +91,7 @@ class ServiceProvider extends PoppyServiceProvider
 		$this->registerConsoleCommand('system.permission', PermissionCommand::class);
 		$this->registerConsoleCommand('system.user', UserCommand::class);
 		$this->registerConsoleCommand('system.install', InstallCommand::class);
+		$this->registerConsoleCommand('system.dev_html', DevHtmlCommand::class);
 	}
 
 
