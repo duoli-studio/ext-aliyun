@@ -18,7 +18,7 @@ use System\Rbac\Traits\RbacRoleTrait;
 class PamRole extends \Eloquent implements RbacRoleContract
 {
 
-	use RbacRoleTrait;
+	use RbacRoleTrait, Filterable;
 
 	const BE_ROOT  = 'root';      // admin user
 	const FE_USER  = 'user';      // web user

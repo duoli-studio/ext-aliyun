@@ -50,18 +50,17 @@ trait SystemTrait
 
 
 	/**
-	 * Get Jwt Backend User
-	 * @return \Illuminate\Contracts\Auth\Authenticatable|null
+	 * Get Jwt Backend Guard
 	 */
-	public function getJwtBeUser()
+	public function getJwtBeGuard()
 	{
-		return $this->getAuth()->guard(PamAccount::GUARD_JWT_BACKEND)->user();
+		return $this->getAuth()->guard(PamAccount::GUARD_JWT_BACKEND);
 	}
 
 
-	public function getJwtWebUser()
+	public function getJwtWebGuard()
 	{
-		return $this->getAuth()->guard(PamAccount::GUARD_JWT_WEB)->user();
+		return $this->getAuth()->guard(PamAccount::GUARD_JWT_WEB);
 	}
 
 

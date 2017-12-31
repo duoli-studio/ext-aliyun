@@ -35,17 +35,13 @@ class RoleMutation extends Mutation
 	public function args(): array
 	{
 		return [
-			'title'       => [
-				'type'        => Type::nonNull(Type::string()),
-				'description' => trans('system::role.db.title'),
-			],
 			'id'          => [
 				'type'        => Type::int(),
 				'description' => trans('system::role.db.id'),
 			],
-			'name'        => [
+			'title'       => [
 				'type'        => Type::nonNull(Type::string()),
-				'description' => trans('system::role.db.name'),
+				'description' => trans('system::role.db.title'),
 			],
 			'type'        => [
 				'type'        => Type::nonNull($this->getGraphQL()->type('role_guard')),
@@ -69,7 +65,7 @@ class RoleMutation extends Mutation
 
 		/** @var Role $role */
 		$role = app('act.role');
-		if (!$role->setPam($this->getJwtBeUser())->establish($args, $id)) {
+		if (!$role->setPam($this->getJwtBeGuard()->user())->establish($args, $id)) {
 			return $role->getError()->toArray();
 		}
 		else {

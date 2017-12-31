@@ -3,6 +3,7 @@
 return [
 	'graphql' => [
 		'queries_desc'  => '角色查询',
+		'query_desc'    => '角色详情',
 		'type_desc'     => '角色类型',
 		'filter_desc'   => '查询过滤器',
 		'mutation_desc' => '角色修改/创建',

@@ -1,5 +1,6 @@
 <?php namespace System\Request\Develop;
 
+use Curl\Curl;
 use Illuminate\Http\Request;
 use Poppy\Framework\Application\Controller;
 use Poppy\Framework\Classes\Resp;
@@ -37,13 +38,26 @@ class SystemController extends Controller
 			}
 		}
 
-		$token = '';
-		if (RawCookieHelper::has('dev_dianjing#token')) {
-			$token = RawCookieHelper::get('dev_dianjing#token');
+		$token     = '';
+		$cookieKey = 'dev_dianjing#token';
+		if (RawCookieHelper::has($cookieKey)) {
+			$token = RawCookieHelper::get($cookieKey);
+
+			// check token is valid
+			$curl   = new Curl();
+			$access = route('system:api.access');
+			$curl->setHeader('x-requested-with', 'XMLHttpRequest');
+			$curl->setHeader('Authorization', 'Bearer ' . $token);
+			$curl->post($access);
+			if ($curl->httpStatusCode === 401) {
+				RawCookieHelper::remove($cookieKey);
+				$token = '';
+			}
 		}
 		return view('system::develop.system.status', [
 			'token_url'         => $tokenUrl,
 			'token'             => $token,
+			'cookie_key'        => $cookieKey,
 			'graphql_view'      => $graphqlUrl,
 			'graphql_auth_view' => $graphqlAuthUrl,
 		]);

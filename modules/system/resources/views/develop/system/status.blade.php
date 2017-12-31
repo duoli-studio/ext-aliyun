@@ -64,7 +64,7 @@
 								    var objData = util.to_json(data);
 								    if (typeof objData.data != 'undefined') {
 									    var objSubData = objData.data;
-									    Cookies.set('dev_dianjing#token', objSubData);
+									    Cookies.set('{!! $cookie_key !!}', objSubData);
 								    }
 
 								    $('#J_result').text(

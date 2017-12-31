@@ -1,17 +1,13 @@
 <?php namespace System\Pam\Graphql\Queries;
 
-use GraphQL\Type\Definition\ListOfType;
+use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Poppy\Framework\GraphQL\Exception\TypeNotFound;
 use Poppy\Framework\GraphQL\Support\Query;
 use System\Classes\Traits\SystemTrait;
-use System\Models\Filters\RoleFilter;
 use System\Models\PamRole;
 
 
-/**
- * Class SettingQuery.
- */
 class RoleQuery extends Query
 {
 	use SystemTrait;
@@ -21,28 +17,27 @@ class RoleQuery extends Query
 	{
 		parent::__construct($attributes);
 		$this->attributes['name']        = 'role';
-		$this->attributes['description'] = trans('system::role.graphql.queries_desc');
+		$this->attributes['description'] = trans('system::role.graphql.query_desc');
 	}
 
 	/**
-	 * @return ListOfType
+	 * @return ObjectType
 	 * @throws TypeNotFound
 	 */
-	public function type(): ListOfType
+	public function type(): ObjectType
 	{
-		return Type::listOf($this->getGraphQL()->type('role'));
+		return $this->getGraphQL()->type('role');
 	}
 
 	/**
 	 * @return array
-	 * @throws TypeNotFound
 	 */
 	public function args()
 	{
 		return [
-			'filters' => [
-				'type'        => Type::nonNull($this->getGraphQL()->type('role_filter')),
-				'description' => trans('system::role.graphql.filter_desc'),
+			'id' => [
+				'type'        => Type::nonNull(Type::int()),
+				'description' => trans('system::role.db.id'),
 			],
 		];
 	}
@@ -54,8 +49,6 @@ class RoleQuery extends Query
 	 */
 	public function resolve($root, $args)
 	{
-		return PamRole::filter($args['filters'], RoleFilter::class)->get();
+		return PamRole::find($args['id']);
 	}
-
-
 }
