@@ -1,6 +1,6 @@
 {
 	"name": "poppy/ext-fe",
-	"description": "支付宝Laravel 5 插件. 支持web 端即时到帐",
+	"description": "Poppy frontEnd support",
 	"type": "poppy-extension",
 	"authors": [
 		{

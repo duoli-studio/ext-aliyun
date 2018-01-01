@@ -1,4 +1,4 @@
-@extends('slt::inc.default')
+@extends('system::tpl.default')
 @section('head-css')
     {!! Html::style('assets/css/basic.css') !!}
     {!! Html::style('assets/css/slt.css') !!}

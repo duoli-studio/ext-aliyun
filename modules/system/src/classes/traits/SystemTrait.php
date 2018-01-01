@@ -25,6 +25,14 @@ trait SystemTrait
 	protected $pam;
 
 	/**
+	 * @return PamAccount
+	 */
+	public function getPam(): PamAccount
+	{
+		return $this->pam;
+	}
+
+	/**
 	 * Check Backend User login and permission.
 	 * @param string $permission
 	 * @return bool
@@ -47,6 +55,8 @@ trait SystemTrait
 		$this->pam = $pam;
 		return $this;
 	}
+
+
 
 
 	/**

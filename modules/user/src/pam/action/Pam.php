@@ -34,6 +34,7 @@ class Pam
 	 * 用户注册
 	 * @param string $passport
 	 * @param string $password
+	 * @param string $role
 	 * @return bool
 	 * @throws \Throwable
 	 */
@@ -129,6 +130,8 @@ class Pam
 				// 设置密码
 				$this->setPassword($pam, $pam->password);
 
+				$this->pam = $pam;
+
 				// 触发注册成功的事件
 				$this->getEvent()->dispatch(new PamRegistered($pam));
 				return true;
@@ -150,7 +153,6 @@ class Pam
 	{
 		$pamTable = (new PamAccount())->getTable();
 
-
 		$type        = $this->passportType($passport);
 		$credentials = [
 			$type      => $passport,
@@ -171,6 +173,8 @@ class Pam
 
 		/** @var \Auth $guard */
 		$guard = \Auth::guard($guard_type);
+		// dd($remember);
+		// dd($credentials);
 		if ($guard->attempt($credentials, $remember)) {
 			/** @var PamAccount $user */
 			$user = $guard->user();
@@ -183,7 +187,6 @@ class Pam
 
 			$this->getEvent()->dispatch(new LoginSuccess($user));
 			$this->pam = $user;
-
 			return true;
 		}
 		else {
@@ -196,6 +199,8 @@ class Pam
 		}
 
 	}
+
+
 
 	public function webLogout()
 	{
@@ -238,22 +243,22 @@ class Pam
 	public function checkPassword($pam, $password)
 	{
 		$key           = $pam->password_key;
-		$regTime       = $pam->created_at->toDateTimeString();
+		$reg_datetime  = $pam->created_at->toDateTimeString();
 		$authPassword  = $pam->getAuthPassword();
-		$cryptPassword = $this->cryptPassword($password, $regTime, $key);
+		$cryptPassword = $this->cryptPassword($password, $reg_datetime, $key);
 		return (bool) ($authPassword === $cryptPassword);
 	}
 
 	/**
 	 * 生成账户密码
-	 * @param String $password    原始密码
-	 * @param String $regDatetime 注册时间(datetime) 类型
-	 * @param String $randomKey   六位随机值
+	 * @param String $password     原始密码
+	 * @param String $reg_datetime 注册时间(datetime) 类型
+	 * @param String $randomKey    六位随机值
 	 * @return string
 	 */
-	private function cryptPassword($password, $regDatetime, $randomKey)
+	private function cryptPassword($password, $reg_datetime, $randomKey)
 	{
-		return md5(sha1($password . $regDatetime) . $randomKey);
+		return md5(sha1($password . $reg_datetime) . $randomKey);
 	}
 
 	/**

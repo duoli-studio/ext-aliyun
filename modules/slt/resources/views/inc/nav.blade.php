@@ -32,7 +32,7 @@
                         <a href="{!! route('slt:tool') !!}">工具</a>
                     </li>
                 </ul>
-                {{--@include('slt::inc.user_status')--}}
+                @include('slt::inc.user_status')
             </div>
 
         </div>

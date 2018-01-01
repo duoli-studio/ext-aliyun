@@ -13,7 +13,11 @@ return [
 			'mutation' => [
 				\System\Setting\Graphql\Mutation\SettingMutation::class,
 				\System\Pam\GraphQL\Mutation\RoleMutation::class,
+
+				/* server
+				 -------------------------------------------- */
 				\Order\Game\GraphQL\Mutation\ServerMutation::class,
+				\Order\Game\GraphQL\Mutation\ServerDeleteMutation::class,
 			],
 			'query'    => [
 				\System\Setting\Graphql\Queries\SettingQuery::class,

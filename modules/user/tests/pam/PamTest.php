@@ -29,7 +29,7 @@ class PamTest extends TestCase
 	{
 		/** @var Pam $pam */
 		$pam = app('act.pam');
-		$user = PamAccount::where('username', 'root')->first();
+		$user = PamAccount::where('username', 'imvkmark')->first();
 		if ($pam->setPassword($user, '123456')) {
 			dd($pam->getSuccess());
 		}

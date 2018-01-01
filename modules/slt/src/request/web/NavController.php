@@ -2,18 +2,12 @@
 
 use Curl\Curl;
 use Illuminate\Http\Request;
-use Sour\Poppy\Models\SiteTag;
-use Sour\Poppy\Models\SiteUrlRelTag;
-use Sour\Lemon\Helper\FileHelper;
-use Sour\Lemon\Support\Resp;
-use Sour\Poppy\Action\ActCollection;
-use Sour\Poppy\Auth\FeUser;
-use Sour\Poppy\Models\SiteCollection;
-use Sour\Poppy\Models\SiteRelCat;
-use Sour\Poppy\Models\SiteUrl;
-use Sour\Poppy\Models\SiteUserUrl;
-use Sour\System\Models\BaseCategory;
-use Sour\System\Models\BaseCategoryGroup;
+use Poppy\Framework\Classes\Resp;
+use Slt\Models\SiteCollection;
+use Slt\Models\SiteTag;
+use Slt\Models\SiteUrl;
+use Slt\Models\SiteUrlRelTag;
+use Slt\Models\SiteUserUrl;
 
 class NavController extends InitController
 {
@@ -143,7 +137,7 @@ class NavController extends InitController
 				$icon = $imgUrls[0];
 			}
 			if ($url && $Collection->hasCreate($url)) {
-				return Resp::web('您已经添加了该网址, 请不要重复添加!');
+				return Resp::web(Resp::ERROR, '您已经添加了该网址, 请不要重复添加!');
 			}
 		}
 
@@ -180,14 +174,14 @@ class NavController extends InitController
 	public function collectionDestroy($id = null)
 	{
 		if (!$id) {
-			return Resp::web('请选中要删除的信息');
+			return Resp::web(Resp::ERROR, '请选中要删除的信息');
 		}
 		$Collection = (new ActCollection())->setUser(FeUser::instance());
 		if ($Collection->destroy($id)) {
-			return Resp::web('OK~删除成功', 'top_reload | 1');
+			return Resp::web(Resp::SUCCESS, 'OK~删除成功', 'top_reload | 1');
 		}
 		else {
-			return Resp::web($Collection->getError());
+			return Resp::web(Resp::ERROR, $Collection->getError());
 		}
 	}
 
@@ -195,14 +189,14 @@ class NavController extends InitController
 	public function urlDestroy($id)
 	{
 		if (!$id) {
-			return Resp::web('请选中要删除的链接');
+			return Resp::web(Resp::ERROR, '请选中要删除的链接');
 		}
 		$Collection = (new ActCollection())->setUser(FeUser::instance());
 		if ($Collection->destroyUrl($id)) {
-			return Resp::web('OK~删除成功', 'top_reload | 1');
+			return Resp::web(Resp::SUCCESS, '删除成功', 'top_reload | 1');
 		}
 		else {
-			return Resp::web($Collection->getError());
+			return Resp::web(Resp::ERROR, $Collection->getError());
 		}
 	}
 
@@ -215,7 +209,7 @@ class NavController extends InitController
 	{
 		$url = $request->input('url');
 		if (!$url) {
-			return Resp::web('请填写url地址!');
+			return Resp::web(Resp::ERROR, '请填写url地址!');
 		}
 		$curl = new Curl();
 		$curl->setTimeout(2);
@@ -224,7 +218,7 @@ class NavController extends InitController
 		}
 		$content = $curl->get($url);
 		if (preg_match("/<title>(.*?)<\/title>/i", $content, $match)) {
-			return Resp::web('OK~获取到标题', [
+			return Resp::web(Resp::SUCCESS, '获取到标题', [
 				'title'  => $match[1],
 				'url'    => $url,
 				'forget' => true,

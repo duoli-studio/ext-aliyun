@@ -110,4 +110,4 @@
 	if (!window.open(url_open, 'wulicode', url_param)) {
 	    window.location.href = url_open;
 	}
-})(700,500, '{!! route('web:nav.url') !!}')
+})(700,500, '{!! route('slt:nav.url') !!}')

@@ -50,7 +50,6 @@ class PamProvider implements UserProviderBase
 		foreach ($credentials as $key => $value) {
 			if (!str_contains($key, 'password')) $query->where($key, $value);
 		}
-
 		return $query->first();
 	}
 

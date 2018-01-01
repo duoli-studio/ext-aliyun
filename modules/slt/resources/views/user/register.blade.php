@@ -1,16 +1,16 @@
-@extends('web.inc.tpl')
+@extends('slt::inc.tpl')
 @section('tpl-main')
     <div class="container">
         <div class="row">
             <div class="col-sm-6 col-sm-offset-3">
                 <div class="row">
                     <div class="col-sm-10 col-sm-offset-1">
-                        {!! Form::open(['route' => ['web:user.register', $type]]) !!}
+                        {!! Form::open(['route' => ['slt:user.register', $type]]) !!}
                         <h4 class="form-title">注册账号</h4>
                         <div class="form-group">
-                            {!!Form::label($type, \Sour\System\Models\PamAccount::kvRegType($type))!!}
+                            {!!Form::label($type, \System\Models\PamAccount::kvRegType($type))!!}
                             {!! Form::text($type, null, [
-                                'placeholder' => '请输入'.\Sour\System\Models\PamAccount::kvRegType($type),
+                                'placeholder' => '请输入'.\System\Models\PamAccount::kvRegType($type),
                                 'class'=> 'form-control']) !!}
                         </div>
                         <div class="form-group">
@@ -29,7 +29,7 @@
 							</span>
                         </div>
                         <div class="form-group text-center">
-                            <a href="{!! route('web:user.login') !!}">登录</a>
+                            <a href="{!! route('slt:user.login') !!}">登录</a>
                         </div>
                         {!!Form::close()!!}
                     </div>
@@ -37,5 +37,5 @@
             </div>
         </div>
     </div>
-    @include('web.inc.footer')
+    @include('slt::inc.footer')
 @endsection

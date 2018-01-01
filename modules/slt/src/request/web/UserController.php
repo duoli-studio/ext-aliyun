@@ -1,35 +1,39 @@
-<?php namespace Slt\Request\Web\Controllers;
+<?php namespace Slt\Request\Web;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Sour\Lemon\Helper\EnvHelper;
-use Sour\Lemon\Helper\StrHelper;
-use Sour\Lemon\Helper\TimeHelper;
-use Sour\Lemon\Support\Resp;
-use Sour\Poppy\Action\ActAccount;
-use Sour\Poppy\Action\ActUser;
-use Sour\Poppy\Auth\FeUser;
-use Sour\System\Models\PamAccount;
-use Sour\System\Models\PamRole;
+use Poppy\Framework\Classes\Resp;
+use System\Models\PamAccount;
+use System\Models\PamRole;
+use User\Pam\Action\Pam;
 
 class UserController extends InitController
 {
+	private $guard;
+
+	public function __construct()
+	{
+		parent::__construct();
+		$this->guard = \Auth::guard(PamAccount::GUARD_WEB);
+	}
 
 	public function profile()
 	{
-		return view('web.user.profile');
+		return view('slt::user.profile');
 	}
 
 
 	public function login(Request $request, $type = 'normal')
 	{
+		$guard = \Auth::guard(PamAccount::GUARD_WEB);
 		if (is_post()) {
 			$passport = $request->input('passport');
 			$password = $request->input('password');
 			$remember = $request->input('remember_me');
-			$account  = new ActAccount();
-			$account->setGuard(PamRole::FE_USER);
-			if ($account->webLogin($passport, $password, PamAccount::ACCOUNT_TYPE_USER, $remember)) {
+
+			/** @var Pam $actPam */
+			$actPam = app('act.pam');
+			if ($actPam->loginCheck($passport, $password, PamAccount::GUARD_WEB, $remember)) {
 				if (!empty($type) && $type == 'mini') {
 					$forward = 'top_reload|1';
 				}
@@ -44,25 +48,25 @@ class UserController extends InitController
 							$private = true;
 						}
 					}
-					$url     = $private ? route('web:user.profile') : $go;
+					$url     = $private ? route('slt:user.profile') : $go;
 					$forward = 'location|' . $url;
 				}
-				return Resp::web('OK~登录成功', $forward);
+				return Resp::web(Resp::SUCCESS, '登录成功', $forward);
 			}
 			else {
-				return Resp::web($account->getError());
+				return Resp::web(Resp::ERROR, $actPam->getError());
 			}
 		}
 
-		if (\Auth::guard(PamAccount::GUARD_WEB)->user()) {
-			return Resp::web('OK~您已登录', [
-				'location' => route('web:user.profile'),
+		if ($guard->user()) {
+			return Resp::web(Resp::SUCCESS, '您已登录', [
+				'location' => route('slt:user.profile'),
 			]);
 		}
 		if ($type == 'mini') {
 			return view('web.user.mini_login');
 		}
-		return view('web.user.login');
+		return view('slt::user.login');
 	}
 
 
@@ -71,11 +75,13 @@ class UserController extends InitController
 	 * @param Request $request
 	 * @param string  $type
 	 * @return \Illuminate\Http\RedirectResponse
+	 * @throws \Throwable
 	 */
-	public function register(Request $request, $type = 'account_name')
+	public function register(Request $request, $type = 'username')
 	{
+		$guard = \Auth::guard(PamAccount::GUARD_WEB);
 		if (!PamAccount::kvRegType($type, true)) {
-			return Resp::web('注册类型不正确');
+			return Resp::web(Resp::ERROR, '注册类型不正确');
 		}
 		if (is_post()) {
 			$validator = \Validator::make($request->all(), [
@@ -86,28 +92,27 @@ class UserController extends InitController
 				$type => PamAccount::kvRegType($type),
 			]);
 			if ($validator->fails()) {
-				return Resp::web($validator->errors());
+				return Resp::web(Resp::ERROR, $validator->errors());
 			}
 			$account  = $request->input($type);
 			$password = $request->input('password');
 
-			$Account = new ActUser();
-			if (!$Account->regUser($type, $account, $password)) {
-				return Resp::web($Account->getError(), '', $request->only([$type]));
+			/** @var Pam $actPam */
+			$actPam = app('act.pam');
+			if (!$actPam->register($account, $password, PamRole::FE_USER)) {
+				return Resp::web(Resp::ERROR, $actPam->getError(), '', $request->only([$type]));
 			}
 
-			$pam = $Account->getPam();
+			$pam = $actPam->getPam();
 
-			if (\Auth::loginUsingId($pam->id)) {
-				$user = \Auth::user();
-				\Event::fire('daniu.register', [$user]);
-				return Resp::web('OK~注册成功, 登录用户系统', 'reload|1');
+			if ($guard->loginUsingId($pam->id)) {
+				return Resp::web(Resp::SUCCESS, '注册成功, 登录用户系统', 'reload|1');
 			}
 			else {
-				return Resp::web('系统异常');
+				return Resp::web(Resp::ERROR, '系统异常');
 			}
 		}
-		return view('web.user.register', [
+		return view('slt::user.register', [
 			'type' => $type,
 		]);
 	}

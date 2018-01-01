@@ -1,4 +1,4 @@
-@extends('web.inc.tpl')
+@extends('slt::inc.tpl')
 @section('tpl-main')
     <div class="container">
         <div class="row">
@@ -21,13 +21,13 @@
                                 {!!Form::checkbox('remember_me', 1, 1, ['id'=> 'remember_me'])!!}
                                 记住登录状态
                             </label>
-                            <a class="pull-right" href="{!! route('web:user.forgot_password') !!}">找回密码</a>
+                            <a class="pull-right" href="{!! route('slt:user.forgot_password') !!}">找回密码</a>
                         </div>
                         <div class="form-group">
                             {!! Form::button('登录', ['class'=> 'btn btn-info form-control J_submit', 'type'=> 'submit']) !!}
                         </div>
                         <div class="form-group text-center">
-                            <a href="{!! route('web:user.register') !!}">注册新用户</a>
+                            <a href="{!! route('slt:user.register') !!}">注册新用户</a>
                         </div>
                         {!!Form::close()!!}
                     </div>
@@ -35,5 +35,5 @@
             </div>
         </div>
     </div>
-    @include('web.inc.footer')
+    @include('slt::inc.footer')
 @endsection
