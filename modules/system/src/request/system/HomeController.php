@@ -2,6 +2,7 @@
 
 use Poppy\Framework\Application\Controller;
 use Poppy\Framework\Classes\Traits\ViewTrait;
+use Poppy\Framework\Helper\RawCookieHelper;
 use System\Classes\Traits\SystemTrait;
 
 /**
@@ -12,8 +13,24 @@ class HomeController extends Controller
 	use SystemTrait, ViewTrait;
 
 
-	public function test()
+	/**
+	 * @return \Response
+	 */
+	public function layout()
 	{
-		$this->getSetting()->getNsGroup('system', 'site');
+		$this->share('translations', json_encode($this->getTranslator()->fetch('zh')));
+		return view('system::layout');
+	}
+
+	public function graphi($schema = 'default')
+	{
+		if ($schema == 'default') {
+			$schema = '';
+		}
+		$token = RawCookieHelper::get('dev_dianjing#token');
+		return view('system::graphql.graphiql', [
+			'graphqlPath' => url('api/system/graphql/' . $schema),
+			'token'       => $token,
+		]);
 	}
 }
