@@ -45,17 +45,6 @@ class InstallCommand extends Command
 		]);
 		$this->info('Install User Roles Success');
 
-		/* create root user
-		 -------------------------------------------- */
-		$this->warn('Create Root User...');
-		$account = $this->ask('What is your super admin name?');
-		$pwd     = $this->ask('What is your password?');
-		$this->call('system:user', [
-			'do'        => 'create_root',
-			'--account' => $account,
-			'--pwd'     => $pwd,
-		]);
-
 		/* permission
 		 -------------------------------------------- */
 		$this->warn('Init Rbac Permission...');

@@ -99,7 +99,7 @@ class UserCommand extends Command
 				$this->info('Init Role success');
 				break;
 			default:
-				$this->error('Please type right action![reset_pwd, init_role, create_root]');
+				$this->error('Please type right action![reset_pwd, init_role, create_user]');
 				break;
 		}
 
