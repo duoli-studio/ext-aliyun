@@ -3,7 +3,7 @@
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Config\Repository as ConfigRepository;
 
-class AlipayServiceProvider extends ServiceProvider
+class ExtensionServiceProvider extends ServiceProvider
 {
 
 	/**

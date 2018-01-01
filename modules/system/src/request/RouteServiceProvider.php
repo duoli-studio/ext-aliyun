@@ -15,6 +15,7 @@ use System\Request\Backend\BeHomeController;
 use System\Request\Develop\DevController;
 use System\Request\Develop\SystemController;
 use System\Request\System\HomeController;
+use System\Request\System\TestController as SystemTestController;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -65,7 +66,7 @@ class RouteServiceProvider extends ServiceProvider
 			$router->get('/graphi/{schema?}', HomeController::class . '@graphi')
 				->name('system:web.graphql');
 			$router->get('/login', HomeController::class . '@login');
-			$router->get('/test', HomeController::class . '@test');
+			$router->get('/test', SystemTestController::class . '@test');
 		});
 		\Route::group([
 			'middleware' => 'backend',
