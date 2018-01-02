@@ -68,10 +68,6 @@ class Util
 		else {
 			return $this->setError(trans('util::act.util.send_captcha_passport_format_error'));
 		}
-
-		// 生成验证码
-
-
 		// 发送验证码
 		// todo
 
