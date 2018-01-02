@@ -3,6 +3,7 @@
 use OSS\OssClient;
 use Poppy\Extension\Alipay\Aop\AopClient;
 use Poppy\Extension\Alipay\OpenApi\Fund\TransToAccountTransfer;
+use Poppy\Extension\Aliyun\Dysms\Sms\Request\V20170525\SendSmsRequest;
 use Poppy\Framework\Application\Controller;
 use Poppy\Framework\Classes\Traits\ViewTrait;
 use System\Classes\Traits\SystemTrait;
@@ -20,6 +21,9 @@ class TestController extends Controller
 	 */
 	public function test()
 	{
+		$sms = new SendSmsRequest();
+		dd($sms);
+
 		$oss = new OssClient('test_key', 'test_sec', 'hangzhou');
 		dd($oss);
 
