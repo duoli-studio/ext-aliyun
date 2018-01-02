@@ -51,7 +51,7 @@ class ServerMutation extends Mutation
 	 */
 	public function resolve($root, $args)
 	{
-		$id     = $args['id'] ?? 0;
+		$id     = $args['parent_id'] ?? 0;
 		$server = app('act.server');
 		if (!$server->establish($args, $id)) {
 			return $server->getError()->toArray();

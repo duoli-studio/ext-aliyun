@@ -38,8 +38,8 @@ class ModulesDevelopMenu extends Repository
 			}
 		}
 		$route             = $definition['route'] ?? '';
-		$param             = $definition['param'] ?? '';
 		$route_params      = $definition['route_param'] ?? '';
+		$param             = $definition['param'] ?? '';
 		$url               = $route ? route_url($route, $route_params, $param) : '#';
 		$definition['url'] = $url;
 		unset($definition['route'], $definition['param'], $definition['route_param']);

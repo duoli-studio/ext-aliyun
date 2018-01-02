@@ -2,8 +2,13 @@ graphql:
     title : GraphQL
     children :
         -
+            title : GraphQL (Web)状态
+            route : system:develop.api
+            param : guard=web
+        -
             title : GraphQL (Backend)状态
-            route : system:develop_system.status
+            route : system:develop.api
+            param : guard=backend
 system:
     title : 系统
     children :

@@ -2,7 +2,6 @@
 
 use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Classes\Traits\PoppyTrait;
-use System\Addon\AddonManager;
 use System\Backend\BackendManager;
 use System\Extension\ExtensionManager;
 use System\Models\PamAccount;

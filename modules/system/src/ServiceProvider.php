@@ -7,7 +7,6 @@
 use Illuminate\Console\Scheduling\Schedule;
 use Poppy\Framework\Exceptions\ModuleNotFoundException;
 use Poppy\Framework\Support\PoppyServiceProvider;
-use System\Addon\AddonServiceProvider;
 use System\Backend\BackendServiceProvider;
 use System\Console\DevHtmlCommand;
 use System\Console\InstallCommand;
@@ -65,7 +64,6 @@ class ServiceProvider extends PoppyServiceProvider
 		$this->app->register(SettingServiceProvider::class);
 		$this->app->register(BackendServiceProvider::class);
 		$this->app->register(ExtensionServiceProvider::class);
-		$this->app->register(AddonServiceProvider::class);
 		$this->app->register(ModuleServiceProvider::class);
 		$this->app->register(RbacServiceProvider::class);
 		$this->app->register(ListenerServiceProvider::class);
@@ -88,6 +86,7 @@ class ServiceProvider extends PoppyServiceProvider
 
 	private function registerConsole()
 	{
+		// system
 		$this->registerConsoleCommand('system.permission', PermissionCommand::class);
 		$this->registerConsoleCommand('system.user', UserCommand::class);
 		$this->registerConsoleCommand('system.install', InstallCommand::class);

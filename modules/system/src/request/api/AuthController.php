@@ -34,9 +34,10 @@ class AuthController extends Controller
 	}
 
 	/**
+	 * @param string $guard
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function token(): JsonResponse
+	public function token($guard): JsonResponse
 	{
 		$this->validate($this->getRequest(), [
 			'username' => Rule::required(),
@@ -53,7 +54,7 @@ class AuthController extends Controller
 				'message' => $message,
 			], 403, [], JSON_UNESCAPED_UNICODE);
 		}
-		if (!$this->guard()->attempt($this->getRequest()->only([
+		if (!$this->guard($guard)->attempt($this->getRequest()->only([
 			'username',
 			'password',
 		], $this->getRequest()->has('remember', true)))) {
@@ -65,7 +66,7 @@ class AuthController extends Controller
 		 -------------------------------------------- */
 		// $this->getRequest()->session()->regenerate();
 		$this->clearLoginAttempts($this->getRequest());
-		$user = $this->guard()->user();
+		$user = $this->guard($guard)->user();
 		if (!$token = $this->getJwt()->fromUser($user)) {
 			return $this->getResponse()->json([
 				'error' => 'invalid_credentials',
@@ -79,11 +80,18 @@ class AuthController extends Controller
 	}
 
 	/**
+	 * @param $guard
 	 * @return \Illuminate\Contracts\Auth\Guard|\Illuminate\Contracts\Auth\StatefulGuard|mixed
 	 */
-	public function guard()
+	public function guard($guard)
 	{
-		return $this->getAuth()->guard(PamAccount::GUARD_JWT_BACKEND);
+		if ($guard == 'web') {
+			$guard = PamAccount::GUARD_JWT_WEB;
+		}
+		else {
+			$guard = PamAccount::GUARD_JWT_BACKEND;
+		}
+		return $this->getAuth()->guard($guard);
 	}
 
 	/**

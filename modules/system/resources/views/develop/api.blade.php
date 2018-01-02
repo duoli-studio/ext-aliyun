@@ -1,12 +1,6 @@
 @extends('system::tpl.develop')
 @section('develop-main')
-    <nav class="navbar navbar-default">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">
-                样式/功能入口
-            </a>
-        </div>
-    </nav>
+    @include('system::develop.inc.header')
     <div class="row">
         <div class="col-sm-12" style="word-break: break-all;">
             @if ($token)
@@ -65,6 +59,7 @@
 								    if (typeof objData.data != 'undefined') {
 									    var objSubData = objData.data;
 									    Cookies.set('{!! $cookie_key !!}', objSubData);
+									    window.location.reload();
 								    }
 
 								    $('#J_result').text(

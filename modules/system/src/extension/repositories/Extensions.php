@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Collection;
 use Poppy\Framework\Support\Abstracts\Repository;
+use Symfony\Component\Yaml\Yaml;
 use System\Classes\Traits\SystemTrait;
 use System\Extension\Extension;
 
@@ -31,6 +32,12 @@ class Extensions extends Repository
 					'directory' => $directory,
 				]);
 				if ($this->getFile()->exists($file = $directory . DIRECTORY_SEPARATOR . 'composer.json')) {
+
+					$configurations = $this->loadConfigurations($directory);
+					$configurations->isNotEmpty() && $configurations->each(function ($value, $item) use ($extension) {
+						$extension->offsetSet($item, $value);
+					});
+
 					$package        = collect(json_decode($this->getFile()->get($file), true));
 					$identification = data_get($package, 'name');
 					$extension->offsetSet('identification', $identification);
@@ -78,5 +85,44 @@ class Extensions extends Repository
 				}
 			});
 		}
+	}
+
+	/**
+	 * @param string $directory
+	 * @return \Illuminate\Support\Collection
+	 * @throws \Exception
+	 */
+	protected function loadConfigurations(string $directory): Collection
+	{
+		if ($this->getFile()->exists($file = $directory . DIRECTORY_SEPARATOR . 'configuration.yaml')) {
+			return collect(Yaml::parse(file_get_contents($file)));
+		}
+		else {
+			if ($this->getFile()->isDirectory($directory = $directory . DIRECTORY_SEPARATOR . 'configurations')) {
+				$configurations = collect();
+				collect($this->getFile()->files($directory))->each(function ($file) use ($configurations) {
+					if ($this->getFile()->isReadable($file)) {
+						collect(Yaml::dump(file_get_contents($file)))->each(function ($data, $key) use ($configurations) {
+							$configurations->put($key, $data);
+						});
+					}
+				});
+
+				return $configurations;
+			}
+			else {
+				throw new \Exception('Load Extension fail: ' . $directory);
+			}
+		}
+	}
+
+	/**
+	 * @return \Illuminate\Support\Collection
+	 */
+	public function enabled(): Collection
+	{
+		return $this->filter(function (Extension $extension) {
+			return $extension->get('enabled') == true;
+		});
 	}
 }
