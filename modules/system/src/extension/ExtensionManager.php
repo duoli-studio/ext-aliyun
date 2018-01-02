@@ -18,7 +18,7 @@ class ExtensionManager
 	public function register()
 	{
 		$this->repository()->each(function (Extension $extension) {
-			if (isset($extension['service']) && $extension['service']) {
+			if (isset($extension['service']) && $extension['service'] && class_exists($extension['service'])) {
 				$this->getContainer()->register($extension->service());
 			}
 		});
