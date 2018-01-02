@@ -26,14 +26,5 @@ class ScriptRepository extends Repository
 			$definition['file'] = $this->getUrl()->asset($definition['file']);
 			$this->items[]      = $definition;
 		});
-		$this->getAddon()->assets()->filter(function ($definition) {
-			return isset($definition['entry'])
-				&& isset($definition['type'])
-				&& $definition['entry'] == 'administration'
-				&& $definition['type'] == 'script';
-		})->each(function ($definition) {
-			$definition['file'] = $this->getUrl()->asset($definition['file']);
-			$this->items[]      = $definition;
-		});
 	}
 }

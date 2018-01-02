@@ -1,4 +1,4 @@
-<?php namespace System\Addon\Repositories;
+<?php namespace System\Extension\Repositories;
 
 use Illuminate\Support\Collection;
 use Poppy\Framework\Support\Abstracts\Repository;
@@ -7,7 +7,7 @@ use System\Classes\Traits\SystemTrait;
 /**
  * Class NavigationRepository.
  */
-class NavigationRepository extends Repository
+class Navigations extends Repository
 {
 	use SystemTrait;
 
@@ -19,7 +19,7 @@ class NavigationRepository extends Repository
 	{
 
 		$this->items = $this->getCache('poppy')->rememberForever(
-			'addon.navigation.repository', function () use ($data) {
+			'extensions.navigation', function () use ($data) {
 			$collection = collect();
 			$data->each(function ($definition, $key) use ($collection) {
 				if (is_array($definition) && $definition) {
