@@ -1,8 +1,8 @@
 <?php
 
 return [
-	'schema'                => 'default',
-	'schemas'               => [
+	'schema'            => 'default',
+	'schemas'           => [
 		'default' => [
 			'mutation' => [],
 			'query'    => [
@@ -13,32 +13,23 @@ return [
 			'mutation' => [
 				\System\Setting\Graphql\Mutation\SettingMutation::class,
 				\System\Pam\GraphQL\Mutation\RoleMutation::class,
-
-				/* server
-				 -------------------------------------------- */
 				\Order\Game\GraphQL\Mutation\ServerMutation::class,
-				\Order\Game\GraphQL\Mutation\ServerDeleteMutation::class,
+				\User\Pam\GraphQL\Mutation\PamMutation::class,
 			],
 			'query'    => [
 				\System\Setting\Graphql\Queries\SettingQuery::class,
 				\System\Setting\Graphql\Queries\SettingsQuery::class,
-
-				\Order\game\Graphql\Queries\ServersQuery::class,
-				\Order\game\Graphql\Queries\ServerQuery::class,
-
-				/* role
-				 -------------------------------------------- */
-				\System\Pam\Graphql\Queries\RolesQuery::class,
 				\System\Pam\Graphql\Queries\RoleQuery::class,
+				\Order\game\Graphql\Queries\ServerQuery::class,
+				\User\Pam\Graphql\Queries\PamQuery::class,
 			],
 		],
 	],
-	'middleware_schema'     => [
-		'default' => ['cross'],
-		'backend' => ['auth:jwt_backend', 'cross'],
+	'middleware_schema' => [
+		'default' => '',
+		'backend' => 'jwt',
 	],
-	'json_encoding_options' => JSON_UNESCAPED_UNICODE,
-	'types'                 => [
+	'types'             => [
 		/* query
 		 -------------------------------------------- */
 		// config
@@ -56,6 +47,10 @@ return [
 		/* server
 		 -------------------------------------------- */
 		\Order\Game\GraphQL\Types\ServerType::class,
+
+		/* pam
+	     -------------------------------------------- */
+		\User\Pam\GraphQL\Types\PamType::class,
 
 	],
 ];
