@@ -1,6 +1,6 @@
 {
-	"name": "poppy/ext-alisms",
-	"description": "Poppy Alisms Extension.",
+	"name": "poppy/ext-base",
+	"description": "Poppy Base Extension.",
 	"type": "poppy-extension",
 	"authors": [
 		{
@@ -13,7 +13,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Poppy\\Extension\\Alisms\\": "src/"
+			"Poppy\\Extension\\Base\\": "src/"
 		}
 	},
 	"config": {

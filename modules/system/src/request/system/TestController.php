@@ -1,5 +1,6 @@
 <?php namespace System\Request\System;
 
+use OSS\OssClient;
 use Poppy\Extension\Alipay\Aop\AopClient;
 use Poppy\Extension\Alipay\OpenApi\Fund\TransToAccountTransfer;
 use Poppy\Framework\Application\Controller;
@@ -19,6 +20,9 @@ class TestController extends Controller
 	 */
 	public function test()
 	{
+		$oss = new OssClient('test_key', 'test_sec', 'hangzhou');
+		dd($oss);
+
 		$aop = new AopClient ();
 		$aop->setEnv('sandbox');
 		// sandbox id : 2016082100303692

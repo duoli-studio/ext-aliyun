@@ -1,6 +1,6 @@
 {
-	"name": "poppy/ext-oss",
-	"description": "Poppy Oss Extension.",
+	"name": "poppy/ext-aliyun",
+	"description": "Poppy Aliyun Extension.",
 	"type": "poppy-extension",
 	"authors": [
 		{
@@ -14,7 +14,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"Poppy\\Extension\\Oss\\": "src/"
+			"Poppy\\Extension\\Aliyun\\": "src/"
 		}
 	},
 	"config": {
