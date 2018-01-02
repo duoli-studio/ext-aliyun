@@ -18,7 +18,8 @@ use System\Rbac\Traits\RbacRoleTrait;
 class PamRole extends \Eloquent implements RbacRoleContract
 {
 
-	use RbacRoleTrait, Filterable;
+	// use RbacRoleTrait, Filterable;
+	use RbacRoleTrait;
 
 	const BE_ROOT  = 'root';      // admin user
 	const FE_USER  = 'user';      // web user
@@ -33,7 +34,6 @@ class PamRole extends \Eloquent implements RbacRoleContract
 		'title',
 		'description',
 		'type',
-		'is_system',
 	];
 
 

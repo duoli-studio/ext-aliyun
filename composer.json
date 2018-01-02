@@ -12,7 +12,6 @@
 		"laravel/framework": "5.5.*",
 		"intervention/image": "2.*",
 		"laravelcollective/html": "5.5.*",
-		"aliyuncs/oss-sdk-php": "~2.0",
 		"mews/purifier": "~2.0",
 		"mews/captcha": "~2.0",
 		"nesbot/carbon": "~1.14",
