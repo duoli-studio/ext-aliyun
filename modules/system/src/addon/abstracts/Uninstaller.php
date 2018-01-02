@@ -7,38 +7,39 @@ use Illuminate\Container\Container;
  */
 abstract class Uninstaller
 {
-    /**
-     * @var Container
-     */
-    protected $container;
+	/**
+	 * @var Container
+	 */
+	protected $container;
 
-    /**
-     * Uninstaller constructor.
-     * @param Container $container
-     */
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
-    }
+	/**
+	 * Uninstaller constructor.
+	 * @param Container $container
+	 */
+	public function __construct(Container $container)
+	{
+		$this->container = $container;
+	}
 
-    /**
-     * @return bool
-     */
-    abstract public function handle();
+	/**
+	 * @return bool
+	 */
+	abstract public function handle();
 
-    /**
-     * @return bool
-     */
-    public abstract function require();
+	/**
+	 * @return bool
+	 */
+	public abstract function require();
 
-    /**
-     * @return bool
-     */
-    public function uninstall() {
-        if (!$this->require()) {
-            return false;
-        }
+	/**
+	 * @return bool
+	 */
+	public function uninstall()
+	{
+		if (!$this->require()) {
+			return false;
+		}
 
-        return $this->handle();
-    }
+		return $this->handle();
+	}
 }

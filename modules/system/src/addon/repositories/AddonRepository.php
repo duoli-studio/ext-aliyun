@@ -1,6 +1,4 @@
-<?php
-
-namespace System\Addon\Repositories;
+<?php namespace System\Addon\Repositories;
 
 use Illuminate\Support\Collection;
 use Poppy\Framework\Support\Abstracts\Repository;

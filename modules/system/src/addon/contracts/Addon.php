@@ -1,5 +1,4 @@
-<?php
-namespace System\Addon\Contracts;
+<?php namespace System\Addon\Contracts;
 
 use Illuminate\Contracts\Support\Arrayable;
 

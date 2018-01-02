@@ -4,13 +4,14 @@ use Illuminate\Support\Collection;
 use Illuminate\Console\Command;
 use System\Addon\Addon;
 use Poppy\Framework\Classes\Traits\PoppyTrait;
+use System\Classes\Traits\SystemTrait;
 
 /**
  * Class ListCommand.
  */
 class ListCommand extends Command
 {
-	use PoppyTrait;
+	use SystemTrait;
 	/**
 	 * @var array
 	 */

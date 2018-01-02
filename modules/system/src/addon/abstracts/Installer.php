@@ -7,38 +7,38 @@ use Illuminate\Container\Container;
  */
 abstract class Installer
 {
-    /**
-     * @var Container
-     */
-    protected $container;
+	/**
+	 * @var Container
+	 */
+	protected $container;
 
-    /**
-     * Installer constructor.
-     * @param Container $container
-     */
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
-    }
+	/**
+	 * Installer constructor.
+	 * @param Container $container
+	 */
+	public function __construct(Container $container)
+	{
+		$this->container = $container;
+	}
 
-    /**
-     * @return bool
-     */
-    abstract public function handle();
+	/**
+	 * @return bool
+	 */
+	abstract public function handle();
 
-    /**
-     * @return bool
-     */
-    public function install()
-    {
-        if (!$this->require()) {
-            return false;
-        }
-        return $this->handle();
-    }
+	/**
+	 * @return bool
+	 */
+	public function install()
+	{
+		if (!$this->require()) {
+			return false;
+		}
+		return $this->handle();
+	}
 
-    /**
-     * @return bool
-     */
-    abstract public function require();
+	/**
+	 * @return bool
+	 */
+	abstract public function require();
 }

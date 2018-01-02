@@ -1,6 +1,4 @@
-<?php
-
-namespace System\Addon\Events;
+<?php namespace System\Addon\Events;
 
 use System\Addon\Addon;
 

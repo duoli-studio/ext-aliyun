@@ -1,58 +1,63 @@
-<?php
-namespace System\Addon\GraphQL\Queries;
+<?php namespace System\Addon\GraphQL\Queries;
 
 use GraphQL\Type\Definition\ListOfType;
 use GraphQL\Type\Definition\Type;
-use Poppy\Framework\GraphQL\Abstracts\Query;
+use Poppy\Framework\GraphQL\Exception\TypeNotFound;
+use Poppy\Framework\GraphQL\Support\Query;
+use System\Classes\Traits\SystemTrait;
 
 /**
  * Class ConfigurationQuery.
  */
 class AddonQuery extends Query
 {
-    /**
-     * @return array
-     */
-    public function args()
-    {
-        return [
-            'enabled'   => [
-                'defaultValue' => null,
-                'name'         => 'enabled',
-                'type'         => Type::boolean(),
-            ],
-            'installed' => [
-                'defaultValue' => null,
-                'name'         => 'installed',
-                'type'         => Type::boolean(),
-            ],
-        ];
-    }
+	use SystemTrait;
 
-    /**
-     * @param $root
-     * @param $args
-     *
-     * @return array
-     */
-    public function resolve($root, $args)
-    {
-        if ($args['enabled'] === true) {
-            return $this->addon->enabled()->toArray();
-        } else if ($args['installed'] === true) {
-            return $this->addon->installed()->toArray();
-        } else if ($args['installed'] === false) {
-            return $this->addon->notInstalled()->toArray();
-        }
+	/**
+	 * @return array
+	 */
+	public function args()
+	{
+		return [
+			'enabled'   => [
+				'defaultValue' => null,
+				'name'         => 'enabled',
+				'type'         => Type::boolean(),
+			],
+			'installed' => [
+				'defaultValue' => null,
+				'name'         => 'installed',
+				'type'         => Type::boolean(),
+			],
+		];
+	}
 
-        return $this->addon->repository()->toArray();
-    }
+	/**
+	 * @param $root
+	 * @param $args
+	 * @return array
+	 */
+	public function resolve($root, $args)
+	{
+		if ($args['enabled'] === true) {
+			return $this->getAddon()->enabled()->toArray();
+		}
+		elseif ($args['installed'] === true) {
+			return $this->getAddon()->installed()->toArray();
+		}
+		elseif ($args['installed'] === false) {
+			return $this->getAddon()->notInstalled()->toArray();
+		}
 
-    /**
-     * @return \GraphQL\Type\Definition\ListOfType
-     */
-    public function type(): ListOfType
-    {
-        return Type::listOf($this->graphql->type('addon'));
-    }
+		return $this->getAddon()->repository()->toArray();
+	}
+
+	/**
+	 * @return ListOfType
+	 * @throws TypeNotFound
+	 */
+	public function type(): ListOfType
+	{
+		return Type::listOf($this->getGraphQL()->type('addon'));
+	}
 }

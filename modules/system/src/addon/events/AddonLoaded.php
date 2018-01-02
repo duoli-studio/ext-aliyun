@@ -1,5 +1,4 @@
-<?php
-namespace System\Addon\Events;
+<?php namespace System\Addon\Events;
 
 /**
  * Class ExtensionLoaded.
