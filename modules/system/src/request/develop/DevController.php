@@ -17,15 +17,21 @@ class DevController extends Controller
 {
 	use SystemTrait, ViewTrait;
 
+	public function __construct()
+	{
+		parent::__construct();
+		\View::share([
+			'menus' => $this->getModule()->navigation(),
+		]);
+	}
+
 	/**
 	 * 字体
 	 * @return \Illuminate\View\View
 	 */
 	public function cp()
 	{
-		return view('system::develop.cp', [
-			'menus' => $this->getModule()->navigation(),
-		]);
+		return view('system::develop.cp');
 	}
 
 	public function login(Request $request)
