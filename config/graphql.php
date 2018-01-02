@@ -9,6 +9,12 @@ return [
 				\System\Setting\Graphql\Queries\SettingsQuery::class,
 			],
 		],
+		'web' => [
+			'mutation' => [],
+			'query'    => [
+				\System\Setting\Graphql\Queries\SettingsQuery::class,
+			],
+		],
 		'backend' => [
 			'mutation' => [
 				\System\Setting\Graphql\Mutation\SettingMutation::class,
@@ -36,6 +42,7 @@ return [
 	'middleware_schema'     => [
 		'default' => ['cross'],
 		'backend' => ['auth:jwt_backend', 'cross'],
+		'web'     => ['auth:jwt_web', 'cross'],
 	],
 	'json_encoding_options' => JSON_UNESCAPED_UNICODE,
 	'types'                 => [

@@ -65,6 +65,7 @@
 								    if (typeof objData.data != 'undefined') {
 									    var objSubData = objData.data;
 									    Cookies.set('{!! $cookie_key !!}', objSubData);
+									    window.location.reload();
 								    }
 
 								    $('#J_result').text(

@@ -27,9 +27,9 @@ class HomeController extends Controller
 		if ($schema == 'default') {
 			$schema = '';
 		}
-		$token = RawCookieHelper::get('dev_dianjing#token');
+		$token = RawCookieHelper::get('dev_token#' . $schema);
 		return view('system::graphql.graphiql', [
-			'graphqlPath' => url('api/system/graphql/' . $schema),
+			'graphqlPath' => route('api.graphql', $schema),
 			'token'       => $token,
 		]);
 	}

@@ -63,8 +63,7 @@ class RouteServiceProvider extends ServiceProvider
 			'prefix' => 'system',
 		], function (Router $router) {
 			$router->get('/', HomeController::class . '@layout');
-			$router->get('/graphi/{schema?}', HomeController::class . '@graphi')
-				->name('system:web.graphql');
+
 			$router->get('/login', HomeController::class . '@login');
 			$router->get('/test', SystemTestController::class . '@test');
 		});
@@ -88,25 +87,28 @@ class RouteServiceProvider extends ServiceProvider
 			'middleware' => 'web',
 			'prefix'     => 'develop',
 		], function (Router $router) {
-			$router->any('login', DevController::class . '@login')->name('system:develop.login');
+			$router->any('login', DevController::class . '@login')
+				->name('system:develop.login');
+
+			$router->get('api', DevController::class . '@api')
+				->name('system:develop.api');
+
 			$router->group([
 				'middleware' => 'auth:develop',
 			], function (Router $router) {
+
+				$router->get('/graphi/{schema?}', HomeController::class . '@graphi')
+					->name('system:develop.graphql');
+
 				$router->get('/', DevController::class . '@cp')
 					->name('system:develop.cp');
+
 				$router->get('/phpinfo', DevController::class . '@phpinfo')
 					->name('system:develop.phpinfo');
 			});
 
 		});
 
-		\Route::group([
-			'middleware' => 'web',
-			'prefix'     => 'develop/system',
-		], function (Router $router) {
-			$router->get('/status', SystemController::class . '@status')
-				->name('system:develop_system.status');
-		});
 	}
 
 	/**
@@ -116,15 +118,12 @@ class RouteServiceProvider extends ServiceProvider
 	 */
 	protected function mapApiRoutes()
 	{
+		$this->graphqlApi();
 
 		\Route::group([
 			'middleware' => ['cross'],
 			'prefix'     => 'api/system',
 		], function (Router $route) {
-			$route->any('/token', AuthController::class . '@token')
-				->name('system:api.token');
-			$route->any('graphql/{graphql_schema?}', GraphQLController::class . '@query')
-				->name('system:api.graphql');
 			$route->any('/information', InformationController::class . '@list');
 			$route->any('/dashboard', DashboardsController::class . '@list');
 			$route->group([
@@ -136,5 +135,13 @@ class RouteServiceProvider extends ServiceProvider
 			});
 
 		});
+	}
+
+	private function graphqlApi()
+	{
+		\Route::any('api/token/{guard?}', AuthController::class . '@token')
+			->name('api.token');
+		\Route::any('api/g/{graphql_schema?}', GraphQLController::class . '@query')
+			->name('api.graphql');
 	}
 }
