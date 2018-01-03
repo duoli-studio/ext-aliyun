@@ -33,6 +33,10 @@ class ServerMutation extends Mutation
 	public function args(): array
 	{
 		return [
+			'id' => [
+				'type'        => Type::int(),
+				'description' => trans('order::server.db.id'),
+			],
 			'title'     => [
 				'type'        => Type::nonNull(Type::string()),
 				'description' => trans('order::server.db.title'),
@@ -40,6 +44,14 @@ class ServerMutation extends Mutation
 			'parent_id' => [
 				'type'        => Type::int(),
 				'description' => trans('order::server.db.parent_id'),
+			],
+			'is_enable' => [
+				'type'        => Type::int(),
+				'description' => trans('order::server.db.is_enable'),
+			],
+			'is_default' => [
+				'type'        => Type::int(),
+				'description' => trans('order::server.db.is_default'),
 			],
 		];
 	}
@@ -51,7 +63,7 @@ class ServerMutation extends Mutation
 	 */
 	public function resolve($root, $args)
 	{
-		$id     = $args['parent_id'] ?? 0;
+		$id     = $args['id'] ?? 0;
 		$server = app('act.server');
 		if (!$server->establish($args, $id)) {
 			return $server->getError()->toArray();

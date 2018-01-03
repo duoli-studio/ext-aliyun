@@ -3,8 +3,8 @@
 /**
  * 游戏服务器操作
  */
-use Poppy\Framework\Validation\Rule;
 use Order\Models\GameServer;
+use Poppy\Framework\Validation\Rule;
 use System\Classes\Traits\SystemTrait;
 
 class Server
@@ -41,11 +41,13 @@ class Server
 			return false;
 		}*/
 		$initDb    = [
-			'title'     => strval(array_get($data, 'title', '')),
-			'parent_id' => strval(array_get($data, 'parent_id', '')),
+			'title'      => strval(array_get($data, 'title', '')),
+			'parent_id'  => strval(array_get($data, 'parent_id', '')),
+			'is_enable'  => strval(array_get($data, 'is_enable', '0')),
+			'is_default' => strval(array_get($data, 'is_default', '0')),
 		];
 		$validator = \Validator::make($initDb, [
-			'title'     => [
+			'title'      => [
 				Rule::required(),
 				Rule::unique($this->gameServerTable, 'title')->where(function($query) use ($id) {
 					if ($id) {
@@ -53,13 +55,23 @@ class Server
 					}
 				}),
 			],
-			'parent_id' => [
+			'parent_id'  => [
+				Rule::required(),
+				Rule::integer(),
+			],
+			'is_enable'  => [
+				Rule::required(),
+				Rule::integer(),
+			],
+			'is_default' => [
 				Rule::required(),
 				Rule::integer(),
 			],
 		], [], [
-			'title'     => trans('system::db.game_server.title'),
-			'parent_id' => trans('system::db.game_server.parent_id'),
+			'title'      => trans('order::server.db.title'),
+			'parent_id'  => trans('order::server.db.parent_id'),
+			'is_enable'  => trans('order::server.db.is_enable'),
+			'is_default' => trans('order::server.db.is_default'),
 		]);
 		if ($validator->fails()) {
 			return $this->setError($validator->messages());
@@ -75,11 +87,56 @@ class Server
 			return true;
 		}
 		else {
+			//创建数据
 			$this->item = GameServer::create($initDb);
+			//生成区服编码
 			$this->item->code = $this->genCode($this->item->id);
+			//生成当前id的子元素
+			$this->item->children = $this->item->id;
+			//生成顶层ID, 父元素
+			$allPid = (array) $this->parentId($this->item->id, $ids);
+			if (empty($allPid)) {
+				$this->item->top_parent_id = 0;
+			}
+			elseif (count($allPid) == 1) {
+				$this->item->top_parent_id = $allPid['0'];
+			}
+			else {
+				$this->item->top_parent_id = $allPid['1'];
+				$this->item->save();
+				//生成所有子元素
+
+				$SecondDb   = GameServer::find($allPid['0']);
+				$parent_ids = GameServer::where('parent_id', $this->item->parent_id)->pluck('id')->toArray();
+				array_unshift($parent_ids, $SecondDb->id);
+				$SecondDb->children = implode(',', $parent_ids);
+
+				$FirstDb        = GameServer::find($allPid['1']);
+				$top_parent_ids = GameServer::where('top_parent_id', $this->item->top_parent_id)->pluck('id')->toArray();
+				array_unshift($top_parent_ids, $FirstDb->id);
+				$FirstDb->children = implode(',', $top_parent_ids);
+
+				$SecondDb->save();
+				$FirstDb->save();
+
+			}
 			$this->item->save();
 		}
 		return true;
+	}
+
+	/**
+	 * 删除数据
+	 * @param int $id
+	 * @return bool
+	 */
+	public function delete($id)
+	{
+		if ($id && !$this->init($id)) {
+			return false;
+		}
+
+		return $this->item->delete();
 	}
 
 	/**
@@ -87,7 +144,7 @@ class Server
 	 * @param int $id
 	 * @return bool|string
 	 */
-	public function genCode($id)
+	private function genCode($id)
 	{
 		$allPid = (array) $this->parentId($id, $ids);
 		array_unshift($allPid, $id);
@@ -108,7 +165,7 @@ class Server
 		return sprintf("%'.04d%'.04d%'.04d", $formatId[0], $formatId[1], $formatId[2]);
 	}
 
-	public function init($id)
+	private function init($id)
 	{
 		try {
 			$this->item = GameServer::findOrFail($id);

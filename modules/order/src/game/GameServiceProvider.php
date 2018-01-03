@@ -7,12 +7,14 @@ use Order\Game\Action\Server;
 class GameServiceProvider extends ServiceProvider
 {
 	/**
+	 *  是否延时加载提供器
 	 * @var bool
 	 */
 	protected $defer = true;
 
 
 	/**
+	 * 在容器中注册绑定
 	 * ServiceProvider register.
 	 */
 	public function register()
@@ -23,6 +25,7 @@ class GameServiceProvider extends ServiceProvider
 	}
 
 	/**
+	 * 获取提供器提供的服务
 	 * @return array
 	 */
 	public function provides()

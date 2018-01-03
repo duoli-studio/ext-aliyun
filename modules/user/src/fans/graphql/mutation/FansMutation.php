@@ -1,17 +1,12 @@
-<?php namespace Order\Game\Graphql\Queries;
+<?php namespace User\Fans\GraphQL\Mutation;
 
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
-use Order\Models\GameServer;
 use Poppy\Framework\GraphQL\Exception\TypeNotFound;
-use Poppy\Framework\GraphQL\Support\Query;
+use Poppy\Framework\GraphQL\Support\Mutation;
 use System\Classes\Traits\SystemTrait;
 
-
-/**
- * Class SettingQuery.
- */
-class ServerQuery extends Query
+class FansMutation extends Mutation
 {
 	use SystemTrait;
 
@@ -19,10 +14,9 @@ class ServerQuery extends Query
 	public function __construct($attributes = [])
 	{
 		parent::__construct($attributes);
-		$this->attributes['name']        = 'server';
-		$this->attributes['description'] = trans('order::server.graphql.query_desc');
+		$this->attributes['name']        = 'fans';
+		$this->attributes['description'] = trans('fans::act.graphql.mutation_desc');
 	}
-
 
 	public function authorize($root, $args)
 	{
@@ -36,18 +30,18 @@ class ServerQuery extends Query
 	 */
 	public function type(): ObjectType
 	{
-		return $this->getGraphQL()->type('server');
+		return $this->getGraphQL()->type('resp');
 	}
 
 	/**
 	 * @return array
 	 */
-	public function args()
+	public function args(): array
 	{
 		return [
-			'id' => [
+			'account_id' => [
 				'type'        => Type::nonNull(Type::int()),
-				'description' => trans('order::server.db.id'),
+				'description' => trans('fans::act.db.fans_id'),
 			],
 		];
 	}
@@ -55,12 +49,17 @@ class ServerQuery extends Query
 	/**
 	 * @param $root
 	 * @param $args
-	 * @return mixed
+	 * @return array
 	 */
 	public function resolve($root, $args)
 	{
-		return GameServer::find($args['id']);
+		$account_id = $args['account_id'];
+		$fans     = app('act.fans');
+		$pam = $this->getJwtWebGuard()->user();
+		if (!$fans->concern($account_id,$pam)) {
+			return $fans->getError()->toArray();
+		} else {
+			return $fans->getSuccess()->toArray();
+		}
 	}
-
-
 }

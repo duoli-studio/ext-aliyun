@@ -22,6 +22,7 @@ class ServiceProvider extends PoppyServiceProvider
 	];
 
 	/**
+	 * 引导任何应用程序服务
 	 * Bootstrap the application events.
 	 * @throws \Poppy\Framework\Exceptions\ModuleNotFoundException
 	 */

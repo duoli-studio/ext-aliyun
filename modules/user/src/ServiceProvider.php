@@ -2,6 +2,7 @@
 
 
 use Poppy\Framework\Exceptions\ModuleNotFoundException;
+use User\Fans\FansServiceProvider;
 use User\Pam\PamServiceProvider;
 use User\Request\RouteServiceProvider;
 use Poppy\Framework\Support\PoppyServiceProvider;
@@ -50,6 +51,7 @@ class ServiceProvider extends PoppyServiceProvider
 
 		$this->app->register(RouteServiceProvider::class);
 		$this->app->register(PamServiceProvider::class);
+		$this->app->register(FansServiceProvider::class);
 
 		$this->registerCommand();
 	}

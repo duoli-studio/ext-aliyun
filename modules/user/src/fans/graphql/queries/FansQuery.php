@@ -1,14 +1,14 @@
-<?php namespace Order\Game\Graphql\Queries;
+<?php namespace User\Fans\Graphql\Queries;
 
 use GraphQL\Type\Definition\ListOfType;
 use GraphQL\Type\Definition\Type;
-use Order\Models\GameServer;
 use Poppy\Framework\GraphQL\Exception\TypeNotFound;
 use Poppy\Framework\GraphQL\Support\Query;
 use System\Classes\Traits\SystemTrait;
+use User\Models\UserFans;
 
 
-class ServersQuery extends Query
+class FansQuery extends Query
 {
 	use SystemTrait;
 
@@ -16,8 +16,8 @@ class ServersQuery extends Query
 	public function __construct($attributes = [])
 	{
 		parent::__construct($attributes);
-		$this->attributes['name']        = 'servers';
-		$this->attributes['description'] = trans('order::server.graphql.queries_desc');
+		$this->attributes['name']        = 'fans';
+		$this->attributes['description'] = trans('user::fans.graphql.queries_desc');
 	}
 
 
@@ -33,7 +33,7 @@ class ServersQuery extends Query
 	 */
 	public function type(): ListOfType
 	{
-		return Type::listOf($this->getGraphQL()->type('server'));
+		return Type::listOf($this->getGraphQL()->type('fans'));
 	}
 
 	/**
@@ -51,7 +51,7 @@ class ServersQuery extends Query
 	 */
 	public function resolve($root, $args)
 	{
-		return GameServer::get();
+		return UserFans::get();
 	}
 
 
