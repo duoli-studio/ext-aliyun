@@ -4,6 +4,7 @@
     export default {
         data() {
             return {
+                value4  : '',
                 form    : {
                     canManagementFileExtension  : '',
                     canManagementImageExtension : '',
@@ -91,6 +92,86 @@
                         },
                     ],
                 },
+
+                columns1 : [
+                    {
+                        title  : 'ID',
+                        key    : 'id',
+                        render : (h, params) => h('div', [
+                            h('Icon', {
+                                props : {
+                                    type : 'person'
+                                }
+                            }),
+                            h('strong', params.row.name)
+                        ])
+                    },
+                    {
+                        title : '用户名',
+                        key   : 'userName'
+                    },
+                    {
+                        title : '手机号',
+                        key   : 'phone'
+                    },
+                    // {
+                    //     title : '操作',
+                    //     key   : 'action',
+                    //     width : 150,
+                    //     align : 'center',
+                    //    render  : (h, params) => {
+                    //        return h('div', [
+                    //            h('Button', {
+                    //                props   : {
+                    //                    type    : 'primary',
+                    //                    size    : 'small'
+                    //                },
+                    //                style   : {
+                    //                    marginRight : '5px'
+                    //                },
+                    //                on  : {
+                    //                    click   : () => {
+                    //                        this.show(params.index);
+                    //                    }
+                    //                }
+                    //            }, 'View'),
+                    //            h('Button', {
+                    //                props   : {
+                    //                    type    : 'error',
+                    //                    size    : 'small'
+                    //                },
+                    //                on  : {
+                    //                    click   : () => {
+                    //                        this.remove(params.index);
+                    //                    }
+                    //                }
+                    //            }, 'Delete')
+                    //        ]);
+                    //    }
+                    // }
+                ],
+                data1    : [
+                    {
+                        id       : 1,
+                        userName : 'John Brown',
+                        phone    : 18
+                    },
+                    {
+                        id       : 2,
+                        userName : 'Jim Green',
+                        phone    : 24
+                    },
+                    {
+                        id       : 3,
+                        userName : 'Joe Black',
+                        phone    : 30
+                    },
+                    {
+                        id       : 4,
+                        userName : 'Jon Snow',
+                        phone    : 26
+                    }
+                ]
             };
         },
         methods : {
@@ -130,8 +211,7 @@
                                     value:"${self.form.fileMaxSize}"
                                 ),
                                 imageMaxSize: setting(
-                                    key:"attachment.limit.image",
-                                    value:"${self.form.imageMaxSize}"
+                                    key:"attachment.limit.image",                                   value:"${self.form.imageMaxSize}"
                                 ),
                                 imageProcessingEngine: setting(
                                     key:"attachment.engine",
@@ -159,111 +239,41 @@
                     }
                 });
             },
+            show(index) {
+                this.$Modal.info({
+                    title   : 'User Info',
+                    content : `Name：${this.data1[index].name}<br>Age：${this.data1[index].age}<br>Address：${this.data1[index].address}`
+                });
+            },
+            remove(index) {
+                this.data1.splice(index, 1);
+            }
         },
+
         mounted() {
             this.$store.commit('title', trans('administration.title.upload'));
         },
     };
 </script>
 <template>
-    <card :bordered="false">
-        <p slot="title">上传配置</p>
-        <i-form :label-width="200" :model="form" ref="form" :rules="rules">
-            <row>
-                <i-col span="12">
-                    <form-item label="图片处理引擎33333" prop="imageProcessingEngine">
-                        <radio-group v-model="form.imageProcessingEngine">
-                            <radio label="gd">GD 库</radio>
-                        </radio-group>
-                    </form-item>
-                </i-col>
-            </row>
-            <row>
-                <i-col span="12">
-                    <form-item label="附件大小" prop="fileMaxSize">
-                        <i-input :number="true" placeholder="请输入附件大小" v-model="form.fileMaxSize">
-                            <span slot="append">KB</span>
-                        </i-input>
-                    </form-item>
-                </i-col>
-            </row>
-            <row>
-                <i-col span="12">
-                    <form-item label="图片大小" prop="imageMaxSize">
-                        <i-input :number="true" placeholder="请输入图片大小" v-model="form.imageMaxSize">
-                            <span slot="append">KB</span>
-                        </i-input>
-                    </form-item>
-                </i-col>
-            </row>
-            <row>
-                <i-col span="12">
-                    <form-item label="视频大小" prop="videoMaxSize">
-                        <i-input :number="true" placeholder="请输入视频大小" v-model="form.videoMaxSize">
-                            <span slot="append">KB</span>
-                        </i-input>
-                    </form-item>
-                </i-col>
-            </row>
-            <row>
-                <i-col span="12">
-                    <form-item label="允许图片的扩展名" prop="canUploadImageExtension">
-                        <i-input type="textarea" placeholder="请输入允许管理图片的扩展名" v-model="form.canUploadImageExtension"
-                                 :autosize="{minRows: 2,maxRows: 5}"></i-input>
-                    </form-item>
-                </i-col>
-            </row>
-            <row>
 
-                <i-col span="12">
-                    <form-item label="允许上传截图的扩展名" prop="canUploadCatcherExtension">
-                        <i-input type="textarea" placeholder="请输入允许管理截图的扩展名" v-model="form.canUploadCatcherExtension"
-                                 :autosize="{minRows: 2,maxRows: 5}"></i-input>
-                    </form-item>
-                </i-col>
-            </row>
-            <row>
-                <i-col span="12">
-                    <form-item label="允许上传视频的扩展名" prop="canUploadVideoExtension">
-                        <i-input type="textarea" placeholder="请输入允许上传视频的扩展名" v-model="form.canUploadVideoExtension"
-                                 :autosize="{minRows: 2,maxRows: 5}"></i-input>
-                    </form-item>
-                </i-col>
-            </row>
-            <row>
-                <i-col span="12">
-                    <form-item label="允许上传文件的扩展名" prop="canUploadFileExtension">
-                        <i-input type="textarea" placeholder="请输入允许上传文件的扩展名" v-model="form.canUploadFileExtension"
-                                 :autosize="{minRows: 2,maxRows: 5}"></i-input>
-                    </form-item>
-                </i-col>
-            </row>
-            <row>
-                <i-col span="12">
-                    <form-item label="允许管理图片的扩展名" prop="canManagementImageExtension">
-                        <i-input type="textarea" placeholder="请输入允许管理图片的扩展名" v-model="form.canManagementImageExtension"
-                                 :autosize="{minRows: 2,maxRows: 5}"></i-input>
-                    </form-item>
-                </i-col>
-            </row>
-            <row>
-                <i-col span="12">
-                    <form-item label="允许管理文件的扩展名" prop="canManagementFileExtension">
-                        <i-input type="textarea" placeholder="请输入允许管理文件的扩展名" v-model="form.canManagementFileExtension"
-                                 :autosize="{minRows: 2,maxRows: 5}"></i-input>
-                    </form-item>
-                </i-col>
-            </row>
-            <row>
-                <i-col span="12">
-                    <form-item>
-                        <i-button :loading="loading" type="primary" @click.native="submit">
-                            <span v-if="!loading">确认提交</span>
-                            <span v-else>正在提交…</span>
-                        </i-button>
-                    </form-item>
-                </i-col>
-            </row>
-        </i-form>
-    </card>
+    <div>
+        <Icon type="checkmark" />
+        <Form inline>
+            <FormItem prop="user">
+                <Input type="text" placeholder="Username">
+                <Icon type="ios-person-outline"></Icon>
+                </Input>
+            </FormItem>
+            <FormItem prop="password">
+                <Input type="password" placeholder="Password">
+                <Icon type="ios-locked-outline"></Icon>
+                </Input>
+            </FormItem>
+            <FormItem>
+                <Button type="primary">Signin</Button>
+            </FormItem>
+        </Form>
+        <i-table height="200" :columns="columns1" :data="data1"></i-table>
+    </div>
 </template>
