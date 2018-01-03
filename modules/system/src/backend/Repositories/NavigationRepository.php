@@ -1,6 +1,5 @@
 <?php namespace System\Backend\Repositories;
 
-use Illuminate\Cache\TaggableStore;
 use Illuminate\Support\Collection;
 use Poppy\Framework\Support\Abstracts\Repository;
 use System\Classes\Traits\SystemTrait;
@@ -20,7 +19,7 @@ class NavigationRepository extends Repository
 	{
 
 		$this->items = $this->getCache('poppy')->rememberForever(
-			'backend.navigation.repository',
+			'backend.navigation',
 			function () use ($data) {
 				return $data->all();
 			}

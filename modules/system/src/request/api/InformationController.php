@@ -5,7 +5,7 @@ use System\Classes\Traits\SystemTrait;
 
 
 /**
- * Class InformationsController.
+ * Class InformationController.
  */
 class InformationController extends Controller
 {
