@@ -59,8 +59,8 @@ class ModulesMenu extends Repository
 							}
 							$children = isset($definition['children']) ? collect((array) $definition['children']) : collect();
 							switch ($definition['injection']) {
-								case 'addon':
-									$this->getAddon()->navigations()->each(function ($definition) use ($children) {
+								case 'extension':
+									$this->getExtension()->navigations()->each(function ($definition) use ($children) {
 										$children->push([
 											'path' => $definition['path'] ?? '/',
 											'text' => $definition['text'] ?? '未定义',

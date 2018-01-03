@@ -72,12 +72,12 @@ configurations:
                     key: site.statistics
                     required: false
                     type: textarea
-multify:
+extension:
     initialization:
-        name: 多元化
-        path: multify
+        name: 扩展配置
+        path: extension
         tabs: true
-        target: global
+        target: extension
     tabs:
         configuration:
             default: true

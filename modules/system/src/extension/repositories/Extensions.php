@@ -94,26 +94,17 @@ class Extensions extends Repository
 	 */
 	protected function loadConfigurations(string $directory): Collection
 	{
-		if ($this->getFile()->exists($file = $directory . DIRECTORY_SEPARATOR . 'configuration.yaml')) {
-			return collect(Yaml::parse(file_get_contents($file)));
+		$configurations = collect();
+		if ($this->getFile()->isDirectory($directory = $directory . DIRECTORY_SEPARATOR . 'configurations')) {
+			collect($this->getFile()->files($directory))->each(function ($file) use ($configurations) {
+				if ($this->getFile()->isReadable($file)) {
+					collect(Yaml::dump(file_get_contents($file)))->each(function ($data, $key) use ($configurations) {
+						$configurations->put($key, $data);
+					});
+				}
+			});
 		}
-		else {
-			if ($this->getFile()->isDirectory($directory = $directory . DIRECTORY_SEPARATOR . 'configurations')) {
-				$configurations = collect();
-				collect($this->getFile()->files($directory))->each(function ($file) use ($configurations) {
-					if ($this->getFile()->isReadable($file)) {
-						collect(Yaml::dump(file_get_contents($file)))->each(function ($data, $key) use ($configurations) {
-							$configurations->put($key, $data);
-						});
-					}
-				});
-
-				return $configurations;
-			}
-			else {
-				throw new \Exception('Load Extension fail: ' . $directory);
-			}
-		}
+		return $configurations;
 	}
 
 	/**
