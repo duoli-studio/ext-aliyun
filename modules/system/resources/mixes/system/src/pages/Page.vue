@@ -42,7 +42,8 @@
 				});
 				self.$loading.start();
 				self.$http.get(`${window.api}/system/page/${self.path}`).then(response => {
-					const {initialization, tabs} = response.data.data.initialization;
+					console.log(response.data.data);
+					const {initialization, tabs} = response.data.data;
 					Object.keys(tabs).forEach(index => {
 						tabs[index].loading = false;
 					});

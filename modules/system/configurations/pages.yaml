@@ -166,10 +166,10 @@ sample:
                     required: false
                     type: textarea
                 input:
-                    default: ''
+                    default: ' '
                     description: ''
                     label: 单行文本输入
-                    key: site.name
+                    key: sample::sample.input
                     placeholder: 请输入网站名称
                     required: true
                     type: input
@@ -184,6 +184,6 @@ sample:
                     description: '关闭后网站将不能访问'
                     format: boolean
                     label: 开关
-                    key: site.enabled
+                    key: sample::sample.is_open
                     required: false
                     type: switch

@@ -122,12 +122,4 @@ trait SystemTrait
 	{
 		return $this->getContainer()->make('extension');
 	}
-
-	/**
-	 * @return AddonManager
-	 */
-	protected function getAddon(): AddonManager
-	{
-		return $this->getContainer()->make('addon');
-	}
 }

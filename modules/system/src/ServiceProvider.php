@@ -30,6 +30,9 @@ class ServiceProvider extends PoppyServiceProvider
 			'System\Module\Listeners\ClearCacheListener',
 			'System\Extension\Listeners\ClearCacheListener',
 		],
+		'System\Setting\Events\SettingUpdated'        => [
+			'System\Module\Listeners\ClearCacheListener',
+		],
 	];
 
 

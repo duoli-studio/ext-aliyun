@@ -18,15 +18,6 @@ class PageRepository extends Repository
 	public function initialize(Collection $collection)
 	{
 		$this->getModule()->pages()->each(function ($definition) {
-
-			// submit address
-			if (
-				isset($definition['tabs']) &&
-				isset($definition['tabs']['configuration']) &&
-				isset($definition['tabs']['submit'])
-			) {
-				$definition['tabs']['submit'] = url($definition['tabs']['submit']);
-			}
 			$this->items[] = $definition;
 		});
 	}

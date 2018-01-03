@@ -1,7 +1,7 @@
 <?php namespace System\Module\Listeners;
 
 
-use Poppy\Framework\Poppy\Events\PoppyOptimized;
+use Poppy\Framework\Application\Event;
 use System\Classes\Traits\SystemTrait;
 
 class ClearCacheListener
@@ -10,9 +10,9 @@ class ClearCacheListener
 	use SystemTrait;
 
 	/**
-	 * @param PoppyOptimized $event
+	 * @param Event $event
 	 */
-	public function handle(PoppyOptimized $event)
+	public function handle($event)
 	{
 		collect([
 			'modules',

@@ -28,6 +28,7 @@ class ModulesPage extends Repository
 			});
 			$collection->transform(function ($definition) {
 				data_set($definition, 'tabs', collect($definition['tabs'])->map(function ($definition) {
+					$definition['submit'] = url($definition['submit']);
 					data_set($definition, 'fields', collect($definition['fields'])->map(function ($definition) {
 						$setting = $this->getSetting()->get($definition['key'], '');
 						if (isset($definition['format'])) {
@@ -43,10 +44,8 @@ class ModulesPage extends Repository
 						else {
 							$definition['value'] = $setting;
 						}
-
 						return $definition;
 					}));
-
 					return $definition;
 				}));
 
