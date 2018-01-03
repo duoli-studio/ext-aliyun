@@ -20,7 +20,7 @@ class StylesheetRepository extends Repository
 		$this->getModule()->assets()->filter(function ($definition) {
 			return isset($definition['entry'])
 				&& isset($definition['type'])
-				&& $definition['entry'] == 'administration'
+				&& $definition['entry'] == 'system'
 				&& $definition['type'] == 'stylesheet';
 		})->each(function ($definition) {
 			$definition['file'] = $this->getUrl()->asset($definition['file']);

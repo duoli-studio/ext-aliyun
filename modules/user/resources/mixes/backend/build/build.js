@@ -27,15 +27,15 @@ rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
                 chunks: true,
                 chunkModules: true
             }) + '\n\n');
-        let assetsPath = path.join(__dirname, '../../../../../../public/assets/member/backend');
+        let assetsPath = path.join(__dirname, '../../../../../../public/assets/user/backend');
 
         console.log(chalk.cyan('  Moving files to path ' + assetsPath + '\n'));
 
         shell.rm('-rf', assetsPath);
         shell.mkdir('-p', assetsPath);
         shell.config.silent = true;
-        shell.cp('-R', path.join(__dirname, '../dist/assets/member/backend/css'), assetsPath);
-        shell.cp('-R', path.join(__dirname, '../dist/assets/member/backend/js'), assetsPath);
+        shell.cp('-R', path.join(__dirname, '../dist/assets/user/backend/css'), assetsPath);
+        shell.cp('-R', path.join(__dirname, '../dist/assets/user/backend/js'), assetsPath);
         shell.config.silent = false;
 
         console.log(chalk.cyan('  Build complete.\n'));

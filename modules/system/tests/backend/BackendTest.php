@@ -15,4 +15,9 @@ class BackendTest extends TestCase
 		(new NavigationRepository())->initialize(app('module')->menus()->structures());
 	}
 
+	public function testScripts()
+	{
+		dd(app('backend')->scripts());
+	}
+
 }

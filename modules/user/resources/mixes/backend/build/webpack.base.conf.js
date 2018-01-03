@@ -14,7 +14,7 @@ module.exports = {
     output: {
         path: config.build.assetsRoot,
         filename: utils.assetsPath('js/module.min.js'),
-        library: 'notadd/member',
+        library: 'poppy/user',
         libraryTarget: "umd",
         publicPath: process.env.NODE_ENV === 'production'
             ? config.build.assetsPublicPath

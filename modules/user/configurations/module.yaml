@@ -1,0 +1,10 @@
+name: 用户中心
+identification: poppy/user
+description: '用户管理模块'
+authors:
+    -
+        name: MarkZhao
+        email: notadd@ibenchu.com
+version: 1.0.0
+csrf:
+    - 'api/member*'

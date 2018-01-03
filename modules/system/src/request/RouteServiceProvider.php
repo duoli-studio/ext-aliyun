@@ -8,9 +8,8 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Routing\Router;
 use Poppy\Framework\GraphQL\GraphQLController;
 use System\Request\Api\AuthController;
-use System\Request\Api\HomeController as SysApiHomeController;
 use System\Request\Api\DashboardsController;
-use System\Request\Api\InformationController;
+use System\Request\Api\HomeController as SysApiHomeController;
 use System\Request\Backend\BeHomeController;
 use System\Request\Develop\DevController;
 use System\Request\System\HomeController;
@@ -107,7 +106,7 @@ class RouteServiceProvider extends ServiceProvider
 			'middleware' => ['cross'],
 			'prefix'     => 'api/system',
 		], function (Router $route) {
-			$route->any('/information', InformationController::class . '@list');
+			$route->any('/information', SysApiHomeController::class . '@information');
 			$route->any('/dashboard', DashboardsController::class . '@list');
 			$route->group([
 				'middleware' => ['auth:jwt_backend'],

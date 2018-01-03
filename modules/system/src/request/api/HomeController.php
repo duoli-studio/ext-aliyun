@@ -51,4 +51,23 @@ class HomeController extends Controller
 			'message' => '获取数据成功！',
 		]);
 	}
+
+	/**
+	 * @return \Illuminate\Http\JsonResponse
+	 */
+	public function information()
+	{
+
+		$data = $this->getResponse()->json([
+			'data'    => [
+				'navigation'  => $this->getBackend()->navigations()->toArray(),
+				'pages'       => $this->getBackend()->pages()->toArray(),
+				'scripts'     => $this->getBackend()->scripts()->toArray(),
+				'stylesheets' => $this->getBackend()->stylesheets()->toArray(),
+			],
+			'message' => '获取模块和插件信息成功！',
+		]);
+		\Artisan::call('cache:clear');
+		return $data;
+	}
 }
