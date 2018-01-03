@@ -13,12 +13,11 @@
 ## 运行开发环境
 
 ```
-cd modules/system/resources/mixes/system && yarn dev
+cd modules/system/resources/mixes/backend && yarn dev
 ```
 
 
 ## 上线注意
-- 删除 `global.js` 文件 `php56 artisan lemon:front`
 - 清空后台并且需要重新生成缓存文件
 - 运行计划任务 `php artisan schedule:run`
 - 运行队列 `php artisan queue:listen`
@@ -33,10 +32,6 @@ apidoc -i app/Http/Controllers/Api/ -o  public/docs/api
 php vendor/sami/sami/sami.php update config/sami.php
 ```
 
-## key
-```
-er5zHW  dba74c8bd7475c75e4ed73c097a11869    2010-10-10 10:10:10
-```
 
 ## 技术文档
 ### session
@@ -63,8 +58,6 @@ stdout_logfile=/media/web/www/1dailian/storage/server/job.log
 ## 计划任务
 ```
 * * * * * php /media/web/www/1dailian/artisan schedule:run 1>> /dev/null 2>&1
-* * * * * sleep 20 && wget http://re.1dailian.com/support_artisan/sync-detail-crontab
-* * * * * sleep 40 && wget http://re.1dailian.com/support_artisan/sync-detail-crontab
 ```
 
 ## 初始化权限
