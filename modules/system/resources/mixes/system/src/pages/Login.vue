@@ -37,7 +37,6 @@
 							username : self.form.username,
 							password : self.form.password,
 						}).then(response => {
-							console.log(response);
 							self.$notice.open({
 								title : '恭喜，登录成功！',
 							});
@@ -46,8 +45,6 @@
 							});
 							self.$store.commit('token', response.data.data);
 							window.location = window.admin;
-						}).then(error => {
-							console.log(error);
 						}).finally(() => {
 							self.loading = false;
 						});
