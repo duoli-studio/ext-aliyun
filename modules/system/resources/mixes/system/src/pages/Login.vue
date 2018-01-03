@@ -33,10 +33,11 @@
 				self.loading = true;
 				self.$refs.form.validate(valid => {
 					if (valid) {
-						self.$http.post(`${window.api}/system/token`, {
+						self.$http.post(`${window.api}/token/backend`, {
 							username : self.form.username,
 							password : self.form.password,
 						}).then(response => {
+							console.log(response);
 							self.$notice.open({
 								title : '恭喜，登录成功！',
 							});

@@ -75,20 +75,26 @@ configurations:
 extension:
     initialization:
         name: 扩展配置
-        path: extension
+        path: ext
         tabs: true
-        target: extension
+        target: global
     tabs:
         configuration:
             default: true
             show: true
             submit: api/setting/set
-            title: 全局设置
+            title: 支付宝设置
             fields:
+                public_key:
+                    default: ''
+                    label: 支付宝公钥
+                    key: alipay.statistics
+                    required: false
+                    type: textarea
                 name:
                     default: ''
                     description: ''
-                    label: 网站名称
+                    label: 网站名称2
                     key: site.name
                     placeholder: 请输入网站名称
                     required: true
@@ -140,9 +146,3 @@ extension:
                     key: site.copyright
                     required: false
                     type: input
-                statistics:
-                    default: ''
-                    label: 统计代码
-                    key: site.statistics
-                    required: false
-                    type: textarea

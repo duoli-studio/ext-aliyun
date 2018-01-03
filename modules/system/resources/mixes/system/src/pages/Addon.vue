@@ -13,7 +13,7 @@
 	export default {
 		beforeRouteEnter(to, from, next) {
 			injection.loading.start();
-			injection.http.post(`${window.api}/administration`, {
+			injection.http.post(`${window.api}/g/backend`, {
 				query : `query {
                     addons{${fields.join(',')}},
                     enabled:addons(enabled:true){${fields.join(',')}},
@@ -257,7 +257,7 @@
 					title : '正在刷新数据……',
 				});
 				self.$loading.start();
-				self.$http.post(`${window.api}/administration`, {
+				self.$http.post(`${window.api}/g/backend`, {
 					query : `query {
                     addons{${fields.join(',')}},
                     enabled:addons(enabled:true){${fields.join(',')}},

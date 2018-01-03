@@ -4,7 +4,7 @@
 	export default {
 		beforeRouteEnter(to, from, next) {
 			injection.loading.start();
-			injection.http.post(`${window.api}/administration`, {
+			injection.http.post(`${window.api}/g/backend`, {
 				query : 'query {extensions{authors,description,enabled,identification,initialized,installed}}',
 			}).then(response => {
 				const {extensions} = response.data.data;

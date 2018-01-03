@@ -44,7 +44,7 @@
 			enableDebug(status) {
 				const self = this;
 				self.$loading.start();
-				self.$http.post(`${window.api}/system/graphql`, {
+				self.$http.post(`${window.api}/g/backend`, {
 					query : `mutation {settings(key:"debug.enabled",value:"${status === true ? '1' : '0'}"){key,value}}`,
 				}).then(() => {
 					self.$loading.finish();
@@ -62,7 +62,7 @@
 			enableTesting(status) {
 				const self = this;
 				self.$loading.start();
-				self.$http.post(`${window.api}/administration`, {
+				self.$http.post(`${window.api}/g/backend`, {
 					query : `mutation {settings(key:"debug.testing",value:"${status === true ? '1' : '0'}"){key,value}}`,
 				}).then(() => {
 					self.$loading.finish();

@@ -13,7 +13,6 @@ use System\Request\Api\DashboardsController;
 use System\Request\Api\InformationController;
 use System\Request\Backend\BeHomeController;
 use System\Request\Develop\DevController;
-use System\Request\Develop\SystemController;
 use System\Request\System\HomeController;
 use System\Request\System\TestController as SystemTestController;
 
@@ -133,15 +132,19 @@ class RouteServiceProvider extends ServiceProvider
 					->name('system:api.access');
 				$route->any('/configuration/{path?}', ConfigurationController::class . '@definition');
 			});
-
 		});
 	}
 
 	private function graphqlApi()
 	{
-		\Route::any('api/token/{guard?}', AuthController::class . '@token')
-			->name('api.token');
-		\Route::any('api/g/{graphql_schema?}', GraphQLController::class . '@query')
-			->name('api.graphql');
+		\Route::group([
+			'middleware' => ['cross'],
+		], function (Router $route) {
+			$route->any('api/token/{guard?}', AuthController::class . '@token')
+				->name('api.token');
+			$route->any('api/g/{graphql_schema?}', GraphQLController::class . '@query')
+				->name('api.graphql');
+		});
+
 	}
 }

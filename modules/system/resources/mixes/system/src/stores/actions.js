@@ -2,8 +2,8 @@ import injection from '../helpers/injection';
 
 export const information = ({commit}) => {
 	commit('loading', true);
-	injection.http.post(`${window.api}/system/graphql`, {
-		query : 'query {  setting(module : "system", group : "setting/site") {\n' +
+	injection.http.post(`${window.api}/g/backend`, {
+		query : 'query {  setting(module : "system", group : "site") {\n' +
 		'    key,\n' +
 		'    value\n' +
 		'}}'
@@ -33,7 +33,7 @@ export const information = ({commit}) => {
 };
 
 export const setting = ({commit}) => (new Promise((resolve, reject) => {
-	injection.http.post(`${window.api}/system/graphql`, {
+	injection.http.post(`${window.api}/g/backend`, {
 		query : 'query {settings{key,value}}',
 	}).then(response => {
 		const settings = [];
