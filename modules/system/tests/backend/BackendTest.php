@@ -2,7 +2,7 @@
 
 
 use Poppy\Framework\Application\TestCase;
-use System\Backend\Repositories\NavigationRepository;
+use System\Backend\_repositories\NavigationRepository;
 
 class BackendTest extends TestCase
 {
