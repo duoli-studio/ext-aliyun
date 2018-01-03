@@ -1,13 +1,13 @@
-<?php namespace System\Backend\Repositories;
+<?php namespace System\Backend\_repositories;
 
 use Illuminate\Support\Collection;
 use Poppy\Framework\Support\Abstracts\Repository;
 use System\Classes\Traits\SystemTrait;
 
 /**
- * Class ScriptRepository.
+ * Class StylesheetRepository.
  */
-class ScriptRepository extends Repository
+class StylesheetRepository extends Repository
 {
 	use SystemTrait;
 
@@ -21,7 +21,7 @@ class ScriptRepository extends Repository
 			return isset($definition['entry'])
 				&& isset($definition['type'])
 				&& $definition['entry'] == 'administration'
-				&& $definition['type'] == 'script';
+				&& $definition['type'] == 'stylesheet';
 		})->each(function ($definition) {
 			$definition['file'] = $this->getUrl()->asset($definition['file']);
 			$this->items[]      = $definition;
