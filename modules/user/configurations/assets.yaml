@@ -2,6 +2,6 @@ system:
     poppy/user:
         permissions: ''
         scripts:
-            - assets/user/system/js/module.min.js
+            - assets/user/backend/js/module.min.js
         stylesheets:
-            - assets/user/system/css/module.min.css
+            - assets/user/backend/css/module.min.css
