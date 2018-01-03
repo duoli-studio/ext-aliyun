@@ -8,7 +8,7 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Routing\Router;
 use Poppy\Framework\GraphQL\GraphQLController;
 use System\Request\Api\AuthController;
-use System\Request\Api\ConfigurationController;
+use System\Request\Api\HomeController as SysApiHomeController;
 use System\Request\Api\DashboardsController;
 use System\Request\Api\InformationController;
 use System\Request\Backend\BeHomeController;
@@ -18,23 +18,7 @@ use System\Request\System\TestController as SystemTestController;
 
 class RouteServiceProvider extends ServiceProvider
 {
-	/**
-	 * This namespace is applied to your controller routes.
-	 * In addition, it is set as the URL generator's root namespace.
-	 * @var string
-	 */
-	protected $namespace = 'System\Request';
 
-	/**
-	 * Define your route model bindings, pattern filters, etc.
-	 * @return void
-	 */
-	public function boot()
-	{
-		//
-
-		parent::boot();
-	}
 
 	/**
 	 * Define the routes for the module.
@@ -130,7 +114,10 @@ class RouteServiceProvider extends ServiceProvider
 			], function (Router $route) {
 				$route->any('/access', AuthController::class . '@access')
 					->name('system:api.access');
-				$route->any('/configuration/{path?}', ConfigurationController::class . '@definition');
+
+				// page
+				$route->any('/page/{path?}', SysApiHomeController::class . '@page');
+
 			});
 		});
 	}

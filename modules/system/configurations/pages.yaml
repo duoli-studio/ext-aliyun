@@ -1,14 +1,14 @@
 configurations:
     initialization:
         name: 参数配置
-        path: configurations
+        path: setting-system
         tabs: true
         target: global
     tabs:
         configuration:
             default: true
             show: true
-            submit: api/setting/set
+            submit: api/system/page/setting-system
             title: 全局设置
             fields:
                 name:
@@ -75,20 +75,20 @@ configurations:
 extension:
     initialization:
         name: 扩展配置
-        path: ext
+        path: setting-extension
         tabs: true
         target: global
     tabs:
         configuration:
             default: true
             show: true
-            submit: api/setting/set
+            submit: api/system/page/setting-extension
             title: 支付宝设置
             fields:
                 public_key:
                     default: ''
                     label: 支付宝公钥
-                    key: alipay.statistics
+                    key: extension::alipay.statistics
                     required: false
                     type: textarea
                 name:
@@ -146,3 +146,44 @@ extension:
                     key: site.copyright
                     required: false
                     type: input
+sample:
+    initialization:
+        name: 示例
+        path: setting-sample
+        tabs: true
+        target: global
+    tabs:
+        configuration:
+            default: true
+            show: true
+            submit: api/system/page/setting-sample
+            title: 示例项
+            fields:
+                textarea:
+                    default: ''
+                    label: 多行文本输入框
+                    key: sample::sample.textarea
+                    required: false
+                    type: textarea
+                input:
+                    default: ''
+                    description: ''
+                    label: 单行文本输入
+                    key: site.name
+                    placeholder: 请输入网站名称
+                    required: true
+                    type: input
+                    validates:
+                        -
+                            message: 请输入网站名称
+                            required: true
+                            trigger: change
+                            type: string
+                switch:
+                    default: false
+                    description: '关闭后网站将不能访问'
+                    format: boolean
+                    label: 开关
+                    key: site.enabled
+                    required: false
+                    type: switch
