@@ -3,10 +3,10 @@
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
 use System\Backend\Abstracts\Backend;
-use System\Backend\_repositories\NavigationRepository;
-use System\Backend\_repositories\PageRepository;
-use System\Backend\_repositories\ScriptRepository;
-use System\Backend\_repositories\StylesheetRepository;
+use System\Backend\Repositories\NavigationRepository;
+use System\Backend\Repositories\PageRepository;
+use System\Backend\Repositories\ScriptRepository;
+use System\Backend\Repositories\StylesheetRepository;
 use System\Classes\Traits\SystemTrait;
 
 /**
