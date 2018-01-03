@@ -13,7 +13,7 @@ class UtilTest extends TestCase
 	{
 
 		$util = app('act.util');
-		if (!$util->sendCaptcha('15566647473')) {
+		if (!$util->sendCaptcha('18864838035')) {
 			dd($util->getError());
 		}
 		else {
