@@ -1,4 +1,4 @@
-<?php namespace User\Fans\GraphQL\Mutation;
+<?php namespace User\Pam\GraphQL\Mutation;
 
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
@@ -6,8 +6,9 @@ use Poppy\Framework\GraphQL\Exception\TypeNotFound;
 use Poppy\Framework\GraphQL\Support\Mutation;
 use System\Classes\Traits\SystemTrait;
 use User\Fans\Action\Fans;
+use User\Pam\Action\User;
 
-class FansMutation extends Mutation
+class UnbindMutation extends Mutation
 {
 	use SystemTrait;
 
@@ -15,8 +16,8 @@ class FansMutation extends Mutation
 	public function __construct($attributes = [])
 	{
 		parent::__construct($attributes);
-		$this->attributes['name']        = 'fans';
-		$this->attributes['description'] = trans('fans::act.graphql.mutation_desc');
+		$this->attributes['name']        = 'unbind';
+		$this->attributes['description'] = trans('user::act.graphql.mutation_desc');
 	}
 
 	public function authorize($root, $args)
@@ -40,9 +41,9 @@ class FansMutation extends Mutation
 	public function args(): array
 	{
 		return [
-			'account_id' => [
-				'type'        => Type::nonNull(Type::int()),
-				'description' => trans('fans::act.db.account_id'),
+			'type' => [
+				'type'        => Type::nonNull(Type::string()),
+				'description' => trans('user::act.db.type'),
 			],
 		];
 	}
@@ -54,14 +55,14 @@ class FansMutation extends Mutation
 	 */
 	public function resolve($root, $args)
 	{
-		$account_id = $args['account_id'];
-		/** @var Fans $fans */
-		$fans     = app('act.fans');
-		$fans->setPam($this->getJwtWebGuard()->user());
-		if (!$fans->concern($account_id)) {
-			return $fans->getError()->toArray();
+		$account_id = $args['type'];
+		/** @var User $user**/
+		$user     = app('act.user');
+		$user->setPam($this->getJwtWebGuard()->user());
+		if (!$user->unbind($account_id)) {
+			return $user->getError()->toArray();
 		} else {
-			return $fans->getSuccess()->toArray();
+			return $user->getSuccess()->toArray();
 		}
 	}
 }

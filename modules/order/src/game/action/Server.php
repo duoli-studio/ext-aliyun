@@ -37,9 +37,9 @@ class Server
 	 */
 	public function establish($data, $id = null)
 	{
-		/*if (!$this->checkBe('backend:global.role.manage')) {
+		if (!$this->checkPermission()){
 			return false;
-		}*/
+		}
 		$initDb    = [
 			'title'      => strval(array_get($data, 'title', '')),
 			'parent_id'  => strval(array_get($data, 'parent_id', '')),

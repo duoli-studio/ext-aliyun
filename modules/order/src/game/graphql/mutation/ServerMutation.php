@@ -18,6 +18,12 @@ class ServerMutation extends Mutation
 		$this->attributes['description'] = trans('order::server.graphql.mutation_desc');
 	}
 
+	public function authorize($root, $args)
+	{
+		// true, if logged in
+		return !$this->getJwtBeGuard()->guest();
+	}
+
 	/**
 	 * @return ObjectType
 	 * @throws TypeNotFound
@@ -65,6 +71,7 @@ class ServerMutation extends Mutation
 	{
 		$id     = $args['id'] ?? 0;
 		$server = app('act.server');
+		$server->setPam($this->getJwtBeGuard()->user());
 		if (!$server->establish($args, $id)) {
 			return $server->getError()->toArray();
 		}

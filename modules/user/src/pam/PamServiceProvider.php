@@ -2,6 +2,7 @@
 
 use Illuminate\Support\ServiceProvider;
 use User\Pam\Action\Pam;
+use User\Pam\Action\User;
 
 /**
  * Class PermissionServiceProvider.
@@ -22,6 +23,10 @@ class PamServiceProvider extends ServiceProvider
 		$this->app->bind('act.pam', function ($app) {
 			return new Pam();
 		});
+
+		$this->app->bind('act.user', function ($app) {
+			return new User();
+		});
 	}
 
 	/**
@@ -31,6 +36,7 @@ class PamServiceProvider extends ServiceProvider
 	{
 		return [
 			'act.pam',
+			'act.user'
 		];
 	}
 }
