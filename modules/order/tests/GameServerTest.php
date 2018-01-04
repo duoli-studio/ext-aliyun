@@ -13,8 +13,8 @@ class GameServerTest extends TestCase
 	{
 		$game = app('act.server');
 		$item = $game->establish([
-			'title'     => 'sdfsdfs',
-			'parent_id' => '15',
+			'title'     => '测试',
+			'parent_id' => '0',
 		]);
 		dd($game->getError());
 	}
@@ -23,16 +23,11 @@ class GameServerTest extends TestCase
 	public function testGenId()
 	{
 		$game = app('act.server');
-		$code = $game->parentId(14,0);
+		$ids = [];
+		$code = $game->parentId(18,$ids);
 		dd($code);
 	}
 
-	public function testGenCode()
-	{
-		$game = app('act.server');
-		$code = $game->genCode(9);
-		dd($code);
-	}
 
 	/*public function testUpdate()
 	{

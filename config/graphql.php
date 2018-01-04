@@ -10,9 +10,14 @@ return [
 			],
 		],
 		'web' => [
-			'mutation' => [],
+			'mutation' => [
+				\User\Fans\GraphQL\Mutation\FansMutation::class,
+				\User\Fans\GraphQL\Mutation\FansDeleteMutation::class,
+			],
 			'query'    => [
 				\System\Setting\Graphql\Queries\SettingsQuery::class,
+
+				\User\Fans\Graphql\Queries\FansQuery::class,
 			],
 		],
 		'backend' => [
@@ -64,5 +69,6 @@ return [
 		 -------------------------------------------- */
 		\Order\Game\GraphQL\Types\ServerType::class,
 
+		\User\Fans\GraphQL\Types\FansType::class,
 	],
 ];

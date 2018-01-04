@@ -5,7 +5,7 @@ use Illuminate\Http\Request;
 use Poppy\Framework\Classes\Resp;
 use System\Models\PamAccount;
 use System\Models\PamRole;
-use User\Pam\Action\Pam;
+use User\Pam\Action\Fans;
 
 class UserController extends InitController
 {
@@ -31,7 +31,7 @@ class UserController extends InitController
 			$password = $request->input('password');
 			$remember = $request->input('remember_me');
 
-			/** @var Pam $actPam */
+			/** @var Fans $actPam */
 			$actPam = app('act.pam');
 			if ($actPam->loginCheck($passport, $password, PamAccount::GUARD_WEB, $remember)) {
 				if (!empty($type) && $type == 'mini') {
@@ -97,7 +97,7 @@ class UserController extends InitController
 			$account  = $request->input($type);
 			$password = $request->input('password');
 
-			/** @var Pam $actPam */
+			/** @var Fans $actPam */
 			$actPam = app('act.pam');
 			if (!$actPam->register($account, $password, PamRole::FE_USER)) {
 				return Resp::web(Resp::ERROR, $actPam->getError(), '', $request->only([$type]));

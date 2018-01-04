@@ -40,6 +40,22 @@ class ServerType extends AbstractType
 				'type'        => Type::int(),
 				'description' => trans('order::server.db.parent_id'),
 			],
+			'top_parent_id' => [
+				'type'        => Type::int(),
+				'description' => trans('order::server.db.top_parent_id'),
+			],
+			'children' => [
+				'type'        => Type::string(),
+				'description' => trans('order::server.db.children'),
+			],
+			'is_enable' => [
+				'type'        => Type::int(),
+				'description' => trans('order::server.db.is_enable'),
+			],
+			'is_default' => [
+				'type'        => Type::int(),
+				'description' => trans('order::server.db.is_default'),
+			],
 		];
 	}
 }

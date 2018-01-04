@@ -1239,4 +1239,44 @@ class AopClient
 		}
 		return $result;
 	}
+
+	/**
+	 * 生成用于调用收银台SDK的字符串
+	 * @param Request $request SDK接口的请求参数对象
+	 * @return string
+	 * @author guofa.tgf
+	 */
+	public function sdkExecute($request) {
+
+		$this->setupCharsets($request);
+
+		$params['app_id'] = $this->appId;
+		$params['method'] = $request->getApiMethodName();
+		$params['format'] = $this->format;
+		$params['sign_type'] = $this->signType;
+		$params['timestamp'] = date("Y-m-d H:i:s");
+		$params['alipay_sdk'] = $this->alipaySdkVersion;
+		$params['charset'] = $this->postCharset;
+
+		$version = $request->getApiVersion();
+		$params['version'] = $this->checkEmpty($version) ? $this->apiVersion : $version;
+
+		if ($notify_url = $request->getNotifyUrl()) {
+			$params['notify_url'] = $notify_url;
+		}
+
+		$dict = $request->getApiParas();
+		$params['biz_content'] = $dict['biz_content'];
+
+		ksort($params);
+
+		$params['sign'] = $this->generateSign($params, $this->signType);
+
+		foreach ($params as &$value) {
+			$value = $this->characet($value, $params['charset']);
+		}
+
+		return http_build_query($params);
+	}
+
 }

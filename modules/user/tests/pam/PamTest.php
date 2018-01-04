@@ -6,7 +6,7 @@
 
 use Poppy\Framework\Application\TestCase;
 use System\Models\PamAccount;
-use User\Pam\Action\Pam;
+use User\Pam\Action\Fans;
 
 class PamTest extends TestCase
 {
@@ -15,7 +15,7 @@ class PamTest extends TestCase
 	 */
 	public function testRegister()
 	{
-		/** @var Pam $pam */
+		/** @var Fans $pam */
 		$pam = app('act.pam');
 		if ($pam->register('develop', 'develop')) {
 			dd($pam->getSuccess());
@@ -27,7 +27,7 @@ class PamTest extends TestCase
 
 	public function testChangePwd()
 	{
-		/** @var Pam $pam */
+		/** @var Fans $pam */
 		$pam = app('act.pam');
 		$user = PamAccount::where('username', 'imvkmark')->first();
 		if ($pam->setPassword($user, '123456')) {

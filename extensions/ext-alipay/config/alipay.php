@@ -49,4 +49,22 @@ return [
 	// 异步通知地址
 	'mobile_notify_url'       => 'mobile-notify',
 
+
+	/*
+	|--------------------------------------------------------------------------
+	| 转账到支付宝 配置项目
+	|--------------------------------------------------------------------------
+	*/
+	//是否是测试环境 sandbox:测试环境  production:正式环境
+	'open_api_env'              => env('ALIPAY_OPEN_API_ENV', 'sandbox'),
+
+	//支付宝分配给开发者的应用ID : 2014072300007148
+	'open_api_app_id'           => env('ALIPAY_OPEN_API_APP_ID'),
+
+	// 开发者私钥
+	'open_api_private_key_path' => env('ALIPAY_OPEN_API_RSA_PRIVATE'),
+
+	// 支付宝公钥
+	'open_api_public_key_path'  => env('ALIPAY_OPEN_API_RSA_PUBLIC'),
+
 ];

@@ -4,7 +4,7 @@ use System\Models\PamAccount;
 use Illuminate\Console\Command;
 use System\Models\PamRole;
 use System\Models\SysConfig;
-use User\Pam\Action\Pam;
+use User\Pam\Action\Fans;
 
 /**
  * User
@@ -44,7 +44,7 @@ class UserCommand extends Command
 					$pwd = trim($this->ask('Your aim password'));
 
 					$pam = PamAccount::find($userid);
-					/** @var Pam $pam */
+					/** @var Fans $pam */
 					$actPam = app('act.pam');
 					$actPam->setPassword($pam, $pwd);
 					$this->info('Reset user password success');
