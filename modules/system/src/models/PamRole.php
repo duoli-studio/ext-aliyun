@@ -7,10 +7,10 @@ use System\Rbac\Traits\RbacRoleTrait;
 
 /**
  * @property integer $id
- * @property string  $role_name
- * @property string  $role_title
- * @property string  $role_description
- * @property string  $account_type
+ * @property string  $name
+ * @property string  $title
+ * @property string  $description
+ * @property string  $type
  * @property boolean $is_system
  * @property Carbon  $created_at
  * @property Carbon  $updated_at

@@ -1,5 +1,6 @@
 <?php namespace User\Pam\Action;
 
+use Poppy\Framework\Exceptions\TransactionException;
 use Poppy\Framework\Validation\Rule;
 use System\Classes\Traits\SystemTrait;
 use System\Models\PamAccount;
@@ -13,49 +14,44 @@ class User
 	/**
 	 * @var UserProfile
 	 */
-	protected $userProfile;
+	protected $profileTable;
 
-	/**
-	 * @var string Pam table
-	 */
-	private $pamTable;
 
 	public function __construct()
 	{
-		$this->pamTable    = (new PamAccount())->getTable();
-		$this->userProfile = (new UserProfile())->getTable();
+		$this->profileTable = (new UserProfile())->getTable();
 	}
 
 	/**
 	 * 设置基本的信息
-	 * @param $nickname
-	 * @param $sex
-	 * @param $id
+	 * @param string $nickname
+	 * @param string $sex
+	 * @param string $password
 	 * @return bool
 	 */
-	public function register($nickname, $sex, $id)
+	public function register($nickname, $sex, $password)
 	{
+		if (!$this->checkPermission()) {
+			return false;
+		}
+
 		$nickname = strval($nickname);
 
 		$initDb = [
 			'nickname' => $nickname,
 			'sex'      => $sex,
-			'id'       => $id,
+			'id'       => $this->pam->id,
 		];
 
 		$rule = [
 			'nickname' => [
 				Rule::required(),
-				Rule::unique($this->userProfile, 'nickname'),
-				Rule::between(2, 12),
+				Rule::unique($this->profileTable, 'nickname'),
+				Rule::between(3, 30),
 				Rule::string(),
 			],
 			'sex'      => [
 				Rule::required(),
-			],
-			'id'       => [
-				Rule::required(),
-				Rule::unique($this->userProfile, 'id'),
 			],
 		];
 
@@ -65,9 +61,18 @@ class User
 		}
 
 		try {
-			UserProfile::create($initDb);
-			return true;
+
+			// 处理数据库
+			return \DB::transaction(function () use ($initDb, $password) {
+
+				app('act.pam')->setPassword($this->pam, $password);
+				UserProfile::create($initDb);
+
+				return true;
+			});
 		} catch (\Exception $e) {
+			return $this->setError($e->getMessage());
+		} catch (\Throwable $e) {
 			return $this->setError($e->getMessage());
 		}
 	}
