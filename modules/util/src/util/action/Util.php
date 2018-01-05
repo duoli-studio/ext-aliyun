@@ -7,6 +7,7 @@ use Poppy\Extension\Aliyun\Core\Profile\DefaultProfile;
 use Poppy\Extension\Aliyun\Dysms\Sms\Request\V20170525\SendSmsRequest;
 use Poppy\Framework\Helper\StrHelper;
 use Poppy\Framework\Helper\UtilHelper;
+use Slt\Models\UserProfile;
 use System\Classes\Traits\SystemTrait;
 use Util\Models\PamCaptcha;
 
@@ -31,23 +32,13 @@ class Util
 		if (UtilHelper::isEmail($passport)) {
 			$sendType   = PamCaptcha::TYPE_MAIL;
 			$expiredMin = $this->getSetting()->get('util::captcha.mail_expired_minute');
-		}
-		elseif (UtilHelper::isMobile($passport)) {
+		} elseif (UtilHelper::isMobile($passport)) {
 			$sendType   = PamCaptcha::TYPE_MOBILE;
 			$expiredMin = $this->getSetting()->get('util::captcha.sms_expired_minute');
-		}
-		else {
+		} else {
 			return $this->setError(trans('util::act.util.send_captcha_passport_format_error'));
 		}
 
-		// todo:张年文  需要判定系统的操作类型
-		switch ($type) {
-			case PamCaptcha::CON_REGISTER:
-			default:
-				break;
-			case PamCaptcha::CON_FIND_PASSWORD:
-				break;
-		}
 
 		// 发送验证码数据库操作
 		$expired = Carbon::now()->addMinute($expiredMin);
@@ -63,21 +54,49 @@ class Util
 			$captcha->num     = 1;
 			$captcha->type    = $sendType;
 			$captcha->captcha = StrHelper::randomCustom(6, '0123456789');
-		}
-		else {
+		} else {
 			$captcha->num  += 1;
 			$captcha->type = $sendType;
 		}
 		$captcha->disabled_at = $expired;
 		$captcha->save();
 
+		// todo:张年文  需要判定系统的操作类型
+		switch ($type) {
+			case PamCaptcha::CON_ORDER:
+				$data =[
+					'signName'     => $this->getSetting()->get('extension::sms.code_sign_name'),
+					'templateCode' => $this->getSetting()->get('extension::sms.order_template'),
+					'templateParam'=> [
+						'code' => $captcha->captcha,
+					]
+				];
+				break;
+			case PamCaptcha::CON_FIND_PASSWORD:
+				$data =[
+					'signName'     => $this->getSetting()->get('extension::sms.code_sign_name'),
+					'templateCode' => $this->getSetting()->get('extension::sms.find_password_template'),
+					'templateParam'=> [
+						'code' => $captcha->captcha,
+					]
+				];
+				break;
+			default :
+				$data =[
+					'signName'     => $this->getSetting()->get('extension::sms.code_sign_name'),
+					'templateCode' => $this->getSetting()->get('extension::sms.register_template'),
+					'templateParam'=> [
+						'code' => $captcha->captcha,
+					]
+				];
+		}
+
 
 		if ($sendType === PamCaptcha::TYPE_MOBILE) {
-			$this->sendSms($passport, $captcha->captcha);
+			$this->sendSms($passport,  $data);
 			return true;
-		}
-		else {
-			$this->sendMail($passport, $captcha->captcha);
+		} else {
+			$this->sendMail($passport, $data);
 			return true;
 		}
 	}
@@ -90,24 +109,21 @@ class Util
 	public function getAcsClient()
 	{
 		//产品名称:云通信流量服务API产品,开发者无需替换
-		$product = "Dysmsapi";
+		$product = $this->getSetting()->get('extension::sms.product');
 
 		//产品域名,开发者无需替换
-		$domain = "dysmsapi.aliyuncs.com";
+		$domain = $this->getSetting()->get('extension::sms.domain');
 
 		// TODO 此处需要替换成开发者自己的AK (https://ak-console.aliyun.com/)
-		$accessKeyId = "LTAILZQeoDjp9Use"; // AccessKeyId
+		$accessKeyId = $this->getSetting()->get('extension::sms.access_key_id');
 
-		$accessKeySecret = "lzcEfdhKKfRKdVrh6zIreLXrXEcbXm"; // AccessKeySecret
+		$accessKeySecret = $this->getSetting()->get('extension::sms.access_key_secret');
 
 		// 暂时不支持多Region
-		$region = "cn-hangzhou";
+		$region = $this->getSetting()->get('extension::sms.region');
 
 		// 服务结点
-		$endPointName = "cn-hangzhou";
-
-
-		$region = $this->getSetting()->get('extension::sms.region');
+		$endPointName = $this->getSetting()->get('extension::sms.end_point_name');
 
 		if (static::$acsClient == null) {
 
@@ -125,55 +141,26 @@ class Util
 
 	/**
 	 * @param $phoneNumbers
-	 * @param $randNo
+	 * @param $data
 	 * @return mixed|\SimpleXMLElement
 	 */
-	private function sendSms($phoneNumbers, $randNo)
+	private function sendSms($phoneNumbers,$data)
 	{
 
 		// 初始化SendSmsRequest实例用于设置发送短信的参数
 		$request = new SendSmsRequest();
-		// switch ($type) {
-		// 	case ($type = 'code'):
-		// 		$signName     = '验证码';
-		// 		$templateCode = 'SMS_119900021';
-		// 		$data         = [
-		// 			'code' => StrHelper::randomCustom(6, '0123456789'),
-		// 		];
-		// 		break;
-		// 	case ($type = 'order'):
-		// 		$signName     = '订单情况';
-		// 		$templateCode = 'SMS_119900021';
-		// 		$data         = [
-		// 			"name" => "哈哈哈",
-		// 			"time" => Carbon::now(),
-		// 		];
-		// 		break;
-		// 	default:
-		// 		$signName     = 'code';
-		// 		$templateCode = 'SMS_119900021';
-		// 		$data         = [
-		// 			'code' => StrHelper::randomCustom(6, '0123456789'),
-		// 		];
-		//
-		// }
-		$signName     = '验证码';
-		$templateCode = 'SMS_119900021';
-
 
 		// 必填，设置短信接收号码
 		$request->setPhoneNumbers($phoneNumbers);
 
 		// 必填，设置签名名称，应严格按"签名名称"填写，请参考: https://dysms.console.aliyun.com/dysms.htm#/develop/sign
-		$request->setSignName($signName);
+		$request->setSignName($data['signName']);
 
 		// 必填，设置模板CODE，应严格按"模板CODE"填写, 请参考: https://dysms.console.aliyun.com/dysms.htm#/develop/template
-		$request->setTemplateCode($templateCode);
+		$request->setTemplateCode($data['templateCode']);
 
 		// 可选，设置模板参数, 假如模板中存在变量需要替换则为必填项
-		$request->setTemplateParam(json_encode([  // 短信模板中字段的值
-			'code' => $randNo,
-		], JSON_UNESCAPED_UNICODE));
+		$request->setTemplateParam(json_encode($data['templateParam'], JSON_UNESCAPED_UNICODE));
 
 		// 可选，设置流水号
 		// $request->setOutId("yourOutId");
