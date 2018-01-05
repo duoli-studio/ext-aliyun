@@ -26,7 +26,7 @@ class UserTest extends TestCase
 
 		/** @var User $actUser */
 		$actUser = app('act.user');
-		$mobile  = '152' . rand('1111', '9999') . '9938';
+		$mobile  = '152' . mt_rand('1111', '9999') . '9938';
 		if ($actPam->register($mobile)) {
 			$actUser->setPam($actPam->getPam());
 			if (!$actUser->register('test', 0, '123456')) {

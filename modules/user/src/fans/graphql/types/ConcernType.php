@@ -6,13 +6,13 @@ use Poppy\Framework\GraphQL\Support\Type as AbstractType;
 /**
  * Class SettingType.
  */
-class FansType extends AbstractType
+class ConcernType extends AbstractType
 {
 
 	public function __construct($attributes = [])
 	{
 		parent::__construct($attributes);
-		$this->attributes['name']        = 'fans';
+		$this->attributes['name']        = 'concern';
 		$this->attributes['description'] = trans('user::fans.graphql.type_desc');
 	}
 
@@ -22,23 +22,23 @@ class FansType extends AbstractType
 	public function fields()
 	{
 		return [
-			'account_id'        => [
+			'account_id' => [
 				'type'        => Type::int(),
 				'description' => trans('user::fans.db.account_id'),
 			],
-			'head_pic' => [
+			'head_pic'   => [
 				'type'        => Type::string(),
 				'description' => trans('user::fans.db.fans_id'),
 			],
-			'nickname' => [
+			'nickname'   => [
 				'type'        => Type::string(),
 				'description' => trans('user::fans.db.fans_id'),
 			],
-			'sex' => [
+			'sex'        => [
 				'type'        => Type::string(),
 				'description' => trans('user::fans.db.fans_id'),
 			],
-			'signature' => [
+			'signature'  => [
 				'type'        => Type::string(),
 				'description' => trans('user::fans.db.fans_id'),
 			],

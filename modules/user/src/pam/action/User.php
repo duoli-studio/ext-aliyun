@@ -1,9 +1,7 @@
 <?php namespace User\Pam\Action;
 
-use Poppy\Framework\Exceptions\TransactionException;
 use Poppy\Framework\Validation\Rule;
 use System\Classes\Traits\SystemTrait;
-use System\Models\PamAccount;
 use User\Models\PamBind;
 use User\Models\UserProfile;
 
