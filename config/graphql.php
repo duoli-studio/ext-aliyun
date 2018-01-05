@@ -6,10 +6,10 @@ return [
 		'default' => [
 			'mutation' => [],
 			'query'    => [
-				\System\Setting\Graphql\Queries\SettingsQuery::class,
+				\Util\Util\GraphQL\Queries\SendCaptchaQuery::class,
 			],
 		],
-		'web' => [
+		'web'     => [
 			'mutation' => [
 				\User\Fans\GraphQL\Mutation\FansMutation::class,
 				\User\Fans\GraphQL\Mutation\FansDeleteMutation::class,
@@ -19,6 +19,7 @@ return [
 			'query'    => [
 				\System\Setting\Graphql\Queries\SettingsQuery::class,
 
+				\Util\Util\GraphQL\Queries\SendCaptchaQuery::class,
 				\User\Fans\Graphql\Queries\FansQuery::class,
 			],
 		],
@@ -82,5 +83,10 @@ return [
 		\User\Fans\GraphQL\Types\FansType::class,
 
 		\User\Pam\GraphQL\Types\ChangeType::class,
+
+		/* util
+		 -------------------------------------------- */
+		// send captcha
+		\Util\Util\GraphQL\Types\SendCaptchaTypeType::class,
 	],
 ];

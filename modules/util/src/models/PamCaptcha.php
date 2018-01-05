@@ -15,6 +15,11 @@ class PamCaptcha extends \Eloquent
 	const TYPE_MOBILE = 'mobile';
 	const TYPE_MAIL   = 'mail';
 
+
+	const CON_REGISTER      = 'register';
+	const CON_FIND_PASSWORD = 'find_password';
+
+
 	protected $table = 'pam_captcha';
 
 	protected $dates = [

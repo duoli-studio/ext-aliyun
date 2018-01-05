@@ -1,4 +1,4 @@
-<?php namespace Util\Util\GraphQL\Mutation;
+<?php namespace Util\Util\GraphQL\Queries;
 
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
@@ -9,7 +9,7 @@ use System\Classes\Traits\SystemTrait;
 class SendCaptchaQuery extends Query
 {
 	use SystemTrait;
-	
+
 	public function __construct($attributes = [])
 	{
 		parent::__construct($attributes);
@@ -52,12 +52,16 @@ class SendCaptchaQuery extends Query
 	public function resolve($root, $args)
 	{
 		$passport = $args['passport'];
-		$util     = app('act.util');
-		if (!$util->sendCaptcha($passport)) {
+		$type     = $args['type'];
+
+		$util = app('act.util');
+		if (!$util->sendCaptcha($passport, $type)) {
 			return $util->getError()->toArray();
 		}
 		else {
-			return $util->getSuccess()->toArray();
+			return $util->getSuccess(
+				trans('util::util.graphql.send_captcha_success')
+			)->toArray();
 		}
 	}
 }

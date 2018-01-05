@@ -1,9 +1,10 @@
 <?php namespace Util\Util\GraphQL\Types;
 
 use Poppy\Framework\GraphQL\Support\EnumType;
+use Util\Models\PamCaptcha;
 
 /**
- * Class SettingType.
+ * Class SendCaptchaTypeType.
  */
 class SendCaptchaTypeType extends EnumType
 {
@@ -14,7 +15,7 @@ class SendCaptchaTypeType extends EnumType
 		$this->attributes['name']        = 'send_captcha_type';
 		$this->attributes['description'] = trans('util::util.graphql.send_captcha_type_desc');
 		$this->attributes['values']      = [
-			'register' => [
+			PamCaptcha::CON_REGISTER => [
 				'description' => trans('util::util.graphql.value_register_desc'),
 			],
 		];

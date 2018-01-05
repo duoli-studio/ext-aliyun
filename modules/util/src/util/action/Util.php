@@ -1,14 +1,9 @@
 <?php namespace Util\Util\Action;
 
-/**
- * 基本账户操作
- */
-
 use Carbon\Carbon;
 use Poppy\Extension\Aliyun\Core\Config;
 use Poppy\Extension\Aliyun\Core\DefaultAcsClient;
 use Poppy\Extension\Aliyun\Core\Profile\DefaultProfile;
-use Poppy\Extension\Aliyun\Dysms\Sms\Request\V20170525\QuerySendDetailsRequest;
 use Poppy\Extension\Aliyun\Dysms\Sms\Request\V20170525\SendSmsRequest;
 use Poppy\Framework\Helper\StrHelper;
 use Poppy\Framework\Helper\UtilHelper;
@@ -26,69 +21,73 @@ class Util
 	}
 
 	/**
-	 * @param $passport
+	 * @param string $passport
+	 * @param string $type
 	 * @return bool
 	 */
-	public function sendCaptcha($passport)
+	public function sendCaptcha($passport, $type = PamCaptcha::CON_REGISTER)
 	{
 		// 验证数据格式
 		if (UtilHelper::isEmail($passport)) {
-			$type       = PamCaptcha::TYPE_MAIL;
+			$sendType   = PamCaptcha::TYPE_MAIL;
 			$expiredMin = $this->getSetting()->get('util::captcha.mail_expired_minute');
 		}
 		elseif (UtilHelper::isMobile($passport)) {
-			$type       = PamCaptcha::TYPE_MOBILE;
+			$sendType   = PamCaptcha::TYPE_MOBILE;
 			$expiredMin = $this->getSetting()->get('util::captcha.sms_expired_minute');
 		}
 		else {
 			return $this->setError(trans('util::act.util.send_captcha_passport_format_error'));
 		}
-		// 发送验证码
-		// todo
 
+		// todo:张年文  需要判定系统的操作类型
+		switch ($type) {
+			case PamCaptcha::CON_REGISTER:
+			default:
+				break;
+			case PamCaptcha::CON_FIND_PASSWORD:
+				break;
+		}
 
 		// 发送验证码数据库操作
 		$expired = Carbon::now()->addMinute($expiredMin);
-
 		/** @var PamCaptcha $captcha */
 		$captcha = PamCaptcha::updateOrCreate([
 			'passport' => $passport,
 		]);
-
 		if ($captcha->num == 3) {
 			$captcha->num = 0;
 		}
 		// Not Send
 		if ($captcha->num == 0) {
 			$captcha->num     = 1;
-			$captcha->type    = $type;
+			$captcha->type    = $sendType;
 			$captcha->captcha = StrHelper::randomCustom(6, '0123456789');
 		}
 		else {
 			$captcha->num  += 1;
-			$captcha->type = $type;
+			$captcha->type = $sendType;
 		}
-
-		// Captcha In Db or Re Generate.
-		// todo : send captcha
-		$randNo = $captcha->captcha;
-
-
 		$captcha->disabled_at = $expired;
-
 		$captcha->save();
 
-		$this->sendSms($passport, $randNo);
-		// 超出指定时间的验证码需要删除
-		// todo 事件
-		return true;
+
+		if ($sendType === PamCaptcha::TYPE_MOBILE) {
+			$this->sendSms($passport, $captcha->captcha);
+			return true;
+		}
+		else {
+			$this->sendMail($passport, $captcha->captcha);
+			return true;
+		}
 	}
+
 
 	/**
 	 * 取得AcsClient
 	 * @return DefaultAcsClient
 	 */
-	public static function getAcsClient()
+	public function getAcsClient()
 	{
 		//产品名称:云通信流量服务API产品,开发者无需替换
 		$product = "Dysmsapi";
@@ -107,6 +106,8 @@ class Util
 		// 服务结点
 		$endPointName = "cn-hangzhou";
 
+
+		$region = $this->getSetting()->get('extension::sms.region');
 
 		if (static::$acsClient == null) {
 
@@ -127,7 +128,7 @@ class Util
 	 * @param $randNo
 	 * @return mixed|\SimpleXMLElement
 	 */
-	public static function sendSms($phoneNumbers, $randNo)
+	private function sendSms($phoneNumbers, $randNo)
 	{
 
 		// 初始化SendSmsRequest实例用于设置发送短信的参数
@@ -187,34 +188,14 @@ class Util
 
 	}
 
+
 	/**
-	 * @return mixed|\SimpleXMLElement
+	 * @param $passport
+	 * @param $rand_number
 	 */
-	public static function querySendDetails()
+	private function sendMail($passport, $rand_number)
 	{
 
-		// 初始化QuerySendDetailsRequest实例用于设置短信查询的参数
-		$request = new QuerySendDetailsRequest();
-
-		// 必填，短信接收号码
-		$request->setPhoneNumber("12345678901");
-
-		// 必填，短信发送日期，格式Ymd，支持近30天记录查询
-		$request->setSendDate("20170718");
-
-		// 必填，分页大小
-		$request->setPageSize(10);
-
-		// 必填，当前页码
-		$request->setCurrentPage(1);
-
-		// 选填，短信发送流水号
-		$request->setBizId("yourBizId");
-
-		// 发起访问请求
-		$acsResponse = static::getAcsClient()->getAcsResponse($request);
-
-		return $acsResponse;
 	}
 
 

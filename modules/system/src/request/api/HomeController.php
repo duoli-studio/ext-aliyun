@@ -22,11 +22,13 @@ class HomeController extends Controller
 	public function page($path)
 	{
 		if (is_post()) {
+			/*
 			$this->validate($this->getRequest(), [
 				'input.value' => Rule::required(),
 			], [
 				'input.value.required' => '单行输入框必须填写',
 			]);
+			*/
 			$inputs = json_decode(\Input::getContent(), true);
 			foreach ($inputs as $input) {
 				$this->getSetting()->set($input['key'], $input['value'] ?? $input['default']);

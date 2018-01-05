@@ -146,6 +146,25 @@ extension:
                     key: site.copyright
                     required: false
                     type: input
+        sms:
+            default: false
+            show: true
+            submit: api/system/page/setting-extension
+            title: 发送短信配置
+            fields:
+                region:
+                    default: ' '
+                    label: 发送区域
+                    key: extension::sms.region
+                    required: false
+                    type: input
+                register_template:
+                    default: ' '
+                    label: 注册模版代码
+                    key: extension::sms.register_template
+                    required: false
+                    type: input
+                    description: '可用变量名称[code:验证码]'
 sample:
     initialization:
         name: 示例
