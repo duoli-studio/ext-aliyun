@@ -36,6 +36,8 @@ return [
 				 -------------------------------------------- */
 				\Order\Game\GraphQL\Mutation\ServerMutation::class,
 				\Order\Game\GraphQL\Mutation\ServerDeleteMutation::class,
+				\User\Pam\GraphQL\Mutation\PwdRegisterMutation::class,
+				\User\Pam\GraphQL\Mutation\CaptchaRegisterMutation::class
 			],
 			'query'    => [
 				\System\Setting\Graphql\Queries\SettingQuery::class,
@@ -48,6 +50,8 @@ return [
 				 -------------------------------------------- */
 				\System\Pam\Graphql\Queries\RolesQuery::class,
 				\System\Pam\Graphql\Queries\RoleQuery::class,
+
+
 
 				\System\Pam\Graphql\Queries\BindChangeQuery::class,
 				\User\Pam\Graphql\Queries\ChangeQuery::class,
@@ -85,9 +89,13 @@ return [
 
 		\User\Pam\GraphQL\Types\ChangeType::class,
 
+
 		/* util
 		 -------------------------------------------- */
 		// send captcha
 		\Util\Util\GraphQL\Types\SendCaptchaTypeType::class,
+		\User\Pam\GraphQL\Types\PwdRegisterType::class,
+		\User\Pam\GraphQL\Types\CaptchaRegisterType::class
+
 	],
 ];
