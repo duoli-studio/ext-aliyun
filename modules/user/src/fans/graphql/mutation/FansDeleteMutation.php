@@ -50,8 +50,8 @@ class FansDeleteMutation extends Mutation
 		// todo
 		$account_id     = $args['account_id'] ?? 0;
 		$fans = app('act.fans');
-		$pam = $this->getJwtWebGuard()->user();
-		if (!$fans->canceled($account_id,$pam)) {
+		$fans->setPam($this->getJwtWebGuard()->user());
+		if (!$fans->canceled($account_id)) {
 			return $fans->getError()->toArray();
 		}
 		else {
