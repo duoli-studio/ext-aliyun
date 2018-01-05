@@ -18,6 +18,12 @@ class ServerDeleteMutation extends Mutation
 		$this->attributes['description'] = trans('order::server.graphql.delete_desc');
 	}
 
+	public function authorize($root, $args)
+	{
+		// true, if logged in
+		return !$this->getJwtBeGuard()->guest();
+	}
+
 	/**
 	 * @return ObjectType
 	 * @throws TypeNotFound
@@ -50,6 +56,7 @@ class ServerDeleteMutation extends Mutation
 		// todo
 		$id     = $args['id'] ?? 0;
 		$server = app('act.server');
+		$server->setPam($this->getJwtBeGuard()->user());
 		if (!$server->delete($id)) {
 			return $server->getError()->toArray();
 		}

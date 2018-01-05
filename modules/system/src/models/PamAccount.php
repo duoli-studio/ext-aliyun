@@ -74,6 +74,7 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 
 	protected $fillable = [
 		'mobile',
+		'email',
 		'username',
 		'password',
 		'type',

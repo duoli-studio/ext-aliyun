@@ -13,6 +13,8 @@ return [
 			'mutation' => [
 				\User\Fans\GraphQL\Mutation\FansMutation::class,
 				\User\Fans\GraphQL\Mutation\FansDeleteMutation::class,
+
+				\User\Pam\GraphQL\Mutation\UnbindMutation::class,
 			],
 			'query'    => [
 				\System\Setting\Graphql\Queries\SettingsQuery::class,
