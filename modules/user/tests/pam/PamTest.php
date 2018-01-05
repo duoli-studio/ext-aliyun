@@ -58,11 +58,11 @@ class PamTest extends TestCase
 		};
 	}
 
-	public function testValidate()
+	public function testCaptchaLogin()
 	{
 		/** @var Pam $pam */
 		$pam = app('act.pam');
-		if ($pam->validateCaptcha(18654958691, 487853)) {
+		if ($pam->captchaLogin(18864838035)) {
 			dd($pam->getSuccess());
 		}
 		else {
@@ -70,11 +70,11 @@ class PamTest extends TestCase
 		};
 	}
 
-	public function testSendValidate()
+	public function testValidate()
 	{
 		/** @var Pam $pam */
 		$pam = app('act.pam');
-		if ($pam->captchaRegister(18864838035)) {
+		if ($pam->validateCaptcha(18654958691, 487853)) {
 			dd($pam->getSuccess());
 		}
 		else {

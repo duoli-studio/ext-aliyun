@@ -52,7 +52,7 @@ class Pam
 	 * @param $passport
 	 * @return bool
 	 */
-	public function captchaRegister($passport)
+	public function captchaLogin($passport)
 	{
 		//验证手机号格式
 		$passport = strtolower($passport);
@@ -74,77 +74,12 @@ class Pam
 		}
 
 		//发送验证码，保证手机号有效性
-		$util   = new Util();
-		$result = $util->sendCaptcha($initDb[$type]);
+		$result = (new Util())->sendCaptcha($initDb[$type]);
+
 		if (!$result) {
 			return $this->setError('验证码发送失败');
 		}
 		return true;
-	}
-
-	/**
-	 * 密码登录
-	 * @param $passport
-	 * @param $password
-	 * @return bool
-	 */
-	public function loginPwd($passport, $password)
-	{
-		$passport = strtolower($passport);
-		$type     = $this->passportType($passport);
-		$initDb   = [
-			$type      => strval($passport),
-			'password' => strval($password),
-		];
-		$rule     = [
-			$type      => [
-				Rule::required(),
-				Rule::between(6, 18),
-				Rule::string(),
-			],
-			'password' => [
-				Rule::required(),
-				Rule::between(6, 18),
-			],
-		];
-		if ($type == PamAccount::REG_TYPE_MOBILE) {
-			$rule[$type][] = Rule::mobile();
-		}
-		elseif ($type == PamAccount::REG_TYPE_EMAIL) {
-			$rule[$type][] = Rule::email();
-		}
-		else {
-			if (preg_match('/\s+/', $passport)) {
-				return $this->setError('用户名中不得包含空格');
-			}
-			$rule[$type][] = 'regex:/[a-zA-Z\x{4e00}-\x{9fa5}][a-zA-Z0-9_\x{4e00}-\x{9fa5}]/u';
-		}
-		// 验证数据
-		$validator = \Validator::make($initDb, $rule);
-		if ($validator->fails()) {
-			return $this->setError($validator->messages());
-		}
-
-		$initType = $initDb[$type];
-		//判断此用户是否注册过
-		$pam = PamAccount::where(function ($query) use ($initType) {
-			$query->where('username', $initType)
-				->orwhere('email', $initType)
-				->orwhere('mobile', $initType);
-		})->get();
-
-		if ($pam->isEmpty()) {
-			return $this->setError('无此用户，请先去注册');
-		}
-		//如果没注册过　去请求　captchaRegister  这个接口　然后请求　register 接口　去设置基本信息
-		foreach ($pam as $p) {
-			$result = $this->checkPassword($p, $initDb['password']);
-		}
-		if (!$result) {
-			return $this->setError('密码或用户名不对');
-		}
-		return true;
-
 	}
 
 	/**
@@ -175,12 +110,11 @@ class Pam
 
 		//是否在register表中设置密码等信息 没有的话 访问 register接口去设置
 		if ((PamAccount::where('mobile', $initDb['passport'])->get())->isEmpty()) {
-			return $this->setError('欢迎来到猎象电竞！请设置密码、昵称、性别 ^_^');
+			$this->register($initDb['passport']);
 		}
 		//登陆成功
 		return true;
 	}
-
 
 	/**
 	 * 用户注册
@@ -238,13 +172,11 @@ class Pam
 			];
 		}
 
-
 		// 验证数据
 		$validator = \Validator::make($initDb, $rule);
 		if ($validator->fails()) {
 			return $this->setError($validator->messages());
 		}
-
 
 		// 服务器处理
 		/** @var PamRole $role */
@@ -274,7 +206,7 @@ class Pam
 
 		try {
 			// 处理数据库
-			return \DB::transaction(function () use ($initDb, $role, $password, $hasAccountName, $prefix) {
+			return \DB::transaction(function() use ($initDb, $role, $password, $hasAccountName, $prefix) {
 
 				/** @var PamAccount $pam pam */
 				$pam = PamAccount::create($initDb);
@@ -303,6 +235,70 @@ class Pam
 		} catch (\Exception $e) {
 			return $this->setError($e->getMessage());
 		}
+	}
+
+	/**
+	 * 密码登录
+	 * @param $passport
+	 * @param $password
+	 * @return bool
+	 */
+	public function loginPwd($passport, $password)
+	{
+		$passport = strtolower($passport);
+		$type     = $this->passportType($passport);
+		$initDb   = [
+			$type      => strval($passport),
+			'password' => strval($password),
+		];
+		$rule     = [
+			$type      => [
+				Rule::required(),
+				Rule::between(6, 18),
+				Rule::string(),
+			],
+			'password' => [
+				Rule::required(),
+				Rule::between(6, 18),
+			],
+		];
+		if ($type == PamAccount::REG_TYPE_MOBILE) {
+			$rule[$type][] = Rule::mobile();
+		}
+		elseif ($type == PamAccount::REG_TYPE_EMAIL) {
+			$rule[$type][] = Rule::email();
+		}
+		else {
+			if (preg_match('/\s+/', $passport)) {
+				return $this->setError('用户名中不得包含空格');
+			}
+			$rule[$type][] = 'regex:/[a-zA-Z\x{4e00}-\x{9fa5}][a-zA-Z0-9_\x{4e00}-\x{9fa5}]/u';
+		}
+		// 验证数据
+		$validator = \Validator::make($initDb, $rule);
+		if ($validator->fails()) {
+			return $this->setError($validator->messages());
+		}
+
+		$initType = $initDb[$type];
+		//判断此用户是否注册过
+		$pam = PamAccount::where(function($query) use ($initType) {
+			$query->where('username', $initType)
+				->orwhere('email', $initType)
+				->orwhere('mobile', $initType);
+		})->get();
+
+		if ($pam->isEmpty()) {
+			return $this->setError('无此用户，请先去注册');
+		}
+		//如果没注册过　去请求　captchaRegister  这个接口　然后请求　register 接口　去设置基本信息
+		foreach ($pam as $p) {
+			$result = $this->checkPassword($p, $initDb['password']);
+		}
+		if (!$result) {
+			return $this->setError('密码或用户名不对');
+		}
+		return true;
 	}
 
 
@@ -385,7 +381,7 @@ class Pam
 
 		try {
 			// 处理数据库
-			return \DB::transaction(function () use ($initDb, $role, $hasAccountName, $prefix, $nickname, $sex) {
+			return \DB::transaction(function() use ($initDb, $role, $hasAccountName, $prefix, $nickname, $sex) {
 				/** @var PamAccount $pam pam account */
 				$pam = PamAccount::create($initDb);
 
@@ -522,7 +518,7 @@ class Pam
 		];
 		$initType = $initDb[$type];
 		//判断此用户是否注册过
-		$result = PamAccount::where(function ($query) use ($initType) {
+		$result = PamAccount::where(function($query) use ($initType) {
 			$query->where('username', $initType)
 				->orwhere('email', $initType)
 				->orwhere('mobile', $initType);
