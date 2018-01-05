@@ -27,6 +27,9 @@ return [
 				\System\Setting\Graphql\Mutation\SettingMutation::class,
 				\System\Pam\GraphQL\Mutation\RoleMutation::class,
 
+				\System\Pam\GraphQL\Mutation\BindChangeMutation::class,
+				\User\Pam\GraphQL\Mutation\ChangeMutation::class,
+
 				/* server
 				 -------------------------------------------- */
 				\Order\Game\GraphQL\Mutation\ServerMutation::class,
@@ -43,6 +46,9 @@ return [
 				 -------------------------------------------- */
 				\System\Pam\Graphql\Queries\RolesQuery::class,
 				\System\Pam\Graphql\Queries\RoleQuery::class,
+
+				\System\Pam\Graphql\Queries\BindChangeQuery::class,
+				\User\Pam\Graphql\Queries\ChangeQuery::class,
 			],
 		],
 	],
@@ -67,10 +73,14 @@ return [
 		\System\Pam\GraphQL\Types\RoleType::class,
 		\System\Pam\GraphQL\Types\RoleGuardType::class,
 
+		\System\Pam\GraphQL\Types\BindChangeType::class,
+
 		/* server
 		 -------------------------------------------- */
 		\Order\Game\GraphQL\Types\ServerType::class,
 
 		\User\Fans\GraphQL\Types\FansType::class,
+
+		\User\Pam\GraphQL\Types\ChangeType::class,
 	],
 ];

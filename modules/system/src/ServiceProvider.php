@@ -13,6 +13,7 @@ use System\Console\InstallCommand;
 use System\Events\ListenerServiceProvider;
 use System\Extension\ExtensionServiceProvider;
 use System\Module\ModuleServiceProvider;
+use System\Pam\BindChangeServiceProvider;
 use System\Pam\Commands\UserCommand;
 use System\Pam\PamServiceProvider;
 use System\Permission\Commands\PermissionCommand;
@@ -72,6 +73,7 @@ class ServiceProvider extends PoppyServiceProvider
 		$this->app->register(ListenerServiceProvider::class);
 		$this->app->register(PermissionServiceProvider::class);
 		$this->app->register(PamServiceProvider::class);
+		$this->app->register(BindChangeServiceProvider::class);
 
 		$this->registerSchedule();
 		$this->registerConsole();

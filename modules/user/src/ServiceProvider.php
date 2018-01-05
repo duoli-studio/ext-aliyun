@@ -2,10 +2,12 @@
 
 
 use Poppy\Framework\Exceptions\ModuleNotFoundException;
-use User\Fans\FansServiceProvider;
-use User\Pam\PamServiceProvider;
-use User\Request\RouteServiceProvider;
 use Poppy\Framework\Support\PoppyServiceProvider;
+use User\Fans\FansServiceProvider;
+use User\Pam\ChangeServiceProvider;
+use User\Pam\PamServiceProvider;
+use User\Pam\PayServiceProvider;
+use User\Request\RouteServiceProvider;
 
 # use Sour\Lemon\Support\Resp;
 # use Sour\System\Command\Rbac as LemonRbac;
@@ -52,6 +54,8 @@ class ServiceProvider extends PoppyServiceProvider
 		$this->app->register(RouteServiceProvider::class);
 		$this->app->register(PamServiceProvider::class);
 		$this->app->register(FansServiceProvider::class);
+		$this->app->register(ChangeServiceProvider::class);
+		$this->app->register(PayServiceProvider::class);
 
 		$this->registerCommand();
 	}
