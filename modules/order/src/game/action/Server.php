@@ -12,17 +12,19 @@ class Server
 	use SystemTrait;
 
 	/**
-	 * @var
+	 * @var GameServer
 	 */
-	protected $item;
+	protected $server;
 
-	protected $id;
+	/**
+	 * @var int GameServer id
+	 */
+	protected $serverId;
 
 	/**
 	 * @var string
 	 */
 	protected $gameServerTable;
-
 
 	public function __construct()
 	{
@@ -30,21 +32,26 @@ class Server
 	}
 
 	/**
-	 *创建需求
+	 * 创建需求
 	 * @param array    $data
 	 * @param null|int $id
 	 * @return bool
 	 */
 	public function establish($data, $id = null)
 	{
-		if (!$this->checkPermission()){
+		if (!$this->checkPermission()) {
+			return false;
+		}
+		//判断parent_id
+		if (!$this->judgeParent((int)$id, (int)$data['parent_id'])) {
+			\Log::debug($this->getError());
 			return false;
 		}
 		$initDb    = [
 			'title'      => strval(array_get($data, 'title', '')),
-			'parent_id'  => strval(array_get($data, 'parent_id', '')),
-			'is_enable'  => strval(array_get($data, 'is_enable', '0')),
-			'is_default' => strval(array_get($data, 'is_default', '0')),
+			'parent_id'  => intval(array_get($data, 'parent_id', 0)),
+			'is_enable'  => intval(array_get($data, 'is_enable', 0)),
+			'is_default' => intval(array_get($data, 'is_default', 0)),
 		];
 		$validator = \Validator::make($initDb, [
 			'title'      => [
@@ -78,49 +85,36 @@ class Server
 		}
 
 		// init
-		if ($id && !$this->init($id)) {
+		if ($id && !$this->initServer($id)) {
 			return false;
 		}
 
 		if ($id) {
-			$this->item->update($initDb);
+			$this->server->update($initDb);
+			//更新区服编码 与 顶级id
+			$Db            = GameServer::find($id);
+			$code          = $this->genCode($id);
+			$top_parent_id = $this->genTopParentId($id);
+			if ($code && $top_parent_id) {
+				$Db->code          = $code;
+				$Db->top_parent_id = $top_parent_id;
+			}
+			else {
+				return false;
+			}
+			$Db->save();
 			return true;
 		}
 		else {
 			//创建数据
-			$this->item = GameServer::create($initDb);
+			$this->server = GameServer::create($initDb);
 			//生成区服编码
-			$this->item->code = $this->genCode($this->item->id);
+			$this->server->code = $this->genCode($this->server->id);
+			//生成顶级ID
+			$this->server->top_parent_id = $this->genTopParentId($this->server->id);
 			//生成当前id的子元素
-			$this->item->children = $this->item->id;
-			//生成顶层ID, 父元素
-			$allPid = (array) $this->parentId($this->item->id, $ids);
-			if (empty($allPid)) {
-				$this->item->top_parent_id = 0;
-			}
-			elseif (count($allPid) == 1) {
-				$this->item->top_parent_id = $allPid['0'];
-			}
-			else {
-				$this->item->top_parent_id = $allPid['1'];
-				$this->item->save();
-				//生成所有子元素
-
-				$SecondDb   = GameServer::find($allPid['0']);
-				$parent_ids = GameServer::where('parent_id', $this->item->parent_id)->pluck('id')->toArray();
-				array_unshift($parent_ids, $SecondDb->id);
-				$SecondDb->children = implode(',', $parent_ids);
-
-				$FirstDb        = GameServer::find($allPid['1']);
-				$top_parent_ids = GameServer::where('top_parent_id', $this->item->top_parent_id)->pluck('id')->toArray();
-				array_unshift($top_parent_ids, $FirstDb->id);
-				$FirstDb->children = implode(',', $top_parent_ids);
-
-				$SecondDb->save();
-				$FirstDb->save();
-
-			}
-			$this->item->save();
+			$this->server->children = $this->server->id;
+			$this->server->save();
 		}
 		return true;
 	}
@@ -128,15 +122,75 @@ class Server
 	/**
 	 * 删除数据
 	 * @param int $id
-	 * @return bool
+	 * @return bool|null
+	 * @throws \Exception
 	 */
 	public function delete($id)
 	{
-		if ($id && !$this->init($id)) {
+		if ($id && !$this->initServer($id)) {
 			return false;
 		}
 
-		return $this->item->delete();
+		return $this->server->delete();
+	}
+
+	/**
+	 * 初始化id
+	 * @param int $id
+	 * @return bool
+	 */
+	private function initServer($id)
+	{
+		try {
+			$this->server   = GameServer::findOrFail($id);
+			$this->serverId = $this->server->id;
+			return true;
+		} catch (\Exception $e) {
+			return $this->setError('条目不存在, 不得操作');
+		}
+	}
+
+	/**
+	 * 获取传入的 parent_id 的级别
+	 * @param int   $parentId
+	 * @param array $ids
+	 * @return array
+	 */
+	private function parent($parentId, &$ids)
+	{
+		if ($parentId) {
+			$ids[] = $parentId;
+			return $this->parentId($parentId, $ids);
+		}
+		else {
+			return $ids;
+		}
+	}
+
+	/**
+	 * 判断传入的 parent_id 级别
+	 * @param int $id
+	 * @param int $parentId
+	 * @return bool
+	 */
+	private function judgeParent($id, $parentId)
+	{
+		$ids = $this->parent($parentId, $ids);
+		if ($ids){
+			if (!empty($id)) {
+
+				array_unshift($ids, $id);
+				if (count($ids) > 3) {
+					return $this->setError('级别错误');
+				}
+			}
+			else{
+				if (count($ids) > 2) {
+					return $this->setError('级别错误');
+				}
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -165,24 +219,13 @@ class Server
 		return sprintf("%'.04d%'.04d%'.04d", $formatId[0], $formatId[1], $formatId[2]);
 	}
 
-	private function init($id)
-	{
-		try {
-			$this->item = GameServer::findOrFail($id);
-			$this->id   = $this->item->id;
-			return true;
-		} catch (\Exception $e) {
-			return $this->setError('条目不存在, 不得操作');
-		}
-	}
-
 	/**
 	 * 递归查找所有父ID
 	 * @param int   $id
 	 * @param array $ids
 	 * @return array
 	 */
-	public function parentId($id, &$ids)
+	private function parentId($id, &$ids)
 	{
 		$parentId = GameServer::where('id', $id)->value('parent_id');
 		if ($parentId) {
@@ -194,4 +237,56 @@ class Server
 		}
 	}
 
+	/**
+	 * 生成顶级id
+	 * @param int $id
+	 * @return bool
+	 */
+	private function genTopParentId($id)
+	{
+		$allPid = (array) $this->parentId($id, $ids);
+		array_unshift($allPid, $id);
+		$ids = array_reverse($allPid);
+		$num = count($ids);
+		if ($num > 3) {
+			return $this->setError('级别错误');
+		}
+		switch ($num) {
+			case 1:
+			case 2:
+			case 3:
+				return $ids['0'];
+				break;
+		}
+	}
+
+	/*	public function genChildren($id)
+		{
+			$allPid = (array) $this->parentId($id, $ids);
+			switch ($allPid) {
+				case !empty($allPid['0']):
+					$SecondDb   = GameServer::find($allPid['0']);
+					$parent_ids = GameServer::where('parent_id', $this->server->parent_id)->pluck('id')->toArray();
+					array_unshift($parent_ids, $SecondDb->id);
+					$SecondDb->children = implode(',', $parent_ids);
+					$SecondDb->save();
+				case $allPid['1']:
+					$SecondDb   = GameServer::find($allPid['0']);
+					$parent_ids = GameServer::where('parent_id', $this->server->parent_id)->pluck('id')->toArray();
+					array_unshift($parent_ids, $SecondDb->id);
+					$SecondDb->children = implode(',', $parent_ids);
+
+					$FirstDb        = GameServer::find($allPid['1']);
+					$top_parent_ids = GameServer::where('top_parent_id', $this->server->top_parent_id)->pluck('id')->toArray();
+					// array_unshift($top_parent_ids, $FirstDb->id);
+					$FirstDb->children = implode(',', $top_parent_ids);
+
+					$SecondDb->save();
+					$FirstDb->save();
+				default:
+					$this->server->children = $this->server->id;
+					$this->server->save();
+					break;
+			}
+		}*/
 }

@@ -50,6 +50,7 @@ class ServerDeleteMutation extends Mutation
 	 * @param $root
 	 * @param $args
 	 * @return array
+	 * @throws \Exception
 	 */
 	public function resolve($root, $args)
 	{

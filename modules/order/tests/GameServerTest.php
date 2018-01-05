@@ -13,7 +13,7 @@ class GameServerTest extends TestCase
 	{
 		$game = app('act.server');
 		$item = $game->establish([
-			'title'     => '测试',
+			'title'     => '英雄',
 			'parent_id' => '0',
 		]);
 		dd($game->getError());

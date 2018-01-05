@@ -5,7 +5,7 @@
  * App\Models\UserFans
  *
  * @property int $account_id 被关注者id
- * @property int $fans_id    粉丝id
+ * @property int $fans_id    粉丝id(操作者id)
  */
 class UserFans extends \Eloquent
 {

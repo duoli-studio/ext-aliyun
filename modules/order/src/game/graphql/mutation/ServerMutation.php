@@ -2,6 +2,7 @@
 
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
+use Order\Game\Action\Server;
 use Poppy\Framework\GraphQL\Exception\TypeNotFound;
 use Poppy\Framework\GraphQL\Support\Mutation;
 use System\Classes\Traits\SystemTrait;
@@ -70,6 +71,7 @@ class ServerMutation extends Mutation
 	public function resolve($root, $args)
 	{
 		$id     = $args['id'] ?? 0;
+		/** @var Server $server */
 		$server = app('act.server');
 		$server->setPam($this->getJwtBeGuard()->user());
 		if (!$server->establish($args, $id)) {
