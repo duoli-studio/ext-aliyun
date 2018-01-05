@@ -21,7 +21,6 @@ return [
 
 				\User\Fans\Graphql\Queries\ConcernQuery::class,
 				\Util\Util\GraphQL\Queries\SendCaptchaQuery::class,
-				\User\Fans\Graphql\Queries\FansQuery::class,
 			],
 		],
 		'backend' => [
@@ -81,7 +80,6 @@ return [
 		 -------------------------------------------- */
 		\Order\Game\GraphQL\Types\ServerType::class,
 
-		\User\Fans\GraphQL\Types\FansType::class,
 
 		\User\Pam\GraphQL\Types\ChangeType::class,
 
@@ -89,5 +87,11 @@ return [
 		 -------------------------------------------- */
 		// send captcha
 		\Util\Util\GraphQL\Types\SendCaptchaTypeType::class,
+
+
+		/* user
+		 -------------------------------------------- */
+		// concern
+		\User\Fans\GraphQL\Types\ConcernType::class,
 	],
 ];

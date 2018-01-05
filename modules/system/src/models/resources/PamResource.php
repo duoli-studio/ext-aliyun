@@ -2,7 +2,6 @@
 
 
 use Illuminate\Http\Resources\Json\Resource;
-use System\Models\PamAccount;
 
 
 class PamResource extends Resource
