@@ -8,7 +8,7 @@ use System\Classes\Traits\SystemTrait;
 use User\Pam\Action\Pam;
 use User\Pam\Action\User;
 
-class PwdRegisterMutation extends Mutation
+class PasswordLoginMutation extends Mutation
 {
 	use SystemTrait;
 
@@ -16,15 +16,10 @@ class PwdRegisterMutation extends Mutation
 	public function __construct($attributes = [])
 	{
 		parent::__construct($attributes);
-		$this->attributes['name']        = 'pwd_register';
+		$this->attributes['name']        = 'password_login';
 		$this->attributes['description'] = trans('user::pwd_register.graphql.mutation_desc');
 	}
 
-	public function authorize($root, $args)
-	{
-		// true, if logged in
-		return !$this->getJwtBeGuard()->guest();
-	}
 
 	/**
 	 * @return ObjectType
@@ -61,11 +56,13 @@ class PwdRegisterMutation extends Mutation
 	{
 		$passport = $args['passport'];
 		$password = $args['password'];
-		/** @var Pam $pam**/
-		$pam     = app('act.pam');
-		if (!$pam->loginPwd($passport,$password)) {
+		/** @var Pam $pam * */
+		$pam = app('act.pam');
+		// todo 返回 token 的
+		if (!$pam->loginPwd($passport, $password)) {
 			return $pam->getError()->toArray();
-		} else {
+		}
+		else {
 			return $pam->getSuccess()->toArray();
 		}
 	}

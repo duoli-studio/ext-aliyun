@@ -56,7 +56,7 @@ class PamTest extends TestCase
 	{
 		/** @var Pam $pam */
 		$pam = app('act.pam');
-		if ($pam->validateCaptcha(18654958691, '042512')) {
+		if ($pam->captchaLogin(18654958691, '042512')) {
 			dd($pam->getSuccess());
 		}
 		else {

@@ -12,7 +12,6 @@ use User\Models\UserProfile;
 use User\Pam\Events\LoginFailed;
 use User\Pam\Events\LoginSuccess;
 use User\Pam\Events\PamRegistered;
-use Util\Models\PamCaptcha;
 use Util\Util\Action\Util;
 
 class Pam
@@ -47,55 +46,22 @@ class Pam
 		$this->bindTable   = (new PamBind())->getTable();
 	}
 
-	/**
-	 * 手机验证码 注册/登录
-	 * @param $passport
-	 * @return bool
-	 */
-	public function captchaLogin($passport)
-	{
-		//验证手机号格式
-		$passport = strtolower($passport);
-		$type     = $this->passportType($passport);
-		$initDb   = [
-			$type => strval($passport),
-		];
-		$rule     = [
-			$type => [
-				Rule::required(),
-				Rule::mobile(),
-			],
-		];
-
-		// 验证数据
-		$validator = \Validator::make($initDb, $rule);
-		if ($validator->fails()) {
-			return $this->setError($validator->messages());
-		}
-
-		//发送验证码，保证手机号有效性
-		$result = (new Util())->sendCaptcha($initDb[$type]);
-
-		if (!$result) {
-			return $this->setError('验证码发送失败');
-		}
-		return true;
-	}
 
 	/**
 	 * 验证验证码
 	 * @param $passport
 	 * @param $captcha
 	 * @return bool
+	 * @throws \Throwable
 	 */
-	public function validateCaptcha($passport, $captcha)
+	public function captchaLogin($passport, $captcha)
 	{
-		$initDb    = [
+		$initDb = [
 			'passport' => $passport,
 			'captcha'  => $captcha,
 		];
 
-		$rule      = [
+		$rule = [
 			'captcha' => Rule::required(),
 		];
 
@@ -104,17 +70,28 @@ class Pam
 			return $this->setError($validator->messages());
 		}
 
-		$result = PamCaptcha::where('passport', $passport)->value('captcha');
-		if ($result != $initDb['captcha']) {
-			return $this->setError('验证码不匹配');
+		$actUtil = app('act.util');
+		if (!$actUtil->validCaptcha($passport, $captcha)) {
+			return $this->setError($actUtil->getError()->getMessage());
 		}
 
-		//是否在register表中设置密码等信息 没有的话 访问 register接口去设置
-		if ((PamAccount::where('mobile', $initDb['passport'])->get())->isEmpty()) {
-			$this->register($initDb['passport']);
+		$passportType = $this->passportType($passport);
+
+		// 判定账号是否存在
+		if (!PamAccount::where($passportType, $initDb['passport'])->exists()) {
+			if ($this->register($initDb['passport'])) {
+				$actUtil->deleteCaptcha($passport, $captcha);
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
-		//登陆成功
-		return true;
+		else {
+			// 登录
+			$this->pam = PamAccount::where($passportType, $passport)->first();
+			return true;
+		}
 	}
 
 	/**
@@ -207,7 +184,7 @@ class Pam
 
 		try {
 			// 处理数据库
-			return \DB::transaction(function() use ($initDb, $role, $password, $hasAccountName, $prefix) {
+			return \DB::transaction(function () use ($initDb, $role, $password, $hasAccountName, $prefix) {
 
 				/** @var PamAccount $pam pam */
 				$pam = PamAccount::create($initDb);
@@ -283,7 +260,7 @@ class Pam
 
 		$initType = $initDb[$type];
 		//判断此用户是否注册过
-		$pam = PamAccount::where(function($query) use ($initType) {
+		$pam = PamAccount::where(function ($query) use ($initType) {
 			$query->where('username', $initType)
 				->orwhere('email', $initType)
 				->orwhere('mobile', $initType);
@@ -382,7 +359,7 @@ class Pam
 
 		try {
 			// 处理数据库
-			return \DB::transaction(function() use ($initDb, $role, $hasAccountName, $prefix, $nickname, $sex) {
+			return \DB::transaction(function () use ($initDb, $role, $hasAccountName, $prefix, $nickname, $sex) {
 				/** @var PamAccount $pam pam account */
 				$pam = PamAccount::create($initDb);
 
@@ -473,7 +450,8 @@ class Pam
 
 	/**
 	 * 绑定qq wx　第三方登录
-	 * @param $data
+	 * @param $type
+	 * @return bool
 	 */
 	public function bind($type)
 	{
@@ -508,6 +486,7 @@ class Pam
 	/**
 	 * 找回密码->发送验证码
 	 * @param $passport
+	 * @return bool
 	 */
 	public function RecoverPassword($passport)
 	{
@@ -519,7 +498,7 @@ class Pam
 		];
 		$initType = $initDb[$type];
 		//判断此用户是否注册过
-		$result = PamAccount::where(function($query) use ($initType) {
+		$result = PamAccount::where(function ($query) use ($initType) {
 			$query->where('username', $initType)
 				->orwhere('email', $initType)
 				->orwhere('mobile', $initType);

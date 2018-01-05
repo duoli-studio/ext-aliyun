@@ -7,7 +7,6 @@ use Poppy\Extension\Aliyun\Core\Profile\DefaultProfile;
 use Poppy\Extension\Aliyun\Dysms\Sms\Request\V20170525\SendSmsRequest;
 use Poppy\Framework\Helper\StrHelper;
 use Poppy\Framework\Helper\UtilHelper;
-use Slt\Models\UserProfile;
 use System\Classes\Traits\SystemTrait;
 use Util\Models\PamCaptcha;
 
@@ -32,10 +31,12 @@ class Util
 		if (UtilHelper::isEmail($passport)) {
 			$sendType   = PamCaptcha::TYPE_MAIL;
 			$expiredMin = $this->getSetting()->get('util::captcha.mail_expired_minute');
-		} elseif (UtilHelper::isMobile($passport)) {
+		}
+		elseif (UtilHelper::isMobile($passport)) {
 			$sendType   = PamCaptcha::TYPE_MOBILE;
 			$expiredMin = $this->getSetting()->get('util::captcha.sms_expired_minute');
-		} else {
+		}
+		else {
 			return $this->setError(trans('util::act.util.send_captcha_passport_format_error'));
 		}
 
@@ -54,7 +55,8 @@ class Util
 			$captcha->num     = 1;
 			$captcha->type    = $sendType;
 			$captcha->captcha = StrHelper::randomCustom(6, '0123456789');
-		} else {
+		}
+		else {
 			$captcha->num  += 1;
 			$captcha->type = $sendType;
 		}
@@ -64,43 +66,82 @@ class Util
 		// todo:张年文  需要判定系统的操作类型
 		switch ($type) {
 			case PamCaptcha::CON_ORDER:
-				$data =[
-					'signName'     => $this->getSetting()->get('extension::sms.code_sign_name'),
-					'templateCode' => $this->getSetting()->get('extension::sms.order_template'),
-					'templateParam'=> [
+				$data = [
+					'signName'      => $this->getSetting()->get('extension::sms.code_sign_name'),
+					'templateCode'  => $this->getSetting()->get('extension::sms.order_template'),
+					'templateParam' => [
 						'code' => $captcha->captcha,
-					]
+					],
 				];
 				break;
 			case PamCaptcha::CON_FIND_PASSWORD:
-				$data =[
-					'signName'     => $this->getSetting()->get('extension::sms.code_sign_name'),
-					'templateCode' => $this->getSetting()->get('extension::sms.find_password_template'),
-					'templateParam'=> [
+				$data = [
+					'signName'      => $this->getSetting()->get('extension::sms.code_sign_name'),
+					'templateCode'  => $this->getSetting()->get('extension::sms.find_password_template'),
+					'templateParam' => [
 						'code' => $captcha->captcha,
-					]
+					],
 				];
 				break;
 			default :
-				$data =[
-					'signName'     => $this->getSetting()->get('extension::sms.code_sign_name'),
-					'templateCode' => $this->getSetting()->get('extension::sms.register_template'),
-					'templateParam'=> [
+				$data = [
+					'signName'      => $this->getSetting()->get('extension::sms.code_sign_name'),
+					'templateCode'  => $this->getSetting()->get('extension::sms.register_template'),
+					'templateParam' => [
 						'code' => $captcha->captcha,
-					]
+					],
 				];
 		}
 
 
 		if ($sendType === PamCaptcha::TYPE_MOBILE) {
-			$this->sendSms($passport,  $data);
+			$this->sendSms($passport, $data);
 			return true;
-		} else {
+		}
+		else {
 			$this->sendMail($passport, $data);
 			return true;
 		}
 	}
 
+
+	/**
+	 * 验证验证码
+	 * @param $passport
+	 * @param $captcha
+	 * @return bool
+	 */
+	public function validCaptcha($passport, $captcha)
+	{
+		$type = PamCaptcha::TYPE_MOBILE;
+		if (UtilHelper::isEmail($passport)) {
+			$type = PamCaptcha::TYPE_MAIL;
+		}
+		$Validate = PamCaptcha::where('disabled_at', '>', Carbon::now());
+		$exists   = $Validate->where('captcha', $captcha)
+			->where('passport', $passport)
+			->where('type', $type)
+			->exists();
+		if ($exists) {
+			return true;
+		}
+		else {
+			return $this->setError('验证码有误!');
+		}
+	}
+
+	/**
+	 * 删除验证代码
+	 * @param $passport
+	 * @param $code
+	 * @return bool|null
+	 * @throws \Exception
+	 */
+	public function deleteCaptcha($passport, $code)
+	{
+		return PamCaptcha::where('passport', $passport)
+			->where('captcha', $code)->delete();
+	}
 
 	/**
 	 * 取得AcsClient
@@ -144,7 +185,7 @@ class Util
 	 * @param $data
 	 * @return mixed|\SimpleXMLElement
 	 */
-	private function sendSms($phoneNumbers,$data)
+	private function sendSms($phoneNumbers, $data)
 	{
 
 		// 初始化SendSmsRequest实例用于设置发送短信的参数

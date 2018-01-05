@@ -3,12 +3,17 @@
 return [
 	'schema'                => 'default',
 	'schemas'               => [
+		// 无权限即可访问
 		'default' => [
-			'mutation' => [],
+			'mutation' => [
+				\User\Pam\GraphQL\Mutation\CaptchaLoginMutation::class,
+				\User\Pam\GraphQL\Mutation\PasswordLoginMutation::class,
+			],
 			'query'    => [
 				\Util\Util\GraphQL\Queries\SendCaptchaQuery::class,
 			],
 		],
+		// 前台用户权限
 		'web'     => [
 			'mutation' => [
 				\User\Fans\GraphQL\Mutation\FansMutation::class,
@@ -16,6 +21,8 @@ return [
 
 				\User\Pam\GraphQL\Mutation\UnbindMutation::class,
 				\User\Pam\GraphQL\Mutation\ProfileMutation::class,
+
+
 			],
 			'query'    => [
 				\System\Setting\Graphql\Queries\SettingsQuery::class,
@@ -24,6 +31,7 @@ return [
 				\Util\Util\GraphQL\Queries\SendCaptchaQuery::class,
 			],
 		],
+		// 后台权限
 		'backend' => [
 			'mutation' => [
 				\System\Setting\Graphql\Mutation\SettingMutation::class,
@@ -36,8 +44,7 @@ return [
 				 -------------------------------------------- */
 				\Order\Game\GraphQL\Mutation\ServerMutation::class,
 				\Order\Game\GraphQL\Mutation\ServerDeleteMutation::class,
-				\User\Pam\GraphQL\Mutation\PwdRegisterMutation::class,
-				\User\Pam\GraphQL\Mutation\CaptchaRegisterMutation::class,
+
 			],
 			'query'    => [
 				\System\Setting\Graphql\Queries\SettingQuery::class,

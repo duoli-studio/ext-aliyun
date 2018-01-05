@@ -33,6 +33,11 @@ class RespType extends AbstractType
 				'type'        => Type::nonNull(Type::string()),
 				'description' => trans('system::act.graphql.resp_message'),
 			],
+			'data'    => [
+				'type'        => Type::string(),
+				// todo 注释
+				'description' => trans('system::act.graphql.resp_message'),
+			],
 		];
 	}
 
