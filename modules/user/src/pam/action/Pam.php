@@ -1,21 +1,19 @@
 <?php namespace User\Pam\Action;
 
 use Carbon\Carbon;
-use Poppy\Framework\Helper\StrHelper;
 use Poppy\Framework\Helper\UtilHelper;
 use Poppy\Framework\Validation\Rule;
 use System\Classes\Traits\SystemTrait;
 use System\Models\PamAccount;
 use System\Models\PamRole;
 use System\Models\SysConfig;
+use User\Models\PamBind;
+use User\Models\UserProfile;
 use User\Pam\Events\LoginFailed;
 use User\Pam\Events\LoginSuccess;
 use User\Pam\Events\PamRegistered;
-use Util\Util\Action\Util;
-use User\Models\UserProfile;
-use User\Pam\Action\User;
 use Util\Models\PamCaptcha;
-use User\Models\PamBind;
+use Util\Util\Action\Util;
 
 class Pam
 {
@@ -129,7 +127,7 @@ class Pam
 
 		$initType = $initDb[$type];
 		//判断此用户是否注册过
-		$pam = PamAccount::where(function($query) use ($initType) {
+		$pam = PamAccount::where(function ($query) use ($initType) {
 			$query->where('username', $initType)
 				->orwhere('email', $initType)
 				->orwhere('mobile', $initType);
@@ -262,7 +260,7 @@ class Pam
 
 		try {
 			// 处理数据库
-			return \DB::transaction(function() use ($initDb, $role, $hasAccountName, $prefix, $nickname, $sex) {
+			return \DB::transaction(function () use ($initDb, $role, $hasAccountName, $prefix, $nickname, $sex) {
 				/** @var PamAccount $pam pam account */
 				$pam = PamAccount::create($initDb);
 
@@ -434,7 +432,7 @@ class Pam
 		];
 		$initType = $initDb[$type];
 		//判断此用户是否注册过
-		$result = PamAccount::where(function($query) use ($initType) {
+		$result = PamAccount::where(function ($query) use ($initType) {
 			$query->where('username', $initType)
 				->orwhere('email', $initType)
 				->orwhere('mobile', $initType);
@@ -499,12 +497,12 @@ class Pam
 	 * 生成账户密码
 	 * @param String $password     原始密码
 	 * @param String $reg_datetime 注册时间(datetime) 类型
-	 * @param String $randomKey    六位随机值
+	 * @param String $random_key   六位随机值
 	 * @return string
 	 */
-	private function cryptPassword($password, $reg_datetime, $randomKey)
+	private function cryptPassword($password, $reg_datetime, $random_key)
 	{
-		return md5(sha1($password . $reg_datetime) . $randomKey);
+		return md5(sha1($password . $reg_datetime) . $random_key);
 	}
 
 	/**
