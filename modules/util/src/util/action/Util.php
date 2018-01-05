@@ -78,7 +78,7 @@ class Util
 
 		$captcha->save();
 
-		$result = $this->sendSms($passport, $randNo);
+		$this->sendSms($passport, $randNo);
 		// 超出指定时间的验证码需要删除
 		// todo 事件
 		return true;
@@ -97,9 +97,9 @@ class Util
 		$domain = "dysmsapi.aliyuncs.com";
 
 		// TODO 此处需要替换成开发者自己的AK (https://ak-console.aliyun.com/)
-		$accessKeyId = "LTAIKnH2BaXd7eCY"; // AccessKeyId
+		$accessKeyId = "LTAILZQeoDjp9Use"; // AccessKeyId
 
-		$accessKeySecret = "H1QktgtR9M4gV7d2VL4iuFK5Ez12BW"; // AccessKeySecret
+		$accessKeySecret = "lzcEfdhKKfRKdVrh6zIreLXrXEcbXm"; // AccessKeySecret
 
 		// 暂时不支持多Region
 		$region = "cn-hangzhou";
@@ -123,24 +123,51 @@ class Util
 	}
 
 	/**
-	 * 发送验证码
-	 * @param $passport
+	 * @param $phoneNumbers
+	 * @param $randNo
 	 * @return mixed|\SimpleXMLElement
 	 */
-	public static function sendSms($passport, $randNo)
+	public static function sendSms($phoneNumbers, $randNo)
 	{
 
 		// 初始化SendSmsRequest实例用于设置发送短信的参数
 		$request = new SendSmsRequest();
+		// switch ($type) {
+		// 	case ($type = 'code'):
+		// 		$signName     = '验证码';
+		// 		$templateCode = 'SMS_119900021';
+		// 		$data         = [
+		// 			'code' => StrHelper::randomCustom(6, '0123456789'),
+		// 		];
+		// 		break;
+		// 	case ($type = 'order'):
+		// 		$signName     = '订单情况';
+		// 		$templateCode = 'SMS_119900021';
+		// 		$data         = [
+		// 			"name" => "哈哈哈",
+		// 			"time" => Carbon::now(),
+		// 		];
+		// 		break;
+		// 	default:
+		// 		$signName     = 'code';
+		// 		$templateCode = 'SMS_119900021';
+		// 		$data         = [
+		// 			'code' => StrHelper::randomCustom(6, '0123456789'),
+		// 		];
+		//
+		// }
+		$signName     = '验证码';
+		$templateCode = 'SMS_119900021';
+
 
 		// 必填，设置短信接收号码
-		$request->setPhoneNumbers("$passport");
+		$request->setPhoneNumbers($phoneNumbers);
 
 		// 必填，设置签名名称，应严格按"签名名称"填写，请参考: https://dysms.console.aliyun.com/dysms.htm#/develop/sign
-		$request->setSignName("顺轻柔");
+		$request->setSignName($signName);
 
 		// 必填，设置模板CODE，应严格按"模板CODE"填写, 请参考: https://dysms.console.aliyun.com/dysms.htm#/develop/template
-		$request->setTemplateCode("SMS_120120356");
+		$request->setTemplateCode($templateCode);
 
 		// 可选，设置模板参数, 假如模板中存在变量需要替换则为必填项
 		$request->setTemplateParam(json_encode([  // 短信模板中字段的值
@@ -161,8 +188,7 @@ class Util
 	}
 
 	/**
-	 * 短信发送记录查询
-	 * @return stdClass
+	 * @return mixed|\SimpleXMLElement
 	 */
 	public static function querySendDetails()
 	{
