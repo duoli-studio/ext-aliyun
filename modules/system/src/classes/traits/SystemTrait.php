@@ -49,6 +49,48 @@ trait SystemTrait
 		return true;
 	}
 
+
+	/**
+	 * check if is web user
+	 * @return bool
+	 */
+	public function isJwtUser()
+	{
+		$guard = $this->getJwtWebGuard();
+		if ($guard->guest()) {
+			return false;
+		}
+		else if ($guard->user()->type != PamAccount::TYPE_USER) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+
+	/**
+	 * check if is backend user
+	 * @return bool
+	 */
+	public function isJwtBackend()
+	{
+		$guard = $this->getJwtBeGuard();
+		if ($guard->guest()) {
+			return false;
+		}
+		else if ($guard->user()->type != PamAccount::TYPE_BACKEND) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+
+	/**
+	 * Set Pam Account.
+	 * @param $pam
+	 * @return $this
+	 */
 	public function setPam($pam)
 	{
 		$this->pam = $pam;

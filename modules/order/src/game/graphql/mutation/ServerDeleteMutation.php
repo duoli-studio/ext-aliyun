@@ -20,8 +20,7 @@ class ServerDeleteMutation extends Mutation
 
 	public function authorize($root, $args)
 	{
-		// true, if logged in
-		return !$this->getJwtBeGuard()->guest();
+		return $this->isJwtBackend();
 	}
 
 	/**
@@ -57,8 +56,7 @@ class ServerDeleteMutation extends Mutation
 		// todo
 		$id     = $args['id'] ?? 0;
 		$server = app('act.server');
-		$server->setPam($this->getJwtBeGuard()->user());
-		if (!$server->delete($id)) {
+		if (!$server->setPam($this->getJwtBeGuard()->user())->delete($id)) {
 			return $server->getError()->toArray();
 		}
 		else {

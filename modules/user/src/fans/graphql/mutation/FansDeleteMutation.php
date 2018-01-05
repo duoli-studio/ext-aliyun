@@ -5,6 +5,7 @@ use GraphQL\Type\Definition\Type;
 use Poppy\Framework\GraphQL\Exception\TypeNotFound;
 use Poppy\Framework\GraphQL\Support\Mutation;
 use System\Classes\Traits\SystemTrait;
+use User\Fans\Action\Fans;
 
 class FansDeleteMutation extends Mutation
 {
@@ -16,6 +17,11 @@ class FansDeleteMutation extends Mutation
 		parent::__construct($attributes);
 		$this->attributes['name']        = 'fans_delete';
 		$this->attributes['description'] = trans('user::fans.graphql.delete_desc');
+	}
+
+	public function authorize($root, $args)
+	{
+		return $this->isJwtUser();
 	}
 
 	/**
@@ -44,14 +50,16 @@ class FansDeleteMutation extends Mutation
 	 * @param $root
 	 * @param $args
 	 * @return array
+	 * @throws \Exception
 	 */
 	public function resolve($root, $args)
 	{
-		// todo
 		$account_id     = $args['account_id'] ?? 0;
+		/**
+		 * @var Fans $fans
+		 */
 		$fans = app('act.fans');
-		$fans->setPam($this->getJwtWebGuard()->user());
-		if (!$fans->canceled($account_id)) {
+		if (!$fans->setPam($this->getJwtWebGuard()->user())->canceled($account_id)) {
 			return $fans->getError()->toArray();
 		}
 		else {

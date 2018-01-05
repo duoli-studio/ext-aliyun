@@ -22,8 +22,7 @@ class UnbindMutation extends Mutation
 
 	public function authorize($root, $args)
 	{
-		// true, if logged in
-		return !$this->getJwtBeGuard()->guest();
+		return $this->isJwtUser();
 	}
 
 	/**
@@ -58,8 +57,7 @@ class UnbindMutation extends Mutation
 		$account_id = $args['type'];
 		/** @var User $user**/
 		$user     = app('act.user');
-		$user->setPam($this->getJwtWebGuard()->user());
-		if (!$user->unbind($account_id)) {
+		if (!$user->setPam($this->getJwtWebGuard()->user())->unbind($account_id)) {
 			return $user->getError()->toArray();
 		} else {
 			return $user->getSuccess()->toArray();

@@ -26,10 +26,23 @@ class FansType extends AbstractType
 				'type'        => Type::int(),
 				'description' => trans('user::fans.db.account_id'),
 			],
-			'fans_id' => [
-				'type'        => Type::int(),
+			'head_pic' => [
+				'type'        => Type::string(),
 				'description' => trans('user::fans.db.fans_id'),
 			],
+			'nickname' => [
+				'type'        => Type::string(),
+				'description' => trans('user::fans.db.fans_id'),
+			],
+			'sex' => [
+				'type'        => Type::string(),
+				'description' => trans('user::fans.db.fans_id'),
+			],
+			'signature' => [
+				'type'        => Type::string(),
+				'description' => trans('user::fans.db.fans_id'),
+			],
+			//todo 认证等级 男女猎手 女猎手
 
 		];
 	}
