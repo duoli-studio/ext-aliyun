@@ -94,17 +94,18 @@ class Pam
 			'passport' => $passport,
 			'captcha'  => $captcha,
 		];
+
 		$rule      = [
 			'captcha' => Rule::required(),
 		];
+
 		$validator = \Validator::make($initDb, $rule);
 		if ($validator->fails()) {
 			return $this->setError($validator->messages());
 		}
 
-		$result = PamCaptcha::where('passport', $passport)->get(['captcha'])->toArray();
-
-		if ($result[0]['captcha'] != $initDb['captcha']) {
+		$result = PamCaptcha::where('passport', $passport)->value('captcha');
+		if ($result != $initDb['captcha']) {
 			return $this->setError('验证码不匹配');
 		}
 

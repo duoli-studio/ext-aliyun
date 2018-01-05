@@ -18,24 +18,6 @@ class PamTest extends TestCase
 		dd($pam);
 	}
 
-	/**
-	 * @throws \Throwable
-	 */
-	public function testRegister()
-	{
-		/** @var Pam $pam */
-		/** @var User $user */
-		/** @var Fans $pam */
-		$pam  = app('act.pam');
-		$user = app('act.user');
-		if ($pam->register(18654958691, 123456, '熊猫', 1)) {
-			dd($pam->getSuccess());
-		}
-		else {
-			dd($pam->getError());
-		}
-	}
-
 	public function testRegisterEmptyPassword()
 	{
 		$mobile = '152' . rand('1111', '9999') . '9938';
@@ -62,7 +44,7 @@ class PamTest extends TestCase
 	{
 		/** @var Pam $pam */
 		$pam = app('act.pam');
-		if ($pam->captchaLogin(18864838035)) {
+		if ($pam->captchaLogin(18654958691)) {
 			dd($pam->getSuccess());
 		}
 		else {
@@ -74,7 +56,7 @@ class PamTest extends TestCase
 	{
 		/** @var Pam $pam */
 		$pam = app('act.pam');
-		if ($pam->validateCaptcha(18654958691, 487853)) {
+		if ($pam->validateCaptcha(18654958691, '042512')) {
 			dd($pam->getSuccess());
 		}
 		else {
@@ -86,7 +68,7 @@ class PamTest extends TestCase
 	{
 		/** @var Pam $pam */
 		$pam = app('act.pam');
-		if ($pam->loginPwd(18654958691, 123456)) {
+		if ($pam->loginPwd(18654958691, 123457)) {
 			dd($pam->getSuccess());
 		}
 		else {
@@ -98,7 +80,7 @@ class PamTest extends TestCase
 	{
 		/** @var Pam $pam */
 		$pam = app('act.pam');
-		if ($pam->findPassword(18654958691, '123457')) {
+		if ($pam->findPassword(18654958691, '123456')) {
 			dd($pam->getSuccess());
 		}
 		else {
