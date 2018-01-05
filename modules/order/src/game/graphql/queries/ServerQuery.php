@@ -61,6 +61,4 @@ class ServerQuery extends Query
 	{
 		return GameServer::find($args['id']);
 	}
-
-
 }

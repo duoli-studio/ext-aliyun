@@ -86,7 +86,7 @@ class User
 		$validator = \Validator::make([
 			'type' => $type,
 		], [
-			'type' => 'required|in:qq,alipay,weixin',
+			'type' => 'required|in:qq,wx',
 		], [], [
 			'type' => '第三方绑定账号类型',
 		]);
@@ -102,7 +102,7 @@ class User
 			]);
 			return true;
 		}
-		if ($type == 'weixin') {
+		if ($type == 'wx') {
 			PamBind::where('account_id', $this->pam->id)->update([
 				'wx_key'      => '',
 				'wx_union_id' => '',
