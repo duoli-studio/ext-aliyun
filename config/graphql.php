@@ -19,6 +19,7 @@ return [
 			'query'    => [
 				\System\Setting\Graphql\Queries\SettingsQuery::class,
 
+				\User\Fans\Graphql\Queries\ConcernQuery::class,
 				\Util\Util\GraphQL\Queries\SendCaptchaQuery::class,
 				\User\Fans\Graphql\Queries\FansQuery::class,
 			],

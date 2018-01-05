@@ -26,8 +26,7 @@ class ServerQuery extends Query
 
 	public function authorize($root, $args)
 	{
-		// true, if logged in
-		return !$this->getJwtBeGuard()->guest();
+		return $this->isJwtBackend();
 	}
 
 	/**

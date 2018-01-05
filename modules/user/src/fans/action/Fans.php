@@ -55,8 +55,11 @@ class Fans
 	 */
 	public function canceled($account_id)
 	{
+		if (!$this->checkPermission()) {
+			return false;
+		}
 		if (!empty($account_id)) {
-			if (!UserFans::where('account_id', $account_id)->where('fans_id', $this->pam->id)->exists()){
+			if (UserFans::where('account_id', $account_id)->where('fans_id', $this->pam->id)->exists()){
 				$result = UserFans::where('account_id', $account_id)->where('fans_id', $this->pam->id)->delete();
 				if ($result && $result !== 0){
 					return true;

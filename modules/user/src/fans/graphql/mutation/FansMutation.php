@@ -21,8 +21,7 @@ class FansMutation extends Mutation
 
 	public function authorize($root, $args)
 	{
-		// true, if logged in
-		return !$this->getJwtBeGuard()->guest();
+		return $this->isJwtUser();
 	}
 
 	/**
@@ -57,8 +56,7 @@ class FansMutation extends Mutation
 		$account_id = $args['account_id'];
 		/** @var Fans $fans */
 		$fans     = app('act.fans');
-		$fans->setPam($this->getJwtWebGuard()->user());
-		if (!$fans->concern($account_id)) {
+		if (!$fans->setPam($this->getJwtWebGuard()->user())->concern($account_id)) {
 			return $fans->getError()->toArray();
 		} else {
 			return $fans->getSuccess()->toArray();

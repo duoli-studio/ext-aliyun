@@ -21,8 +21,7 @@ class ServerMutation extends Mutation
 
 	public function authorize($root, $args)
 	{
-		// true, if logged in
-		return !$this->getJwtBeGuard()->guest();
+		return $this->isJwtBackend();
 	}
 
 	/**
@@ -73,8 +72,7 @@ class ServerMutation extends Mutation
 		$id     = $args['id'] ?? 0;
 		/** @var Server $server */
 		$server = app('act.server');
-		$server->setPam($this->getJwtBeGuard()->user());
-		if (!$server->establish($args, $id)) {
+		if (!$server->setPam($this->getJwtBeGuard()->user())->establish($args, $id)) {
 			return $server->getError()->toArray();
 		}
 		else {
