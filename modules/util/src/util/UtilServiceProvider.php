@@ -1,7 +1,6 @@
 <?php namespace Util\Util;
 
 use Illuminate\Support\ServiceProvider;
-use Util\Util\Action\Util;
 
 
 class UtilServiceProvider extends ServiceProvider
@@ -17,9 +16,7 @@ class UtilServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
-		$this->app->bind('act.util', function ($app) {
-			return new Util();
-		});
+		$this->app->bind('act.util', 'Util\Util\Action\Util');
 	}
 
 	/**

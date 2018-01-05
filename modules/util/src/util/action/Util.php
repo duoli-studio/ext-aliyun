@@ -8,21 +8,22 @@ use Carbon\Carbon;
 use Poppy\Extension\Aliyun\Core\Config;
 use Poppy\Extension\Aliyun\Core\DefaultAcsClient;
 use Poppy\Extension\Aliyun\Core\Profile\DefaultProfile;
+use Poppy\Extension\Aliyun\Dysms\Sms\Request\V20170525\QuerySendDetailsRequest;
 use Poppy\Extension\Aliyun\Dysms\Sms\Request\V20170525\SendSmsRequest;
 use Poppy\Framework\Helper\StrHelper;
 use Poppy\Framework\Helper\UtilHelper;
-use Symfony\Component\Console\Helper\HelperSet;
 use System\Classes\Traits\SystemTrait;
 use Util\Models\PamCaptcha;
-use Poppy\Extension\Aliyun\Dysms\Sms\Request\V20170525\QuerySendDetailsRequest;
-
-// 加载区域结点配置
-Config::load();
 
 class Util
 {
 	use SystemTrait;
 	static $acsClient = null;
+
+	public function __construct()
+	{
+		Config::load();
+	}
 
 	/**
 	 * @param $passport
@@ -34,10 +35,12 @@ class Util
 		if (UtilHelper::isEmail($passport)) {
 			$type       = PamCaptcha::TYPE_MAIL;
 			$expiredMin = $this->getSetting()->get('util::captcha.mail_expired_minute');
-		} elseif (UtilHelper::isMobile($passport)) {
+		}
+		elseif (UtilHelper::isMobile($passport)) {
 			$type       = PamCaptcha::TYPE_MOBILE;
 			$expiredMin = $this->getSetting()->get('util::captcha.sms_expired_minute');
-		} else {
+		}
+		else {
 			return $this->setError(trans('util::act.util.send_captcha_passport_format_error'));
 		}
 		// 发送验证码
@@ -46,6 +49,8 @@ class Util
 
 		// 发送验证码数据库操作
 		$expired = Carbon::now()->addMinute($expiredMin);
+
+		/** @var PamCaptcha $captcha */
 		$captcha = PamCaptcha::updateOrCreate([
 			'passport' => $passport,
 		]);
@@ -58,7 +63,8 @@ class Util
 			$captcha->num     = 1;
 			$captcha->type    = $type;
 			$captcha->captcha = StrHelper::randomCustom(6, '0123456789');
-		} else {
+		}
+		else {
 			$captcha->num  += 1;
 			$captcha->type = $type;
 		}
@@ -68,12 +74,11 @@ class Util
 		$randNo = $captcha->captcha;
 
 
-
 		$captcha->disabled_at = $expired;
 
 		$captcha->save();
 
-		$result = $this->sendSms($passport,$randNo);
+		$result = $this->sendSms($passport, $randNo);
 		// 超出指定时间的验证码需要删除
 		// todo 事件
 		return true;
@@ -81,7 +86,6 @@ class Util
 
 	/**
 	 * 取得AcsClient
-	 *
 	 * @return DefaultAcsClient
 	 */
 	public static function getAcsClient()
@@ -123,7 +127,7 @@ class Util
 	 * @param $passport
 	 * @return mixed|\SimpleXMLElement
 	 */
-	public static function sendSms($passport,$randNo)
+	public static function sendSms($passport, $randNo)
 	{
 
 		// 初始化SendSmsRequest实例用于设置发送短信的参数
@@ -140,7 +144,7 @@ class Util
 
 		// 可选，设置模板参数, 假如模板中存在变量需要替换则为必填项
 		$request->setTemplateParam(json_encode([  // 短信模板中字段的值
-			'code' => $randNo
+			'code' => $randNo,
 		], JSON_UNESCAPED_UNICODE));
 
 		// 可选，设置流水号

@@ -1,7 +1,6 @@
 <?php namespace Util\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property int    $id                 id
@@ -11,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $captcha            验证码
  * @property Carbon $disabled_at        失效时间
  */
-class PamCaptcha extends Model
+class PamCaptcha extends \Eloquent
 {
 	const TYPE_MOBILE = 'mobile';
 	const TYPE_MAIL   = 'mail';

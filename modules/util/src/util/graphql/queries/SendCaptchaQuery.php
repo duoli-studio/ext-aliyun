@@ -3,19 +3,18 @@
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Poppy\Framework\GraphQL\Exception\TypeNotFound;
-use Poppy\Framework\GraphQL\Support\Mutation;
+use Poppy\Framework\GraphQL\Support\Query;
 use System\Classes\Traits\SystemTrait;
 
-class UtilMutation extends Mutation
+class SendCaptchaQuery extends Query
 {
 	use SystemTrait;
-
-
+	
 	public function __construct($attributes = [])
 	{
 		parent::__construct($attributes);
-		$this->attributes['name']        = 'util';
-		$this->attributes['description'] = trans('util::act.graphql.mutation_desc');
+		$this->attributes['name']        = 'send_captcha';
+		$this->attributes['description'] = trans('util::util.graphql.send_captcha_queries_desc');
 	}
 
 	/**
@@ -29,13 +28,18 @@ class UtilMutation extends Mutation
 
 	/**
 	 * @return array
+	 * @throws TypeNotFound
 	 */
 	public function args(): array
 	{
 		return [
 			'passport' => [
 				'type'        => Type::nonNull(Type::string()),
-				'description' => trans('util::act.db.passport'),
+				'description' => trans('util::util.db.passport'),
+			],
+			'type'     => [
+				'type'        => Type::nonNull($this->getGraphQL()->type('send_captcha_type')),
+				'description' => trans('util::util.graphql.send_captcha_type_desc'),
 			],
 		];
 	}
@@ -51,7 +55,8 @@ class UtilMutation extends Mutation
 		$util     = app('act.util');
 		if (!$util->sendCaptcha($passport)) {
 			return $util->getError()->toArray();
-		} else {
+		}
+		else {
 			return $util->getSuccess()->toArray();
 		}
 	}

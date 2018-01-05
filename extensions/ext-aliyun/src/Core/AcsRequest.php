@@ -1,6 +1,4 @@
-<?php
-
-namespace Poppy\Extension\Aliyun\Core;
+<?php namespace Poppy\Extension\Aliyun\Core;
 
 abstract class AcsRequest
 {
