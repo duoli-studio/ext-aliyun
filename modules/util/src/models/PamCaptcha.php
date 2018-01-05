@@ -18,6 +18,7 @@ class PamCaptcha extends \Eloquent
 
 	const CON_REGISTER      = 'register';
 	const CON_FIND_PASSWORD = 'find_password';
+	const CON_ORDER         = 'order';
 
 
 	protected $table = 'pam_captcha';
