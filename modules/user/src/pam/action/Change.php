@@ -12,50 +12,44 @@ class Change
 	/**
 	 * @var string Pam table
 	 */
-	private $userTable;
+	private $profileTable;
 
 	public function __construct()
 	{
-		$this->userTable = (new UserProfile())->getTable();
+		$this->profileTable = (new UserProfile())->getTable();
 	}
 
 
-	public function nicknameChange($accountId, $newNickname)
+	public function nicknameChange($nickname)
 	{
+		if (!$this->checkPermission()) {
+			return false;
+		}
 
 		//获取原来的昵称 显示用
 		// $nickname = UserProfile::where('id', $accountId)->get('nickname');
 
 		//验证规则
-		$newNick = [
-			'nickname' => strval($newNickname),
+		$newNick   = [
+			'nickname' => strval($nickname),
 		];
-		$validator   = \Validator::make($newNick, [
+		$validator = \Validator::make($newNick, [
 			'nickname' => [
 				Rule::required(),
 				Rule::string(),
-				Rule::between(2,16)
+				Rule::between(2, 16),
+				Rule::unique($this->profileTable, 'nickname')->where(function ($query) {
+					$query->where('id', '!=', $this->pam->id);
+				}),
 			],
 
 		]);
 		if ($validator->fails()) {
 			return $this->setError($validator->messages());
 		}
-
-		//昵称的唯一性验证
-		$count = UserProfile::where('nickname', $newNickname)->count();
-		if ($count) {
-			return $this->setError('该昵称已被注册');
-		} else {
-			//修改新昵称
-			// $userProfile           = UserProfile::where('id', $accountId)->get();
-			// $userProfile->nickname = $newNickname;
-			// $userProfile->save();
-
-			UserProfile::where('id',$accountId)->update(['nickname' => $newNickname]);
-
-		}
-
+		UserProfile::where('id', $this->pam->id)->update([
+			'nickname' => $nickname,
+		]);
 		return true;
 	}
 
@@ -63,12 +57,13 @@ class Change
 	{
 
 		//判断是否认证过
-		if (UserProfile::where('id', $accountId)->where('is_chid_validated',1)->count()) {
+		if (UserProfile::where('id', $accountId)->where('is_chid_validated', 1)->count()) {
 			return $this->setError('该账号已经实名认证过，不能修改性别');
-		} else {
+		}
+		else {
 			//没有认证过的可以修改
 
-			UserProfile::where('id', $accountId)->update(['sex'=> $newSex]);
+			UserProfile::where('id', $accountId)->update(['sex' => $newSex]);
 		}
 		return true;
 
@@ -80,14 +75,14 @@ class Change
 
 		//获取原来的签名 显示用
 		//验证规则 验证长度
-		$newSign= [
+		$newSign   = [
 			'signature' => strval($signature),
 		];
-		$validator   = \Validator::make($newSign, [
+		$validator = \Validator::make($newSign, [
 			'signature' => [
 				Rule::required(),
 				Rule::string(),
-				Rule::between(0,255)
+				Rule::between(0, 255),
 			],
 
 		]);
@@ -96,7 +91,7 @@ class Change
 		}
 
 		//修改
-		UserProfile::where('id', $accountId)->update(['signature'=>"$signature"]);
+		UserProfile::where('id', $accountId)->update(['signature' => "$signature"]);
 		return true;
 
 	}
@@ -136,7 +131,7 @@ class Change
 		//上传到阿里云oss 调用方法
 
 		//修改头像
-		$this->userTable->where('id', $accountId)->update(['head_pic'=>"$headPic"]);
+		$this->profileTable->where('id', $accountId)->update(['head_pic' => "$headPic"]);
 		return true;
 	}
 

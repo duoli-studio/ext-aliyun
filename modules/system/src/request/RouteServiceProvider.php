@@ -10,7 +10,7 @@ use Poppy\Framework\GraphQL\GraphQLController;
 use System\Request\Api\AuthController;
 use System\Request\Api\DashboardsController;
 use System\Request\Api\HomeController as SysApiHomeController;
-use System\Request\Backend\BeHomeController;
+use System\Request\Backend\HomeController as BackendHomeController;
 use System\Request\Develop\DevController;
 use System\Request\System\HomeController;
 use System\Request\System\TestController as SystemTestController;
@@ -54,7 +54,11 @@ class RouteServiceProvider extends ServiceProvider
 			'middleware' => 'backend',
 			'prefix'     => 'backend',
 		], function (Router $router) {
-			$router->get('/login', BeHomeController::class . '@login');
+			$router->any('/login', BackendHomeController::class . '@login');
+
+			$router->any('/cp', BackendHomeController::class . '@cp')->name('backend:home.cp');
+			$router->any('/password', BackendHomeController::class . '@password')->name('backend:home.password');
+			$router->any('/logout', BackendHomeController::class . '@cp')->name('backend:home.logout');
 		});
 	}
 

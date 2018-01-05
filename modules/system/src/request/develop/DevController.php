@@ -9,6 +9,7 @@ use Poppy\Framework\Helper\RawCookieHelper;
 use System\Classes\Traits\SystemTrait;
 use System\Models\PamAccount;
 use User\Pam\Action\Fans;
+use User\Pam\Action\Pam;
 
 /**
  * 后端入口
@@ -21,7 +22,7 @@ class DevController extends Controller
 	{
 		parent::__construct();
 		\View::share([
-			'menus' => $this->getModule()->navigation(),
+			'menus' => $this->getModule()->developMenus(),
 		]);
 	}
 
@@ -40,7 +41,7 @@ class DevController extends Controller
 			$username = $request->input('username');
 			$password = $request->input('password');
 
-			/** @var Fans $pam */
+			/** @var Pam $pam */
 			$pam = app('act.pam');
 			if ($pam->loginCheck($username, $password, PamAccount::GUARD_DEVELOP, true)) {
 				return Resp::web(Resp::SUCCESS, '登录成功！', 'location|' . route('system:develop.cp'));
@@ -74,7 +75,7 @@ class DevController extends Controller
 			$username = $request->input('username');
 			$password = $request->input('password');
 
-			/** @var Fans $pam */
+			/** @var Pam $pam */
 			$pam = app('act.pam');
 			if ($pam->loginCheck($username, $password, PamAccount::GUARD_DEVELOP, true)) {
 				return Resp::web(Resp::SUCCESS, '登录成功！', 'location|' . route('system:develop.cp'));

@@ -1,0 +1,54 @@
+<?php
+$_pam   = \Auth::guard(\System\Models\PamAccount::GUARD_BACKEND)->user();
+$_menus = app('module')->backendMenus()->toArray();
+?>
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element">
+					<span>
+						{!! Html::image('', $_pam->username, ['class' => 'img-circle', 'style'=> 'width: 50px;'])!!}
+					</span>
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+						<span class="clear">
+							<span class="block m-t-xs">
+								<strong class="font-bold">{{$_pam->username}}<b class="caret"></b></strong>
+							</span>
+						</span>H
+                    </a>
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li><a href="{!! route('backend:home.logout') !!}">退出</a></li>
+                    </ul>
+                </div>
+                <div class="logo-element">
+                    SLF
+                </div>
+            </li>
+            @if(isset($_menus))
+                @foreach($_menus as $__menu_key => $__module)
+                    @foreach($__module as $__sub_menus)
+                        <li class="nav-item @if (in_array(\Route::currentRouteName(), array_keys($__sub_menus['children']))) active @endif ">
+                            <a href="javascript:;" class="nav-link nav-toggle">
+                                {!! $__sub_menus['icon']??'' !!}
+                                <span class="title">{{$__sub_menus['title']}}</span>
+                            </a>
+                            <ul class="nav nav-second-level collapse @if (in_array($_route, array_keys($__sub_menus['flat_links']))) in @endif ">
+                                @foreach($__sub_menus['links'] as $nav_key => $nav)
+                                    @if (isset($nav['links']) && !empty($nav['links']))
+                                        @foreach($nav['links'] as $sub)
+                                            <li class="nav-item @if ($sub['route'] == $_route) active @endif">
+                                                <a href="{{ $sub['url']}}" class="nav-link">
+                                                    {!! $sub['icon'] !!} {{$sub['title']}}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    @endif
+                                @endforeach
+                            </ul>
+                    @endforeach
+                @endforeach
+            @endif
+        </ul>
+    </div>
+</nav>

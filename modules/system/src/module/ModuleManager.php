@@ -3,6 +3,7 @@
 use Illuminate\Support\Collection;
 use Poppy\Framework\Classes\Traits\PoppyTrait;
 use System\Module\Repositories\ModulesAssets;
+use System\Module\Repositories\ModulesBackendMenu;
 use System\Module\Repositories\ModulesMenu;
 use System\Module\Repositories\Modules;
 use System\Module\Repositories\ModulesDevelopMenu;
@@ -44,7 +45,12 @@ class ModuleManager
 	/**
 	 * @var ModulesDevelopMenu
 	 */
-	protected $navigation;
+	protected $developMenus;
+
+	/**
+	 * @var ModulesBackendMenu
+	 */
+	protected $backendMenus;
 
 	/**
 	 * @var Modules
@@ -179,17 +185,33 @@ class ModuleManager
 	/**
 	 * @return ModulesDevelopMenu
 	 */
-	public function navigation(): ModulesDevelopMenu
+	public function developMenus(): ModulesDevelopMenu
 	{
-		if (!$this->navigation instanceof ModulesDevelopMenu) {
+		if (!$this->developMenus instanceof ModulesDevelopMenu) {
 			$collection = collect();
 			$this->repository()->enabled()->each(function (Module $module) use ($collection) {
 				$collection->put($module->slug(), $module->get('develop_menus', []));
 			});
-			$this->navigation = new ModulesDevelopMenu();
-			$this->navigation->initialize($collection);
+			$this->developMenus = new ModulesDevelopMenu();
+			$this->developMenus->initialize($collection);
 		}
-		return $this->navigation;
+		return $this->developMenus;
+	}
+
+	/**
+	 * @return ModulesBackendMenu
+	 */
+	public function backendMenus(): ModulesBackendMenu
+	{
+		if (!$this->backendMenus instanceof ModulesBackendMenu) {
+			$collection = collect();
+			$this->repository()->enabled()->each(function (Module $module) use ($collection) {
+				$collection->put($module->slug(), $module->get('backend_menus', []));
+			});
+			$this->backendMenus = new ModulesBackendMenu();
+			$this->backendMenus->initialize($collection);
+		}
+		return $this->backendMenus;
 	}
 
 	/**

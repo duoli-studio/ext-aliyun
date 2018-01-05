@@ -9,10 +9,10 @@
 
     <title>Login V3 | Remark Admin Template</title>
 
-    @include('poppy-fe::requirejs')
+    @include('ext-fe::requirejs')
 
 <!-- Stylesheets -->
-    {!! Html::style('assets/css/libs/bt3/3.3.7/bootstrap.min.css') !!}
+    {!! Html::style('assets/css/basic.css') !!}
     {!! Html::style('assets/css/poppy-ext-fe/be_login.css') !!}
 
 </head>
@@ -36,11 +36,11 @@
 
                 {!! Form::open() !!}
                 <div class="form-group form-material floating">
-                    <input type="text" class="form-control" name="adm_name"/>
+                    <input type="text" class="form-control" name="username"/>
                     <label class="floating-label">用户名</label>
                 </div>
                 <div class="form-group form-material floating">
-                    <input type="password" class="form-control" name="adm_pwd"/>
+                    <input type="password" class="form-control" name="password"/>
                     <label class="floating-label">密码</label>
                 </div>
                 <div class="form-group clearfix">
