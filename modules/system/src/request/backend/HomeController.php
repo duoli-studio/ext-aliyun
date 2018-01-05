@@ -3,13 +3,23 @@
 use Illuminate\Http\Request;
 use Poppy\Framework\Application\Controller;
 use Poppy\Framework\Classes\Resp;
-use System\Models\SysConfig;
+use System\Classes\Traits\SystemTrait;
 use System\Models\PamAccount;
-use System\Models\PamRole;
+use System\Models\SysConfig;
 
 
-class BeHomeController extends Controller
+class HomeController extends Controller
 {
+	use SystemTrait;
+
+	public function __construct()
+	{
+		parent::__construct();
+		\View::share([
+			'_pam' => \Auth::guard(PamAccount::GUARD_BACKEND)->user(),
+		]);
+	}
+
 	/**
 	 * 登录
 	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
@@ -17,39 +27,17 @@ class BeHomeController extends Controller
 	 */
 	public function login()
 	{
-		$auth = \Auth::guard(PamAccount::TYPE_BACKEND);
+		$auth = \Auth::guard(PamAccount::GUARD_BACKEND);
 		if (is_post()) {
 			$credentials = [
-				'account_type' => PamAccount::TYPE_BACKEND,
-				'account_name' => \Input::get('adm_name'),
-				'password'     => \Input::get('adm_pwd'),
+				'username' => \Input::get('username'),
+				'password' => \Input::get('password'),
 			];
-
-			$validator = \Validator::make($credentials, [
-				'account_name' => 'required',
-				'password'     => 'required',
-			]);
-			if ($validator->fails()) {
-				return Resp::web(Resp::ERROR, $validator->messages());
-			}
-
-
-			if ($auth->once($credentials)) {
-				/** @var PamAccount $account */
-				$account = $auth->user();
-				if (!$account->hasRole(PamRole::BE_ROOT)) {
-					// check is_enable
-					if ($account->is_enable == SysConfig::NO) {
-						return Resp::web(Resp::ERROR, '用户被禁用');
-					}
-				}
-
-				$auth->login($account, true);
-
-				return Resp::web(Resp::SUCCESS, '登录成功', 'location|' . route('be:home.welcome'));
+			$actPam      = app('act.pam');
+			if ($actPam->loginCheck($credentials['username'], $credentials['password'], PamAccount::GUARD_BACKEND)) {
+				return Resp::web(Resp::SUCCESS, '登录成功', 'location|' . route('backend:home.cp'));
 			}
 			else {
-				\Event::fire('auth.failed', [$credentials]);
 				return Resp::web(Resp::ERROR, '登录用户名密码不匹配');
 			}
 		}
@@ -58,7 +46,7 @@ class BeHomeController extends Controller
 			/** @var PamAccount $be */
 			$be = $auth->user();
 			if ($be->account_type == PamAccount::TYPE_BACKEND) {
-				return Resp::web(Resp::SUCCESS, '登录成功', 'location|' . route('be:home.welcome'));
+				return Resp::web(Resp::SUCCESS, '登录成功', 'location|' . route('backend:home.cp'));
 			}
 		}
 		return view('system::backend.home.login');
@@ -73,7 +61,7 @@ class BeHomeController extends Controller
 	 */
 	public function password(Request $request)
 	{
-		if (\Input::method() == 'POST') {
+		if (is_post()) {
 			$validator = \Validator::make($request->all(), [
 				'password'     => 'required|confirmed',
 				'old_password' => 'required',
@@ -104,7 +92,7 @@ class BeHomeController extends Controller
 	 */
 	public function logout()
 	{
-		\Auth::guard($this->accountType)->logout();
+		\Auth::guard(PamAccount::GUARD_BACKEND)->logout();
 		return Resp::web(Resp::SUCCESS, '退出登录', 'location|' . route('be:home.login'));
 	}
 
@@ -112,10 +100,10 @@ class BeHomeController extends Controller
 	 * 控制面板
 	 * @return \Illuminate\View\View
 	 */
-	public function getCp()
+	public function cp()
 	{
-		$menus = SysAcl::menu(PamAccount::TYPE_BACKEND, $this->pam, true);
-		return view('backend.lemon_home.cp', [
+		$menus = $this->getModule()->backendMenus()->toArray();
+		return view('system::backend.home.cp', [
 			'menus' => $menus,
 		]);
 

@@ -5,9 +5,10 @@ use GraphQL\Type\Definition\Type;
 use Poppy\Framework\GraphQL\Exception\TypeNotFound;
 use Poppy\Framework\GraphQL\Support\Mutation;
 use System\Classes\Traits\SystemTrait;
+use System\Models\PamAccount;
 use User\Pam\Action\Change;
 
-class ChangeMutation extends Mutation
+class ProfileMutation extends Mutation
 {
 	use SystemTrait;
 
@@ -15,10 +16,14 @@ class ChangeMutation extends Mutation
 	public function __construct($attributes = [])
 	{
 		parent::__construct($attributes);
-		$this->attributes['name']        = 'change';
+		$this->attributes['name']        = 'profile';
 		$this->attributes['description'] = trans('user::change.graphql.mutation_desc');
 	}
 
+	public function authorize($root, $args)
+	{
+		return $this->isJwtUser();
+	}
 
 	/**
 	 * @return ObjectType
@@ -31,15 +36,19 @@ class ChangeMutation extends Mutation
 
 	/**
 	 * @return array
+	 * @throws TypeNotFound
 	 */
 	public function args(): array
 	{
 		return [
-			'id' => [
-				'type'        => Type::nonNull(Type::int()),
+			// nickname
+			// sex
+			// description
+			'type'  => [
+				'type'        => Type::nonNull($this->getGraphQL()->type('profile_change')),
 				'description' => trans('user::change.db.account_id'),
 			],
-			'nickname'   => [
+			'value' => [
 				'type'        => Type::nonNull(Type::string()),
 				'description' => trans('user::change.db.nickname'),
 			],
@@ -53,16 +62,22 @@ class ChangeMutation extends Mutation
 	 */
 	public function resolve($root, $args)
 	{
-		$account_id = $args['id'];
-		$nickname   = $args['nickname'];
-		/** @var Change $change */
-		$change     = app('act.change');
 
+		$type     = $args['type'];
+		$nickname = $args['value'];
+
+		/** @var PamAccount $pam */
+		$pam = $this->getJwtWebGuard()->user();
+
+		/** @var Change $change */
+		$profile = app('act.change');
+		$profile->setPam($pam);
 		//修改方法多个 怎么写
-		if (!$change->nicknameChange($account_id, $nickname)) {
-			return $change->getError()->toArray();
-		} else {
-			return $change->getSuccess()->toArray();
+		if (!$profile->nicknameChange($nickname)) {
+			return $profile->getError()->toArray();
+		}
+		else {
+			return $profile->getSuccess()->toArray();
 		}
 	}
 }

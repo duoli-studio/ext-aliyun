@@ -56,7 +56,6 @@ class UserProfile extends \Eloquent
 
 	protected $table = 'user_profile';
 
-
 	public $timestamps = false;
 
 	protected $fillable = [

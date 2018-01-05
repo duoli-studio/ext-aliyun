@@ -15,6 +15,7 @@ return [
 				\User\Fans\GraphQL\Mutation\FansDeleteMutation::class,
 
 				\User\Pam\GraphQL\Mutation\UnbindMutation::class,
+				\User\Pam\GraphQL\Mutation\ProfileMutation::class,
 			],
 			'query'    => [
 				\System\Setting\Graphql\Queries\SettingsQuery::class,
@@ -29,14 +30,14 @@ return [
 				\System\Pam\GraphQL\Mutation\RoleMutation::class,
 
 				\System\Pam\GraphQL\Mutation\BindChangeMutation::class,
-				\User\Pam\GraphQL\Mutation\ChangeMutation::class,
+
 
 				/* server
 				 -------------------------------------------- */
 				\Order\Game\GraphQL\Mutation\ServerMutation::class,
 				\Order\Game\GraphQL\Mutation\ServerDeleteMutation::class,
 				\User\Pam\GraphQL\Mutation\PwdRegisterMutation::class,
-				\User\Pam\GraphQL\Mutation\CaptchaRegisterMutation::class
+				\User\Pam\GraphQL\Mutation\CaptchaRegisterMutation::class,
 			],
 			'query'    => [
 				\System\Setting\Graphql\Queries\SettingQuery::class,
@@ -49,7 +50,6 @@ return [
 				 -------------------------------------------- */
 				\System\Pam\Graphql\Queries\RolesQuery::class,
 				\System\Pam\Graphql\Queries\RoleQuery::class,
-
 
 
 				\System\Pam\Graphql\Queries\BindChangeQuery::class,
@@ -85,7 +85,7 @@ return [
 		\Order\Game\GraphQL\Types\ServerType::class,
 
 
-		\User\Pam\GraphQL\Types\ChangeType::class,
+		\User\Pam\GraphQL\Types\ProfileChangeType::class,
 
 
 		/* util
@@ -99,7 +99,7 @@ return [
 		// concern
 		\User\Fans\GraphQL\Types\ConcernType::class,
 		\User\Pam\GraphQL\Types\PwdRegisterType::class,
-		\User\Pam\GraphQL\Types\CaptchaRegisterType::class
+		\User\Pam\GraphQL\Types\CaptchaRegisterType::class,
 
 	],
 ];
