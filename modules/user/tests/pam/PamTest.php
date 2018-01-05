@@ -70,7 +70,7 @@ class PamTest extends TestCase
 	{
 		/** @var Pam $pam */
 		$pam = app('act.pam');
-		if ($pam->loginPwd(18654958691,123456)) {
+		if ($pam->loginPwd(18654958691,123457)) {
 			dd($pam->getSuccess());
 		}
 		else {
@@ -100,6 +100,18 @@ class PamTest extends TestCase
 		else {
 			dd($pam->getError());
 		}
+	}
+
+	public function testResetPwd()
+	{
+		/** @var Pam $pam */
+		$pam = app('act.pam');
+		if ($pam->resetPassword(107,'19970302','4515222')) {
+			dd($pam->getSuccess());
+		}
+		else {
+			dd($pam->getError());
+		};
 	}
 
 }

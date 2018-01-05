@@ -352,18 +352,138 @@ class Pam
 	 * 绑定qq wx　第三方登录
 	 * @param $data
 	 */
-	public function bind($data)
+	public function bind($type)
 	{
+		$validator = \Validator::make([
+			'type' => $type,
+		], [
+			'type' => [
+				Rule::required(),
+				Rule::in('qq', 'alipay', 'weixin'),
+			],
+		], [], [
+			'type' => '第三方绑定账号类型',
+		]);
+
+		if ($validator->fails()) {
+			return $this->setError($validator->messages());
+		}
+
 		$initDb = [
-			'qq_key'      => strval(array_get($data, 'qq_key')),
-			'wx_key'      => strval(array_get($data, 'wx_key')),
-			'wx_union_id' => strval(array_get($data, 'wx_union_id')),
-			'qq_union_id' => strval(array_get($data, 'qq_union_id')),
+			'qq_key'      => strval(array_get($type, 'qq_key')),
+			'wx_key'      => strval(array_get($type, 'wx_key')),
+			'wx_union_id' => strval(array_get($type, 'wx_union_id')),
+			'qq_union_id' => strval(array_get($type, 'qq_union_id')),
 		];
-		$rule   = [
-			'qq_key' => [],
-		];
+		//检测他在bind 表中是否存在　
+
+		//不存在　即表示　他是第一次进入平台　让他去访问那个
+
 		PamBind::create($initDb);
+	}
+
+	/**
+	 * 找回密码->发送验证码
+	 * @param $passport
+	 */
+	public function RecoverPassword($passport)
+	{
+		//接收数据，判断数据是手机号还是邮箱或者用户名
+		$passport = strtolower($passport);
+		$type     = $this->passportType($passport);
+		$initDb   = [
+			$type => strval($passport),
+		];
+		$initType = $initDb[$type];
+		//判断此用户是否注册过
+		$result = PamAccount::where(function ($query) use ($initType) {
+			$query->where('username', $initType)
+				->orwhere('email', $initType)
+				->orwhere('mobile', $initType);
+		})->get();
+
+		if ($result->isEmpty()) {
+			return $this->setError('该用户没有注册');
+		}
+		//生成验证码并且发送
+		switch ($type) {
+			case 'mobile':
+				$util   = new Util();
+				$result = $util->sendCaptcha($initType);
+				break;
+			case 'email':
+				//调用第三方邮箱发送
+				break;
+		}
+		if (!$result) {
+			return $this->setError('验证码发送失败');
+		}
+		//验证用户输入的验证码是否正确  请求那个validatorCaptcha
+		return true;
+	}
+
+	/**
+	 * 找回密码->修改密码
+	 * @param $passport
+	 * @param $password
+	 * @return bool
+	 */
+	public function findPassword($passport, $password)
+	{
+		$password  = strval($password);
+		$initDb    = [
+			'password' => $password,
+		];
+		$rule      = [
+			'password' => [
+				Rule::required(),
+				Rule::password(),
+				Rule::string(),
+				Rule::between(6, 16),
+			],
+		];
+		$validator = \Validator::make($initDb, $rule);
+		if ($validator->fails()) {
+			return $this->setError($validator->messages());
+		}
+		$newPassword = array_get($initDb, 'password');
+		$pam         = PamAccount::where('mobile', $passport)->get();
+		foreach ($pam as $p) {
+			$result = $this->setPassword($p, $newPassword);
+		}
+		if (!$result) {
+			return $this->setError('修改密码失败');
+		}
+		return true;
+	}
+
+	/**
+	 * 密码重置
+	 * @param $account_id
+	 * @param $oldPassword
+	 * @param $newPassword
+	 * @return bool
+	 */
+	public function resetPassword($account_id, $oldPassword,$newPassword)
+	{
+		$oldPassword = strval($oldPassword);
+		$newPassword = strval($newPassword);
+		$pam = PamAccount::where('id', $account_id)->get();
+		foreach ($pam as $p) {
+			$result = $this->checkPassword($p, $oldPassword);
+		}
+
+		if (!$result) {
+			return $this->setError('原密码不对，请重新输入');
+		}
+
+		foreach ($pam as $p) {
+			$ok = $this->setPassword($p, $newPassword);
+		}
+		if(!$ok){
+			return $this->setError('修改密码成功');
+		}
+		return true;
 	}
 
 	/**
@@ -415,82 +535,6 @@ class Pam
 		$authPassword  = $pam->getAuthPassword();
 		$cryptPassword = $this->cryptPassword($password, $reg_datetime, $key);
 		return (bool) ($authPassword === $cryptPassword);
-	}
-
-
-	/**
-	 * 找回密码
-	 * @param $passport
-	 */
-	public function RecoverPassword($passport)
-	{
-		//接收数据，判断数据是手机号还是邮箱或者用户名
-		$passport = strtolower($passport);
-		$type     = $this->passportType($passport);
-		$initDb   = [
-			$type => strval($passport),
-		];
-		$initType = $initDb[$type];
-		//判断此用户是否注册过
-		$result = PamAccount::where(function ($query) use ($initType) {
-			$query->where('username', $initType)
-				->orwhere('email', $initType)
-				->orwhere('mobile', $initType);
-		})->get();
-
-		if ($result->isEmpty()) {
-			return $this->setError('该用户没有注册');
-		}
-		//生成验证码并且发送
-		switch ($type) {
-			case 'mobile':
-				$util   = new Util();
-				$result = $util->sendCaptcha($initType);
-				break;
-			case 'email':
-				//调用第三方邮箱发送
-				break;
-		}
-		if (!$result) {
-			return $this->setError('验证码发送失败');
-		}
-		//验证用户输入的验证码是否正确  请求那个validatorCaptcha
-		return true;
-	}
-
-	/**
-	 * 找回密码
-	 * @param $passport
-	 * @param $password
-	 * @return bool
-	 */
-	public function findPassword($passport, $password)
-	{
-		$password  = strval($password);
-		$initDb    = [
-			'password' => $password,
-		];
-		$rule      = [
-			'password' => [
-				Rule::required(),
-				Rule::password(),
-				Rule::string(),
-				Rule::between(6, 16),
-			],
-		];
-		$validator = \Validator::make($initDb, $rule);
-		if ($validator->fails()) {
-			return $this->setError($validator->messages());
-		}
-		$newPassword = array_get($initDb, 'password');
-		$pam         = PamAccount::where('mobile', $passport)->get();
-		foreach ($pam as $p) {
-			$result = $this->setPassword($p, $newPassword);
-		}
-		if (!$result) {
-			return $this->setError('修改密码失败');
-		}
-		return true;
 	}
 
 	/**
