@@ -64,7 +64,7 @@ class HomeController extends InitController
 
 
 			/** @var PamAccount $pam */
-			$pam = $this->getBeGuard()->user();
+			$pam    = $this->getBeGuard()->user();
 			$actPam = app('act.pam');
 			if (!$actPam->checkPassword($pam, $old_password)) {
 				return Resp::web(Resp::ERROR, '原密码错误!');
@@ -93,26 +93,20 @@ class HomeController extends InitController
 	 */
 	public function cp()
 	{
-		$menus = $this->getModule()->backendMenus()->toArray();
-		return view('system::backend.home.cp', [
-			'menus' => $menus,
-		]);
-
+		return view('system::backend.home.cp');
 	}
 
-
-	public function test()
-	{
-		// test
-	}
-
+	/**
+	 * Setting
+	 * @param Request $request
+	 * @param string  $path
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector|\Illuminate\View\View
+	 */
 	public function setting(Request $request, $path = 'setting-system')
 	{
-
 		$Setting = new SettingManager($path);
 		if (is_post()) {
-			$group = \Input::get('_group');
-			if (!$Setting->save($request->all(), $group)) {
+			if (!$Setting->save($request)) {
 				return Resp::web(Resp::ERROR, $Setting->getError(), 'forget|1');
 			}
 			return Resp::web(Resp::SUCCESS, '更新配置成功', 'forget|!');

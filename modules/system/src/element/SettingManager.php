@@ -1,14 +1,11 @@
 <?php namespace System\Element;
 
+use Illuminate\Http\Request;
 use Poppy\Framework\Classes\Traits\KeyParserTrait;
+use Poppy\Framework\Validation\Rule;
 use System\Classes\Traits\SystemTrait;
 
 
-/**
- * 用户UI界面
- * @author     Mark <zhaody901@126.com>
- * @copyright  Copyright (c) 2013-2017 Sour Lemon Team
- */
 class SettingManager
 {
 	use SystemTrait, KeyParserTrait;
@@ -27,22 +24,16 @@ class SettingManager
 
 
 	/**
+	 * Flat Tab
+	 * @var array
+	 */
+	private $flatTab = [];
+
+	/**
 	 * Path
 	 * @var string
 	 */
 	private $path = '';
-
-	/**
-	 * 表单配置
-	 * @var array|mixed|string
-	 */
-	private $formSetting = [];
-
-	/**
-	 * 当前的类型
-	 * @var
-	 */
-	private $type;
 
 	/**
 	 * 请求地址
@@ -66,23 +57,7 @@ class SettingManager
 		} catch (\Exception $e) {
 			throw new \Exception('配置文件不正确');
 		}
-		$this->url = $this->url ?: \Input::url();
-	}
 
-
-	/**
-	 * 获取设置信息
-	 * @param        $key
-	 * @param string $default
-	 * @return string
-	 */
-	public function getDefaultValue($key, $default = '')
-	{
-		return $this->getSetting()->get($key, $default);
-	}
-
-	public function render()
-	{
 		foreach ($this->tabs as $key => $tab) {
 			foreach ($tab['fields'] as $f_key => $field) {
 				if ($field['type'] == 'input') {
@@ -91,14 +66,38 @@ class SettingManager
 						'placeholder' => $item['placeholder'] ?? '',
 					];
 				}
+				elseif ($field['type'] == 'textarea') {
+					$form = [
+						'class'       => 'form-control',
+						'rows'        => '3',
+						'placeholder' => $item['placeholder'] ?? '',
+					];
+				}
 				else {
 					$form = [];
 				}
-				$form                  += $this->getValidates($field, 'js-validation');
-				$field['options']      = $form;
+				$form             += $this->getValidates($field, 'js-validation');
+				$field['options'] = $form;
+
+				list($ns, $group, $item) = $this->parseKey($field['key']);
+				unset($tab['fields'][$f_key]);
+				if (!$ns || !$group || !$item) {
+					continue;
+				}
+				$field['name']         = "{$ns}::{$group}::{$item}";
 				$tab['fields'][$f_key] = $field;
+
+				$this->flatTab[$field['name']] = $field;
 			}
+			$this->tabs[$key] = $tab;
 		}
+
+		$this->url = $this->url ?: \Input::url();
+	}
+
+
+	public function render()
+	{
 		return view('system::backend.tpl.setting', [
 			'title'       => $this->initialization['name'],
 			'description' => $this->initialization['description'] ?? $this->initialization['name'],
@@ -106,6 +105,48 @@ class SettingManager
 			'url'         => $this->url,
 			'path'        => $this->path,
 		]);
+	}
+
+
+	/**
+	 * 更新配置
+	 * @param Request $request
+	 * @return bool
+	 */
+	public function save(Request $request)
+	{
+		$inputKeys = collect();
+		$keys      = collect($request->keys());
+		$configs   = [];
+		$keys->each(function ($item) use ($inputKeys, $request, &$configs) {
+			if (strpos($item, '::') !== false) {
+
+				$configs[$item] = $request->get($item);
+				$inputKeys->push($item);
+			}
+		});
+
+		$rule  = [];
+		$title = [];
+		foreach ($this->flatTab as $key => $field) {
+			if (!in_array($key, $inputKeys->toArray())) {
+				continue;
+			}
+			$rule[$key]  = $this->getValidates($field, 'laravel');
+			$title[$key] = array_get($field, 'label');
+		}
+		if ($rule) {
+			$validator = \Validator::make($configs, $rule, [], $title);
+			if ($validator->fails()) {
+				return $this->setError($validator->messages());
+			}
+		}
+
+		foreach ($configs as $key => $value) {
+			$key = str_replace_last('::', '.', $key);
+			$this->getSetting()->set($key, $value);
+		}
+		return true;
 	}
 
 	private function getValidates($field, $return_type)
@@ -129,69 +170,25 @@ class SettingManager
 				}
 				return $rule;
 				break;
-		}
+			case 'laravel': // framework 使用
+				$rule = [];
+				if (isset($field['required']) && $field['required']) {
+					$rule[] = Rule::required();
+				}
 
+				if (!count($validates)) {
+					return [];
+				}
+
+				foreach ($validates as $validate) {
+					$required = $validate['required'] ?? false;
+					if ($required) {
+						$rule[] = Rule::required();
+					}
+				}
+				return array_unique($rule);
+				break;
+		}
 	}
 
-	/**
-	 * 更新配置
-	 * @param array  $configs
-	 * @param string $group
-	 * @return bool
-	 */
-	public function save($configs, $group = '')
-	{
-		$definition = $this->typeDefinition;
-		$batch      = [];
-		$keys       = [];
-
-		$rule  = [];
-		$title = [];
-		foreach ($definition as $key => $value) {
-			if (!$group) {
-				if (array_get($value, 'validator')) {
-					$rule[$key] = $value['validator'];
-				}
-			}
-			if ($group == '_other') {
-				if (array_get($value, 'validator') && !array_get($value, 'group')) {
-					$rule[$key] = $value['validator'];
-				}
-			}
-			elseif (array_get($value, 'validator') && array_get($value, 'group') == $group) {
-				$rule[$key] = $value['validator'];
-			}
-			$title[$key] = array_get($value, 'title');
-		}
-
-		if ($rule) {
-			$validator = \Validator::make($configs, $rule, [], $title);
-			if ($validator->fails()) {
-				return $this->setError($validator->messages());
-			}
-		}
-
-
-		foreach ($configs as $key => $value) {
-			if (isset($definition[$key])) {
-				$keys[]  = $key;
-				$batch[] = [
-					'namespace'   => $this->namespace,
-					'group'       => $this->type,
-					'item'        => $key,
-					'value'       => serialize($value),
-					'description' => $definition[$key]['title'],
-				];
-			}
-		}
-		if ($keys) {
-			BaseConfig::whereIn('item', array_keys($configs))
-				->where('group', $this->type)
-				->where('namespace', $this->namespace)
-				->delete();
-			BaseConfig::insert($batch);
-		}
-		\Cache::flush();
-		return true;
-	}
 }

@@ -27,7 +27,6 @@ class RouteServiceProvider extends ServiceProvider
 	{
 		$this->mapWebRoutes();
 
-
 		$this->mapDevRoutes();
 
 		$this->mapApiRoutes();
@@ -63,7 +62,7 @@ class RouteServiceProvider extends ServiceProvider
 				$router->any('/cp', BackendHomeController::class . '@cp')->name('backend:home.cp');
 				$router->any('/password', BackendHomeController::class . '@password')->name('backend:home.password');
 				$router->any('/logout', BackendHomeController::class . '@logout')->name('backend:home.logout');
-				$router->any('/setting', BackendHomeController::class . '@setting')->name('backend:home.setting');
+				$router->any('/setting/{path?}', BackendHomeController::class . '@setting')->name('backend:home.setting');
 			});
 		});
 	}

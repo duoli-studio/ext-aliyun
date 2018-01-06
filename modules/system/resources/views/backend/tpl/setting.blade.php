@@ -54,10 +54,23 @@
                                 </label>
                                 <div class="col-lg-10">
                                     @if ($item['type'] == 'input')
-                                        {!! Form::text($item['key'], $item['default'], $item['options']) !!}
+                                        {!! Form::text($item['name'], $item['value'], $item['options']) !!}
+                                    @endif
+                                    @if ($item['type'] == 'switch')
+                                        <label class="radio-inline">
+                                            {!! Form::radio($item['name'],0, $item['value'], $item['options']) !!}
+                                            否
+                                        </label>
+                                        <label class="radio-inline">
+                                            {!! Form::radio($item['name'],1, $item['value'], $item['options']) !!}
+                                            是
+                                        </label>
+                                    @endif
+                                    @if ($item['type'] == 'textarea')
+                                        {!! Form::textarea($item['name'], $item['value'], $item['options']) !!}
                                     @endif
                                     @if (isset($item['description']) && trim($item['description']))
-                                        <p>{!! $item['description'] !!}</p>
+                                        <p style="margin-top: 5px;color: #b1b0b0;">{!! $item['description'] !!}</p>
                                     @endif
                                 </div>
                             </div>
@@ -69,7 +82,7 @@
                         </div>
                         {!!Form::close()!!}
                         <script>
-							requirejs(['jquery', 'jquery.validation'], function($) {
+							requirejs(['jquery', 'poppy/util', 'jquery.validation'], function($, util) {
 								$(function() {
 									$('#form_' + '{!! $group_key !!}').validate();
 								})

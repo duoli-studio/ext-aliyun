@@ -15,7 +15,7 @@ configurations:
                     default: ''
                     description: ''
                     label: 网站名称
-                    key: site.name
+                    key: system::site.name
                     placeholder: 请输入网站名称
                     required: true
                     type: input
@@ -30,7 +30,7 @@ configurations:
                     description: '关闭后网站将不能访问'
                     format: boolean
                     label: 站点开启
-                    key: site.enabled
+                    key: system::site.is_open
                     required: false
                     type: switch
                 domain:
@@ -232,7 +232,7 @@ sample:
                     default: ''
                     label: 多行文本输入框
                     key: sample::sample.textarea
-                    required: false
+                    required: true
                     type: textarea
                 input:
                     default: ' '
