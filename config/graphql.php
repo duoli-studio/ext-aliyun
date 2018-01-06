@@ -22,13 +22,14 @@ return [
 				\User\Pam\GraphQL\Mutation\UnbindMutation::class,
 				\User\Pam\GraphQL\Mutation\ProfileMutation::class,
 
-
+				\Util\Util\GraphQL\Mutation\SendCaptchaMutation::class,
 			],
+
+
 			'query'    => [
 				\System\Setting\Graphql\Queries\SettingsQuery::class,
 
 				\User\Fans\Graphql\Queries\ConcernQuery::class,
-				\Util\Util\GraphQL\Queries\SendCaptchaQuery::class,
 			],
 		],
 		// 后台权限

@@ -190,7 +190,6 @@ class Util
 					],
 				];
 		}
-		dd($data);
 
 		// 必填，设置短信接收号码
 		$request->setPhoneNumbers($phoneNumbers);
