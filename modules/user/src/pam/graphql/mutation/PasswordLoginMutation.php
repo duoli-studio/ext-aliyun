@@ -2,12 +2,11 @@
 
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
+use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\GraphQL\Exception\TypeNotFound;
 use Poppy\Framework\GraphQL\Support\Mutation;
 use System\Classes\Traits\SystemTrait;
 use User\Pam\Action\Pam;
-use Poppy\Framework\Classes\Resp;
-use System\Models\PamAccount;
 
 class PasswordLoginMutation extends Mutation
 {

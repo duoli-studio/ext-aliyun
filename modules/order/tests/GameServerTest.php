@@ -24,8 +24,8 @@ class GameServerTest extends TestCase
 	{
 		$game = app('act.server');
 		$ids = [];
-		$code = $game->parentId(18,$ids);
-		dd($code);
+		// $code = $game->parentId(18,$ids);
+		// dd($code);
 	}
 
 
