@@ -36,9 +36,9 @@ class User
 		$nickname = strval($nickname);
 
 		$initDb = [
-			'nickname' => $nickname,
-			'sex'      => $sex,
-			'id'       => $this->pam->id,
+			'nickname'   => $nickname,
+			'sex'        => $sex,
+			'account_id' => $this->pam->id,
 		];
 
 		$rule = [
@@ -59,9 +59,8 @@ class User
 		}
 
 		try {
-
 			// 处理数据库
-			return \DB::transaction(function () use ($initDb, $password) {
+			return \DB::transaction(function() use ($initDb, $password) {
 
 				app('act.pam')->setPassword($this->pam, $password);
 				UserProfile::create($initDb);
