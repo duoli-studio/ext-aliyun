@@ -18,6 +18,7 @@ import Template from '../pages/Template.vue';
 import Upload from '../pages/Upload.vue';
 import Role from '../pages/Role.vue';
 
+
 import requireAuth from '../middlewares/auth';
 import store from '../stores';
 
@@ -87,7 +88,7 @@ const configuration = [
 	{
 		component   : Role,
 		path        : 'role',
-	},
+	}
 ];
 
 export default {

@@ -42,7 +42,7 @@ Thumbs.db
 .svn
 # IDE #
 #######
-/.idea/
+.idea/
 /nbproject/
 
 
@@ -59,6 +59,7 @@ Thumbs.db
 /public/mix-manifest.json
 /vendor
 !/public/uploads/.gitkeep
+/node_modules
 .env
 composer.lock
 package-lock.json

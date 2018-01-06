@@ -13,27 +13,27 @@
             ]).then(injection.http.spread((groupsData, userData) => {
                 const { data, groups } = groupsData.data;
                 next(vm => {
-                    data.forEach(item => {
+                      data.forEach(item => {
                         if (groups) {
-                            Object.keys(groups).map(key => {
-                                const has = groups[key];
-                                if (has.type === 'default') {
-                                    vm.form.date = has.end;
-                                    vm.form.group = has.id;
-                                    vm.form.next = has.next;
-                                } else if (has.id === item.id) {
-                                    item.check = true;
-                                    item.end = has.end;
-                                }
-                                return has;
-                            });
+                          Object.keys(groups).map(key => {
+                            const has = groups[key];
+                            if (has.type === 'default') {
+                              vm.form.date = has.end;
+                              vm.form.group = has.id;
+                              vm.form.next = has.next;
+                            } else if (has.id === item.id) {
+                              item.check = true;
+                              item.end = has.end;
+                            }
+                            return has;
+                          });
                         }
                         item.check = item.check ? item.check : false;
                         item.end = item.end ? item.end : '';
-                    });
-                    vm.form.id = userData.data.data.id;
-                    vm.groups = data;
-                    injection.loading.finish();
+                      });
+                      vm.form.id = userData.data.data.id;
+                      vm.groups = data;
+                      injection.loading.finish();
                 });
             })).catch(() => {
                 injection.loading.error();

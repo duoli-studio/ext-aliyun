@@ -4,7 +4,6 @@ import App from './App.vue';
 import injection from './helpers/injection';
 import store from './stores';
 
-
 Vue.config.productionTip = false;
 Vue.use(injection);
 
