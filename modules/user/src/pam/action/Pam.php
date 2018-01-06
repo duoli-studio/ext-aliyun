@@ -12,7 +12,6 @@ use User\Models\UserProfile;
 use User\Pam\Events\LoginFailed;
 use User\Pam\Events\LoginSuccess;
 use User\Pam\Events\PamRegistered;
-use Util\Util\Action\Util;
 
 class Pam
 {
@@ -90,9 +89,16 @@ class Pam
 		else {
 			// 登录
 			$this->pam = PamAccount::where($passportType, $passport)->first();
-			//登录时间
 
-			//账号是否封禁
+			if ($this->pam->is_enable == SysConfig::NO) {
+				// 账户被禁用
+				$this->webLogout();
+				return $this->setError('本账户被禁用, 不得登入');
+			}
+			//登录时间
+			$this->pam->logined_at  = Carbon::now();
+			$this->pam->login_times += 1;
+			$this->pam->save();
 			return true;
 		}
 	}
@@ -310,6 +316,15 @@ class Pam
 		//不存在　即表示　他是第一次进入平台　让他去访问那个
 
 		PamBind::create($initDb);
+	}
+
+	/**
+	 * 找回手机号
+	 * @param $passport
+	 */
+	public function findMobile($passport)
+	{
+
 	}
 
 	/**
