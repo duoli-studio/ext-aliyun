@@ -22,13 +22,15 @@ return [
 				\User\Pam\GraphQL\Mutation\UnbindMutation::class,
 				\User\Pam\GraphQL\Mutation\ProfileMutation::class,
 
-
+				\Util\Util\GraphQL\Mutation\SendCaptchaMutation::class,
 			],
+
+
 			'query'    => [
 				\System\Setting\Graphql\Queries\SettingsQuery::class,
 
 				\User\Fans\Graphql\Queries\ConcernQuery::class,
-				\Util\Util\GraphQL\Queries\SendCaptchaQuery::class,
+				\User\Fans\Graphql\Queries\FansQuery::class,
 			],
 		],
 		// 后台权限
@@ -60,7 +62,6 @@ return [
 
 
 				\System\Pam\Graphql\Queries\BindChangeQuery::class,
-				\User\Pam\Graphql\Queries\ChangeQuery::class,
 			],
 		],
 	],
@@ -98,13 +99,13 @@ return [
 		/* util
 		 -------------------------------------------- */
 		// send captcha
-		\Util\Util\GraphQL\Types\SendCaptchaTypeType::class,
+		\Util\Util\GraphQL\Types\SendCaptchaType::class,
 
 
 		/* user
 		 -------------------------------------------- */
 		// concern
-		\User\Fans\GraphQL\Types\ConcernType::class,
+		\User\Fans\GraphQL\Types\ListType::class,
 		\User\Pam\GraphQL\Types\PwdRegisterType::class,
 		\User\Pam\GraphQL\Types\CaptchaRegisterType::class,
 

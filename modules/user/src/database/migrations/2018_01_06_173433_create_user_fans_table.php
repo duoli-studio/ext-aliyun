@@ -18,12 +18,8 @@ class CreateUserFansTable extends Migration
     public function up()
     {
         Schema::create('user_fans', function (Blueprint $table) {
-            $table->integer('account_id');
-            $table->integer('fans_id')->nullable()->comment('粉丝id');
-
-            $table->primary('account_id');
-
-            
+            $table->integer('account_id')->unsigned()->default(0)->comment('被关注人 ID');
+            $table->integer('fans_id')->unsigned()->default(0)->comment('当前账户id(粉丝id)');
 
         });
     }

@@ -25,7 +25,7 @@ class Util
 	 * @param string $type
 	 * @return bool
 	 */
-	public function sendCaptcha($passport, $type = PamCaptcha::CON_REGISTER)
+	public function sendCaptcha($passport, $type)
 	{
 		// 验证数据格式
 		if (UtilHelper::isEmail($passport)) {
@@ -63,43 +63,13 @@ class Util
 		$captcha->disabled_at = $expired;
 		$captcha->save();
 
-		// todo:张年文  需要判定系统的操作类型
-		switch ($type) {
-			case PamCaptcha::CON_ORDER:
-				$data = [
-					'signName'      => $this->getSetting()->get('extension::sms.code_sign_name'),
-					'templateCode'  => $this->getSetting()->get('extension::sms.order_template'),
-					'templateParam' => [
-						'code' => $captcha->captcha,
-					],
-				];
-				break;
-			case PamCaptcha::CON_FIND_PASSWORD:
-				$data = [
-					'signName'      => $this->getSetting()->get('extension::sms.code_sign_name'),
-					'templateCode'  => $this->getSetting()->get('extension::sms.find_password_template'),
-					'templateParam' => [
-						'code' => $captcha->captcha,
-					],
-				];
-				break;
-			default :
-				$data = [
-					'signName'      => $this->getSetting()->get('extension::sms.code_sign_name'),
-					'templateCode'  => $this->getSetting()->get('extension::sms.register_template'),
-					'templateParam' => [
-						'code' => $captcha->captcha,
-					],
-				];
-		}
-
 
 		if ($sendType === PamCaptcha::TYPE_MOBILE) {
-			$this->sendSms($passport, $data);
+			$this->sendSms($passport, $captcha->captcha, $type);
 			return true;
 		}
 		else {
-			$this->sendMail($passport, $data);
+			$this->sendMail($passport, $type);
 			return true;
 		}
 	}
@@ -182,14 +152,44 @@ class Util
 
 	/**
 	 * @param $phoneNumbers
-	 * @param $data
+	 * @param $captcha
+	 * @param $type
 	 * @return mixed|\SimpleXMLElement
 	 */
-	private function sendSms($phoneNumbers, $data)
+	private function sendSms($phoneNumbers,$captcha, $type)
 	{
 
 		// 初始化SendSmsRequest实例用于设置发送短信的参数
 		$request = new SendSmsRequest();
+
+		switch ($type) {
+			case PamCaptcha::CON_ORDER:
+				$data = [
+					'signName'      => $this->getSetting()->get('extension::sms.code_sign_name'),
+					'templateCode'  => $this->getSetting()->get('extension::sms.order_template'),
+					'templateParam' => [
+						'code' => $captcha,
+					],
+				];
+				break;
+			case PamCaptcha::CON_FIND_PASSWORD:
+				$data = [
+					'signName'      => $this->getSetting()->get('extension::sms.code_sign_name'),
+					'templateCode'  => $this->getSetting()->get('extension::sms.find_password_template'),
+					'templateParam' => [
+						'code' => $captcha,
+					],
+				];
+				break;
+			default :
+				$data = [
+					'signName'      => $this->getSetting()->get('extension::sms.code_sign_name'),
+					'templateCode'  => $this->getSetting()->get('extension::sms.register_template'),
+					'templateParam' => [
+						'code' => $captcha,
+					],
+				];
+		}
 
 		// 必填，设置短信接收号码
 		$request->setPhoneNumbers($phoneNumbers);

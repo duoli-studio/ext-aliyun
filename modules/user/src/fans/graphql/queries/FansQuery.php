@@ -11,7 +11,7 @@ use User\Models\UserFans;
 use User\Models\UserProfile;
 
 
-class ConcernQuery extends Query
+class FansQuery extends Query
 {
 	use SystemTrait;
 
@@ -19,7 +19,7 @@ class ConcernQuery extends Query
 	public function __construct($attributes = [])
 	{
 		parent::__construct($attributes);
-		$this->attributes['name']        = 'concern';
+		$this->attributes['name']        = 'fans';
 		$this->attributes['description'] = trans('user::fans.graphql.queries_desc');
 	}
 
@@ -56,7 +56,7 @@ class ConcernQuery extends Query
 		//todo  分页
 		/** @var PamAccount $pam */
 		$pam = $this->getJwtWebGuard()->user();
-		$concern = UserFans::where('fans_id', $pam->id)->pluck('account_id')->toArray();
+		$concern = UserFans::where('account_id', $pam->id)->pluck('fans_id')->toArray();
 
 		$users = [];
 		foreach ($concern as $id) {
@@ -65,9 +65,8 @@ class ConcernQuery extends Query
 				$users[] = (new ConcernResource($v))->toArray($this->getRequest());
 			}
 		}
-		//todo
-		// $users['num'] = count($concern);
-		\Log::debug($users);
+		/*$users['num'] = count($concern);
+		\Log::debug($users);*/
 		return $users;
 	}
 }
