@@ -1,8 +1,10 @@
 @extends('system::tpl.default')
 @section('head-css')
     {!! Html::style('assets/css/basic.css') !!}
-    {!! Html::style('assets/css/3rd/font-awesome.css') !!}
-    {!! Html::style('assets/css/lemon/backend/cp.css') !!}
+    {!! Html::style('assets/css/backend.css') !!}
+@endsection
+@section('head-script')
+    @include('ext-fe::requirejs')
 @endsection
 @section('body-main')
     @include('system::tpl.inc_toastr')
@@ -18,6 +20,6 @@
         </div>
     </div>
 @endsection
-@section('script-cp')
-    <script>requirejs(['lemon/backend/cp']);</script>
+@section('footer-script')
+    <script>requirejs(['poppy/backend/cp']);</script>
 @endsection

@@ -35,7 +35,7 @@ class ConcernQuery extends Query
 	 */
 	public function type(): ListOfType
 	{
-		return Type::listOf($this->getGraphQL()->type('concern'));
+		return Type::listOf($this->getGraphQL()->type('list'));
 	}
 
 	/**
@@ -65,7 +65,8 @@ class ConcernQuery extends Query
 				$users[] = (new ConcernResource($v))->toArray($this->getRequest());
 			}
 		}
-		$users['num'] = count($concern);
+		//todo
+		// $users['num'] = count($concern);
 		\Log::debug($users);
 		return $users;
 	}
