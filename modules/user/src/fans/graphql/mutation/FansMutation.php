@@ -16,7 +16,7 @@ class FansMutation extends Mutation
 	{
 		parent::__construct($attributes);
 		$this->attributes['name']        = 'fans';
-		$this->attributes['description'] = trans('fans::act.graphql.mutation_desc');
+		$this->attributes['description'] = trans('user::fans.graphql.mutation_desc');
 	}
 
 	public function authorize($root, $args)
@@ -41,7 +41,7 @@ class FansMutation extends Mutation
 		return [
 			'account_id' => [
 				'type'        => Type::nonNull(Type::int()),
-				'description' => trans('fans::act.db.account_id'),
+				'description' => trans('user::fans.db.account_id'),
 			],
 		];
 	}

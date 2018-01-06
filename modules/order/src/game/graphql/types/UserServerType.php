@@ -26,27 +26,10 @@ class UserServerType extends AbstractType
 				'type'        => Type::int(),
 				'description' => trans('order::server.db.id'),
 			],
-			'code'      => [
-				'type'        => Type::string(),
-				'description' => trans('order::server.db.code'),
-
-			],
 			'title'     => [
 				'type'        => Type::string(),
 				'description' => trans('order::server.db.title'),
 
-			],
-			'parent_id' => [
-				'type'        => Type::int(),
-				'description' => trans('order::server.db.parent_id'),
-			],
-			'top_parent_id' => [
-				'type'        => Type::int(),
-				'description' => trans('order::server.db.top_parent_id'),
-			],
-			'children' => [
-				'type'        => Type::string(),
-				'description' => trans('order::server.db.children'),
 			],
 		];
 	}

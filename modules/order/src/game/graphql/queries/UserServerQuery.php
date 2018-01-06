@@ -1,7 +1,6 @@
 <?php namespace Order\Game\Graphql\Queries;
 
 use GraphQL\Type\Definition\ObjectType;
-use GraphQL\Type\Definition\Type;
 use Order\Models\GameServer;
 use Poppy\Framework\GraphQL\Exception\TypeNotFound;
 use Poppy\Framework\GraphQL\Support\Query;
@@ -43,12 +42,7 @@ class UserServerQuery extends Query
 	 */
 	public function args()
 	{
-		return [
-			'id' => [
-				'type'        => Type::nonNull(Type::int()),
-				'description' => trans('order::server.db.id'),
-			],
-		];
+		return [];
 	}
 
 	/**
@@ -58,6 +52,24 @@ class UserServerQuery extends Query
 	 */
 	public function resolve($root, $args)
 	{
-		return GameServer::find($args['id']);
+		$allServer = GameServer::where('parent_id',0)->get();
+		// gen tree
+		// $array = [];
+		$ke = [];
+		foreach ($allServer as $k => $r) {
+			$all = GameServer::where('top_parent_id',$r->id)->get();
+			foreach ($all as $v) {
+				$ke[$r->id] = [
+					'id'    => intval($v->id),
+					'title' => strval($v->title),
+					'pid'   => intval($v->parent_id),
+				];
+			}
+		}
+
+		// \Log::debug($array);
+		// \Log::debug($all);
+		\Log::debug($ke);
+		// return $array;
 	}
 }

@@ -23,6 +23,7 @@ return [
 				\User\Pam\GraphQL\Mutation\ProfileMutation::class,
 
 				\Util\Util\GraphQL\Mutation\SendCaptchaMutation::class,
+
 			],
 
 
@@ -31,6 +32,8 @@ return [
 
 				\User\Fans\Graphql\Queries\ConcernQuery::class,
 				\User\Fans\Graphql\Queries\FansQuery::class,
+
+				\Order\Game\Graphql\Queries\UserServerQuery::class,
 			],
 		],
 		// 后台权限
@@ -91,6 +94,7 @@ return [
 		/* server
 		 -------------------------------------------- */
 		\Order\Game\GraphQL\Types\ServerType::class,
+		\Order\Game\GraphQL\Types\UserServerType::class,
 
 
 		\User\Pam\GraphQL\Types\ProfileChangeType::class,
