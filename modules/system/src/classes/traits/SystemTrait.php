@@ -1,5 +1,7 @@
 <?php namespace System\Classes\Traits;
 
+use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Contracts\Auth\StatefulGuard;
 use Poppy\Framework\Classes\Traits\AppTrait;
 use Poppy\Framework\Classes\Traits\PoppyTrait;
 use System\Backend\BackendManager;
@@ -60,7 +62,7 @@ trait SystemTrait
 		if ($guard->guest()) {
 			return false;
 		}
-		else if ($guard->user()->type != PamAccount::TYPE_USER) {
+		elseif ($guard->user()->type != PamAccount::TYPE_USER) {
 			return false;
 		}
 		else {
@@ -78,7 +80,7 @@ trait SystemTrait
 		if ($guard->guest()) {
 			return false;
 		}
-		else if ($guard->user()->type != PamAccount::TYPE_BACKEND) {
+		elseif ($guard->user()->type != PamAccount::TYPE_BACKEND) {
 			return false;
 		}
 		else {
@@ -98,14 +100,20 @@ trait SystemTrait
 	}
 
 
-
-
 	/**
 	 * Get Jwt Backend Guard
 	 */
 	public function getJwtBeGuard()
 	{
 		return $this->getAuth()->guard(PamAccount::GUARD_JWT_BACKEND);
+	}
+
+	/**
+	 * @return Guard|StatefulGuard
+	 */
+	public function getBeGuard()
+	{
+		return $this->getAuth()->guard(PamAccount::GUARD_BACKEND);
 	}
 
 

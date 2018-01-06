@@ -18,7 +18,7 @@ class PageRepository extends Repository
 	public function initialize(Collection $collection)
 	{
 		$this->getModule()->pages()->each(function ($definition) {
-			$this->items[] = $definition;
+			$this->items[$definition['initialization']['path']] = $definition;
 		});
 	}
 }

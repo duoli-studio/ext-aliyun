@@ -28,12 +28,12 @@ $_menus = app('module')->backendMenus()->toArray();
             @if(isset($_menus))
                 @foreach($_menus as $__menu_key => $__module)
                     @foreach($__module as $__sub_menus)
-                        <li class="nav-item @if (in_array(\Route::currentRouteName(), array_keys($__sub_menus['children']))) active @endif ">
+                        <li class="nav-item @if (in_array(\Route::currentRouteName(), $__sub_menus['routes'])) active @endif ">
                             <a href="javascript:;" class="nav-link nav-toggle">
                                 {!! $__sub_menus['icon']??'' !!}
                                 <span class="title">{{$__sub_menus['title']}}</span>
                             </a>
-                            <ul class="nav nav-second-level collapse @if (in_array(\Route::currentRouteName(), array_keys($__sub_menus['children']))) in @endif ">
+                            <ul class="nav nav-second-level collapse @if (in_array(\Route::currentRouteName(), $__sub_menus['routes'])) in @endif ">
                                 @foreach($__sub_menus['children'] as $nav_key => $nav)
                                     <li class="nav-item @if ($nav['url'] == \Route::currentRouteName()) active @endif">
                                         <a href="{{ $nav['url']}}" class="nav-link">

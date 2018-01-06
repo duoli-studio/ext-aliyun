@@ -1,0 +1,25 @@
+{
+	"name": "poppy/ext-out_login",
+	"description": "Poppy OutLogin Extension.",
+	"type": "poppy-extension",
+	"authors": [
+		{
+			"name": "Rookie Chu",
+			"email": "freedomcqiu@gmail.com"
+		}
+	],
+	"require": {
+		"php": ">=7.0.0",
+		"socialiteproviders/weixin": "~4.0.2",
+		"socialiteproviders/qq": "~3.0.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"Poppy\\Extension\\OutLogin\\": "src/"
+		}
+	},
+	"config": {
+		"preferred-install": "dist"
+	},
+	"minimum-stability": "dev"
+}
