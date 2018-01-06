@@ -51,6 +51,12 @@
  */
 class UserProfile extends \Eloquent
 {
+	const TYPE_NICKNAME  = 'nickname';
+	const TYPE_SEX       = 'sex';
+	const TYPE_SIGNATURE = 'signature';
+	const TYPE_GAME      = 'game';
+	const TYPE_HEAD_PIC  = 'head_pic';
+	const TYPE_AREA      = 'area';
 
 
 	protected $table = 'user_profile';
