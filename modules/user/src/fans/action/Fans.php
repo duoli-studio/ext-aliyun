@@ -38,10 +38,11 @@ class Fans
 		if ($validator->fails()) {
 			return $this->setError($validator->messages());
 		}
-		if (!UserFans::where('account_id', $account_id)->where('fans_id', $this->pam->id)->exists()){
+		if (!UserFans::where('account_id', $account_id)->where('fans_id', $this->pam->id)->exists()) {
 			$this->fans = UserFans::create($initDb);
 			return true;
-		}else{
+		}
+		else {
 			return $this->setError('已关注');
 		}
 	}
@@ -49,24 +50,25 @@ class Fans
 	/**
 	 * 取关
 	 * @param int $account_id
-	 * @param     $pam
 	 * @return bool
 	 * @throws \Exception
 	 */
-	public function canceled($account_id)
+	public function cancel($account_id)
 	{
 		if (!$this->checkPermission()) {
 			return false;
 		}
 		if (!empty($account_id)) {
-			if (UserFans::where('account_id', $account_id)->where('fans_id', $this->pam->id)->exists()){
+			if (UserFans::where('account_id', $account_id)->where('fans_id', $this->pam->id)->exists()) {
 				$result = UserFans::where('account_id', $account_id)->where('fans_id', $this->pam->id)->delete();
-				if ($result && $result !== 0){
+				if ($result && $result !== 0) {
 					return true;
-				}else{
+				}
+				else {
 					return $this->setError('已取关');
 				}
-			}else{
+			}
+			else {
 				return $this->setError('已取关');
 			}
 		}
