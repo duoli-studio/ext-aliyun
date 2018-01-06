@@ -1,6 +1,7 @@
 <?php namespace User\Pam\GraphQL\Types;
 
 use Poppy\Framework\GraphQL\Support\EnumType;
+use User\Models\UserProfile;
 
 /**
  * Class SettingType.
@@ -12,27 +13,27 @@ class ProfileChangeType extends EnumType
 	{
 		parent::__construct($attributes);
 		$this->attributes['name']        = 'profile_change';
-		$this->attributes['description'] = trans('user::change.graphql.type_desc');
+		$this->attributes['description'] = trans('user::profile.graphql.type_desc');
 		$this->attributes['values']      = [
 			// todo 尽量使用常量
-			'nickname'  => [
-				'description' => trans('user::change.db.nickname'),
+			UserProfile::TYPE_NICKNAME  => [
+				'description' => trans('user::profile.db.nickname'),
 			],
-			'sex'       => [
-				'description' => trans('user::change.db.sex'),
+			UserProfile::TYPE_SEX       => [
+				'description' => trans('user::profile.db.sex'),
 			],
-			'signature' => [
-				'description' => trans('user::change.db.signature'),
+			UserProfile::TYPE_SIGNATURE => [
+				'description' => trans('user::profile.db.signature'),
 			],
 			// todo
-			'game'      => [
-				'description' => trans('user::change.db.signature'),
+			UserProfile::TYPE_GAME      => [
+				'description' => trans('user::profile.db.game'),
 			],
-			'head_pic'  => [
-				'description' => trans('user::change.db.signature'),
+			UserProfile::TYPE_HEAD_PIC  => [
+				'description' => trans('user::profile.db.head_pic'),
 			],
-			'area'      => [
-				'description' => trans('user::change.db.signature'),
+			UserProfile::TYPE_AREA      => [
+				'description' => trans('user::profile.db.area'),
 			],
 		];
 	}

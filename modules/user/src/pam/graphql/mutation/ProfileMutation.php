@@ -6,7 +6,7 @@ use Poppy\Framework\GraphQL\Exception\TypeNotFound;
 use Poppy\Framework\GraphQL\Support\Mutation;
 use System\Classes\Traits\SystemTrait;
 use System\Models\PamAccount;
-use User\Pam\Action\Change;
+use User\Pam\Action\ProfileChange;
 
 class ProfileMutation extends Mutation
 {
@@ -16,8 +16,8 @@ class ProfileMutation extends Mutation
 	public function __construct($attributes = [])
 	{
 		parent::__construct($attributes);
-		$this->attributes['name']        = 'profile';
-		$this->attributes['description'] = trans('user::change.graphql.mutation_desc');
+		$this->attributes['name']        = 'profile_change';
+		$this->attributes['description'] = trans('user::profile.graphql.mutation_desc');
 	}
 
 	public function authorize($root, $args)
@@ -46,11 +46,11 @@ class ProfileMutation extends Mutation
 			// description
 			'type'  => [
 				'type'        => Type::nonNull($this->getGraphQL()->type('profile_change')),
-				'description' => trans('user::change.db.account_id'),
+				'description' => trans('user::profile.graphql.type_desc'),
 			],
 			'value' => [
 				'type'        => Type::nonNull(Type::string()),
-				'description' => trans('user::change.db.nickname'),
+				'description' => trans('user::profile.db.value'),
 			],
 		];
 	}
@@ -63,20 +63,19 @@ class ProfileMutation extends Mutation
 	public function resolve($root, $args)
 	{
 
-		$type     = $args['type'];
-		$nickname = $args['value'];
+		$type  = $args['type'];
+		$value = $args['value'];
 
 		/** @var PamAccount $pam */
 		$pam = $this->getJwtWebGuard()->user();
 
-		/** @var Change $change */
-		$profile = app('act.change');
+		/** @var ProfileChange $change */
+		$profile = app('act.profile_change');
 		$profile->setPam($pam);
-		//修改方法多个 怎么写
-		if (!$profile->nicknameChange($nickname)) {
+
+		if (!$profile->ProfileChange($type, $value)) {
 			return $profile->getError()->toArray();
-		}
-		else {
+		} else {
 			return $profile->getSuccess()->toArray();
 		}
 	}

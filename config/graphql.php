@@ -8,9 +8,10 @@ return [
 			'mutation' => [
 				\User\Pam\GraphQL\Mutation\CaptchaLoginMutation::class,
 				\User\Pam\GraphQL\Mutation\PasswordLoginMutation::class,
+
+				\Util\Util\GraphQL\Mutation\SendCaptchaMutation::class,
 			],
 			'query'    => [
-				\Util\Util\GraphQL\Queries\SendCaptchaQuery::class,
 			],
 		],
 		// 前台用户权限
@@ -22,10 +23,10 @@ return [
 				\User\Pam\GraphQL\Mutation\UnbindMutation::class,
 				\User\Pam\GraphQL\Mutation\ProfileMutation::class,
 
-				\Util\Util\GraphQL\Mutation\SendCaptchaMutation::class,
+				\System\Pam\GraphQL\Mutation\BindChangeMutation::class,
+
+
 			],
-
-
 			'query'    => [
 				\System\Setting\Graphql\Queries\SettingsQuery::class,
 
@@ -38,9 +39,6 @@ return [
 			'mutation' => [
 				\System\Setting\Graphql\Mutation\SettingMutation::class,
 				\System\Pam\GraphQL\Mutation\RoleMutation::class,
-
-				\System\Pam\GraphQL\Mutation\BindChangeMutation::class,
-
 
 				/* server
 				 -------------------------------------------- */
@@ -60,8 +58,6 @@ return [
 				\System\Pam\Graphql\Queries\RolesQuery::class,
 				\System\Pam\Graphql\Queries\RoleQuery::class,
 
-
-				\System\Pam\Graphql\Queries\BindChangeQuery::class,
 			],
 		],
 	],
