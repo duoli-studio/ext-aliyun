@@ -29,7 +29,6 @@ return [
 			],
 
 
-			],
 			'query'    => [
 				\System\Setting\Graphql\Queries\SettingsQuery::class,
 

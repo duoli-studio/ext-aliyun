@@ -17,7 +17,7 @@ class UnbindMutation extends Mutation
 	{
 		parent::__construct($attributes);
 		$this->attributes['name']        = 'unbind';
-		$this->attributes['description'] = trans('user::act.graphql.mutation_desc');
+		$this->attributes['description'] = trans('user::user.graphql.mutation_desc');
 	}
 
 	public function authorize($root, $args)
@@ -42,7 +42,7 @@ class UnbindMutation extends Mutation
 		return [
 			'type' => [
 				'type'        => Type::nonNull(Type::string()),
-				'description' => trans('user::act.db.type'),
+				'description' => trans('user::user.db.type'),
 			],
 		];
 	}
