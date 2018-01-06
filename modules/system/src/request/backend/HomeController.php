@@ -1,24 +1,14 @@
 <?php namespace System\Request\Backend;
 
 use Illuminate\Http\Request;
-use Poppy\Framework\Application\Controller;
 use Poppy\Framework\Classes\Resp;
-use System\Classes\Traits\SystemTrait;
+use System\Element\SettingManager;
 use System\Models\PamAccount;
 use System\Models\SysConfig;
 
 
-class HomeController extends Controller
+class HomeController extends InitController
 {
-	use SystemTrait;
-
-	public function __construct()
-	{
-		parent::__construct();
-		\View::share([
-			'_pam' => \Auth::guard(PamAccount::GUARD_BACKEND)->user(),
-		]);
-	}
 
 	/**
 	 * 登录
@@ -62,7 +52,9 @@ class HomeController extends Controller
 	public function password(Request $request)
 	{
 		if (is_post()) {
-			$validator = \Validator::make($request->all(), [
+			$old_password = $request->input('old_password');
+			$password     = trim($request->input('password'));
+			$validator    = \Validator::make($request->all(), [
 				'password'     => 'required|confirmed',
 				'old_password' => 'required',
 			]);
@@ -70,20 +62,19 @@ class HomeController extends Controller
 				return Resp::web(Resp::ERROR, $validator->errors());
 			}
 
-			$old_password = $request->input('old_password');
-			if ($old_password) {
-				if (!app('act.pam')->checkPassword($this->pam, $old_password)) {
-					return Resp::web(Resp::ERROR, '原密码错误!');
-				}
+
+			/** @var PamAccount $pam */
+			$pam = $this->getBeGuard()->user();
+			$actPam = app('act.pam');
+			if (!$actPam->checkPassword($pam, $old_password)) {
+				return Resp::web(Resp::ERROR, '原密码错误!');
 			}
 
-
-			$password = $request->input('password');
-			PamAccount::changePwd(\Auth::id(), $password);
+			$actPam->setPassword($pam, $password);
 			\Auth::logout();
-			return Resp::web(Resp::SUCCESS, trans('desktop.edit_password_ok_and_relogin'), 'location|' . route('dsk.lemon_home.login'));
+			return Resp::web(Resp::SUCCESS, '密码修改成功, 请重新登录', 'location|' . route('backend:home.login'));
 		}
-		return view('backend.lemon_home.password');
+		return view('system::backend.home.password');
 	}
 
 	/**
@@ -93,7 +84,7 @@ class HomeController extends Controller
 	public function logout()
 	{
 		\Auth::guard(PamAccount::GUARD_BACKEND)->logout();
-		return Resp::web(Resp::SUCCESS, '退出登录', 'location|' . route('be:home.login'));
+		return Resp::web(Resp::SUCCESS, '退出登录', 'location|' . route('backend:home.login'));
 	}
 
 	/**
@@ -115,10 +106,11 @@ class HomeController extends Controller
 		// test
 	}
 
-	public function setting(Request $request, $file = 'site')
+	public function setting(Request $request, $path = 'setting-system')
 	{
-		$Setting = new SettingManager('backend::' . $file);
-		if ($request->method() == 'POST') {
+
+		$Setting = new SettingManager($path);
+		if (is_post()) {
 			$group = \Input::get('_group');
 			if (!$Setting->save($request->all(), $group)) {
 				return Resp::web(Resp::ERROR, $Setting->getError(), 'forget|1');

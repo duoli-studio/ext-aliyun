@@ -32,17 +32,22 @@ class ModulesBackendMenu extends Repository
 
 	private function handleNavigation($definition)
 	{
+		$childrenRoutes = [];
 		if (isset($definition['children']) && is_array($definition['children'])) {
 			foreach ($definition['children'] as $key => $define) {
+				if (isset($define['route'])) {
+					$childrenRoutes[] = $define['route'];
+				}
 				$definition['children'][$key] = $this->handleNavigation($define);
 			}
 		}
-		$route             = $definition['route'] ?? '';
-		$route_params      = $definition['route_param'] ?? '';
-		$param             = $definition['param'] ?? '';
-		$url               = $route ? route_url($route, $route_params, $param) : '#';
-		$definition['url'] = $url;
-		unset($definition['route'], $definition['param'], $definition['route_param']);
+		$route                = $definition['route'] ?? '';
+		$route_params         = $definition['route_param'] ?? '';
+		$param                = $definition['param'] ?? '';
+		$url                  = $route ? route_url($route, $route_params, $param) : '#';
+		$definition['url']    = $url;
+		$definition['routes'] = $childrenRoutes;
+		unset($definition['param'], $definition['route_param']);
 		$definition['key'] = UtilHelper::md5($definition);
 		return $definition;
 	}

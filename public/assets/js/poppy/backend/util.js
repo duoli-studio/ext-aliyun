@@ -1,6 +1,5 @@
 define(function(require) {
 	var $ = require('jquery');
-	var lemon = require('global');
 	var util = require('poppy/util');
 
 	return {
@@ -56,54 +55,7 @@ define(function(require) {
 				$('#side-menu').removeAttr('style');
 			}
 		},
-		/**
-		 *
-		 * @param game_id
-		 * @param server_ctr
-		 * @param server_key
-		 * @param opts
-		 */
-		server_html     : function(game_id, server_ctr, server_key, opts) {
-			$(function() {
-				var $game_id = $('#' + game_id);
-				$game_id.on('change', function() {
-					get_server($(this).val());
-				});
-				get_server($game_id.val());
-			});
 
-			function get_server(game_id) {
-				if (!game_id) return;
-				$.get(lemon.support_url.game_server_html, {
-					game_id    : game_id,
-					server_key : server_key,
-					options    : opts
-				}, function(data) {
-					$('#' + server_ctr).html(data);
-				})
-			}
-		},
-
-		type_html : function(game_id, type_ctr, type_key, opts) {
-			$(function() {
-				var $game_id = $('#' + game_id);
-				$game_id.on('change', function() {
-					get_type($(this).val());
-				});
-				get_type($game_id.val());
-			});
-
-			function get_type(game_id) {
-				if (!game_id) return;
-				$.get(lemon.support_url.game_type_html, {
-					game_id  : game_id,
-					type_key : type_key,
-					options  : opts
-				}, function(data) {
-					$('#' + type_ctr).html(data);
-				})
-			}
-		},
 
 		animate_footer : function() {
 			var $p_footer = $('.J_p_footer');

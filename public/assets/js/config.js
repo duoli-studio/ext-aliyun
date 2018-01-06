@@ -3,9 +3,11 @@ var alias = {
     "bt3": "assets/js/libs/bt3/3.3.7/bootstrap",
     "bt3.hover-dropdown": "assets/js/libs/bt3/hover-dropdown/2.2.1/bt3.hover-dropdown",
     "clipboard": "assets/js/libs/clipboard/1.7.1/clipboard.min",
-    "jquery": "assets/js/libs/jquery/1.9.1/jquery.min",
+    "jquery": "assets/js/libs/jquery/2.2.4/jquery.min",
     "jquery.form": "assets/js/libs/jquery/form/4.2.2/jquery.form",
     "jquery.layer": "assets/js/libs/jquery/layer/3.1.1/jquery.layer",
+    "jquery.metis-menu": "assets/js/libs/jquery/metis-menu/2.7.2/jquery.metis-menu",
+    "jquery.slimscroll": "assets/js/libs/jquery/slimscroll/1.3.8/jquery.slimscroll.min",
     "jquery.toastr": "assets/js/libs/jquery/toastr/2.1.3/jquery.toastr",
     "jquery.validation": "assets/js/libs/jquery/validation/1.17.0/jquery.validation",
     "js-cookie": "assets/js/libs/js-cookie/2.2.0/js-cookie",
@@ -30,6 +32,9 @@ var shim  = {
         "jquery"
     ],
     "jquery.layer": [
+        "jquery"
+    ],
+    "jquery.slimscroll": [
         "jquery"
     ],
     "jquery.toastr": [
