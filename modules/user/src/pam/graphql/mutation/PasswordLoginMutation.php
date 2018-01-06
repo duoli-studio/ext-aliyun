@@ -17,7 +17,7 @@ class PasswordLoginMutation extends Mutation
 	{
 		parent::__construct($attributes);
 		$this->attributes['name']        = 'password_login';
-		$this->attributes['description'] = trans('user::password_login.graphql.mutation_desc');
+		$this->attributes['description'] = trans('user::login.graphql.mutation_desc');
 	}
 
 
@@ -38,11 +38,11 @@ class PasswordLoginMutation extends Mutation
 		return [
 			'passport' => [
 				'type'        => Type::nonNull(Type::string()),
-				'description' => trans('user::password_login.db.passport'),
+				'description' => trans('user::login.db.passport'),
 			],
 			'password' => [
 				'type'        => Type::nonNull(Type::string()),
-				'description' => trans('user::password_login.db.password'),
+				'description' => trans('user::login.db.password'),
 			],
 		];
 	}
@@ -75,7 +75,7 @@ class PasswordLoginMutation extends Mutation
 			}
 			else {
 				$success         = $actPam->getSuccess(
-					trans('user::password_login.graphql.get_token_success')
+					trans('user::login.graphql.get_token_success')
 				)->toArray();
 				$success['data'] = $token;
 				return $success;

@@ -6,10 +6,10 @@ return [
 		// 无权限即可访问
 		'default' => [
 			'mutation' => [
-				\User\Pam\GraphQL\Mutation\CaptchaLoginMutation::class,
 				\User\Pam\GraphQL\Mutation\PasswordLoginMutation::class,
-
 				\Util\Util\GraphQL\Mutation\SendCaptchaMutation::class,
+				\User\Pam\GraphQL\Mutation\CaptchaLoginMutation::class,
+				\User\Pam\GraphQL\Mutation\UpdatePasswordMutation::class
 			],
 			'query'    => [
 			],
@@ -104,6 +104,6 @@ return [
 		\User\Fans\GraphQL\Types\ListType::class,
 		\User\Pam\GraphQL\Types\PwdRegisterType::class,
 		\User\Pam\GraphQL\Types\CaptchaRegisterType::class,
-
+		\User\Pam\GraphQL\Types\UpdatePasswordType::class
 	],
 ];

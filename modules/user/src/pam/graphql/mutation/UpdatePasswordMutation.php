@@ -8,7 +8,7 @@ use Poppy\Framework\GraphQL\Support\Mutation;
 use System\Classes\Traits\SystemTrait;
 use User\Pam\Action\Pam;
 
-class CaptchaLoginMutation extends Mutation
+class UpdatePasswordMutation extends Mutation
 {
 	use SystemTrait;
 
@@ -16,8 +16,8 @@ class CaptchaLoginMutation extends Mutation
 	public function __construct($attributes = [])
 	{
 		parent::__construct($attributes);
-		$this->attributes['name']        = 'captcha_login';
-		$this->attributes['description'] = trans('user::login.graphql.mutation_desc');
+		$this->attributes['name']        = 'update_password';
+		$this->attributes['description'] = trans('user::update_password.graphql.mutation_desc');
 	}
 
 
@@ -38,11 +38,11 @@ class CaptchaLoginMutation extends Mutation
 		return [
 			'passport' => [
 				'type'        => Type::nonNull(Type::string()),
-				'description' => trans('user::login.db.passport'),
+				'description' => trans('user::update_password.db.passport'),
 			],
 			'captcha'  => [
 				'type'        => Type::nonNull(Type::string()),
-				'description' => trans('user::login.db.captcha'),
+				'description' => trans('user::update_password.db.captcha'),
 			],
 		];
 	}
@@ -75,7 +75,7 @@ class CaptchaLoginMutation extends Mutation
 			}
 			else {
 				$success         = $actPam->getSuccess(
-					trans('user::login.graphql.get_token_success')
+					trans('user::captcha_login.graphql.get_token_success')
 				)->toArray();
 				$success['data'] = $token;
 				return $success;
