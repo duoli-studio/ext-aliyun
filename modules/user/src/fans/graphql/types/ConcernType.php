@@ -24,47 +24,47 @@ class ConcernType extends AbstractType
 		return [
 			'account_id' => [
 				'type'        => Type::int(),
-				'description' => trans('user::fans.db.account_id'),
+				'description' => trans('user::profile.db.account_id'),
 			],
 			'user_img'   => [
 				'type'        => Type::string(),
-				'description' => trans('user::fans.db.fans_id'),
+				'description' => trans('user::profile.db.head_pic'),
 			],
-			'nick_name'   => [
+			'nickname'   => [
 				'type'        => Type::string(),
-				'description' => trans('user::fans.db.fans_id'),
+				'description' => trans('user::profile.db.nickname'),
 			],
-			'gender'        => [
+			'sex'        => [
 				'type'        => Type::string(),
-				'description' => trans('user::fans.db.fans_id'),
+				'description' => trans('user::profile.db.sex'),
 			],
-			'autograph'  => [
+			'signature'  => [
 				'type'        => Type::string(),
-				'description' => trans('user::fans.db.fans_id'),
+				'description' => trans('user::profile.db.signature'),
 			],
 			'lol_is_girl'  => [
 				'type'        => Type::string(),
-				'description' => trans('user::fans.db.fans_id'),
+				'description' => trans('user::profile.db.lol_is_girl_validated'),
 			],
 			'lol_type'  => [
 				'type'        => Type::string(),
-				'description' => trans('user::fans.db.fans_id'),
+				'description' => trans('user::profile.db.lol_validated_type'),
 			],
 			'wz_is_girl'  => [
 				'type'        => Type::string(),
-				'description' => trans('user::fans.db.fans_id'),
+				'description' => trans('user::profile.db.wz_is_girl_validated'),
 			],
 			'wz_type'  => [
 				'type'        => Type::string(),
-				'description' => trans('user::fans.db.fans_id'),
+				'description' => trans('user::profile.db.wz_validated_type'),
 			],
 			'pubg_is_girl'  => [
 				'type'        => Type::string(),
-				'description' => trans('user::fans.db.fans_id'),
+				'description' => trans('user::profile.db.pubg_is_girl_validated'),
 			],
 			'pubg_type'  => [
 				'type'        => Type::string(),
-				'description' => trans('user::fans.db.fans_id'),
+				'description' => trans('user::profile.db.pubg_validated_type'),
 			],
 		];
 	}

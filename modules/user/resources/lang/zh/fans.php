@@ -8,7 +8,8 @@ return [
 	],
 
 	'db' => [
-		'account_id' => '被关注者ID',
-		'fans_id'    => '关注者ID',
+		'account_id'  => '被关注者ID',
+		'fans_id'     => '关注者ID',
+		'concern_num' => '关注人数',
 	],
 ];

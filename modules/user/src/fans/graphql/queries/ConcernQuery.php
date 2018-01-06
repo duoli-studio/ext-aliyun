@@ -57,13 +57,16 @@ class ConcernQuery extends Query
 		/** @var PamAccount $pam */
 		$pam = $this->getJwtWebGuard()->user();
 		$concern = UserFans::where('fans_id', $pam->id)->pluck('account_id')->toArray();
+
 		$users = [];
 		foreach ($concern as $id) {
-			$Db = UserProfile::where('id', $id)->get();
+			$Db = UserProfile::where('account_id', $id)->get();
 			foreach ($Db as $v) {
 				$users[] = (new ConcernResource($v))->toArray($this->getRequest());
 			}
 		}
+		$users['num'] = count($concern);
+		\Log::debug($users);
 		return $users;
 	}
 }
