@@ -35,10 +35,15 @@ class FansMutation extends Mutation
 
 	/**
 	 * @return array
+	 * @throws TypeNotFound
 	 */
 	public function args(): array
 	{
 		return [
+			'type'       => [
+				'type'        => Type::nonNull($this->getGraphQL()->type('fans_handle')),
+				'description' => trans('fans::act.db.account_id'),
+			],
 			'account_id' => [
 				'type'        => Type::nonNull(Type::int()),
 				'description' => trans('user::fans.db.account_id'),
@@ -50,16 +55,31 @@ class FansMutation extends Mutation
 	 * @param $root
 	 * @param $args
 	 * @return array
+	 * @throws \Exception
 	 */
 	public function resolve($root, $args)
 	{
 		$account_id = $args['account_id'];
+		$type       = $args['type'];
 		/** @var Fans $fans */
-		$fans     = app('act.fans');
-		if (!$fans->setPam($this->getJwtWebGuard()->user())->concern($account_id)) {
-			return $fans->getError()->toArray();
-		} else {
-			return $fans->getSuccess()->toArray();
+		$fans = app('act.fans');
+		$fans->setPam($this->getJwtWebGuard()->user());
+		if ($type == 'attention') {
+			if (!$fans->concern($account_id)) {
+				return $fans->getError()->toArray();
+			}
+			else {
+				return $fans->getSuccess()->toArray();
+			}
 		}
+		else {
+			if (!$fans->cancel($account_id)) {
+				return $fans->getError()->toArray();
+			}
+			else {
+				return $fans->getSuccess()->toArray();
+			}
+		}
+
 	}
 }

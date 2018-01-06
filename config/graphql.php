@@ -9,7 +9,7 @@ return [
 				\User\Pam\GraphQL\Mutation\PasswordLoginMutation::class,
 				\Util\Util\GraphQL\Mutation\SendCaptchaMutation::class,
 				\User\Pam\GraphQL\Mutation\CaptchaLoginMutation::class,
-				\User\Pam\GraphQL\Mutation\UpdatePasswordMutation::class
+				\User\Pam\GraphQL\Mutation\UpdatePasswordMutation::class,
 			],
 			'query'    => [
 			],
@@ -18,17 +18,14 @@ return [
 		'web'     => [
 			'mutation' => [
 				\User\Fans\GraphQL\Mutation\FansMutation::class,
-				\User\Fans\GraphQL\Mutation\FansDeleteMutation::class,
 
 				\User\Pam\GraphQL\Mutation\UnbindMutation::class,
 				\User\Pam\GraphQL\Mutation\ProfileMutation::class,
 
 				\System\Pam\GraphQL\Mutation\BindChangeMutation::class,
-				\Util\Util\GraphQL\Mutation\SendCaptchaMutation::class,
+
 
 			],
-
-
 			'query'    => [
 				\System\Setting\Graphql\Queries\SettingsQuery::class,
 
@@ -43,9 +40,6 @@ return [
 			'mutation' => [
 				\System\Setting\Graphql\Mutation\SettingMutation::class,
 				\System\Pam\GraphQL\Mutation\RoleMutation::class,
-
-				\System\Pam\GraphQL\Mutation\BindChangeMutation::class,
-
 
 				/* server
 				 -------------------------------------------- */
@@ -112,6 +106,7 @@ return [
 		\User\Fans\GraphQL\Types\ListType::class,
 		\User\Pam\GraphQL\Types\PwdRegisterType::class,
 		\User\Pam\GraphQL\Types\CaptchaRegisterType::class,
-
+		\User\Pam\GraphQL\Types\UpdatePasswordType::class,
+		\User\Fans\GraphQL\Types\FansHandleType::class,
 	],
 ];
