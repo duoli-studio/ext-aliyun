@@ -4,6 +4,6 @@
 	"version": "1.0",
 	"description": "This is the description for the poppy Backend module.",
 	"autoload": [
-		"classes/functions.php"
+		"src/classes/functions.php"
 	]
 }

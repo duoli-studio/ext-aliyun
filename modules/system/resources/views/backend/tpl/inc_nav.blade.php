@@ -33,17 +33,13 @@ $_menus = app('module')->backendMenus()->toArray();
                                 {!! $__sub_menus['icon']??'' !!}
                                 <span class="title">{{$__sub_menus['title']}}</span>
                             </a>
-                            <ul class="nav nav-second-level collapse @if (in_array($_route, array_keys($__sub_menus['flat_links']))) in @endif ">
-                                @foreach($__sub_menus['links'] as $nav_key => $nav)
-                                    @if (isset($nav['links']) && !empty($nav['links']))
-                                        @foreach($nav['links'] as $sub)
-                                            <li class="nav-item @if ($sub['route'] == $_route) active @endif">
-                                                <a href="{{ $sub['url']}}" class="nav-link">
-                                                    {!! $sub['icon'] !!} {{$sub['title']}}
-                                                </a>
-                                            </li>
-                                        @endforeach
-                                    @endif
+                            <ul class="nav nav-second-level collapse @if (in_array(\Route::currentRouteName(), array_keys($__sub_menus['children']))) in @endif ">
+                                @foreach($__sub_menus['children'] as $nav_key => $nav)
+                                    <li class="nav-item @if ($nav['url'] == \Route::currentRouteName()) active @endif">
+                                        <a href="{{ $nav['url']}}" class="nav-link">
+                                            {!! $nav['icon'] ?? '' !!} {{$nav['title']}}
+                                        </a>
+                                    </li>
                                 @endforeach
                             </ul>
                     @endforeach
