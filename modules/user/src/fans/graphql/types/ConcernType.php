@@ -26,24 +26,46 @@ class ConcernType extends AbstractType
 				'type'        => Type::int(),
 				'description' => trans('user::fans.db.account_id'),
 			],
-			'head_pic'   => [
+			'user_img'   => [
 				'type'        => Type::string(),
 				'description' => trans('user::fans.db.fans_id'),
 			],
-			'nickname'   => [
+			'nick_name'   => [
 				'type'        => Type::string(),
 				'description' => trans('user::fans.db.fans_id'),
 			],
-			'sex'        => [
+			'gender'        => [
 				'type'        => Type::string(),
 				'description' => trans('user::fans.db.fans_id'),
 			],
-			'signature'  => [
+			'autograph'  => [
 				'type'        => Type::string(),
 				'description' => trans('user::fans.db.fans_id'),
 			],
-			//todo 认证等级 男女猎手 女猎手
-
+			'lol_is_girl'  => [
+				'type'        => Type::string(),
+				'description' => trans('user::fans.db.fans_id'),
+			],
+			'lol_type'  => [
+				'type'        => Type::string(),
+				'description' => trans('user::fans.db.fans_id'),
+			],
+			'wz_is_girl'  => [
+				'type'        => Type::string(),
+				'description' => trans('user::fans.db.fans_id'),
+			],
+			'wz_type'  => [
+				'type'        => Type::string(),
+				'description' => trans('user::fans.db.fans_id'),
+			],
+			'pubg_is_girl'  => [
+				'type'        => Type::string(),
+				'description' => trans('user::fans.db.fans_id'),
+			],
+			'pubg_type'  => [
+				'type'        => Type::string(),
+				'description' => trans('user::fans.db.fans_id'),
+			],
 		];
 	}
 }

@@ -53,13 +53,10 @@ class ConcernQuery extends Query
 	 */
 	public function resolve($root, $args)
 	{
-		//todo 用户头像 昵称 性别 认证等级
 		//todo  分页
 		/** @var PamAccount $pam */
 		$pam = $this->getJwtWebGuard()->user();
-		/*var_dump($pam->type);*/
 		$concern = UserFans::where('fans_id', $pam->id)->pluck('account_id')->toArray();
-
 		$users = [];
 		foreach ($concern as $id) {
 			$Db = UserProfile::where('id', $id)->get();
