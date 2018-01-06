@@ -6,7 +6,8 @@ use Poppy\Framework\GraphQL\Exception\TypeNotFound;
 use Poppy\Framework\GraphQL\Support\Mutation;
 use System\Classes\Traits\SystemTrait;
 use User\Pam\Action\Pam;
-use User\Pam\Action\User;
+use Poppy\Framework\Classes\Resp;
+use System\Models\PamAccount;
 
 class PasswordLoginMutation extends Mutation
 {
@@ -17,7 +18,7 @@ class PasswordLoginMutation extends Mutation
 	{
 		parent::__construct($attributes);
 		$this->attributes['name']        = 'password_login';
-		$this->attributes['description'] = trans('user::pwd_register.graphql.mutation_desc');
+		$this->attributes['description'] = trans('user::password_login.graphql.mutation_desc');
 	}
 
 
@@ -38,11 +39,11 @@ class PasswordLoginMutation extends Mutation
 		return [
 			'passport' => [
 				'type'        => Type::nonNull(Type::string()),
-				'description' => trans('user::pwd_register.db.passport'),
+				'description' => trans('user::password_login.db.passport'),
 			],
 			'password' => [
 				'type'        => Type::nonNull(Type::string()),
-				'description' => trans('user::pwd_register.db.password'),
+				'description' => trans('user::password_login.db.password'),
 			],
 		];
 	}
@@ -56,14 +57,30 @@ class PasswordLoginMutation extends Mutation
 	{
 		$passport = $args['passport'];
 		$password = $args['password'];
-		/** @var Pam $pam * */
-		$pam = app('act.pam');
-		// todo 返回 token 的
-		if (!$pam->loginPwd($passport, $password)) {
-			return $pam->getError()->toArray();
+		/** @var Pam $actPam */
+		$actPam = app('act.pam');
+
+		// if (!$actPam->loginCheck($passport, $password, PamAccount::GUARD_JWT_WEB)) {
+		if (!$actPam->loginCheck($passport, $password)) {
+			$error         = $actPam->getError()->toArray();
+			$error['data'] = '';
+			return $error;
 		}
 		else {
-			return $pam->getSuccess()->toArray();
+			$pam = $actPam->getPam();
+
+			if (!$token = $this->getJwt()->fromUser($pam)) {
+				$error         = (new Resp(Resp::ERROR, '获取凭证失败'))->toArray();
+				$error['data'] = '';
+				return $error;
+			}
+			else {
+				$success         = $actPam->getSuccess(
+					trans('user::password_login.graphql.get_token_success')
+				)->toArray();
+				$success['data'] = $token;
+				return $success;
+			}
 		}
 	}
 }

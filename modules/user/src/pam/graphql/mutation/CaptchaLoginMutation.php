@@ -17,7 +17,7 @@ class CaptchaLoginMutation extends Mutation
 	{
 		parent::__construct($attributes);
 		$this->attributes['name']        = 'captcha_login';
-		$this->attributes['description'] = trans('user::captcha_register.graphql.mutation_desc');
+		$this->attributes['description'] = trans('user::captcha_login.graphql.mutation_desc');
 	}
 
 
@@ -38,12 +38,11 @@ class CaptchaLoginMutation extends Mutation
 		return [
 			'passport' => [
 				'type'        => Type::nonNull(Type::string()),
-				'description' => trans('user::captcha_register.db.passport'),
+				'description' => trans('user::captcha_login.db.passport'),
 			],
 			'captcha'  => [
 				'type'        => Type::nonNull(Type::string()),
-				// todo 注释
-				'description' => trans('user::captcha_register.db.passport'),
+				'description' => trans('user::captcha_login.db.captcha'),
 			],
 		];
 	}
@@ -62,7 +61,7 @@ class CaptchaLoginMutation extends Mutation
 		$actPam = app('act.pam');
 
 		if (!$actPam->captchaLogin($passport, $captcha)) {
-			$error =  $actPam->getError()->toArray();
+			$error         = $actPam->getError()->toArray();
 			$error['data'] = '';
 			return $error;
 		}
@@ -75,8 +74,9 @@ class CaptchaLoginMutation extends Mutation
 				return $error;
 			}
 			else {
-				// todo 多语言
-				$success         = $actPam->getSuccess('登录成功, 获取Token')->toArray();
+				$success         = $actPam->getSuccess(
+					trans('user::captcha_login.graphql.get_token_success')
+				)->toArray();
 				$success['data'] = $token;
 				return $success;
 			}

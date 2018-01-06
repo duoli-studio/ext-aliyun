@@ -184,7 +184,7 @@ class Pam
 
 		try {
 			// 处理数据库
-			return \DB::transaction(function () use ($initDb, $role, $password, $hasAccountName, $prefix) {
+			return \DB::transaction(function() use ($initDb, $role, $password, $hasAccountName, $prefix) {
 
 				/** @var PamAccount $pam pam */
 				$pam = PamAccount::create($initDb);
@@ -216,180 +216,6 @@ class Pam
 	}
 
 	/**
-	 * 密码登录
-	 * @param $passport
-	 * @param $password
-	 * @return bool
-	 */
-	public function loginPwd($passport, $password)
-	{
-		$passport = strtolower($passport);
-		$type     = $this->passportType($passport);
-		$initDb   = [
-			$type      => strval($passport),
-			'password' => strval($password),
-		];
-		$rule     = [
-			$type      => [
-				Rule::required(),
-				Rule::between(6, 18),
-				Rule::string(),
-			],
-			'password' => [
-				Rule::required(),
-				Rule::between(6, 18),
-			],
-		];
-		if ($type == PamAccount::REG_TYPE_MOBILE) {
-			$rule[$type][] = Rule::mobile();
-		}
-		elseif ($type == PamAccount::REG_TYPE_EMAIL) {
-			$rule[$type][] = Rule::email();
-		}
-		else {
-			if (preg_match('/\s+/', $passport)) {
-				return $this->setError('用户名中不得包含空格');
-			}
-			$rule[$type][] = 'regex:/[a-zA-Z\x{4e00}-\x{9fa5}][a-zA-Z0-9_\x{4e00}-\x{9fa5}]/u';
-		}
-		// 验证数据
-		$validator = \Validator::make($initDb, $rule);
-		if ($validator->fails()) {
-			return $this->setError($validator->messages());
-		}
-
-		$initType = $initDb[$type];
-		//判断此用户是否注册过
-		$pam = PamAccount::where(function ($query) use ($initType) {
-			$query->where('username', $initType)
-				->orwhere('email', $initType)
-				->orwhere('mobile', $initType);
-		})->get();
-
-		if ($pam->isEmpty()) {
-			return $this->setError('无此用户，请先去注册');
-		}
-		//如果没注册过　去请求　captchaRegister  这个接口　然后请求　register 接口　去设置基本信息
-		foreach ($pam as $p) {
-			$result = $this->checkPassword($p, $initDb['password']);
-		}
-		if (!$result) {
-			return $this->setError('密码或用户名不对');
-		}
-		return true;
-	}
-
-
-	/**
-	 * 用户注册
-	 * @param string $passport
-	 * @param string $password
-	 * @param string $role
-	 * @return bool
-	 * @throws \Throwable
-	 */
-	public function registerBak($passport, $password, $nickname, $sex, $role = PamRole::FE_USER)
-	{
-		// 组织数据 -> 根据数据库字段来组织
-		$passport = strtolower($passport);
-
-		$type = $this->passportType($passport);
-
-		$initDb = [
-			$type      => strval($passport),
-			'password' => strval($password),
-		];
-
-		$rule = [
-			$type      => [
-				Rule::required(),
-				Rule::string(),
-				Rule::between(6, 30),
-				// 唯一性认证
-				Rule::unique($this->pamTable, $type),
-			],
-			'password' => [
-				Rule::required(),
-				Rule::password(),
-				Rule::string(),
-				Rule::between(6, 16),
-			],
-		];
-		if ($type == PamAccount::REG_TYPE_MOBILE) {
-			$rule[$type][] = Rule::mobile();
-		}
-		elseif ($type == PamAccount::REG_TYPE_EMAIL) {
-			$rule[$type][] = Rule::email();
-		}
-		else {
-			if (preg_match('/\s+/', $passport)) {
-				return $this->setError('用户名中不得包含空格');
-			}
-			$rule[$type][] = 'regex:/[a-zA-Z\x{4e00}-\x{9fa5}][a-zA-Z0-9_\x{4e00}-\x{9fa5}]/u';
-		}
-		// 验证数据
-		$validator = \Validator::make($initDb, $rule);
-		if ($validator->fails()) {
-			return $this->setError($validator->messages());
-		}
-		// 服务器处理
-		// role and account type
-		$role = PamRole::where('name', $role)->first();
-		if (!$role) {
-			return $this->setError('给定的用户角色不存在');
-		}
-		// 自动设置前缀
-		$prefix = strtoupper(strtolower($this->getSetting()->get('system::site.account_prefix')));
-		if ($type != PamAccount::REG_TYPE_USERNAME) {
-			$hasAccountName = false;
-			// 检查是否设置了前缀
-			if (!$prefix) {
-				return $this->setError('尚未设置用户名默认前缀, 无法注册, 请联系管理员!');
-			}
-			$username = $prefix . '_' . Carbon::now()->format('YmdHis') . str_random(6);
-		}
-		else {
-			$hasAccountName = true;
-			$username       = $passport;
-		}
-
-		$initDb['username']  = $username;
-		$initDb['type']      = $role->type;
-		$initDb['is_enable'] = SysConfig::YES;
-
-		try {
-			// 处理数据库
-			return \DB::transaction(function () use ($initDb, $role, $hasAccountName, $prefix, $nickname, $sex) {
-				/** @var PamAccount $pam pam account */
-				$pam = PamAccount::create($initDb);
-
-				$user   = new User();
-				$result = $user->register($nickname, $sex, $pam->id);
-				if (!$result) {
-					throw new \Exception($user->getError());
-				}
-				// 给用户默认角色
-				$pam->roles()->attach($role->id);
-				// 如果没有设置账号, 则根据规范生成用户名
-				if (!$hasAccountName) {
-					$formatAccountName = sprintf("%s_%'.09d", $prefix, $pam->id);
-					$pam->username     = $formatAccountName;
-					$pam->save();
-				}
-				// 设置密码
-				$this->setPassword($pam, $pam->password);
-				$this->pam = $pam;
-				// 触发注册成功的事件
-				$this->getEvent()->dispatch(new PamRegistered($pam));
-				return true;
-			});
-		} catch (\Exception $e) {
-			return $this->setError($e->getMessage());
-		}
-	}
-
-
-	/**
 	 * 检查登录是否成功
 	 * @param string $passport
 	 * @param string $password
@@ -418,7 +244,6 @@ class Pam
 		if ($validator->fails()) {
 			return $this->setError($validator->errors());
 		}
-
 		/** @var \Auth $guard */
 		$guard = \Auth::guard($guard_type);
 		// dd($remember);
@@ -435,6 +260,7 @@ class Pam
 
 			$this->getEvent()->dispatch(new LoginSuccess($user));
 			$this->pam = $user;
+
 			return true;
 		}
 		else {
@@ -498,7 +324,7 @@ class Pam
 		];
 		$initType = $initDb[$type];
 		//判断此用户是否注册过
-		$result = PamAccount::where(function ($query) use ($initType) {
+		$result = PamAccount::where(function($query) use ($initType) {
 			$query->where('username', $initType)
 				->orwhere('email', $initType)
 				->orwhere('mobile', $initType);
