@@ -30,64 +30,65 @@ class BindChange
 		$this->accountTable = (new PamAccount())->getTable();
 	}
 
-
-	//账号换绑
-	//
-	public function establish($accountId, $captcha)
+	public function oldSendCaptcha()
 	{
-		// init
-		if ($accountId && !$this->initAccount($accountId)) {
+		if (!$this->checkPermission()) {
 			return false;
 		}
-
-		//给该手机号发送验证码
-		$util = new Util();
-		$util->sendCaptcha($this->mobile);
-		//如果手机号失效，调用忘记手机号的方法验证
-
-		//验证手机验证码
-		$getCaptchas = PamCaptcha::where('passport', $this->mobile)->get(['captcha'])->toArray();
-		$getCaptcha = $getCaptchas[0]['captcha'];
-		if ($captcha == $getCaptcha) {
-			return true;
-		} else {
-			return $this->setError('操作失败');
+		// init
+		if ($this->pam->id && !$this->initAccount($this->pam->id)) {
+			return false;
 		}
+		$actUtil = app('act.util');
+		$actUtil->sendCaptcha($this->mobile, $type = PamCaptcha::CON_FIND_PASSWORD);
+		//忘记手机号，手机号失效的情况
 
+		return true;
+	}
+
+	//验证
+	public function oldValidator($captcha)
+	{
+		$actUtil = app('act.util');
+		if (!$actUtil->validCaptcha($this->mobile, $captcha)) {
+			return $this->setError($actUtil->getError()->getMessage());
+		}
+		$actUtil->deleteCaptcha($this->mobile, $captcha);
+		return true;
+	}
+
+	public function newSendCaptcha($newMobile)
+	{
+		//验证新手机号是否已经注册
+		if (PamAccount::where('mobile', $newMobile)->count()) {
+			return $this->setError('该手机号已经注册过');
+		} else {
+			//发送验证码
+			$actUtil = app('act.util');
+			$actUtil->sendCaptcha($newMobile, $type = PamCaptcha::CON_REGISTER);
+		}
+		return true;
 	}
 
 	//新的手机号验证
-	public function validator($accountId, $newMobile, $newCaptcha)
+	public function newValidator($newMobile, $newCaptcha)
 	{
-		//验证新手机号是否已经注册
-		$count = PamAccount::where('mobile', $newMobile)->count();
-		if ($count){
-			return $this->setError('该手机号已经注册过');
-		}else{
-			//发送验证码
-			(new Util())->sendCaptcha($newMobile);
-
-			$getCaptchas = PamCaptcha::where('passport', $newMobile)->get('captcha')->toArray();
-			$getCaptcha = $getCaptchas[0]['captcha'];
-			if($newCaptcha == $getCaptcha) {
-
-				// $this->accountTable->mobile = $newMobile;
-				// $this->accountTable->save();
-				PamAccount::where('id',$accountId)->update(['mobile' => $newMobile]);
-
-				return true;
-			}else{
-				return $this->setError('操作失败');
-			}
+		$actUtil = app('act.util');
+		if (!$actUtil->validCaptcha($newMobile, $newCaptcha)) {
+			return $this->setError($actUtil->getError()->getMessage());
 		}
-
+		PamAccount::where('id', $this->pam->id)->update([
+			'mobile' => $newMobile,
+		]);
+		$actUtil->deleteCaptcha($newMobile, $newCaptcha);
+		return true;
 	}
 
 
-	public function initAccount($accountId)
+	public function initAccount($id)
 	{
 		try {
-			$this->accountId = PamAccount::findOrFail($accountId);
+			$this->accountId = PamAccount::findOrFail($id);
 			$this->mobile    = $this->accountId->mobile;
 			return true;
 		} catch (\Exception $e) {

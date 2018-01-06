@@ -22,13 +22,13 @@ class BindChangeType extends AbstractType
 	public function fields()
 	{
 		return [
-			'account_id'  => [
-				'type'        => Type::int(),
-				'description' => trans('system::bind_change.db.account_id'),
-			],
 			'mobile' => [
-				'type'        => Type::string(),
+				'type'        => Type::nonNull(Type::string()),
 				'description' => trans('system::bind_change.db.mobile'),
+			],
+			'captcha' => [
+				'type'        => Type::nonNull(Type::string()),
+				'description' => trans('system::bind_change.db.captcha'),
 			],
 		];
 	}

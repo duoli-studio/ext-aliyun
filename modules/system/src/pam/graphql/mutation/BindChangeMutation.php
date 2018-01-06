@@ -6,6 +6,7 @@ use Poppy\Framework\GraphQL\Exception\TypeNotFound;
 use Poppy\Framework\GraphQL\Support\Mutation;
 use System\Classes\Traits\SystemTrait;
 use System\Pam\Action\BindChange;
+use System\Models\PamAccount;
 
 class BindChangeMutation extends Mutation
 {
@@ -30,16 +31,11 @@ class BindChangeMutation extends Mutation
 
 	/**
 	 * @return array
-	 * @throws TypeNotFound
 	 */
 	public function args(): array
 	{
 		return [
-			'account_id' => [
-				'type'        => Type::int(),
-				'description' => trans('system::bind_change.db.account_id'),
-			],
-			'mobile'     => [
+			'mobile' => [
 				'type'        => Type::nonNull(Type::string()),
 				'description' => trans('system::bind_change.db.mobile'),
 			],
@@ -53,12 +49,15 @@ class BindChangeMutation extends Mutation
 	 */
 	public function resolve($root, $args)
 	{
-		$account_id = $args['account_id'];
-		$mobile     = $args['mobile'];
+		$mobile = $args['mobile'];
+
+		/** @var PamAccount $pam */
+		$pam = $this->getJwtWebGuard()->user();
 
 		/** @var BindChange $bindChange */
 		$bindChange = app('act.bind_change');
-		if (!$bindChange->establish($account_id, $mobile)) {
+		$bindChange->setPam($pam);
+		if (!$bindChange->newSendCaptcha($mobile)) {
 			return $bindChange->getError()->toArray();
 		} else {
 			return $bindChange->getSuccess()->toArray();
