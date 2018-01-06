@@ -30,6 +30,7 @@ return [
 				\System\Setting\Graphql\Queries\SettingsQuery::class,
 
 				\User\Fans\Graphql\Queries\ConcernQuery::class,
+				\User\Fans\Graphql\Queries\FansQuery::class,
 			],
 		],
 		// 后台权限
@@ -104,7 +105,7 @@ return [
 		/* user
 		 -------------------------------------------- */
 		// concern
-		\User\Fans\GraphQL\Types\ConcernType::class,
+		\User\Fans\GraphQL\Types\ListType::class,
 		\User\Pam\GraphQL\Types\PwdRegisterType::class,
 		\User\Pam\GraphQL\Types\CaptchaRegisterType::class,
 
