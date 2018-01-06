@@ -60,7 +60,6 @@ return [
 
 
 				\System\Pam\Graphql\Queries\BindChangeQuery::class,
-				\User\Pam\Graphql\Queries\ChangeQuery::class,
 			],
 		],
 	],
@@ -98,7 +97,7 @@ return [
 		/* util
 		 -------------------------------------------- */
 		// send captcha
-		\Util\Util\GraphQL\Types\SendCaptchaTypeType::class,
+		\Util\Util\GraphQL\Types\SendCaptchaType::class,
 
 
 		/* user
