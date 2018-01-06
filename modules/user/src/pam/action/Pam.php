@@ -48,7 +48,7 @@ class Pam
 
 
 	/**
-	 * 验证验证码
+	 * 验证验登录
 	 * @param $passport
 	 * @param $captcha
 	 * @return bool
@@ -90,6 +90,9 @@ class Pam
 		else {
 			// 登录
 			$this->pam = PamAccount::where($passportType, $passport)->first();
+			//登录时间
+
+			//账号是否封禁
 			return true;
 		}
 	}
@@ -216,7 +219,7 @@ class Pam
 	}
 
 	/**
-	 * 检查登录是否成功
+	 * 密码登录
 	 * @param string $passport
 	 * @param string $password
 	 * @param string $guard_type
@@ -310,106 +313,45 @@ class Pam
 	}
 
 	/**
-	 * 找回密码->发送验证码
+	 * 找回密码->验证验证码
 	 * @param $passport
+	 * @param $captcha
 	 * @return bool
 	 */
-	public function RecoverPassword($passport)
+	public function updatePassword($passport, $captcha, $password)
 	{
-		//接收数据，判断数据是手机号还是邮箱或者用户名
-		$passport = strtolower($passport);
+		$passport = strval($passport);
 		$type     = $this->passportType($passport);
 		$initDb   = [
-			$type => strval($passport),
-		];
-		$initType = $initDb[$type];
-		//判断此用户是否注册过
-		$result = PamAccount::where(function($query) use ($initType) {
-			$query->where('username', $initType)
-				->orwhere('email', $initType)
-				->orwhere('mobile', $initType);
-		})->get();
-
-		if ($result->isEmpty()) {
-			return $this->setError('该用户没有注册');
-		}
-		//生成验证码并且发送
-		switch ($type) {
-			case 'mobile':
-				$util   = new Util();
-				$result = $util->sendCaptcha($initType);
-				break;
-			case 'email':
-				//调用第三方邮箱发送
-				break;
-		}
-		if (!$result) {
-			return $this->setError('验证码发送失败');
-		}
-		//验证用户输入的验证码是否正确  请求那个validatorCaptcha
-		return true;
-	}
-
-	/**
-	 * 找回密码->修改密码
-	 * @param $passport
-	 * @param $password
-	 * @return bool
-	 */
-	public function findPassword($passport, $password)
-	{
-		$password  = strval($password);
-		$initDb    = [
+			'passport' => $passport,
 			'password' => $password,
+			'captcha'  => $captcha,
 		];
-		$rule      = [
+
+		$rule = [
+			'captcha'  => Rule::required(),
 			'password' => [
 				Rule::required(),
+				Rule::between(6, 30),
 				Rule::password(),
 				Rule::string(),
-				Rule::between(6, 16),
 			],
 		];
+
 		$validator = \Validator::make($initDb, $rule);
 		if ($validator->fails()) {
 			return $this->setError($validator->messages());
 		}
-		$newPassword = array_get($initDb, 'password');
-		$pam         = PamAccount::where('mobile', $passport)->get();
-		foreach ($pam as $p) {
-			$result = $this->setPassword($p, $newPassword);
+
+		$actUtil = app('act.util');
+		if (!$actUtil->validCaptcha($passport, $captcha)) {
+			return $this->setError($actUtil->getError()->getMessage());
 		}
+
+		$pam    = PamAccount::where($type, $passport)->first();
+		$result = $this->setPassword($pam, $password);
 		if (!$result) {
-			return $this->setError('修改密码失败');
-		}
-		return true;
-	}
-
-	/**
-	 * 密码重置
-	 * @param $account_id
-	 * @param $oldPassword
-	 * @param $newPassword
-	 * @return bool
-	 */
-	public function resetPassword($account_id, $oldPassword, $newPassword)
-	{
-		$oldPassword = strval($oldPassword);
-		$newPassword = strval($newPassword);
-		$pam         = PamAccount::where('id', $account_id)->get();
-		foreach ($pam as $p) {
-			$result = $this->checkPassword($p, $oldPassword);
-		}
-
-		if (!$result) {
-			return $this->setError('原密码不对，请重新输入');
-		}
-
-		foreach ($pam as $p) {
-			$ok = $this->setPassword($p, $newPassword);
-		}
-		if (!$ok) {
-			return $this->setError('修改密码成功');
+			return false;
 		}
 		return true;
 	}

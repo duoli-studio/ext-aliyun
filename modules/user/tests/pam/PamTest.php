@@ -28,30 +28,6 @@ class PamTest extends TestCase
 		dd($result);
 	}
 
-	public function testCaptcha()
-	{
-		/** @var Pam $pam */
-		$pam = app('act.pam');
-		if ($pam->RecoverPassword(18654958691)) {
-			dd($pam->getSuccess());
-		}
-		else {
-			dd($pam->getError());
-		};
-	}
-
-	public function testCaptchaLogin()
-	{
-		/** @var Pam $pam */
-		$pam = app('act.pam');
-		if ($pam->captchaLogin(18654958691)) {
-			dd($pam->getSuccess());
-		}
-		else {
-			dd($pam->getError());
-		};
-	}
-
 	public function testValidate()
 	{
 		/** @var Pam $pam */
@@ -61,26 +37,16 @@ class PamTest extends TestCase
 		}
 		else {
 			dd($pam->getError());
-		};
+		}
+
 	}
 
-	public function testPwdLogin()
-	{
-		/** @var Pam $pam */
-		$pam = app('act.pam');
-		if ($pam->passwordLogin(18654958691, 123457)) {
-			dd($pam->getSuccess());
-		}
-		else {
-			dd($pam->getError());
-		};
-	}
 
 	public function testUpdatePwd()
 	{
 		/** @var Pam $pam */
 		$pam = app('act.pam');
-		if ($pam->findPassword(18654958691, '123456')) {
+		if ($pam->updatePassword(18654958691, '132213', '19970302')) {
 			dd($pam->getSuccess());
 		}
 		else {
@@ -90,7 +56,7 @@ class PamTest extends TestCase
 
 	public function testChangePwd()
 	{
-		/** @var Fans $pam */
+		/** @var Pam $pam */
 		$pam  = app('act.pam');
 		$user = PamAccount::where('username', 'imvkmark')->first();
 		if ($pam->setPassword($user, '123456')) {
@@ -101,23 +67,11 @@ class PamTest extends TestCase
 		}
 	}
 
-	public function testResetPwd()
-	{
-		/** @var Pam $pam */
-		$pam = app('act.pam');
-		if ($pam->resetPassword(107, '19970302', '4515222')) {
-			dd($pam->getSuccess());
-		}
-		else {
-			dd($pam->getError());
-		};
-	}
-
 	public function testLoginCheck()
 	{
 		/** @var Pam $pam */
 		$pam = app('act.pam');
-		if ($pam->loginCheck('18654958691','123456')) {
+		if ($pam->loginCheck('18654958691', '123456')) {
 			dd($pam->getSuccess());
 		}
 		else {
