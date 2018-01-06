@@ -9,5 +9,6 @@ return [
 	'db'      => [
 		'account_id' => 'ID',
 		'mobile'     => '手机号',
+		'captcha'    => '验证码',
 	],
 ];

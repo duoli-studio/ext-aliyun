@@ -134,6 +134,14 @@ return [
 			"key"  => 'jquery.validation',
 			'shim' => ['jquery'],
 		],
+		"jquery-slimscroll" => [
+			"js"   => [
+				'main' => 'jquery.slimscroll.min.js',
+				'aim' => 'jquery/slimscroll/{VERSION}/jquery.slimscroll.min.js',
+			],
+			"key"  => 'jquery.slimscroll',
+			'shim' => ['jquery'],
+		],
 
 		"js-cookie" => [
 			"js"   => [
@@ -172,6 +180,17 @@ return [
 			"shim" => [
 				"exports" => "vkbeautify",
 			],
+		],
+
+		"metisMenu" => [
+			"js"  => [
+				'main' => 'dist/metisMenu.js',
+				'aim'  => 'jquery/metis-menu/{VERSION}/jquery.metis-menu.js',
+			],
+			"css" => [
+				'dist/*.css' => 'jquery/metis-menu/',
+			],
+			"key" => 'jquery.metis-menu',
 		],
 
 		"PACE" => [

@@ -1,7 +1,7 @@
 <?php namespace User\Pam;
 
 use Illuminate\Support\ServiceProvider;
-use User\Pam\Action\Change;
+use User\Pam\Action\ProfileChange;
 
 /**
  * Class PermissionServiceProvider.
@@ -19,8 +19,8 @@ class ChangeServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
-		$this->app->bind('act.change', function ($app) {
-			return new Change();
+		$this->app->bind('act.profile_change', function ($app) {
+			return new ProfileChange();
 		});
 	}
 
@@ -30,7 +30,7 @@ class ChangeServiceProvider extends ServiceProvider
 	public function provides()
 	{
 		return [
-			'act.change',
+			'act.profile_change',
 		];
 	}
 }

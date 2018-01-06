@@ -17,7 +17,7 @@ class CaptchaLoginMutation extends Mutation
 	{
 		parent::__construct($attributes);
 		$this->attributes['name']        = 'captcha_login';
-		$this->attributes['description'] = trans('user::captcha_login.graphql.mutation_desc');
+		$this->attributes['description'] = trans('user::login.graphql.mutation_desc');
 	}
 
 
@@ -38,11 +38,11 @@ class CaptchaLoginMutation extends Mutation
 		return [
 			'passport' => [
 				'type'        => Type::nonNull(Type::string()),
-				'description' => trans('user::captcha_login.db.passport'),
+				'description' => trans('user::login.db.passport'),
 			],
 			'captcha'  => [
 				'type'        => Type::nonNull(Type::string()),
-				'description' => trans('user::captcha_login.db.captcha'),
+				'description' => trans('user::login.db.captcha'),
 			],
 		];
 	}
@@ -75,7 +75,7 @@ class CaptchaLoginMutation extends Mutation
 			}
 			else {
 				$success         = $actPam->getSuccess(
-					trans('user::captcha_login.graphql.get_token_success')
+					trans('user::login.graphql.get_token_success')
 				)->toArray();
 				$success['data'] = $token;
 				return $success;

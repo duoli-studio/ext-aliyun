@@ -27,7 +27,6 @@ class RouteServiceProvider extends ServiceProvider
 	{
 		$this->mapWebRoutes();
 
-
 		$this->mapDevRoutes();
 
 		$this->mapApiRoutes();
@@ -50,15 +49,21 @@ class RouteServiceProvider extends ServiceProvider
 			$router->get('/test', SystemTestController::class . '@test');
 			$router->get('/test_app', SystemTestController::class . '@test_app');
 		});
+
+		// backend web
 		\Route::group([
 			'middleware' => 'backend',
 			'prefix'     => 'backend',
 		], function (Router $router) {
-			$router->any('/login', BackendHomeController::class . '@login');
-
-			$router->any('/cp', BackendHomeController::class . '@cp')->name('backend:home.cp');
-			$router->any('/password', BackendHomeController::class . '@password')->name('backend:home.password');
-			$router->any('/logout', BackendHomeController::class . '@cp')->name('backend:home.logout');
+			$router->any('/', BackendHomeController::class . '@login')->name('backend:home.login');
+			$router->group([
+				'middleware' => 'auth:backend',
+			], function (Router $router) {
+				$router->any('/cp', BackendHomeController::class . '@cp')->name('backend:home.cp');
+				$router->any('/password', BackendHomeController::class . '@password')->name('backend:home.password');
+				$router->any('/logout', BackendHomeController::class . '@logout')->name('backend:home.logout');
+				$router->any('/setting/{path?}', BackendHomeController::class . '@setting')->name('backend:home.setting');
+			});
 		});
 	}
 
