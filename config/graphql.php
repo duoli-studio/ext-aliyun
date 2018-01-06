@@ -6,12 +6,12 @@ return [
 		// 无权限即可访问
 		'default' => [
 			'mutation' => [
-				\User\Pam\GraphQL\Mutation\PasswordLoginMutation::class,
-				\Util\Util\GraphQL\Mutation\SendCaptchaMutation::class,
-				\User\Pam\GraphQL\Mutation\CaptchaLoginMutation::class,
-				\User\Pam\GraphQL\Mutation\UpdatePasswordMutation::class,
+				\User\Pam\Graphql\Mutation\PasswordLoginMutation::class,
+				\User\Pam\Graphql\Mutation\CaptchaLoginMutation::class,
+				\User\Pam\Graphql\Mutation\UpdatePasswordMutation::class,
 			],
 			'query'    => [
+				\Util\Util\Graphql\Queries\SendCaptchaQuery::class,
 			],
 		],
 		// 前台用户权限
@@ -23,8 +23,6 @@ return [
 				\User\Pam\GraphQL\Mutation\ProfileMutation::class,
 
 				\System\Pam\GraphQL\Mutation\BindChangeMutation::class,
-
-
 			],
 			'query'    => [
 				\System\Setting\Graphql\Queries\SettingsQuery::class,

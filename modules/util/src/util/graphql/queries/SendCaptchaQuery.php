@@ -1,12 +1,12 @@
-<?php namespace Util\Util\GraphQL\Mutation;
+<?php namespace Util\Util\Graphql\Queries;
 
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use Poppy\Framework\GraphQL\Exception\TypeNotFound;
-use Poppy\Framework\GraphQL\Support\Mutation;
+use Poppy\Framework\GraphQL\Support\Query;
 use System\Classes\Traits\SystemTrait;
 
-class SendCaptchaMutation extends Mutation
+class SendCaptchaQuery extends Query
 {
 	use SystemTrait;
 

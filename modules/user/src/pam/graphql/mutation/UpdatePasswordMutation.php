@@ -1,4 +1,4 @@
-<?php namespace User\Pam\GraphQL\Mutation;
+<?php namespace User\Pam\Graphql\Mutation;
 
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
