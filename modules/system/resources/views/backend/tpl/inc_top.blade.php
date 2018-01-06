@@ -6,11 +6,11 @@
         <ul class="nav navbar-top-links navbar-right">
             <li>
 				<span class="text-muted welcome-message">
-                    你好, {{$_pam->account_name}}
+                    你好, {{\Auth::guard(\System\Models\PamAccount::GUARD_BACKEND)->user()->username}}
                 </span>
             </li>
             <li>
-                <a href="{!! route('be:home.logout') !!}">
+                <a href="{!! route('backend:home.logout') !!}">
                     <i class="fa fa-sign-out"></i> 退出
                 </a>
             </li>
