@@ -1,7 +1,46 @@
 <script>
-    import {trans} from '../helpers/injection';
+    import injection, {trans} from '../helpers/injection';
 
     export default {
+        /**
+         *
+         * @param to     即将要进入的目标 路由对象
+         * @param from   当前导航正要离开的路由
+         * @param next   一定要调用该方法来 resolve 这个钩子。执行效果依赖 next 方法的调用参数
+         */
+        beforeRouteEnter(to, from, next) {
+            injection.loading.start();
+            injection.http.post(`${window.api}/g/backend`, {
+                query         : `
+                query roles ($filters:role_filter!) {
+                    roles : roles(filters: $filters){
+                        title,
+                        name,
+                        type
+                    }
+                }`,
+                variables     : {
+                    filters : {
+                        type : 'backend'
+                    }
+                },
+                operationName : 'roles'
+            }).then(response => {
+                //
+                const {data, pagination} = response.data;
+
+                console.log(pagination);
+                next(vm => {
+                    data.roles.forEach(item => {
+                        console.log(item);
+                    });
+                    vm.roles_data = data.roles;
+                    injection.loading.finish();
+                });
+            }).catch(() => {
+                injection.loading.error();
+            });
+        },
         data() {
             return {
                 value4  : '',
@@ -93,85 +132,24 @@
                     ],
                 },
 
-                columns1 : [
+                roles_column : [
                     {
-                        title  : 'ID',
-                        key    : 'id',
-                        render : (h, params) => h('div', [
-                            h('Icon', {
-                                props : {
-                                    type : 'person'
-                                }
-                            }),
-                            h('strong', params.row.name)
-                        ])
+                        title : '角色标识(英文字母)',
+                        key   : 'name'
                     },
                     {
-                        title : '用户名',
-                        key   : 'userName'
-                    },
-                    {
-                        title : '手机号',
-                        key   : 'phone'
-                    },
-                    // {
-                    //     title : '操作',
-                    //     key   : 'action',
-                    //     width : 150,
-                    //     align : 'center',
-                    //    render  : (h, params) => {
-                    //        return h('div', [
-                    //            h('Button', {
-                    //                props   : {
-                    //                    type    : 'primary',
-                    //                    size    : 'small'
-                    //                },
-                    //                style   : {
-                    //                    marginRight : '5px'
-                    //                },
-                    //                on  : {
-                    //                    click   : () => {
-                    //                        this.show(params.index);
-                    //                    }
-                    //                }
-                    //            }, 'View'),
-                    //            h('Button', {
-                    //                props   : {
-                    //                    type    : 'error',
-                    //                    size    : 'small'
-                    //                },
-                    //                on  : {
-                    //                    click   : () => {
-                    //                        this.remove(params.index);
-                    //                    }
-                    //                }
-                    //            }, 'Delete')
-                    //        ]);
-                    //    }
-                    // }
-                ],
-                data1    : [
-                    {
-                        id       : 1,
-                        userName : 'John Brown',
-                        phone    : 18
-                    },
-                    {
-                        id       : 2,
-                        userName : 'Jim Green',
-                        phone    : 24
-                    },
-                    {
-                        id       : 3,
-                        userName : 'Joe Black',
-                        phone    : 30
-                    },
-                    {
-                        id       : 4,
-                        userName : 'Jon Snow',
-                        phone    : 26
+                        title : '角色标题',
+                        key   : 'title'
                     }
-                ]
+                ],
+                roles_data   : [
+                    {
+                        id    : '3',
+                        name  : 'name',
+                        title : '管理员'
+                    },
+                ],
+
             };
         },
         methods : {
@@ -211,7 +189,8 @@
                                     value:"${self.form.fileMaxSize}"
                                 ),
                                 imageMaxSize: setting(
-                                    key:"attachment.limit.image",                                   value:"${self.form.imageMaxSize}"
+                                    key:"attachment.limit.image",
+                                    value:"${self.form.imageMaxSize}"
                                 ),
                                 imageProcessingEngine: setting(
                                     key:"attachment.engine",
@@ -249,31 +228,16 @@
                 this.data1.splice(index, 1);
             }
         },
-
         mounted() {
             this.$store.commit('title', trans('administration.title.upload'));
         },
     };
 </script>
 <template>
-
-    <div>
-        <Icon type="checkmark" />
-        <Form inline>
-            <FormItem prop="user">
-                <Input type="text" placeholder="Username">
-                <Icon type="ios-person-outline"></Icon>
-                </Input>
-            </FormItem>
-            <FormItem prop="password">
-                <Input type="password" placeholder="Password">
-                <Icon type="ios-locked-outline"></Icon>
-                </Input>
-            </FormItem>
-            <FormItem>
-                <Button type="primary">Signin</Button>
-            </FormItem>
-        </Form>
-        <i-table height="200" :columns="columns1" :data="data1"></i-table>
+    <div class="page-wrap">
+        <i-form :label-width="200" inline>
+            <i-input :rows="2" placeholder="搜索..." icon="ios-search"></i-input>
+        </i-form>
+        <i-table height="200" :columns="roles_column" :data="roles_data"></i-table>
     </div>
 </template>

@@ -4,7 +4,7 @@
     export default {
         beforeRouteEnter(to, from, next) {
             injection.loading.start();
-            injection.http.post(`${window.api}/member/administration/information/list`, {
+            injection.http.post(`${window.api}/g/backend`, {
                 order: 'asc',
                 sort: 'order',
             }).then(response => {

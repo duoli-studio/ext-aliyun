@@ -9,9 +9,12 @@ export const information = ({commit}) => {
 		'}}'
 	}).then(response => {
 		const settings = [];
-		Object.keys(response.data.data.config).forEach(key => {
-			settings[response.data.data.config[key].item] = response.data.data.config[key].value;
-		});
+		console.warn('todo // setting injection');
+		if (response.data.data) {
+			Object.keys(response.data.data.setting).forEach(key => {
+				settings[response.data.data.setting[key].item] = response.data.data.setting[key].value;
+			});
+		}
 		commit('setting', settings);
 	});
 	injection.http.post(`${window.api}/system/information`).then(response => {
