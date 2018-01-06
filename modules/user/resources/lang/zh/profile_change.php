@@ -3,17 +3,18 @@
 return [
 	'graphql' => [
 		'queries_desc'  => '查询列表',
-		'mutation_desc' => '修改',
-		'type_desc'     => '类型',
+		'mutation_desc' => '个人资料修改',
+		'type_desc'     => '修改类型',
 	],
 
 	'db'   => [
-		'account_id' => 'ID',
+		'value'      => '值',
 		'nickname'   => '昵称',
 		'sex'        => '性别',
 		'signature'  => '签名',
 		'game'       => '游戏名片',
 		'head_pic'   => '头像',
+		'area'       => '地区',
 	],
 	'game' => [
 		'wz_game_nickname'     => '王者荣耀昵称',
