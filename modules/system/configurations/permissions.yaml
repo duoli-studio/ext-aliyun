@@ -1,0 +1,80 @@
+-
+    description: 全局权限
+    slug: backend:global
+    title: 全局
+    groups:
+        -
+            description: 插件权限定义
+            slug: addon
+            title: 插件权限
+            permissions:
+                -
+                    default: false
+                    description: 全局插件管理权限
+                    slug: manage
+        -
+            description: 邮件权限定义
+            slug: mail
+            title: 邮件权限
+            permissions:
+                -
+                    default: false
+                    description: 全局邮件配置管理权限
+                    slug: manage
+        -
+            description: 模块权限定义
+            slug: module
+            title: 模块权限
+            permissions:
+                -
+                    default: false
+                    description: 全局模块管理权限
+                    slug: manage
+        -
+            description: 导航权限定义
+            slug: navigation
+            title: 导航权限
+            permissions:
+                -
+                    default: false
+                    description: 全局导航分组管理权限
+                    slug: group
+                -
+                    default: false
+                    description: 全局导航项管理权限
+                    slug: item
+        -
+            description: 搜索引擎权限定义
+            slug: search-engine
+            title: 搜索引擎权限
+            permissions:
+                -
+                    default: false
+                    description: 获取全局 SEO 配置项
+                    slug: get
+                -
+                    default: false
+                    description: 设置全局 SEO 配置项
+                    slug: set
+        -
+            description: 全局权限定义
+            slug: global
+            title: 全局权限
+            permissions:
+                -
+                    default: false
+                    description: 获取全局配置项
+                    slug: get
+                -
+                    default: false
+                    description: 设置全局配置项
+                    slug: set
+        -
+            description: 用户角色管理
+            slug: role
+            title: 角色权限
+            permissions:
+                -
+                    default: false
+                    description: 管理用户角色
+                    slug: manage

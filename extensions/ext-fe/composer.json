@@ -1,0 +1,24 @@
+{
+	"name": "poppy/ext-fe",
+	"description": "Poppy frontEnd support",
+	"type": "poppy-extension",
+	"authors": [
+		{
+			"name": "Mark Zhao",
+			"email": "zhaody901@126.com"
+		}
+	],
+	"require": {
+		"php": ">=7.0.0",
+		"sabberworm/php-css-parser": "^8.1"
+	},
+	"autoload": {
+		"psr-4": {
+			"Poppy\\Extension\\Fe\\": "src/"
+		}
+	},
+	"config": {
+		"preferred-install": "dist"
+	},
+	"minimum-stability": "dev"
+}

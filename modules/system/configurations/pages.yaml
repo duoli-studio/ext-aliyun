@@ -1,0 +1,246 @@
+configurations:
+    initialization:
+        name: 参数配置
+        path: setting-system
+        tabs: true
+        target: global
+    tabs:
+        configuration:
+            default: true
+            show: true
+            submit: api/system/page/setting-system
+            title: 全局设置
+            fields:
+                name:
+                    default: ''
+                    description: ''
+                    label: 网站名称
+                    key: system::site.name
+                    placeholder: 请输入网站名称
+                    required: true
+                    type: input
+                    validates:
+                        -
+                            message: 请输入网站名称
+                            required: true
+                            trigger: change
+                            type: string
+                enabled:
+                    default: false
+                    description: '关闭后网站将不能访问'
+                    format: boolean
+                    label: 站点开启
+                    key: system::site.is_open
+                    required: false
+                    type: switch
+                domain:
+                    default: ''
+                    description: '不带 http:// 或 https://'
+                    label: 网站域名
+                    key: site.domain
+                    required: false
+                    type: input
+                multidomain:
+                    default: false
+                    description: '由于前后端分离机制，官方不对多域名做特殊支持，可能导致其他未知问题'
+                    format: boolean
+                    label: 开启多域名
+                    key: site.multidomain
+                    required: false
+                    type: switch
+                beian:
+                    default: ''
+                    label: 备案信息
+                    key: site.beian
+                    required: false
+                    type: input
+                company:
+                    default: ''
+                    label: 公司名称
+                    key: site.company
+                    required: false
+                    type: input
+                copyright:
+                    default: ''
+                    label: 版权信息
+                    key: site.copyright
+                    required: false
+                    type: input
+                statistics:
+                    default: ''
+                    label: 统计代码
+                    key: site.statistics
+                    required: false
+                    type: textarea
+extension:
+    initialization:
+        name: 扩展配置
+        path: setting-extension
+        tabs: true
+        target: global
+    tabs:
+        configuration:
+            default: true
+            show: true
+            submit: api/system/page/setting-extension
+            title: 支付宝设置
+            fields:
+                public_key:
+                    default: ''
+                    label: 支付宝公钥
+                    key: extension::alipay.statistics
+                    required: false
+                    type: textarea
+                name:
+                    default: ''
+                    description: ''
+                    label: 网站名称2
+                    key: site.name
+                    placeholder: 请输入网站名称
+                    required: true
+                    type: input
+                    validates:
+                        -
+                            message: 请输入网站名称
+                            required: true
+                            trigger: change
+                            type: string
+                enabled:
+                    default: false
+                    description: '关闭后网站将不能访问'
+                    format: boolean
+                    label: 站点开启
+                    key: site.enabled
+                    required: false
+                    type: switch
+                domain:
+                    default: ''
+                    description: '不带 http:// 或 https://'
+                    label: 网站域名
+                    key: site.domain
+                    required: false
+                    type: input
+                multidomain:
+                    default: false
+                    description: '由于前后端分离机制，官方不对多域名做特殊支持，可能导致其他未知问题'
+                    format: boolean
+                    label: 开启多域名
+                    key: site.multidomain
+                    required: false
+                    type: switch
+                beian:
+                    default: ''
+                    label: 备案信息
+                    key: site.beian
+                    required: false
+                    type: input
+                company:
+                    default: ''
+                    label: 公司名称
+                    key: site.company
+                    required: false
+                    type: input
+                copyright:
+                    default: ''
+                    label: 版权信息
+                    key: site.copyright
+                    required: false
+                    type: input
+        sms:
+            default: false
+            show: true
+            submit: api/system/page/setting-extension
+            title: 发送短信配置
+            fields:
+                access_key_id:
+                    default: ' '
+                    label: accessKeyId
+                    key: extension::sms.access_key_id
+                    required: false
+                    type: input
+                access_key_secret:
+                    default: ' '
+                    label: accessKeySecret
+                    key: extension::sms.access_key_secret
+                    required: false
+                    type: input
+                region:
+                    default: ' '
+                    label: 发送区域
+                    key: extension::sms.region
+                    required: false
+                    type: input
+                end_point_name:
+                    default: ' '
+                    label: 服务结点
+                    key: extension::sms.end_point_name
+                    required: false
+                    type: input
+                code_sign_name:
+                    default: ' '
+                    label: 验证码签名
+                    key: extension::sms.code_sign_name
+                    required: false
+                    type: input
+                register_template:
+                    default: ' '
+                    label: 注册模版代码
+                    key: extension::sms.register_template
+                    required: false
+                    type: input
+                    description: '可用变量名称[code:验证码]'
+                find_password_template:
+                    default: ' '
+                    label: 找回密码模版代码
+                    key: extension::sms.find_password_template
+                    required: false
+                    type: input
+                    description: '可用变量名称[code:验证码]'
+                order_template:
+                    default: ' '
+                    label: 订单操作模版代码
+                    key: extension::sms.order_template
+                    required: false
+                    type: input
+                    description: '可用变量名称[code:验证码]'
+sample:
+    initialization:
+        name: 示例
+        path: setting-sample
+        tabs: true
+        target: global
+    tabs:
+        configuration:
+            default: true
+            show: true
+            submit: api/system/page/setting-sample
+            title: 示例项
+            fields:
+                textarea:
+                    default: ''
+                    label: 多行文本输入框
+                    key: sample::sample.textarea
+                    required: true
+                    type: textarea
+                input:
+                    default: ' '
+                    description: ''
+                    label: 单行文本输入
+                    key: sample::sample.input
+                    placeholder: 请输入网站名称
+                    required: true
+                    type: input
+                    validates:
+                        -
+                            message: 请输入网站名称
+                            required: true
+                            trigger: change
+                            type: string
+                switch:
+                    default: false
+                    description: '关闭后网站将不能访问'
+                    format: boolean
+                    label: 开关
+                    key: sample::sample.is_open
+                    required: false
+                    type: switch
