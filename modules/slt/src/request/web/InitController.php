@@ -2,16 +2,11 @@
 
 
 use Poppy\Framework\Application\Controller;
+use Slt\Classes\Traits\SltTrait;
 
 
 class InitController extends Controller
 {
+	use SltTrait;
 
-
-	public function __construct()
-	{
-		parent::__construct();
-
-		// $this->assignMenus();
-	}
 }

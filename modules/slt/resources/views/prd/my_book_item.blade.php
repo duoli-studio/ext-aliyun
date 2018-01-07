@@ -1,4 +1,4 @@
-@extends('web.inc.tpl')
+@extends('slt::inc.tpl')
 @section('tpl-main')
     <div class="container ">
         <div class="row">

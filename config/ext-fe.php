@@ -57,7 +57,6 @@ return [
 			],
 		],
 
-
 		"bootstrap" => [
 			"js"   => [
 				'main' => 'dist/js/bootstrap.js',
@@ -85,6 +84,16 @@ return [
 			],
 		],
 
+		"fex-webuploader" => [
+			"js"   => [
+				'aim' => 'jquery/webuploader/{VERSION}/jquery.webuploader.js',
+			],
+			"css"  => [
+				'dist/*.css' => 'jquery/webuploader/',
+			],
+			"key"  => 'jquery.webuploader',
+			'shim' => ['jquery'],
+		],
 
 		"jquery" => [
 			"js" => [
@@ -92,7 +101,6 @@ return [
 				'aim'  => 'jquery/{VERSION}/jquery.min.js',
 			],
 		],
-
 
 		"layer" => [
 			"js"   => [
@@ -103,6 +111,17 @@ return [
 				'src/theme/*' => 'jquery/layer/',
 			],
 			"key"  => 'jquery.layer',
+			'shim' => ['jquery'],
+		],
+
+		"image-picker" => [
+			"js"   => [
+				'aim'  => 'jquery/image-picker/{VERSION}/jquery.image-picker.js',
+			],
+			"css"  => [
+				'image-picker/image-picker.css' => 'jquery/image-picker/image-picker.css',
+			],
+			"key"  => 'jquery.image-picker',
 			'shim' => ['jquery'],
 		],
 
@@ -118,6 +137,17 @@ return [
 			'shim' => ['jquery'],
 		],
 
+		"tokenize2" => [
+			"js"   => [
+				'main' => 'dist/tokenize2.min.js',
+				'aim'  => 'jquery/tokenize2/{VERSION}/jquery.tokenize2.js',
+			],
+			"css"  => [
+				'dist/tokenize2.min.css' => 'jquery/tokenize2/tokenize2.min.css',
+			],
+			"key"  => 'jquery.tokenize2',
+			'shim' => ['jquery'],
+		],
 
 		"jquery-form" => [
 			"js"   => [
@@ -134,10 +164,11 @@ return [
 			"key"  => 'jquery.validation',
 			'shim' => ['jquery'],
 		],
+
 		"jquery-slimscroll" => [
 			"js"   => [
 				'main' => 'jquery.slimscroll.min.js',
-				'aim' => 'jquery/slimscroll/{VERSION}/jquery.slimscroll.min.js',
+				'aim'  => 'jquery/slimscroll/{VERSION}/jquery.slimscroll.min.js',
 			],
 			"key"  => 'jquery.slimscroll',
 			'shim' => ['jquery'],
@@ -161,7 +192,6 @@ return [
 				"exports" => "JSON",
 			],
 		],
-
 
 		"smooth-scroll" => [
 			"js"  => [
@@ -206,6 +236,7 @@ return [
 	],
 	'global'  => [
 		'url_site' => env('URL_SITE'),
+		'url_js'   => env('URL_SITE') . '/assets/js',
 	],
 	'appends' => [
 		'poppy'   => env('URL_SITE') . "/assets/js/poppy",

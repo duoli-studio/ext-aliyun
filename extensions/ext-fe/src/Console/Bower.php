@@ -76,6 +76,8 @@ class Bower extends Command
 		$this->debug = (bool) $this->option('debug');
 
 
+		$this->config['path']['global'] = $this->jsPath . '/global';
+
 		$this->mapData = config('ext-fe');
 
 		$disk = config('ext-fe.disk');

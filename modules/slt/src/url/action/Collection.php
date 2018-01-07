@@ -60,7 +60,7 @@ class Collection
 	 */
 	public function establish($data, $id = null)
 	{
-		if (!$this->checkPam()) {
+		if (!$this->checkPermission()) {
 			return false;
 		}
 		$validator = \Validator::make($data, [
@@ -125,10 +125,11 @@ class Collection
 	 * @param      $data
 	 * @param null $id
 	 * @return bool
+	 * @throws \Exception
 	 */
 	public function establishUrl($data, $id = null)
 	{
-		if (!$this->checkPam()) {
+		if (!$this->checkPermission()) {
 			return false;
 		}
 		// data
@@ -210,7 +211,7 @@ class Collection
 
 	public function hasCreate($url)
 	{
-		if (!$this->checkPam()) {
+		if (!$this->checkPermission()) {
 			return false;
 		}
 		$objUrl = SiteUrl::where('url', '=', $url)->first();
@@ -230,10 +231,11 @@ class Collection
 	 * 删除Url Relation
 	 * @param $id
 	 * @return bool
+	 * @throws \Exception
 	 */
 	public function destroy($id)
 	{
-		if (!$this->checkPam()) {
+		if (!$this->checkPermission()) {
 			return false;
 		}
 		// init
@@ -257,6 +259,7 @@ class Collection
 	 * 删除 url relation
 	 * @param $id
 	 * @return bool
+	 * @throws \Exception
 	 */
 	public function destroyUrl($id)
 	{
@@ -278,6 +281,11 @@ class Collection
 		return true;
 	}
 
+	/**
+	 * @param $tags
+	 * @return bool|void
+	 * @throws \Exception
+	 */
 	private function handleRelation($tags)
 	{
 		if (!is_array($tags)) {

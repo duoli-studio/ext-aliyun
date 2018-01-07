@@ -27,11 +27,7 @@ class ServiceProvider extends ModuleServiceProviderBase
 	 */
 	public function boot()
 	{
-		$modulePath = poppy_path($this->name);
-		$this->loadViewsFrom($modulePath . '/resources/views', $this->name);
-		$this->loadTranslationsFrom($modulePath . '/resources/lang', $this->name);
-		// policies
-		$this->bootPolicies();
+		parent::boot($this->name);
 	}
 
 	public function register()

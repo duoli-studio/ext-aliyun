@@ -1,16 +1,15 @@
-<?php namespace Slt\Request\Web\Controllers;
+<?php namespace Slt\Request\Web;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Sour\Lemon\Support\Resp;
-use Sour\System\Action\SystemUpload;
+use Poppy\Framework\Classes\Resp;
+use System\Classes\Uploader;
 
 /**
  * 服务接口
  * Class GameController
  * @package App\Http\Controllers\Desktop
  */
-class UtilController extends Controller
+class UtilController extends InitController
 {
 
 	/**
@@ -29,10 +28,11 @@ class UtilController extends Controller
 		$field = $request->input('field', 'image_file');
 		// 匹配
 		$file  = \Input::file($field);
-		$Image = new SystemUpload();
+		$Image = new Uploader('uploads');
 		$Image->setExtension(['jpg', 'png', 'gif', 'jpeg']);
-		if ($Image->saveFile($file) && $Image->saveAli()) {
-			return Resp::web('OK~图片上传成功', [
+		$Image->setResizeDistrict(1000);
+		if ($Image->saveFile($file)) {
+			return Resp::web(Resp::SUCCESS, '图片上传成功', [
 				'json'        => true,
 				'success'     => true,
 				'url'         => $Image->getUrl(),
@@ -40,7 +40,7 @@ class UtilController extends Controller
 			]);
 		}
 		else {
-			return Resp::web($Image->getError(), [
+			return Resp::web(Resp::ERROR, $Image->getError(), [
 				'json' => true,
 			]);
 		}
@@ -53,22 +53,14 @@ class UtilController extends Controller
 	 */
 	public function file(Request $request)
 	{
-		$field    = $request->input('field', 'bin_file');
-		$ext      = $request->input('ext');
-		$save_ali = $request->input('save_ali');
+		$field = $request->input('field', 'bin_file');
+		$ext   = $request->input('ext');
+
 		// 匹配
 		$file   = \Input::file($field);
-		$Upload = new SystemUpload();
+		$Upload = new Uploader();
 		$Upload->setExtension([$ext]);
 		if ($Upload->saveFile($file)) {
-			if ($save_ali) {
-				// save error
-				if (!$Upload->saveAli(true)) {
-					return Resp::web($Upload->getError(), [
-						'json' => true,
-					]);
-				}
-			}
 			return Resp::web('OK~文件上传成功', [
 				'json'        => true,
 				'success'     => true,
@@ -77,7 +69,7 @@ class UtilController extends Controller
 			]);
 		}
 		else {
-			return Resp::web($Upload->getError(), [
+			return Resp::web(Resp::ERROR, $Upload->getError(), [
 				'json' => true,
 			]);
 		}

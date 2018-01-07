@@ -1,4 +1,4 @@
-@extends('web.inc.tpl')
+@extends('slt::inc.tpl')
 @section('tpl-main')
     @include('web.fe.auto_header')
     <h3>{!! $plugin !!}</h3>

@@ -1,4 +1,4 @@
-@extends('web.inc.tpl')
+@extends('slt::inc.tpl')
 @section('body-start')
     <body class="site_nav">@stop
     @section('tpl-main')

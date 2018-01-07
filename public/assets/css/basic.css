@@ -3351,7 +3351,22 @@ button.toast-close-button {padding: 0;
   from { -webkit-transform: rotateY(0deg); transform: rotateY(0deg) }
   to { -webkit-transform: rotateY(360deg); transform: rotateY(360deg) }
 }
-@charset "UTF-8";
+.webuploader-container {position: relative;}
+.webuploader-element-invisible {position: absolute !important;
+    clip: rect(1px 1px 1px 1px);
+    clip: rect(1px,1px,1px,1px);}
+.webuploader-pick {position: relative;
+    display: inline-block;
+    cursor: pointer;
+    background: #00b7ee;
+    padding: 10px 15px;
+    color: #fff;
+    text-align: center;
+    border-radius: 3px;
+    overflow: hidden;}
+.webuploader-pick-hover {background: #00a2d4;}
+.webuploader-pick-disable {opacity: .6;
+    pointer-events: none;}@charset "UTF-8";
 
 /*!
  * Font Awesome Free 5.0.2 by @fontawesome - http://fontawesome.com

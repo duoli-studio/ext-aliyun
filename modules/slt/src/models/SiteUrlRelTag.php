@@ -116,7 +116,7 @@ class SiteUrlRelTag extends \Eloquent
 		foreach ($userRelTag as $rel) {
 			$tag = isset($kvTags[$rel->tag_id]) ? $kvTags[$rel->tag_id] : '';
 			if ($tag) {
-				$data .= '<a href="' . route_url('web:nav.index', null, ['tag' => $tag]) . '">' . $tag . '</a>';
+				$data .= '<a href="' . route_url('slt:nav.index', null, ['tag' => $tag]) . '">' . $tag . '</a>';
 			}
 		}
 		return $data;

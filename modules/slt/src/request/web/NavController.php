@@ -3,11 +3,14 @@
 use Curl\Curl;
 use Illuminate\Http\Request;
 use Poppy\Framework\Classes\Resp;
+use Poppy\Framework\Helper\FileHelper;
 use Slt\Models\SiteCollection;
 use Slt\Models\SiteTag;
 use Slt\Models\SiteUrl;
 use Slt\Models\SiteUrlRelTag;
 use Slt\Models\SiteUserUrl;
+use Slt\Url\Action\Collection;
+use System\Models\PamAccount;
 
 class NavController extends InitController
 {
@@ -18,8 +21,9 @@ class NavController extends InitController
 	 */
 	public function index()
 	{
-		$tag  = \Input::get('tag');
-		$pam  = FeUser::instance()->getPam();
+		$tag = \Input::get('tag');
+		/** @var PamAccount $pam */
+		$pam  = $this->getWebGuard()->user();
 		$tags = SiteUrlRelTag::userTag($pam->id);
 		$Db   = SiteUserUrl::where('account_id', $pam->id);
 		if ($tag) {
@@ -34,7 +38,7 @@ class NavController extends InitController
 		$urls =
 			$Db->with(['siteUrlRelTag', 'siteUrl'])
 				->paginate($this->pagesize);
-		return view('web.nav.index', [
+		return view('slt::nav.index', [
 			'items' => $urls,
 			'tags'  => $tags,
 		]);
@@ -44,7 +48,7 @@ class NavController extends InitController
 	{
 		$referer = \Input::server('HTTP_REFERER');
 		if (parse_url($referer)['host'] != parse_url(config('app.url'))['host']) {
-			return Resp::web('来源非法');
+			return Resp::web(Resp::ERROR, '来源非法');
 		}
 		/** @var SiteUrl $url */
 		$url       = SiteUrl::find($id);
@@ -74,12 +78,12 @@ class NavController extends InitController
 	public function collection($id = null)
 	{
 		if (is_post()) {
-			$Collection = (new ActCollection())->setUser(FeUser::instance());
+			$Collection = (new Collection())->setPam($this->getWebGuard()->user());
 			if ($Collection->establish(\Input::all(), $id)) {
-				return Resp::web('OK~操作成功!', 'top_reload|1');
+				return Resp::web(Resp::SUCCESS, '操作成功!', 'top_reload|1');
 			}
 			else {
-				return Resp::web($Collection->getError());
+				return Resp::web(Resp::ERROR, $Collection->getError());
 			}
 		}
 		if ($id) {
@@ -88,7 +92,7 @@ class NavController extends InitController
 			\View::share('item', $item);
 		}
 
-		$icons = FileHelper::listFile(public_path('project/sour/images/collection_icon'));
+		$icons = FileHelper::listFile(public_path('modules/slt/images/collection_icon'));
 
 		$options = [];
 		foreach ($icons as $icon) {
@@ -96,21 +100,26 @@ class NavController extends InitController
 			$src       = str_replace(base_path('public'), '', $icon);
 			$options[] = '<option ' . ((isset($item) && $item->icon == $key) ? ' selected="selected" ' : '') . ' value="' . $key . '" data-img-src="' . config('app.url') . '/' . $src . '">' . $key . '</option>';
 		}
-		return view('web.nav.collection', [
+		return view('slt::nav.collection', [
 			'options' => $options,
 		]);
 	}
 
 
+	/**
+	 * @param null $id
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector|\Illuminate\View\View
+	 * @throws \Exception
+	 */
 	public function url($id = null)
 	{
-		$Collection = (new ActCollection())->setUser(FeUser::instance());
+		$Collection = (new Collection())->setPam($this->getWebGuard()->user());
 		if (is_post()) {
 			if ($Collection->establishUrl(\Input::all(), $id)) {
-				return Resp::web('OK~操作成功!', 'top_reload|1');
+				return Resp::web(Resp::SUCCESS, '操作成功!', 'top_reload|1');
 			}
 			else {
-				return Resp::web($Collection->getError());
+				return Resp::web(Resp::ERROR, $Collection->getError());
 			}
 		}
 
@@ -123,7 +132,7 @@ class NavController extends InitController
 				// todo
 			}
 			else {
-				return Resp::web($Collection->getError());
+				return Resp::web(Resp::ERROR, $Collection->getError());
 			}
 
 		}
@@ -141,7 +150,7 @@ class NavController extends InitController
 			}
 		}
 
-		return view('web.nav.url', [
+		return view('slt::nav.url', [
 			'url'         => $url,
 			'title'       => $title,
 			'description' => $description,
@@ -151,9 +160,10 @@ class NavController extends InitController
 
 	public function tag()
 	{
-		$kw   = strval(trim(\Input::get('search')));
-		$user = FeUser::instance();
-		$tags = SiteUrlRelTag::userTag($user->getPam()->id, $kw);
+		$kw = strval(trim(\Input::get('search')));
+		/** @var PamAccount $user */
+		$user = $this->getWebGuard()->user();
+		$tags = SiteUrlRelTag::userTag($user->id, $kw);
 		$data = [];
 		if (count($tags)) {
 			foreach ($tags as $tag) {
@@ -176,7 +186,7 @@ class NavController extends InitController
 		if (!$id) {
 			return Resp::web(Resp::ERROR, '请选中要删除的信息');
 		}
-		$Collection = (new ActCollection())->setUser(FeUser::instance());
+		$Collection = (new Collection())->setPam($this->getWebGuard()->user());
 		if ($Collection->destroy($id)) {
 			return Resp::web(Resp::SUCCESS, 'OK~删除成功', 'top_reload | 1');
 		}
@@ -191,7 +201,7 @@ class NavController extends InitController
 		if (!$id) {
 			return Resp::web(Resp::ERROR, '请选中要删除的链接');
 		}
-		$Collection = (new ActCollection())->setUser(FeUser::instance());
+		$Collection = (new Collection())->setPam($this->getWebGuard()->user());
 		if ($Collection->destroyUrl($id)) {
 			return Resp::web(Resp::SUCCESS, '删除成功', 'top_reload | 1');
 		}

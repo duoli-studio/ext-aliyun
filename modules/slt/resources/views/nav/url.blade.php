@@ -1,7 +1,7 @@
-@extends('web.inc.tpl_dialog')
-@section('body-dialog_class') site_collection @endsection
+@extends('slt::tpl.default_dialog')
+@section('body-dialog_class', 'site_collection')
 @section('tpl-main')
-    {!! Form::model(isset($item)?$item: null,['route' => ['web:nav.url', isset($item)?$item->id: null]]) !!}
+    {!! Form::model(isset($item)?$item: null,['route' => ['slt:nav.url', isset($item)?$item->id: null]]) !!}
     <div class="form-group">
         <label>网站地址</label>
         {!! Form::text('url', $url, ['placeholder' => '输入收藏的网站地址', 'class'=>'form-control', 'id'=> 'url']) !!}
@@ -23,7 +23,7 @@
     <div class="form-group">
         <label>标签</label>
         <div class="clearfix">
-            {!! Form::webuploader('icon',$icon, ['id'=> 'icon', 'ext'=>'image']) !!}
+            {!! slt_upload('icon', $icon) !!}
         </div>
     </div>
     <div class="form-group clearfix">
@@ -31,40 +31,41 @@
     </div>
     {!! Form::close() !!}
     <script>
-        require(['jquery', 'lemon/util', 'jquery.tokenize2'], function ($, util) {
-            function get_title() {
-                var url = $('#url').val();
-                if (!url || $('#title').val()) {
-                    return;
-                }
-                util.make_request("{!! route('web:nav.title') !!}", {url: url}, function (resp_obj) {
-                    var obj_data = resp_obj.data;
-                    if (resp_obj.status == 0) {
-                        $('#title').val(obj_data.title);
-                        $('#url').val(obj_data.url);
-                        $('#site_title').fadeIn(500);
-                    } else {
-                        $('#title').val(obj_data.title);
-                        $('#url').val(obj_data.url);
-                        $('#site_title').fadeIn(500);
-                        util.splash(resp_obj);
-                    }
-                })
-            }
+		require(['jquery', 'poppy/util', 'jquery.tokenize2'], function($, util) {
+			function get_title() {
+				var url = $('#url').val();
+				if (!url || $('#title').val()) {
+					return;
+				}
+				util.make_request("{!! route('slt:nav.title') !!}", {url : url}, function(resp_obj) {
+					var obj_data = resp_obj.data;
+					if (resp_obj.status == 0) {
+						$('#title').val(obj_data.title);
+						$('#url').val(obj_data.url);
+						$('#site_title').fadeIn(500);
+					}
+					else {
+						$('#title').val(obj_data.title);
+						$('#url').val(obj_data.url);
+						$('#site_title').fadeIn(500);
+						util.splash(resp_obj);
+					}
+				})
+			}
 
-            $('#url').on('blur', get_title);
-            $(function () {
-                get_title();
-            });
-            $('#site_tags').tokenize2({
-                dataSource       : '{!! route('web:nav.tag') !!}',
-                tokensAllowCustom: true,
-                placeholder      : '输入新标签或者点选标签, 最多 6 个',
-                tokensMaxItems   : 6,
-                searchMinLength  : 2,
-                searchHighlight  : true,
-                debounce         : 800
-            });
-        })
+			$('#url').on('blur', get_title);
+			$(function() {
+				get_title();
+			});
+			$('#site_tags').tokenize2({
+				dataSource        : '{!! route('slt:nav.tag') !!}',
+				tokensAllowCustom : true,
+				placeholder       : '输入新标签或者点选标签, 最多 6 个',
+				tokensMaxItems    : 6,
+				searchMinLength   : 2,
+				searchHighlight   : true,
+				debounce          : 800
+			});
+		})
     </script>
 @endsection

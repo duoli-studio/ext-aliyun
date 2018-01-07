@@ -1,24 +1,18 @@
-<?php namespace Slt\Action;
-
-/**
- * 需求处理类
- * @author     Mark <zhaody901@126.com>
- * @copyright  Copyright (c) 2013-2016 Sour Lemon team
- */
+<?php namespace Slt\Site\Action;
 
 use Poppy\Framework\Helper\StrHelper;
-use Poppy\Framework\Traits\BaseTrait;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Slt\Models\SiteTag;
 use Slt\Models\SiteUrlRelTag;
 use Slt\Models\SiteCollection;
 use Slt\Models\SiteUrl;
 use Slt\Models\SiteUserUrl;
+use System\Classes\Traits\SystemTrait;
 
-class ActCollection
+class Collection
 {
 
-	use BaseTrait, AuthorizesRequests;
+	use SystemTrait, AuthorizesRequests;
 
 	/** @var  SiteCollection */
 	protected $item;
@@ -60,7 +54,7 @@ class ActCollection
 	 */
 	public function establish($data, $id = null)
 	{
-		if (!$this->checkPam()) {
+		if (!$this->checkPermission()) {
 			return false;
 		}
 		$validator = \Validator::make($data, [
@@ -125,10 +119,11 @@ class ActCollection
 	 * @param      $data
 	 * @param null $id
 	 * @return bool
+	 * @throws \Exception
 	 */
 	public function establishUrl($data, $id = null)
 	{
-		if (!$this->checkPam()) {
+		if (!$this->checkPermission()) {
 			return false;
 		}
 		// data
@@ -210,7 +205,7 @@ class ActCollection
 
 	public function hasCreate($url)
 	{
-		if (!$this->checkPam()) {
+		if (!$this->checkPermission()) {
 			return false;
 		}
 		$objUrl = SiteUrl::where('url', '=', $url)->first();
@@ -230,10 +225,11 @@ class ActCollection
 	 * 删除Url Relation
 	 * @param $id
 	 * @return bool
+	 * @throws \Exception
 	 */
 	public function destroy($id)
 	{
-		if (!$this->checkPam()) {
+		if (!$this->checkPermission()) {
 			return false;
 		}
 		// init
@@ -257,6 +253,7 @@ class ActCollection
 	 * 删除 url relation
 	 * @param $id
 	 * @return bool
+	 * @throws \Exception
 	 */
 	public function destroyUrl($id)
 	{
@@ -278,6 +275,11 @@ class ActCollection
 		return true;
 	}
 
+	/**
+	 * @param $tags
+	 * @return bool|void
+	 * @throws \Exception
+	 */
 	private function handleRelation($tags)
 	{
 		if (!is_array($tags)) {

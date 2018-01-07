@@ -1,4 +1,4 @@
-@extends('web.inc.tpl')
+@extends('slt::tpl.default')
 @section('body-class', 'site--url')
 @section('tpl-main')
     <div class="container">
@@ -8,7 +8,7 @@
                     <h3>发现墙是什么</h3>
                     <p>WuliHub的发现墙每天都会展示最好产品和新闻。这是一个分享最新APP，网站，硬件和技术、工具的好地方</p>
                     <div class="text-center mt8">
-                        <a class="J_iframe btn btn-success url-share" href="{!! route('web:nav.url') !!}"
+                        <a class="J_iframe btn btn-success url-share" href="{!! route('slt:nav.url') !!}"
                            data-width="600" data-height="480" @if(!empty($_pam))data-title="分享产品、工具、app、新闻、硬件或技术"
                            @else data-title="用户登录" @endif>分享好产品、网站或内容</a>
                     </div>
@@ -47,7 +47,7 @@
                                             <div class="pull-left">
                                                 <span class="display_content-image">
                                                     <span class="display_content-title">
-                                                        {!! Form::showThumb($item->siteUrl->icon, ['width' => 118, 'height'=> 70, 'class'=> 'pull-left']) !!}
+                                                        {!! slt_image($item->siteUrl->icon,null, ['width' => 118, 'height'=> 70, 'class'=> 'pull-left']) !!}
                                                     </span>
                                                 </span>
                                             </div>
@@ -73,7 +73,7 @@
                                         </a>
                                         <div class="display_content-links">
                                             <p class="pull-left display_content-tag">
-                                                {!! \Sour\Poppy\Models\SiteUrlRelTag::translate($item->siteUrlRelTag) !!}
+                                                {!! \Slt\Models\SiteUrlRelTag::translate($item->siteUrlRelTag) !!}
                                             </p>
                                             <p class="pull-right">
                                                 <a data-title="点赞" class="display_content-comment good btn btn-default">
@@ -99,8 +99,7 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
-    @include('web.inc.footer')
+    @include('slt::tpl.inc_footer')
 @endsection

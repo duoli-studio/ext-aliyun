@@ -1,4 +1,4 @@
-@extends('web.inc.tpl')
+@extends('slt::inc.tpl')
 @section('head-js')
     @parent
     {!! Html::script('assets/js/re_libs/emmet/emmet.js') !!}

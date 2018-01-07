@@ -123,6 +123,12 @@ trait SystemTrait
 	}
 
 
+	public function getWebGuard()
+	{
+		return $this->getAuth()->guard(PamAccount::GUARD_WEB);
+	}
+
+
 	/**
 	 * @return BackendManager
 	 */

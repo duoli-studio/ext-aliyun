@@ -1,8 +1,8 @@
-@extends('web.inc.tpl_dialog')
+@extends('slt::tpl.default_dialog')
 @section('body-dialog_class', 'site_collection--page_item')
 @section('tpl-main')
     @if (isset($item))
-        {!! Form::model($item,['route' => ['web:nav.collection', $item->id]]) !!}
+        {!! Form::model($item,['route' => ['slt:nav.collection', $item->id]]) !!}
     @else
         {!! Form::open() !!}
     @endif
@@ -23,7 +23,7 @@
     <div class="form-group clearfix">
         {!! Form::button(isset($item) ? '编辑收藏夹' : '添加收藏夹', ['type'=> 'submit', 'class' => 'btn btn-success J_submit']) !!}
         @if (isset($item))
-            {!! Html::link(route('web:nav.collection_destroy', $item->id), '删除收藏夹'
+            {!! Html::link(route('slt:nav.collection_destroy', $item->id), '删除收藏夹'
             , [
                 'class' => 'btn btn-danger J_request',
                 'data-confirm' => '确认删除此收藏夹?'

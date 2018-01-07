@@ -1,4 +1,4 @@
-<?php namespace System\Element;
+<?php namespace System\Classes;
 
 use Illuminate\Http\Request;
 use Poppy\Framework\Classes\Traits\KeyParserTrait;
@@ -6,7 +6,7 @@ use Poppy\Framework\Validation\Rule;
 use System\Classes\Traits\SystemTrait;
 
 
-class SettingManager
+class SettingUI
 {
 	use SystemTrait, KeyParserTrait;
 

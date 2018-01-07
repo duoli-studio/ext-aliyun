@@ -6,6 +6,7 @@ use Poppy\Framework\Classes\Resp;
 use System\Models\PamAccount;
 use System\Models\PamRole;
 use User\Pam\Action\Fans;
+use User\Pam\Action\Pam;
 
 class UserController extends InitController
 {
@@ -31,7 +32,7 @@ class UserController extends InitController
 			$password = $request->input('password');
 			$remember = $request->input('remember_me');
 
-			/** @var Fans $actPam */
+			/** @var Pam $actPam */
 			$actPam = app('act.pam');
 			if ($actPam->loginCheck($passport, $password, PamAccount::GUARD_WEB, $remember)) {
 				if (!empty($type) && $type == 'mini') {

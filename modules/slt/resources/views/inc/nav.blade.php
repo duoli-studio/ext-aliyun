@@ -21,9 +21,11 @@
                     <li class="{!! route_current( ['web:fe.js'], 'active') !!}">
                         <a href="{!! route('web:fe.js') !!}">前端</a>
                     </li>
-                    <li class="{!! route_current( ['web:nav.index'], 'active') !!}">
-                        <a href="{!! route('web:nav.index') !!}">导航</a>
+                    --}}
+                    <li class="{!! route_current( ['slt:nav.index'], 'active') !!}">
+                        <a href="{!! route('slt:nav.index') !!}">导航</a>
                     </li>
+                    {{--
                     <li class="{!! route_current( ['web:prd.my_book'], 'active') !!}">
                         <a href="{!! route('web:prd.my_book') !!}">文库</a>
                     </li>

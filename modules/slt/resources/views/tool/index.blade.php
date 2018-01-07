@@ -1,4 +1,4 @@
-@extends('slt::inc.tpl')
+@extends('slt::tpl.default')
 @section('body-class', 'tool--editor')
 @section('tpl-main')
     <div class="container mb20 mt20">
@@ -31,52 +31,52 @@
                             <button id="clear" class="btn btn-sm btn-danger">清空</button>
                         </p>
                         <script>
-                            require(['jquery', 'ace/ace', 'clipboard', 'poppy/util', 'vkbeautify'],
-                                function ($, ace, Clipboard, poppy, vkbeautify) {
-                                    $(function () {
-                                        var editor = ace.edit("editor");
-                                        editor.setTheme("ace/theme/chrome");
-                                        editor.session.setMode("ace/mode/{!! $type !!}");
+							require(['jquery', 'ace/ace', 'clipboard', 'poppy/util', 'vkbeautify'],
+								function($, ace, Clipboard, poppy, vkbeautify) {
+									$(function() {
+										var editor = ace.edit("editor");
+										editor.setTheme("ace/theme/chrome");
+										editor.session.setMode("ace/mode/{!! $type !!}");
 
-                                       $("#copy").click(function () {
-	                                        new Clipboard('#copy', {
-		                                        text: function() {
-			                                        return editor.getValue();
-		                                        }
-	                                        });
-	                                        poppy.splash({
-		                                        status : 0,
-		                                        message: '已经复制到粘贴板'
-	                                        });
-                                        });
+										$("#copy").click(function() {
+											new Clipboard('#copy', {
+												text : function() {
+													return editor.getValue();
+												}
+											});
+											poppy.splash({
+												status  : 0,
+												message : '已经复制到粘贴板'
+											});
+										});
 
-                                        $("#format").click(function () {
-                                            var content = editor.getValue();
-                                            try {
-                                                editor.setValue(vkbeautify.{!! $type !!}(content));
-                                            } catch (err) {
-                                                alert("Your document is invalid");
-                                            }
-                                        });
-                                        $("#clear").click(function () {
-                                            editor.setValue("");
-                                        });
-                                        $("#minify").click(function () {
-                                            var content = editor.getValue();
-                                            try {
-                                                editor.setValue(vkbeautify.{!! $type !!}min(content));
-                                            } catch (err) {
-                                                alert("Your document is invalid");
-                                            }
-                                        });
-                                    })
-                                }
-                            );
+										$("#format").click(function() {
+											var content = editor.getValue();
+											try {
+												editor.setValue(vkbeautify.{!! $type !!}(content));
+											} catch (err) {
+												alert("Your document is invalid");
+											}
+										});
+										$("#clear").click(function() {
+											editor.setValue("");
+										});
+										$("#minify").click(function() {
+											var content = editor.getValue();
+											try {
+												editor.setValue(vkbeautify.{!! $type !!}min(content));
+											} catch (err) {
+												alert("Your document is invalid");
+											}
+										});
+									})
+								}
+							);
                         </script>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    @include('slt::inc.footer')
+    @include('slt::tpl.inc_footer')
 @endsection

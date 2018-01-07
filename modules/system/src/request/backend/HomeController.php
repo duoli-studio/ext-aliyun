@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Poppy\Framework\Classes\Resp;
-use System\Element\SettingManager;
+use System\Classes\SettingUI;
 use System\Models\PamAccount;
 use System\Models\SysConfig;
 
@@ -104,7 +104,7 @@ class HomeController extends InitController
 	 */
 	public function setting(Request $request, $path = 'setting-system')
 	{
-		$Setting = new SettingManager($path);
+		$Setting = new SettingUI($path);
 		if (is_post()) {
 			if (!$Setting->save($request)) {
 				return Resp::web(Resp::ERROR, $Setting->getError(), 'forget|1');
