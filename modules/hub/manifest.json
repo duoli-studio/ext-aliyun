@@ -1,9 +1,0 @@
-{
-	"name": "hub",
-	"slug": "hub",
-	"version": "1.0",
-	"description": "This is the description for the poppy hub module.",
-	"autoload": [
-		"classes/functions.php"
-	]
-}
