@@ -1,9 +1,0 @@
-{
-	"name": "Slt",
-	"slug": "slt",
-	"version": "1.0",
-	"description": "Sour Lemon Team",
-	"autoload": [
-		"src/classes/functions.php"
-	]
-}

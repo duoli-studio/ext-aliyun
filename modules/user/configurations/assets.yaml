@@ -1,7 +1,0 @@
-system:
-    poppy/user:
-        permissions: ''
-        scripts:
-            - assets/user/backend/js/module.min.js
-        stylesheets:
-            - assets/user/backend/css/module.min.css

@@ -1,8 +1,0 @@
-util::captcha.sms_expired_minute :
-    type : int
-    default : 5
-    description : 短信验证码有效期(分钟)
-util::captcha.mail_expired_minute :
-    type : int
-    default : 15
-    description : 邮件验证码有效期(分钟)

@@ -1,9 +1,0 @@
-{
-	"name": "util",
-	"slug": "util",
-	"version": "1.0",
-	"description": "util",
-	"autoload": [
-		"classes/functions.php"
-	]
-}
