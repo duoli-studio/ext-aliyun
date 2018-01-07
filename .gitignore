@@ -48,6 +48,9 @@ Thumbs.db
 
 # Project User #
 ################
+framework/.git/
+modules/system/.git/
+extensions/ext-fe/.git/
 .sass-cache
 /bootstrap/cache/compiled.php
 /bootstrap/cache/services.json
