@@ -19,3 +19,18 @@ modules 中有哪些是需要的, 保留, 不需要的删掉. system 不需要�
 ```
 php artisan migrate
 ```
+
+## 运行
+
+```
+php artisan serve
+```
+
+## 安装 ext-fe
+
+```
+cd extensions 
+git clone https://github.com/duoli-studio/ext-fe
+cd ext-fe
+composer update -vvv
+```
