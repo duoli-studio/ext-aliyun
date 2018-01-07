@@ -152,18 +152,6 @@ extension:
             submit: api/system/page/setting-extension
             title: 发送短信配置
             fields:
-                product:
-                    default: ' '
-                    label: 产品名称
-                    key: extension::sms.product
-                    required: false
-                    type: input
-                domain:
-                    default: ' '
-                    label: 产品域名
-                    key: extension::sms.domain
-                    required: false
-                    type: input
                 access_key_id:
                     default: ' '
                     label: accessKeyId

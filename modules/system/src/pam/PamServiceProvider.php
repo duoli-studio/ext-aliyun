@@ -2,7 +2,6 @@
 
 use Illuminate\Support\ServiceProvider;
 use System\Models\PamAccount;
-use System\Pam\Action\Role;
 use System\Pam\Auth\Guard\JwtAuthGuard;
 use System\Pam\Auth\Provider\BackendProvider;
 use System\Pam\Auth\Provider\DevelopProvider;
@@ -47,9 +46,8 @@ class PamServiceProvider extends ServiceProvider
 		});
 
 
-		$this->app->bind('act.role', function ($app) {
-			return new Role();
-		});
+		$this->app->bind('act.role', 'System\Pam\Action\Role');
+		$this->app->bind('act.pam', 'System\Pam\Action\Pam');
 	}
 
 	/**
@@ -59,6 +57,7 @@ class PamServiceProvider extends ServiceProvider
 	{
 		return [
 			'act.role',
+			'act.pam',
 		];
 	}
 }

@@ -1,0 +1,71 @@
+<!DOCTYPE html><html><head><title>罂粟网络</title><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><link href=/assets/backend/css/app.min.css rel=stylesheet></head><body><div id=app></div><script>window.url = "http://l.play.sour-lemon.com";
+	window.api = url + "/api";
+	window.asset = url + "/assets";
+	window.admin = "http://127.0.0.1:8080/";
+	window.local = {
+    "poppy.resp.success": "操作成功",
+    "poppy.resp.error": "操作失败",
+    "poppy.resp.token_miss": "凭据不存在, 请重新登录",
+    "poppy.resp.token_timeout": "凭据已过期",
+    "poppy.resp.token_error": "凭据错误",
+    "poppy.resp.param_error": "参数错误",
+    "poppy.resp.sign_error": "签名错误",
+    "poppy.resp.no_auth": "无权操作",
+    "poppy.resp.inner_error": "内部错误",
+    "order.server.graphql.query_desc": "游戏区服详细",
+    "order.server.graphql.queries_desc": "游戏区服查询",
+    "order.server.graphql.mutation_desc": "游戏区服修改\/创建",
+    "order.server.graphql.type_desc": "游戏区服",
+    "order.server.graphql.delete": "删除游戏区服",
+    "order.server.db.id": "ID",
+    "order.server.db.title": "区服名称",
+    "order.server.db.parent_id": "上一级的ID",
+    "order.server.db.code": "区服代码",
+    "util.act.util.send_captcha_passport_format_error": "无法发送验证码, 格式不正确",
+    "util.act.graphql.type_desc": "验证码",
+    "util.act.graphql.mutation_desc": "发送验证码",
+    "util.act.graphql.queries_desc": "验证码查询",
+    "util.act.db.id": "ID",
+    "util.act.db.passport": "手机号或邮箱",
+    "util.act.db.captcha": "验证码",
+    "util.act.db.type": "验证类型",
+    "util.act.db.num": "发送次数",
+    "util.act.db.disabled_at": "失效时间",
+    "system.act.check_permission_need_login": "你需要登录才能访问",
+    "system.act.check_permission_failed": "无权操作此项, 请联系管理员",
+    "system.act.graphql.resp_desc": "返回操作提示",
+    "system.act.graphql.resp_status": "操作状态",
+    "system.act.graphql.resp_message": "操作信息提示",
+    "system.role.graphql.queries_desc": "角色查询",
+    "system.role.graphql.query_desc": "角色详情",
+    "system.role.graphql.type_desc": "角色类型",
+    "system.role.graphql.filter_desc": "查询过滤器",
+    "system.role.graphql.mutation_desc": "角色修改\/创建",
+    "system.role.db.id": "ID",
+    "system.role.db.name": "角色标识",
+    "system.role.db.title": "角色名称",
+    "system.role.db.type": "角色类型",
+    "system.role.db.description": "角色描述",
+    "system.setting.graphql.query_desc": "配置查询",
+    "system.setting.graphql.queries_desc": "多条配置查询",
+    "system.setting.graphql.mutation_desc": "配置项修改",
+    "system.setting.graphql.type_desc": "配置项",
+    "system.setting.graphql.namespace": "配置项命名空间",
+    "system.setting.graphql.group": "配置项分组名称",
+    "system.setting.graphql.key": "配置项键",
+    "system.setting.graphql.value": "配置项值",
+    "system.setting.graphql.description": "配置项描述",
+    "system.setting.resp.key_not_match": "给定的键 :key 格式不匹配",
+    "slt.tip.safe_money": "From SLT : 是指对上家游戏账号安全进行保障时下家所需预先支付的保证形式的费用。当在代练过程中出现帐号安全问题，即以双方协商或客服仲裁的部分或全部金额赔付给上家。（安全问题包括游戏内虚拟道具的安全，例如：符文、角色经验、胜点、负场经下家代练后不增反减、私自与号主联系、下家使用第三方软件带来的风险。）",
+    "slt.tip.speed_money": "效率保证金是指对上家的代练要求进行效率保障时下家所需预先支付的保证形式的费用。当下家未在规定时间内完成代练要求，即以双方协商或客服仲裁的部分或全部金额赔付给上家。（代练要求包括：下家在规定时间内没有完成上家的代练要求，接单4小时内没有上号，代练时间过四分之一但代练进度未达六分之一，下家原因退单，下家未及时上传代练截图）",
+    "slt.tip.kf": "撤销订单 5 小时后才能要求客服介入, 请及时与对方取得联系, 友好协商, 并在订单留言里面写明您的撤销理由或申诉理由, 并保留号相关证据(订单留言是客服介入的最重要依据)"
+};
+	window.monacoPath = "https://cdn.bootcss.com/monaco-editor/0.10.0/min/vs";
+	window.modules = [
+		"notadd/content",
+		"notadd/member",
+	];
+	window.token = url + "/admin/token";
+	window.upload = url + "/editor";
+
+	window.UEDITOR_HOME_URL = "/assets/neditor/";</script><script type=text/javascript src=/assets/backend/js/app.min.js></script></body></html>
