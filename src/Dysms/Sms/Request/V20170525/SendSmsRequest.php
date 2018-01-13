@@ -34,6 +34,11 @@ class SendSmsRequest extends RpcAcsRequest
 		return $this->templateCode;
 	}
 
+	/**
+	 * 必填，设置模板CODE，应严格按"模板CODE"填写, 请参考
+	 * @url https://dysms.console.aliyun.com/dysms.htm#/develop/template
+	 * @param $templateCode
+	 */
 	public function setTemplateCode($templateCode) {
 		$this->templateCode = $templateCode;
 		$this->queryParameters["TemplateCode"]=$templateCode;
@@ -43,6 +48,10 @@ class SendSmsRequest extends RpcAcsRequest
 		return $this->phoneNumbers;
 	}
 
+	/**
+	 * 设置短信接收号码
+	 * @param $phoneNumbers
+	 */
 	public function setPhoneNumbers($phoneNumbers) {
 		$this->phoneNumbers = $phoneNumbers;
 		$this->queryParameters["PhoneNumbers"]=$phoneNumbers;
@@ -52,6 +61,11 @@ class SendSmsRequest extends RpcAcsRequest
 		return $this->signName;
 	}
 
+	/**
+	 * 必填，设置签名名称，应严格按"签名名称"填写
+	 * @param $signName
+	 * @url https://dysms.console.aliyun.com/dysms.htm#/develop/sign
+	 */
 	public function setSignName($signName) {
 		$this->signName = $signName;
 		$this->queryParameters["SignName"]=$signName;
@@ -70,6 +84,10 @@ class SendSmsRequest extends RpcAcsRequest
 		return $this->templateParam;
 	}
 
+	/**
+	 * 可选，设置模板参数, 假如模板中存在变量需要替换则为必填项
+	 * @param $templateParam
+	 */
 	public function setTemplateParam($templateParam) {
 		$this->templateParam = $templateParam;
 		$this->queryParameters["TemplateParam"]=$templateParam;
