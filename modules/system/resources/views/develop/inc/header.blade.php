@@ -1,6 +1,6 @@
 <nav class="navbar navbar-default">
     <div class="navbar-header">
-        <a class="navbar-brand" href="{!! route('system:develop.cp') !!}">
+        <a class="navbar-brand" href="{!! route('system:develop.cp.cp') !!}">
             开发平台
         </a>
     </div>
@@ -8,7 +8,7 @@
         <ul class="nav navbar-nav">
             @foreach($menus as $key => $menu)
                 <li>
-                    <a href="{!! route('system:develop.cp') !!}#{!! $key !!}">
+                    <a href="{!! route('system:develop.cp.cp') !!}#{!! $key !!}">
                         {!! app('poppy')->get($key."::name") !!}
                     </a>
                 </li>

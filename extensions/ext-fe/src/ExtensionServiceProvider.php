@@ -1,6 +1,7 @@
 <?php namespace Poppy\Extension\Fe;
 
-use Poppy\Extension\Fe\Console\Bower;
+use Poppy\Extension\Fe\Command\BowerCommand;
+use Poppy\Extension\Fe\Command\DocCommand;
 use Poppy\Extension\Fe\Form\FeForm;
 use Poppy\Framework\Support\PoppyServiceProvider;
 
@@ -41,9 +42,10 @@ class ExtensionServiceProvider extends PoppyServiceProvider
 	{
 		// 配置文件合并
 		$this->mergeConfigFrom(__DIR__ . '/../config/fe.php', 'ext-fe');
-		$this->registerConsoleCommand('extension.fe.bower', Bower::class);
+		$this->registerConsoleCommand('extension.fe.bower', BowerCommand::class);
+		$this->registerConsoleCommand('extension.fe.doc', DocCommand::class);
 
-		$this->app->singleton('poppy.fe.form', function ($app) {
+		$this->app->singleton('poppy.fe.form', function($app) {
 			$form = new FeForm($app['html'], $app['url'], $app['view'], $app['session.store']->token());
 			return $form->setSessionStore($app['session.store']);
 		});

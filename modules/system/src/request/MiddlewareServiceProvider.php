@@ -31,4 +31,5 @@ class MiddlewareServiceProvider extends ServiceProvider
 			$this->app->make(KernelContract::class)->prependMiddleware(CrossPreflight::class);
 		}
 	}
+
 }

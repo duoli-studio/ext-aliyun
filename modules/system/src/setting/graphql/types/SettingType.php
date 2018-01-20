@@ -12,7 +12,7 @@ class SettingType extends AbstractType
 	public function __construct($attributes = [])
 	{
 		parent::__construct($attributes);
-		$this->attributes['name']        = 'setting';
+		$this->attributes['name']        = 'Setting';
 		$this->attributes['description'] = trans('system::setting.graphql.type_desc');
 	}
 

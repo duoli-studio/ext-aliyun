@@ -11,7 +11,11 @@ use System\Request\Api\AuthController;
 use System\Request\Api\DashboardsController;
 use System\Request\Api\HomeController as SysApiHomeController;
 use System\Request\Backend\HomeController as BackendHomeController;
-use System\Request\Develop\DevController;
+use System\Request\Backend\RoleController as BackendRoleController;
+use System\Request\Backend\PamController as BackendPamController;
+use System\Request\Develop\CpController as DevCpController;
+use System\Request\Develop\PamController as DevPamController;
+use System\Request\Develop\EnvController as DevEnvController;
 use System\Request\System\HomeController;
 use System\Request\System\TestController as SystemTestController;
 
@@ -42,7 +46,7 @@ class RouteServiceProvider extends ServiceProvider
 	{
 		\Route::group([
 			'prefix' => 'system',
-		], function (Router $router) {
+		], function(Router $router) {
 			$router->get('/', HomeController::class . '@layout');
 
 			$router->get('/login', HomeController::class . '@login');
@@ -54,15 +58,35 @@ class RouteServiceProvider extends ServiceProvider
 		\Route::group([
 			'middleware' => 'backend',
 			'prefix'     => 'backend',
-		], function (Router $router) {
+		], function(Router $router) {
 			$router->any('/', BackendHomeController::class . '@login')->name('backend:home.login');
 			$router->group([
 				'middleware' => 'auth:backend',
-			], function (Router $router) {
-				$router->any('/cp', BackendHomeController::class . '@cp')->name('backend:home.cp');
-				$router->any('/password', BackendHomeController::class . '@password')->name('backend:home.password');
-				$router->any('/logout', BackendHomeController::class . '@logout')->name('backend:home.logout');
-				$router->any('/setting/{path?}', BackendHomeController::class . '@setting')->name('backend:home.setting');
+			], function(Router $router) {
+				$router->any('/cp', BackendHomeController::class . '@cp')
+					->name('backend:home.cp');
+				$router->any('/password', BackendHomeController::class . '@password')
+					->name('backend:home.password');
+				$router->any('/logout', BackendHomeController::class . '@logout')
+					->name('backend:home.logout');
+				$router->any('/setting/{path?}', BackendHomeController::class . '@setting')
+					->name('backend:home.setting');
+
+				$router->get('/role', BackendRoleController::class . '@index')
+					->name('backend:role.index');
+				$router->any('/role/establish/{id?}', BackendRoleController::class . '@establish')
+					->name('backend:role.establish');
+				$router->any('/role/delete/{id?}', BackendRoleController::class . '@delete')
+					->name('backend:role.delete');
+				$router->any('/role/menu/{id}', BackendRoleController::class . '@menu')
+					->name('backend:role.menu');
+
+				$router->get('/pam', BackendPamController::class . '@index')
+					->name('backend:pam.index');
+				$router->any('/pam/establish', BackendPamController::class . '@establish')
+					->name('backend:pam.establish');
+				$router->any('/pam/password/{id}', BackendPamController::class . '@password')
+					->name('backend:pam.password');
 			});
 		});
 	}
@@ -78,29 +102,22 @@ class RouteServiceProvider extends ServiceProvider
 		\Route::group([
 			'middleware' => 'web',
 			'prefix'     => 'develop',
-		], function (Router $router) {
-			$router->any('login', DevController::class . '@login')
-				->name('system:develop.login');
-
-			$router->get('api', DevController::class . '@api')
-				->name('system:develop.api');
-
-			$router->group([
-				'middleware' => 'auth:develop',
-			], function (Router $router) {
-
-				$router->get('/graphi/{schema?}', HomeController::class . '@graphi')
-					->name('system:develop.graphql');
-
-				$router->get('/', DevController::class . '@cp')
-					->name('system:develop.cp');
-
-				$router->get('/phpinfo', DevController::class . '@phpinfo')
-					->name('system:develop.phpinfo');
-			});
-
+		], function(Router $router) {
+			$router->get('/', DevCpController::class . '@index')
+				->name('system:develop.cp.cp');
+			$router->any('login', DevPamController::class . '@login')
+				->name('system:develop.pam.login');
+			$router->get('api', DevCpController::class . '@api')
+				->name('system:develop.cp.api');
+			$router->any('set_token', DevCpController::class . '@setToken')
+				->name('system:develop.cp.set_token');
+			$router->get('doc', DevCpController::class . '@doc')
+				->name('system:develop.cp.doc');
+			$router->get('/graphi/{schema?}', DevCpController::class . '@graphi')
+				->name('system:develop.cp.graphql');
+			$router->get('/phpinfo', DevEnvController::class . '@phpinfo')
+				->name('system:develop.env.phpinfo');
 		});
-
 	}
 
 	/**
@@ -115,18 +132,17 @@ class RouteServiceProvider extends ServiceProvider
 		\Route::group([
 			'middleware' => ['cross'],
 			'prefix'     => 'api/system',
-		], function (Router $route) {
+		], function(Router $route) {
 			$route->any('/information', SysApiHomeController::class . '@information');
 			$route->any('/dashboard', DashboardsController::class . '@list');
+			$route->get('/captcha', SysApiHomeController::class . '@captcha');
 			$route->group([
 				'middleware' => ['auth:jwt_backend'],
-			], function (Router $route) {
+			], function(Router $route) {
 				$route->any('/access', AuthController::class . '@access')
 					->name('system:api.access');
-
-				// page
 				$route->any('/page/{path?}', SysApiHomeController::class . '@page');
-
+				$route->get('/permission', SysApiHomeController::class . '@permission');
 			});
 		});
 	}
@@ -135,7 +151,7 @@ class RouteServiceProvider extends ServiceProvider
 	{
 		\Route::group([
 			'middleware' => ['cross'],
-		], function (Router $route) {
+		], function(Router $route) {
 			$route->any('api/token/{guard?}', AuthController::class . '@token')
 				->name('api.token');
 			$route->any('api/g/{graphql_schema?}', GraphQLController::class . '@query')

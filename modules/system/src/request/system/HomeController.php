@@ -21,16 +21,4 @@ class HomeController extends Controller
 		$this->share('translations', json_encode($this->getTranslator()->fetch('zh')));
 		return view('system::layout');
 	}
-
-	public function graphi($schema = 'default')
-	{
-		if ($schema == 'default') {
-			$schema = '';
-		}
-		$token = RawCookieHelper::get('dev_token#' . $schema);
-		return view('system::graphql.graphiql', [
-			'graphqlPath' => route('api.graphql', $schema),
-			'token'       => $token,
-		]);
-	}
 }

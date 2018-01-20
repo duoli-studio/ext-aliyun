@@ -167,12 +167,14 @@ extension:
                 region:
                     default: ' '
                     label: 发送区域
+                    description: '暂时不支持多Region, 默认是 cn-hangzhou'
                     key: extension::sms.region
                     required: false
                     type: input
                 end_point_name:
                     default: ' '
                     label: 服务结点
+                    description: '默认是 cn-hangzhou'
                     key: extension::sms.end_point_name
                     required: false
                     type: input
@@ -182,6 +184,13 @@ extension:
                     key: extension::sms.code_sign_name
                     required: false
                     type: input
+                login_template:
+                    default: ' '
+                    label: 登录模版代码
+                    key: extension::sms.login_template
+                    required: false
+                    type: input
+                    description: '可用变量名称[code:验证码]'
                 register_template:
                     default: ' '
                     label: 注册模版代码
@@ -203,6 +212,72 @@ extension:
                     required: false
                     type: input
                     description: '可用变量名称[code:验证码]'
+        oss:
+            default: false
+            show: true
+            submit: api/system/page/setting-extension
+            title: oss上传配置
+            fields:
+                access_key_id:
+                    default: ' '
+                    label: accessKeyId
+                    key: extension::oss.access_key_id
+                    required: false
+                    type: input
+                access_key_secret:
+                    default: ' '
+                    label: accessKeySecret
+                    key: extension::oss.access_key_secret
+                    required: false
+                    type: input
+                endpoint:
+                    default: ' '
+                    label: endpoint
+                    key: extension::oss.endpoint
+                    required: false
+                    type: input
+                bucket_name:
+                    default: ' '
+                    label: bucket_name
+                    key: extension::oss.bucket_name
+                    required: false
+                    type: input
+        wechatLogin:
+            default: false
+            show: true
+            submit: api/system/page/setting-extension
+            title: 微信
+            fields:
+                app_key:
+                    default: ' '
+                    label: appKey
+                    key: extension::wechat.app_key
+                    required: false
+                    type: input
+                app_secret:
+                    default: ' '
+                    label: appSecret
+                    key: extension::wechat.app_secret
+                    required: false
+                    type: input
+        qqLogin:
+            default: false
+            show: true
+            submit: api/system/page/setting-extension
+            title: QQ登录
+            fields:
+                app_key:
+                    default: ' '
+                    label: appKey
+                    key: extension::qq.app_key
+                    required: false
+                    type: input
+                app_secret:
+                    default: ' '
+                    label: appSecret
+                    key: extension::qq.app_secret
+                    required: false
+                    type: input
 sample:
     initialization:
         name: 示例

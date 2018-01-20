@@ -34,6 +34,30 @@ trait SystemTrait
 	}
 
 	/**
+	 * Check Set Password
+	 * @return bool
+	 */
+	public function existsPassword()
+	{
+		if (!$this->pam->password) {
+			return $this->setError('密码为空');
+		}
+		return true;
+	}
+
+	/**
+	 * 检查 pam 用户
+	 * @return bool
+	 */
+	public function checkPam()
+	{
+		if (!$this->pam) {
+			return $this->setError(trans('system::act.check_permission_need_login'));
+		}
+		return true;
+	}
+
+	/**
 	 * Check Backend User login and permission.
 	 * @param string $permission
 	 * @return bool
@@ -127,7 +151,6 @@ trait SystemTrait
 	{
 		return $this->getAuth()->guard(PamAccount::GUARD_WEB);
 	}
-
 
 	/**
 	 * @return BackendManager

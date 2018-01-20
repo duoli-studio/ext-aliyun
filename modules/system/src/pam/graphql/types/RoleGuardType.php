@@ -12,7 +12,7 @@ class RoleGuardType extends EnumType
 	public function __construct($attributes = [])
 	{
 		parent::__construct($attributes);
-		$this->attributes['name']        = 'role_guard';
+		$this->attributes['name']        = 'RoleGuard';
 		$this->attributes['description'] = trans('system::role.graphql.type_desc');
 		$this->attributes['values']      = [
 			PamAccount::GUARD_BACKEND => [

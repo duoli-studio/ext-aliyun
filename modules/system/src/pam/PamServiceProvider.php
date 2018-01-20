@@ -48,6 +48,7 @@ class PamServiceProvider extends ServiceProvider
 
 		$this->app->bind('act.role', 'System\Pam\Action\Role');
 		$this->app->bind('act.pam', 'System\Pam\Action\Pam');
+		$this->app->bind('act.area', 'System\Pam\Action\Area');
 	}
 
 	/**
@@ -58,6 +59,7 @@ class PamServiceProvider extends ServiceProvider
 		return [
 			'act.role',
 			'act.pam',
+			'act.area',
 		];
 	}
 }

@@ -63,7 +63,7 @@ class PermissionCommand extends Command
 		$this->getPermission()->permissions()->each(function (Permission $permission) use ($data) {
 			$data->push([
 				$permission->type(),
-				$permission->id(),
+				$permission->key(),
 				$permission->description(),
 			]);
 		});

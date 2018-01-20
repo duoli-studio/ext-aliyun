@@ -1,34 +1,30 @@
 <?php namespace System\Pam\GraphQL\Types;
 
-use GraphQL\Type\Definition\Type;
-use Poppy\Framework\GraphQL\Support\Type as AbstractType;
+use Poppy\Framework\GraphQL\Support\EnumType;
 
 /**
  * Class SettingType.
  */
-class BindChangeType extends AbstractType
+class BindChangeType extends EnumType
 {
 
 	public function __construct($attributes = [])
 	{
 		parent::__construct($attributes);
-		$this->attributes['name']        = 'bind_change';
-		$this->attributes['description'] = trans('system::bind_change.graphql.type_desc');
-	}
-
-	/**
-	 * @return array
-	 */
-	public function fields()
-	{
-		return [
-			'mobile' => [
-				'type'        => Type::nonNull(Type::string()),
-				'description' => trans('system::bind_change.db.mobile'),
+		$this->attributes['name']        = 'BindChange';
+		$this->attributes['description'] = trans('system::bind_change.graphql.action_desc');
+		$this->attributes['values']      = [
+			'old_send' => [
+				'description' => trans('system::bind_change.action.old_send'),
 			],
-			'captcha' => [
-				'type'        => Type::nonNull(Type::string()),
-				'description' => trans('system::bind_change.db.captcha'),
+			'old_validate' => [
+				'description' => trans('system::bind_change.action.old_validate'),
+			],
+			'new_send' => [
+				'description' => trans('system::bind_change.action.new_send'),
+			],
+			'new_validate' => [
+				'description' => trans('system::bind_change.action.new_validate'),
 			],
 		];
 	}

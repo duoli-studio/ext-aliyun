@@ -13,8 +13,12 @@
         <div id="page-wrapper" class="gray-bg">
             @include('system::backend.tpl.inc_top')
             @yield('backend-breadcrumb')
-            <div class="wrapper wrapper-content animated fadeInRight">
-                @yield('backend-main')
+            <div class="wrapper wrapper-content">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        @yield('backend-main')
+                    </div>
+                </div>
             </div>
             @include('system::backend.tpl.inc_footer')
         </div>

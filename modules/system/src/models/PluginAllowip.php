@@ -1,25 +1,25 @@
-<?php namespace App\Models;
+<?php namespace System\Models;
 
-use App\Lemon\Repositories\Sour\LmUtil;
+use Carbon\Carbon;
+use Poppy\Framework\Helper\UtilHelper;
 
 
 /**
  * App\Models\PluginAllowip
- * @property integer        $ip_id
- * @property string         $ip_addr
- * @property string         $note
- * @property \Carbon\Carbon $created_at
- * @property string         $deleted_at
- * @property \Carbon\Carbon $updated_at
+ * @property integer $id
+ * @property string  $ip_address
+ * @property string  $note
+ * @property Carbon  $created_at
+ * @property Carbon  $updated_at
  */
-class PluginAllowip extends \Eloquent {
+class PluginAllowip extends \Eloquent
+{
 
 
 	protected $table = 'plugin_allowip';
 
-	protected $primaryKey = 'ip_id';
-	protected $fillable   = [
-		'ip_addr',
+	protected $fillable = [
+		'ip_address',
 		'note',
 	];
 
@@ -28,10 +28,11 @@ class PluginAllowip extends \Eloquent {
 	 * @param $ip
 	 * @return mixed
 	 */
-	public static function ipExists($ip) {
-		if (!LmUtil::isIp($ip)) {
+	public static function ipExists($ip)
+	{
+		if (!UtilHelper::isIp($ip)) {
 			return false;
 		}
-		return self::where('ip_addr', $ip)->value('ip_id');
+		return self::where('ip_address', $ip)->value('id');
 	}
 }

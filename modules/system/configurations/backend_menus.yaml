@@ -1,17 +1,15 @@
-graphql:
-    title : GraphQL
+manage:
+    title : 网站管理
     children :
         -
-            title : GraphQL (Web)状态
-            route : system:develop.api
-            param : guard=web
-        -
-            title : GraphQL (Backend)状态
-            route : system:develop.api
-            param : guard=backend
-system:
-    title : 系统
+            title : 系统配置
+            route : backend:home.setting
+pam:
+    title : 用户管理
     children :
         -
-            title : PHP状态
-            route : system:develop.phpinfo
+            title : 用户角色
+            route : backend:role.index
+        -
+            title : 用户管理
+            route : backend:pam.index

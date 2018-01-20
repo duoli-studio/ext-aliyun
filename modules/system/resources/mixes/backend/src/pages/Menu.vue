@@ -233,7 +233,7 @@
                                                            :items="item.children"
                                                            :originals="originals"
                                                            :rules="rules"
-                                                           v-if="Object.keys(item.children).length > 0 && originals[item.index].expand"></menu-children>
+                                                           v-if="Object.keys(item.children).length > 0 && originals[item.index].expand"/>
                                         </template>
                                         </tbody>
                                     </table>

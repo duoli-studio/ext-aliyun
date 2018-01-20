@@ -3,13 +3,18 @@
 use Carbon\Carbon;
 use Illuminate\Auth\Authenticatable as TraitAuthenticatable;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Foundation\Auth\Access\Authorizable;
+use Poppy\Framework\Http\Pagination\PageInfo;
+use System\Classes\Traits\FilterTrait;
 use System\Rbac\Traits\RbacUserTrait;
 use Tymon\JWTAuth\Contracts\JWTSubject as JWTSubjectAuthenticatable;
 
 
 /**
  * System\Models\PamAccount
+ *
  * @property int                       $id
  * @property string                    $mobile             手机号
  * @property string                    $username           用户名称
@@ -32,11 +37,21 @@ use Tymon\JWTAuth\Contracts\JWTSubject as JWTSubjectAuthenticatable;
  * @property string|null               $password_key       账号注册时候随机生成的6位key
  * @property string|null               $type               邮箱
  * @property string|null               $reg_platform       注册平台
+ * @property string                    $disable_reason     禁用原因
+ * @property string|null               $disable_start_at   禁用开始时间
+ * @property string|null               $disable_end_at     禁用结束时间
+ * @method static Builder|PamAccount filter($input = [], $filter = null)
+ * @method static Builder|PamAccount pageFilter(PageInfo $pageInfo)
+ * @method static Builder|PamAccount paginateFilter($perPage = null, $columns = [], $pageName = 'page', $page = null)
+ * @method static Builder|PamAccount simplePaginateFilter($perPage = null, $columns = [], $pageName = 'page')
+ * @method static Builder|PamAccount whereBeginsWith($column, $value, $boolean = 'and')
+ * @method static Builder|PamAccount whereEndsWith($column, $value, $boolean = 'and')
+ * @method static Builder|PamAccount whereLike($column, $value, $boolean = 'and')
  */
 class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthenticatable
 {
 
-	use TraitAuthenticatable, RbacUserTrait;
+	use TraitAuthenticatable, RbacUserTrait, Authorizable, FilterTrait;
 
 	/* Register Type
 	 -------------------------------------------- */
@@ -157,22 +172,6 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 			self::REG_PLATFORM_IOS     => 'ios',
 			self::REG_PLATFORM_PC      => 'pc',
 			self::REG_PLATFORM_WEB     => 'web',
-		];
-		return kv($desc, $key, $check_exists);
-	}
-
-	/**
-	 * 账户类型
-	 * @param null $key
-	 * @param bool $check_exists
-	 * @return array|string
-	 */
-	public static function kvAccountType($key = null, $check_exists = false)
-	{
-
-		$desc = [
-			self::TYPE_BACKEND => '后台',
-			self::TYPE_USER    => '用户',
 		];
 		return kv($desc, $key, $check_exists);
 	}

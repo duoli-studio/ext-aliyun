@@ -1,6 +1,6 @@
 <nav class="navbar navbar-default">
 	<div class="navbar-header">
-		<a class="navbar-brand" href="{!! route('web:fe.md') !!}"><i class="fa fa-home"></i></a>
+		<a class="navbar-brand" href="{!! route('slt:fe.md') !!}"><i class="fa fa-home"></i></a>
 	</div>
 	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 		@foreach($singles as $key => $single)
@@ -10,7 +10,7 @@
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">Js ({!! $key !!}) <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							@foreach($single as $link)
-								<li><a href="{!! route('web:fe.js', $link) !!}">{!! $link !!}</a></li>
+								<li><a href="{!! route('slt:fe.js', $link) !!}">{!! $link !!}</a></li>
 							@endforeach
 						</ul>
 					</li>
@@ -24,7 +24,7 @@
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">jQuery ({!! $key !!}) <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							@foreach($single as $link)
-								<li><a href="{!! route('web:fe.js', ['jquery.'. $link]) !!}">{!! $link !!}</a></li>
+								<li><a href="{!! route('slt:fe.js', ['jquery.'. $link]) !!}">{!! $link !!}</a></li>
 							@endforeach
 						</ul>
 					</li>
@@ -38,7 +38,7 @@
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">jQuery Bt3({!! $key !!}) <span class="caret"></span></a>
 						<ul class="dropdown-menu">
 							@foreach($single as $link)
-								<li><a href="{!! route('web:fe.js', ['jquery.bt3.'. $link]) !!}">{!! $link !!}</a></li>
+								<li><a href="{!! route('slt:fe.js', ['bt3.'. $link]) !!}">{!! $link !!}</a></li>
 							@endforeach
 						</ul>
 					</li>

@@ -2,23 +2,39 @@
 
 use Carbon\Carbon;
 use EloquentFilter\Filterable;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Poppy\Framework\Http\Pagination\PageInfo;
+use System\Classes\Traits\FilterTrait;
 use System\Rbac\Contracts\RbacRoleContract;
 use System\Rbac\Traits\RbacRoleTrait;
 
 /**
- * @property integer $id
- * @property string  $name
- * @property string  $title
- * @property string  $description
- * @property string  $type
- * @property boolean $is_system
- * @property Carbon  $created_at
- * @property Carbon  $updated_at
+ * \System\Models\PamRole
+ * @property integer                         $id
+ * @property string                          $name
+ * @property string                          $title
+ * @property string                          $description
+ * @property string                          $type
+ * @property boolean                         $is_system
+ * @property Carbon                          $created_at
+ * @property Carbon                          $updated_at
+ * @property int                             $is_enable 是否可用
+ * @property-read Collection|PamPermission[] $perms
+ * @property-read Collection|PamAccount[]    $users
+ * @method static Builder|PamRole filter($input = [], $filter = null)
+ * @method static Builder|PamRole paginateFilter($perPage = null, $columns = [], $pageName = 'page', $page = null)
+ * @method static Builder|PamRole simplePaginateFilter($perPage = null, $columns = [], $pageName = 'page')
+ * @method static Builder|PamRole whereBeginsWith($column, $value, $boolean = 'and')
+ * @method static Builder|PamRole whereEndsWith($column, $value, $boolean = 'and')
+ * @method static Builder|PamRole whereLike($column, $value, $boolean = 'and')
+ * @method static Builder|PamRole pageFilter(PageInfo $pageInfo, $columns = [], $pageName = 'page')
+ * @mixin \Eloquent
  */
 class PamRole extends \Eloquent implements RbacRoleContract
 {
 
-	use RbacRoleTrait, Filterable;
+	use RbacRoleTrait, FilterTrait;
 
 	const BE_ROOT  = 'root';      // admin user
 	const FE_USER  = 'user';      // web user
@@ -54,17 +70,13 @@ class PamRole extends \Eloquent implements RbacRoleContract
 
 	/**
 	 * 返回一维的角色对应
-	 * @param null $accountType
-	 * @return array
+	 * @param null   $type
+	 * @param string $key
+	 * @return \Illuminate\Support\Collection
 	 */
-	public static function getLinear($accountType = null)
+	public static function getLinear($type = null, $key = 'id')
 	{
-		$roles  = self::getAll($accountType);
-		$linear = [];
-		foreach ($roles as $roleId => $role) {
-			$linear[$roleId] = self::info($roleId, 'role_name');
-		}
-		return $linear;
+		return self::where('type', $type)->pluck('title', $key);
 	}
 
 	/**

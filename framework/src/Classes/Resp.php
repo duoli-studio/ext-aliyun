@@ -133,7 +133,7 @@ class Resp
 		$arrAppend = StrHelper::parseKey($append);
 
 		// is json
-		if (isset($arrAppend['json']) || \Request::ajax()) {
+		if (isset($arrAppend['json']) || \Request::ajax() || (strtolower(substr(\Input::header('Authorization'), 0, 6)) === 'bearer')) {
 			$isJson = true;
 			unset($arrAppend['json']);
 		}
@@ -183,6 +183,37 @@ class Resp
 	}
 
 	/**
+	 * 返回成功输入
+	 * @param $message
+	 * @return array
+	 */
+	public static function success($message)
+	{
+		return (new Resp(self::SUCCESS, $message))->toArray();
+	}
+
+	/**
+	 * 返回错误数组
+	 * @param $message
+	 * @return array
+	 */
+	public static function error($message)
+	{
+		return (new Resp(self::ERROR, $message))->toArray();
+	}
+
+	/**
+	 * 返回自定义信息
+	 * @param        $code
+	 * @param string $message
+	 * @return array
+	 */
+	public static function custom($code, $message = '')
+	{
+		return (new Resp($code, $message))->toArray();
+	}
+
+	/**
 	 * 显示界面
 	 * @param $time
 	 * @param $location
@@ -192,13 +223,26 @@ class Resp
 	private static function webView($time, $location, $input)
 	{
 		if ($time || $location == 'back' || $location == 'message' || !$location) {
-			$re = $location ?: 'back';
-			if (Container::getInstance()->runningInBackend()) {
-				$view = 'system::backend.tpl.inc_message';
+			$re         = $location ?: 'back';
+			$messageTpl = config('poppy.message_template');
+			$view       = '';
+			if ($messageTpl) {
+				foreach ($messageTpl as $context => $tplView) {
+					if (Container::getInstance()->isRunningIn($context)) {
+						$view = $tplView;
+					}
+				}
 			}
-			else {
-				$view = 'poppy::template.message';
+
+			if (!$view) {
+				if (Container::getInstance()->runningInBackend()) {
+					$view = 'system::backend.tpl.inc_message';
+				}
+				else {
+					$view = 'poppy::template.message';
+				}
 			}
+
 			return response()->view($view, [
 				'location' => $re,
 				'input'    => $input,
@@ -217,7 +261,7 @@ class Resp
 	 * @param Resp   $resp
 	 * @param string $append
 	 * @param array  $input
-	 * @return \Illuminate\Http\Response
+	 * @return \Illuminate\Http\JsonResponse
 	 */
 	private static function webSplash($resp, $append = '', $input = [])
 	{
@@ -247,8 +291,7 @@ class Resp
 			\Session::flashInput($input);
 		}
 
-		$json = json_encode($return, JSON_UNESCAPED_UNICODE);
-		return \Response::make($json);
+		return \Response::json($return, 200, [], JSON_UNESCAPED_UNICODE);
 	}
 
 }

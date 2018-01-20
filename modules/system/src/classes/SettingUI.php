@@ -22,6 +22,11 @@ class SettingUI
 	 */
 	private $tabs = [];
 
+	/**
+	 * 页面
+	 * @var array
+	 */
+	private $pages = [];
 
 	/**
 	 * Flat Tab
@@ -51,6 +56,13 @@ class SettingUI
 	{
 
 		try {
+			$this->pages = $this->getBackend()->pages();
+			$poppyPages  = config('poppy.backend_pages');
+			if ($poppyPages) {
+				$this->pages = $this->pages->filter(function($page, $key) use ($poppyPages) {
+					return in_array($key, $poppyPages);
+				});
+			}
 			$definition           = $this->getBackend()->pages()->offsetGet($key);
 			$this->initialization = $definition['initialization'];
 			$this->tabs           = $definition['tabs'];
@@ -102,6 +114,7 @@ class SettingUI
 			'title'       => $this->initialization['name'],
 			'description' => $this->initialization['description'] ?? $this->initialization['name'],
 			'tabs'        => $this->tabs,
+			'pages'       => $this->pages,
 			'url'         => $this->url,
 			'path'        => $this->path,
 		]);
@@ -118,7 +131,7 @@ class SettingUI
 		$inputKeys = collect();
 		$keys      = collect($request->keys());
 		$configs   = [];
-		$keys->each(function ($item) use ($inputKeys, $request, &$configs) {
+		$keys->each(function($item) use ($inputKeys, $request, &$configs) {
 			if (strpos($item, '::') !== false) {
 
 				$configs[$item] = $request->get($item);
@@ -146,6 +159,8 @@ class SettingUI
 			$key = str_replace_last('::', '.', $key);
 			$this->getSetting()->set($key, $value);
 		}
+
+		\Cache::forget('modules.page');
 		return true;
 	}
 

@@ -23,11 +23,11 @@ mix.sass(
 	'resources/assets/scss/slt.scss',
 	'public/assets/css'
 ).sass(
-	'resources/assets/scss/develop.scss',
-	'public/assets/css'
+    'extensions/ext-fe/resources/scss/develop/style.scss',
+    'public/assets/css'
 ).sass(
-	'resources/assets/scss/backend.scss',
-	'public/assets/css'
+    'extensions/ext-fe/resources/scss/backend/style.scss',
+    'public/assets/css'
 ).browserSync({
-	proxy : 'l.play.sour-lemon.com'
+	proxy : 'l.slt.sour-lemon.com'
 });

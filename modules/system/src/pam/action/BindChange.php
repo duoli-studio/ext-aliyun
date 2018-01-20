@@ -1,12 +1,13 @@
 <?php namespace System\Pam\Action;
 
 /**
- * 基本账户操作
+ * 手机换绑操作
  */
+use Poppy\Framework\Validation\Rule;
 use System\Classes\Traits\SystemTrait;
 use System\Models\PamAccount;
+use User\User\Action\User;
 use Util\Models\PamCaptcha;
-use Util\Util\Action\Util;
 
 
 class BindChange
@@ -14,85 +15,124 @@ class BindChange
 
 	use SystemTrait;
 
-	/** @var PamAccount */
-	protected $accountId;
-
-	/** @var int Role id */
-	protected $mobile;
-
 	/**
-	 * @var string
+	 * 原手机号发送验证码
+	 * @param $mobile
+	 * @param $captcha
+	 * @return bool
 	 */
-	protected $accountTable;
-
-	public function __construct()
-	{
-		$this->accountTable = (new PamAccount())->getTable();
-	}
-
-	public function oldSendCaptcha()
+	public function oldSendCaptcha($mobile, $captcha)
 	{
 		if (!$this->checkPermission()) {
 			return false;
 		}
-		// init
-		if ($this->pam->id && !$this->initAccount($this->pam->id)) {
+		if (!(new User())->existsPassword($this->pam)) {
+			return false;
+		}
+
+		$actUtil = app('act.util');
+
+		if ($mobile != $this->pam->mobile) {
+			return $this->setError('该手机号不是本账号绑定手机');
+		}
+		$actUtil->sendCaptcha($mobile, $type = PamCaptcha::CON_FIND_PASSWORD);
+		//考虑忘记手机号，手机号失效的情况
+
+		return true;
+	}
+
+	/**
+	 * 原手机验证
+	 * @param $captcha
+	 * @return bool|string
+	 * @throws \Exception
+	 */
+	public function oldValidate($captcha)
+	{
+		$actUtil = app('act.util');
+		if (!$actUtil->validCaptcha($this->pam->mobile, $captcha)) {
+			return $this->setError($actUtil->getError()->getMessage());
+		}
+		$actUtil->deleteCaptcha($this->pam->mobile, $captcha);
+		//生成串码 包含有效期
+		try {
+			$verify_code = $actUtil->genOnceVerifyCode(10, $this->pam->mobile);
+			return $verify_code;
+		} catch (\Exception $e) {
+			return $this->setError($e->getMessage());
+		}
+	}
+
+
+	/**
+	 * 新手机号发送验证码
+	 * @param $verify_code
+	 * @param $newMobile
+	 * @return bool
+	 */
+	public function newSendCaptcha($verify_code, $newMobile)
+	{
+		$data      = [
+			'verify_code' => $verify_code,
+			'mobile'      => $newMobile,
+		];
+		$validator = \Validator::make($data, [
+			'verify_code' => [
+				Rule::required(),
+				Rule::string(),
+			],
+			'mobile'      => [
+				Rule::required(),
+				Rule::mobile(),
+			], [], [
+				'verify_code' => trans('system::bind_change.db.verify_code'),
+				'mobile'      => trans('system::bind_change.db.mobile'),
+			],
+		]);
+		if ($validator->fails()) {
+			return $this->setError($validator->messages());
+		}
+		$actUtil = app('act.util');
+		if (!$actUtil->verifyOnceCode($verify_code)) {
+			return $this->setError($actUtil->getError()->getMessage());
+		}
+		//验证新手机号是否已经注册
+		if (PamAccount::where('mobile', $newMobile)->exists()) {
+			return $this->setError('该手机号已经注册过');
+		}
+
+		//发送验证码
+		$actUtil->sendCaptcha($newMobile, $type = PamCaptcha::CON_REGISTER);
+		return true;
+	}
+
+	/**
+	 * 新的手机号验证
+	 * @param $newMobile
+	 * @param $newCaptcha
+	 * @return bool
+	 * @throws \Exception
+	 */
+	public function newValidate($newMobile, $newCaptcha)
+	{
+		if (!$this->checkPermission()) {
 			return false;
 		}
 		$actUtil = app('act.util');
-		$actUtil->sendCaptcha($this->mobile, $type = PamCaptcha::CON_FIND_PASSWORD);
-		//忘记手机号，手机号失效的情况
 
-		return true;
-	}
-
-	//验证
-	public function oldValidator($captcha)
-	{
-		$actUtil = app('act.util');
-		if (!$actUtil->validCaptcha($this->mobile, $captcha)) {
-			return $this->setError($actUtil->getError()->getMessage());
-		}
-		$actUtil->deleteCaptcha($this->mobile, $captcha);
-		return true;
-	}
-
-	public function newSendCaptcha($newMobile)
-	{
-		//验证新手机号是否已经注册
-		if (PamAccount::where('mobile', $newMobile)->count()) {
-			return $this->setError('该手机号已经注册过');
-		} else {
-			//发送验证码
-			$actUtil = app('act.util');
-			$actUtil->sendCaptcha($newMobile, $type = PamCaptcha::CON_REGISTER);
-		}
-		return true;
-	}
-
-	//新的手机号验证
-	public function newValidator($newMobile, $newCaptcha)
-	{
-		$actUtil = app('act.util');
 		if (!$actUtil->validCaptcha($newMobile, $newCaptcha)) {
 			return $this->setError($actUtil->getError()->getMessage());
 		}
-		PamAccount::where('id', $this->pam->id)->update([
-			'mobile' => $newMobile,
-		]);
 		$actUtil->deleteCaptcha($newMobile, $newCaptcha);
-		return true;
-	}
 
-
-	public function initAccount($id)
-	{
 		try {
-			$this->accountId = PamAccount::findOrFail($id);
-			$this->mobile    = $this->accountId->mobile;
+			$this->pam->update([
+				'mobile' => $newMobile,
+			]);
 			return true;
 		} catch (\Exception $e) {
-			return $this->setError('条目不存在, 不得操作');
+			return $this->setError($e->getMessage());
 		}
 	}
+
 }

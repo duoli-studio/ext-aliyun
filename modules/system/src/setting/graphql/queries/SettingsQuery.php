@@ -28,7 +28,7 @@ class SettingsQuery extends Query
 	 */
 	public function type(): ListOfType
 	{
-		return Type::listOf($this->getGraphQL()->type('setting'));
+		return Type::listOf($this->getGraphQL()->type('Setting'));
 	}
 
 	/**

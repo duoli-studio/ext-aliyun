@@ -27,11 +27,7 @@
 	\Route::group([
 		'middleware' => 'web',
 	], function () {
-		// fe
-		\Route::get('fe/js/{name?}', 'Web\FeController@js')
-			->name('web:fe.js');
-		\Route::get('fe/md', 'Web\FeController@markdown')
-			->name('web:fe.md');
+
 		\Route::any('fe/editor/{id?}', 'Web\FeController@editor')
 			->name('web:fe.editor');
 		\Route::post('fe/run', 'Web\FeController@run')

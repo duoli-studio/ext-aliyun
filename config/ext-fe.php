@@ -57,6 +57,12 @@ return [
 			],
 		],
 
+		"autosize" => [
+			"js" => [
+				'aim' => 'autosize/{VERSION}/autosize.js',
+			],
+		],
+
 		"bootstrap" => [
 			"js"   => [
 				'main' => 'dist/js/bootstrap.js',
@@ -84,6 +90,26 @@ return [
 			],
 		],
 
+		"datatables.net" => [
+			"js"   => [
+				'main' => 'js/jquery.dataTables.js',
+				'aim'  => 'jquery/data-tables/{VERSION}/jquery.data-tables.js',
+			],
+			'shim' => ['jquery'],
+		],
+
+		"datatables.net-bs" => [
+			"js"   => [
+				'main' => 'js/dataTables.bootstrap.js',
+				'aim'  => 'bt3/data-tables/{VERSION}/bt3.data-tables.js',
+			],
+			"css"  => [
+				'css/dataTables.bootstrap.css' => 'bt3/data-tables/data-tables.bootstrap.css',
+			],
+			"key"  => 'bt3.data-tables',
+			'shim' => ['jquery', 'bt3'],
+		],
+
 		"fex-webuploader" => [
 			"js"   => [
 				'aim' => 'jquery/webuploader/{VERSION}/jquery.webuploader.js',
@@ -93,6 +119,20 @@ return [
 			],
 			"key"  => 'jquery.webuploader',
 			'shim' => ['jquery'],
+		],
+
+		"highlight" => [
+			"js"   => [
+				'main'    => 'src/highlight.js',
+				'aim'     => 'highlight/{VERSION}/highlight.js',
+				'dispose' => [
+					'src/styles/*'    => 'highlight/{VERSION}/styles/',
+					'src/languages/*' => 'highlight/{VERSION}/languages/',
+				],
+			],
+			'shim' => [
+				"exports" => "hljs",
+			],
 		],
 
 		"jquery" => [
@@ -116,7 +156,7 @@ return [
 
 		"image-picker" => [
 			"js"   => [
-				'aim'  => 'jquery/image-picker/{VERSION}/jquery.image-picker.js',
+				'aim' => 'jquery/image-picker/{VERSION}/jquery.image-picker.js',
 			],
 			"css"  => [
 				'image-picker/image-picker.css' => 'jquery/image-picker/image-picker.css',

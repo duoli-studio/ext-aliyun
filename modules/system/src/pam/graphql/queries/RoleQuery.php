@@ -26,7 +26,7 @@ class RoleQuery extends Query
 	 */
 	public function type(): ObjectType
 	{
-		return $this->getGraphQL()->type('role');
+		return $this->getGraphQL()->type('Role');
 	}
 
 	/**

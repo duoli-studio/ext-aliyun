@@ -3,16 +3,13 @@
 use GraphQL\Type\Definition\Type;
 use Poppy\Framework\GraphQL\Support\Type as AbstractType;
 
-/**
- * Class SettingType.
- */
 class RoleType extends AbstractType
 {
 
 	public function __construct($attributes = [])
 	{
 		parent::__construct($attributes);
-		$this->attributes['name']        = 'role';
+		$this->attributes['name']        = 'Role';
 		$this->attributes['description'] = trans('system::role.graphql.type_desc');
 	}
 
@@ -22,17 +19,25 @@ class RoleType extends AbstractType
 	public function fields()
 	{
 		return [
-			'name'  => [
+			'id'             => [
+				'type'        => Type::int(),
+				'description' => trans('system::role.db.id'),
+			],
+			'name'           => [
 				'type'        => Type::string(),
 				'description' => trans('system::role.db.name'),
 			],
-			'title' => [
+			'title'          => [
+				'type'        => Type::string(),
 				'description' => trans('system::role.db.title'),
-				'type'        => Type::string(),
 			],
-			'type'  => [
-				'description' => trans('system::role.db.type'),
+			'type'           => [
 				'type'        => Type::string(),
+				'description' => trans('system::role.db.type'),
+			],
+			'can_permission' => [
+				'type'        => Type::boolean(),
+				'description' => trans('system::role.graphql.can_permission'),
 			],
 		];
 	}

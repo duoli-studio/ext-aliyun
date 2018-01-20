@@ -3,30 +3,65 @@
 use Carbon\Carbon;
 use Intervention\Image\Constraint;
 use Intervention\Image\Image;
-use Poppy\Framework\Classes\Traits\AppTrait;
+use OSS\OssClient;
 use Poppy\Framework\Helper\ImageHelper;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use System\Classes\Traits\SystemTrait;
 
-
+/**
+ * 图片上传类
+ */
 class Uploader
 {
 
-	use AppTrait;
+	use SystemTrait;
 
+	/**
+	 * 目标路径
+	 * @var string
+	 */
 	protected $destination = '';
 
+	/**
+	 * 目标磁盘
+	 * @var string
+	 */
 	protected $disk = 'public';
 
+	/**
+	 * 文件夹
+	 * @var string
+	 */
 	private $folder = '';
 
+	/**
+	 * 返回地址
+	 * @var string
+	 */
 	private $returnUrl = '';
 
+	/**
+	 * 允许上传的扩展
+	 * @var array
+	 */
 	private $allowedExtensions = ['zip'];
 
+	/**
+	 * 默认图片质量
+	 * @var int
+	 */
 	private $quality = 70;
 
+	/**
+	 * 重新设置大小时候的阈值
+	 * @var int
+	 */
 	private $resizeDistrict = 1920;
 
+	/**
+	 * 图片扩展的描述
+	 * @var array
+	 */
 	protected static $extensions = [
 		'image' => [
 			'extension'   => 'jpg,jpeg,png,gif',
@@ -50,6 +85,8 @@ class Uploader
 		],
 	];
 
+	private $saveAli = false;
+
 
 	public function __construct($folder = 'uploads')
 	{
@@ -57,6 +94,10 @@ class Uploader
 		$this->returnUrl = config('app.url') . '/';
 	}
 
+	/**
+	 * Set Extension
+	 * @param array $extension
+	 */
 	public function setExtension($extension = [])
 	{
 		$this->allowedExtensions = $extension;
@@ -139,8 +180,7 @@ class Uploader
 
 			$this->destination = $fileRelativePath;
 			return true;
-		}
-		else {
+		} else {
 
 			return $this->setError($file->getErrorMessage());
 		}
@@ -158,8 +198,7 @@ class Uploader
 	{
 		if ($content instanceof Image) {
 			$Image = $content;
-		}
-		else {
+		} else {
 			$Image = \Image::make($content);
 		}
 
@@ -183,7 +222,7 @@ class Uploader
 			}
 		}
 
-		$Image->resize($width, $height, function (Constraint $constraint) {
+		$Image->resize($width, $height, function(Constraint $constraint) {
 			$constraint->aspectRatio();
 			$constraint->upsize();
 		});
@@ -206,7 +245,7 @@ class Uploader
 
 		// 缩放图片
 		$Image = \Image::make($content);
-		$Image->resize(1920, null, function (Constraint $constraint) {
+		$Image->resize(1920, null, function(Constraint $constraint) {
 			$constraint->aspectRatio();
 			$constraint->upsize();
 		});
@@ -225,8 +264,7 @@ class Uploader
 	{
 		if (!isset(self::$extensions[$type])) {
 			$ext = self::$extensions['image'];
-		}
-		else {
+		} else {
 			$ext = self::$extensions[$type];
 		}
 		switch ($return_type) {
@@ -263,6 +301,31 @@ class Uploader
 	{
 		// 磁盘 public_uploads 对应的是根目录下的 uploads, 所以这里的目录是指定的
 		return $this->returnUrl . $this->destination;
+	}
+
+	/**
+	 * 保存到阿里云
+	 * @param bool $delete_local
+	 * @return bool
+	 */
+	public function saveAli($delete_local = true)
+	{
+		$endpoint = $this->getSetting()->get('extension::oss.endpoint');
+		$bucket   = $this->getSetting()->get('extension::oss.bucket_name');
+
+		$accessKeyId     = $this->getSetting()->get('extension::oss.access_key_id');
+		$accessKeySecret = $this->getSetting()->get('extension::oss.access_key_secret');
+		$this->saveAli   = true;
+		try {
+			$ossClient = new OssClient($accessKeyId, $accessKeySecret, $endpoint, false);
+			$ossClient->putObject($bucket, $this->destination, $this->storage()->get($this->destination));
+			if ($delete_local) {
+				$this->storage()->delete($this->destination);
+			}
+			return true;
+		} catch (\Exception $e) {
+			return $this->setError($e->getMessage());
+		}
 	}
 
 

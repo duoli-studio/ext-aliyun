@@ -14,7 +14,7 @@ class RespType extends AbstractType
 	public function __construct($attributes = [])
 	{
 		parent::__construct($attributes);
-		$this->attributes['name']        = 'resp';
+		$this->attributes['name']        = 'Resp';
 		$this->attributes['description'] = trans('system::act.graphql.resp_desc');
 	}
 

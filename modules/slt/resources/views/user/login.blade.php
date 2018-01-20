@@ -1,4 +1,4 @@
-@extends('slt::inc.tpl')
+@extends('slt::tpl.default')
 @section('tpl-main')
     <div class="container">
         <div class="row">
@@ -35,5 +35,5 @@
             </div>
         </div>
     </div>
-    @include('slt::inc.footer')
+    @include('slt::tpl.inc_footer')
 @endsection

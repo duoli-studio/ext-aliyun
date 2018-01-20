@@ -9,19 +9,23 @@ use Poppy\Framework\Exceptions\ModuleNotFoundException;
 use Poppy\Framework\Support\PoppyServiceProvider;
 use System\Backend\BackendServiceProvider;
 use System\Console\DevHtmlCommand;
+use System\Console\DocCommand;
 use System\Console\InstallCommand;
 use System\Events\ListenerServiceProvider;
 use System\Extension\ExtensionServiceProvider;
+use System\Models\PamRole;
 use System\Module\ModuleServiceProvider;
 use System\Pam\BindChangeServiceProvider;
 use System\Pam\Commands\UserCommand;
 use System\Pam\PamServiceProvider;
+use System\Pam\Policies\RolePolicy;
 use System\Permission\Commands\PermissionCommand;
 use System\Permission\PermissionServiceProvider;
 use System\Rbac\RbacServiceProvider;
 use System\Request\MiddlewareServiceProvider;
 use System\Request\RouteServiceProvider;
 use System\Setting\SettingServiceProvider;
+
 
 class ServiceProvider extends PoppyServiceProvider
 {
@@ -36,6 +40,9 @@ class ServiceProvider extends PoppyServiceProvider
 		],
 	];
 
+	protected $policies = [
+		PamRole::class => RolePolicy::class,
+	];
 
 	/**
 	 * @var string Module name
@@ -96,6 +103,7 @@ class ServiceProvider extends PoppyServiceProvider
 		$this->registerConsoleCommand('system.user', UserCommand::class);
 		$this->registerConsoleCommand('system.install', InstallCommand::class);
 		$this->registerConsoleCommand('system.dev_html', DevHtmlCommand::class);
+		$this->registerConsoleCommand('system.doc', DocCommand::class);
 	}
 
 

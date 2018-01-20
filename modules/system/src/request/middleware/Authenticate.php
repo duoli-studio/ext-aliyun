@@ -5,6 +5,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Auth\Middleware\Authenticate as IlluminateAuthenticate;
 use Poppy\Framework\Classes\Resp;
 use System\Classes\Traits\SystemTrait;
+use System\Models\PamAccount;
 
 /**
  * Class Authenticate.
@@ -53,8 +54,13 @@ class Authenticate extends IlluminateAuthenticate
 					"message" => 'Unauthorized',
 				], 401);
 			}
-			elseif (in_array('develop', $guards)) {
-				return Resp::web(Resp::ERROR, '无权限访问', 'location|' . route('system:develop.login'));
+			// develop
+			elseif (in_array(PamAccount::GUARD_DEVELOP, $guards)) {
+				return Resp::web(Resp::ERROR, '无权限访问', 'location|' . route('system:develop.pam.login'));
+			}
+			// backend
+			elseif (in_array(PamAccount::GUARD_BACKEND, $guards)) {
+				return Resp::web(Resp::ERROR, '无权限访问', 'location|' . route('backend:home.login'));
 			}
 			else {
 				return response('Unauthorized.', 401);

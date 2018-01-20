@@ -12,6 +12,6 @@
         @yield('develop-main')
     </div>
 @endsection
-@section('script-cp')
-    <script>requirejs(['jquery', 'bt3'])</script>
+@section('footer-script')
+    <script>requirejs(['jquery', 'bt3', 'poppy/cp'])</script>
 @endsection

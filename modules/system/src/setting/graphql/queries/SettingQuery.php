@@ -28,7 +28,7 @@ class SettingQuery extends Query
 	 */
 	public function type(): ObjectType
 	{
-		return $this->getGraphQL()->type('setting');
+		return $this->getGraphQL()->type('Setting');
 	}
 
 	/**

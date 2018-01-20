@@ -9,16 +9,25 @@
         </div>
         <div class="col-lg-2">
             <div class="title-action">
-                @if(count($tabs)>1)
-                    <div class="btn-group">
-                        @foreach($tabs as $key => $conf)
-                            <a href="{!! route($route, [$key]) !!}"
-                               class="btn {!! $key == $type ? 'btn-primary' : 'btn-default' !!}">{!! $conf['title'] !!}</a>
-                        @endforeach
+                @if(count($pages)>1)
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                            {!! $title !!}
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            @foreach($pages as $key => $conf)
+                                <li>
+                                    <a href="{!! route('backend:home.setting', [$key]) !!}"
+                                       class="btn {!! $key == $path ? 'btn-primary' : 'btn-default' !!}">
+                                        {!! $conf['initialization']['name'] !!}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
                     </div>
                 @endif
             </div>
-
         </div>
     </div>
 @endsection
@@ -82,11 +91,11 @@
                         </div>
                         {!!Form::close()!!}
                         <script>
-							requirejs(['jquery', 'poppy/util', 'jquery.validation'], function($, util) {
-								$(function() {
-									$('#form_' + '{!! $group_key !!}').validate();
-								})
+						requirejs(['jquery', 'poppy/util', 'jquery.validation'], function ($, util) {
+							$(function () {
+								$('#form_' + '{!! $group_key !!}').validate();
 							})
+						})
                         </script>
                     </div>
                 @endforeach

@@ -17,12 +17,25 @@ class Permission
 	/**
 	 * @var string permission id
 	 */
-	protected $id = '';
+	protected $key = '';
 
 	/**
 	 * @var string Module name
 	 */
 	protected $root = '';
+
+
+	/**
+	 * @var string Root Permission Title
+	 */
+	protected $rootTitle = '';
+
+
+	/**
+	 * @var string Permission group title
+	 */
+	protected $groupTitle = '';
+
 
 	/**
 	 * @var string Group name
@@ -44,7 +57,7 @@ class Permission
 	 */
 	protected $description = '';
 
-	public function __construct($permission, $id)
+	public function __construct($permission, $key)
 	{
 		$this->isDefault   = $permission['default'] ?? false;
 		$this->description = $permission['description'] ?? '';
@@ -52,12 +65,14 @@ class Permission
 		$this->type        = $permission['type'] ?? '';
 		$this->group       = $permission['group'] ?? '';
 		$this->module      = $permission['module'] ?? '';
-		$this->id          = $id;
+		$this->rootTitle   = $permission['root_title'] ?? '';
+		$this->groupTitle  = $permission['group_title'] ?? '';
+		$this->key         = $key;
 	}
 
-	public function id()
+	public function key()
 	{
-		return $this->id;
+		return $this->key;
 	}
 
 	public function type()
@@ -85,9 +100,37 @@ class Permission
 		return $this->module;
 	}
 
+	public function rootTitle()
+	{
+		return $this->rootTitle;
+	}
+
+	public function groupTitle()
+	{
+		return $this->groupTitle;
+	}
 
 	public function description()
 	{
 		return $this->description;
+	}
+
+	/**
+	 * 权限转换成数组
+	 * @return array
+	 */
+	public function toArray()
+	{
+		return [
+			'is_default'  => $this->isDefault,
+			'description' => $this->description,
+			'root'        => $this->root,
+			'type'        => $this->type,
+			'group'       => $this->group,
+			'module'      => $this->module,
+			'root_title'  => $this->rootTitle,
+			'group_title' => $this->groupTitle,
+			'key'         => $this->key,
+		];
 	}
 }

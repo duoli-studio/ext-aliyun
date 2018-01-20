@@ -3,17 +3,15 @@
 use GraphQL\Type\Definition\Type;
 use Poppy\Framework\GraphQL\Support\InputType;
 
-/**
- * Class SettingType.
- */
+
 class RoleFilterType extends InputType
 {
 
 	public function __construct($attributes = [])
 	{
 		parent::__construct($attributes);
-		$this->attributes['name']        = 'role_filter';
-		$this->attributes['description'] = trans('system::role.graphql.filter_desc');
+		$this->attributes['name']        = 'RoleFilter';
+		$this->attributes['description'] = trans('system::role.graphql.input_role_filter_type');
 	}
 
 	/**

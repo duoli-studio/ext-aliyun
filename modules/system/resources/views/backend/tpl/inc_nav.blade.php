@@ -7,15 +7,12 @@ $_menus = app('module')->backendMenus()->toArray();
         <ul class="nav" id="side-menu">
             <li class="nav-header">
                 <div class="dropdown profile-element">
-					<span>
-						{!! Html::image('', $_pam->username, ['class' => 'img-circle', 'style'=> 'width: 50px;'])!!}
-					</span>
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
 						<span class="clear">
 							<span class="block m-t-xs">
 								<strong class="font-bold">{{$_pam->username}}<b class="caret"></b></strong>
 							</span>
-						</span>H
+						</span>
                     </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
                         <li><a href="{!! route('backend:home.logout') !!}">退出</a></li>
@@ -35,7 +32,7 @@ $_menus = app('module')->backendMenus()->toArray();
                             </a>
                             <ul class="nav nav-second-level collapse @if (in_array(\Route::currentRouteName(), $__sub_menus['routes'])) in @endif ">
                                 @foreach($__sub_menus['children'] as $nav_key => $nav)
-                                    <li class="nav-item @if ($nav['url'] == \Route::currentRouteName()) active @endif">
+                                    <li class="nav-item @if ($nav['route'] == \Route::currentRouteName()) active @endif">
                                         <a href="{{ $nav['url']}}" class="nav-link">
                                             {!! $nav['icon'] ?? '' !!} {{$nav['title']}}
                                         </a>

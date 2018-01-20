@@ -137,7 +137,7 @@ trait RbacRoleTrait
 		else {
 
 			foreach ($this->cachedPermissions() as $permission) {
-				if ($permission->permission_name == $name) {
+				if ($permission->name == $name) {
 					return true;
 				}
 			}

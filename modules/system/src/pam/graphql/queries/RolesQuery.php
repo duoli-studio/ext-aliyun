@@ -30,7 +30,7 @@ class RolesQuery extends Query
 	 */
 	public function type(): ListOfType
 	{
-		return Type::listOf($this->getGraphQL()->type('role'));
+		return Type::listOf($this->getGraphQL()->type('Role'));
 	}
 
 	/**
@@ -41,7 +41,7 @@ class RolesQuery extends Query
 	{
 		return [
 			'filters' => [
-				'type'        => Type::nonNull($this->getGraphQL()->type('role_filter')),
+				'type'        => $this->getGraphQL()->type('RoleFilter'),
 				'description' => trans('system::role.graphql.filter_desc'),
 			],
 		];
@@ -54,7 +54,14 @@ class RolesQuery extends Query
 	 */
 	public function resolve($root, $args)
 	{
-		return PamRole::filter($args['filters'], RoleFilter::class)->get();
+		$filters    = $args['filters'] ?? [];
+		$collection = PamRole::filter($filters, RoleFilter::class)->get();
+		$collection->map(function($item) {
+			// root 用户不可以编辑权限
+			$item->can_permission = $item->name != PamRole::BE_ROOT;
+			return $item;
+		});
+		return $collection;
 	}
 
 

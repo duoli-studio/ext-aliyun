@@ -1,7 +1,9 @@
 <script>
     import injection, {trans} from '../helpers/injection';
+    // import ISelect from "iview/src/components/select/select";
 
     export default {
+        // components : {ISelect},
         /**
          *
          * @param to     即将要进入的目标 路由对象
@@ -12,8 +14,9 @@
             injection.loading.start();
             injection.http.post(`${window.api}/g/backend`, {
                 query         : `
-                query roles ($filters:role_filter!) {
+                query roles ($filters:RoleFilter!) {
                     roles : roles(filters: $filters){
+                        id,
                         title,
                         name,
                         type
@@ -26,9 +29,7 @@
                 },
                 operationName : 'roles'
             }).then(response => {
-                //
                 const {data, pagination} = response.data;
-
                 console.log(pagination);
                 next(vm => {
                     data.roles.forEach(item => {
@@ -43,8 +44,9 @@
         },
         data() {
             return {
-                value4  : '',
-                form    : {
+                items       : [],
+                value4      : '',
+                form        : {
                     canManagementFileExtension  : '',
                     canManagementImageExtension : '',
                     canUploadCatcherExtension   : '',
@@ -56,83 +58,43 @@
                     imageProcessingEngine       : 'gd',
                     videoMaxSize                : 0,
                 },
-                loading : false,
-                rules   : {
-                    canManagementFileExtension  : [
+                modal       : false,
+                modalCreate : false,
+                loading     : false,
+                rules       : {
+                    name        : [
                         {
+                            message  : '角色标识不能为空',
                             required : true,
-                            type     : 'string',
-                            message  : '请输入允许管理文件的扩展名',
-                            trigger  : 'change',
+                            trigger  : 'blur',
                         },
                     ],
-                    canManagementImageExtension : [
+                    title       : [
                         {
+                            message  : '角色名称不能为空',
                             required : true,
-                            type     : 'string',
-                            message  : '请输入允许管理图片的扩展名',
-                            trigger  : 'change',
+                            trigger  : 'blur',
                         },
                     ],
-                    canUploadCatcherExtension   : [
+                    guard       : [
                         {
+                            message  : '角色类型不能为空',
                             required : true,
-                            type     : 'string',
-                            message  : '请输入允许管理截图的扩展名',
-                            trigger  : 'change',
+                            trigger  : 'blur',
                         },
                     ],
-                    canUploadFileExtension      : [
+                    description : [
                         {
-                            required : true,
-                            type     : 'string',
-                            message  : '请输入允许上传文件的扩展名',
-                            trigger  : 'change',
-                        },
-                    ],
-                    canUploadImageExtension     : [
-                        {
-                            required : true,
-                            type     : 'string',
-                            message  : '请输入允许管理图片的扩展名',
-                            trigger  : 'change',
-                        },
-                    ],
-                    canUploadVideoExtension     : [
-                        {
-                            required : true,
-                            type     : 'string',
-                            message  : '请输入允许上传视频的扩展名',
-                            trigger  : 'change',
-                        },
-                    ],
-                    fileMaxSize                 : [
-                        {
-                            required : true,
-                            type     : 'integer',
-                            message  : '请输入附件大小',
-                            trigger  : 'change',
-                        },
-                    ],
-                    imageMaxSize                : [
-                        {
-                            required : true,
-                            type     : 'integer',
-                            message  : '请输入图片大小',
-                            trigger  : 'change',
-                        },
-                    ],
-                    videoMaxSize                : [
-                        {
-                            required : true,
-                            type     : 'integer',
-                            message  : '请输入视频大小',
-                            trigger  : 'change',
+                            trigger : 'blur',
                         },
                     ],
                 },
 
                 roles_column : [
+                    {
+                        title : '角色ID',
+                        key   : 'id'
+                    },
                     {
                         title : '角色标识(英文字母)',
                         key   : 'name'
@@ -140,84 +102,72 @@
                     {
                         title : '角色标题',
                         key   : 'title'
-                    }
-                ],
-                roles_data   : [
+                    },
                     {
-                        id    : '3',
-                        name  : 'name',
-                        title : '管理员'
+                        title  : '操作',
+                        key    : 'handle',
+                        width  : 150,
+                        align  : 'center',
+                        render(h, params) {
+                            return h('div', [
+                                h('i-button', {
+                                    props : {
+                                        type : 'primary',
+                                        size : 'small'
+                                    },
+                                    on    : {
+                                        click : () => {
+                                            this.show(params.index);
+                                        }
+                                    }
+                                }, '编辑'),
+                                h('i-button', {
+                                    props : {
+                                        type : 'error',
+                                        size : 'small'
+                                    },
+                                    on    : {
+                                        click : () => {
+                                            this.remove(params.index);
+                                        }
+                                    }
+                                }, '删除')
+                            ]);
+                        },
                     },
                 ],
-
+                createModal  : {
+                    parent_org : '',
+                    title      : '新增角色',
+                },
+                role         : {
+                    name        : '',
+                    title       : '',
+                    guard       : '',
+                    description : '',
+                },
+                // 显示列表信息
+                roles_data   : [
+                    {},
+                ],
+                // 新增角色类型
+                guardList    : [
+                    {
+                        value : 'backend',
+                        label : '后台',
+                    },
+                    {
+                        value : 'web',
+                        label : '用户',
+                    },
+                    {
+                        value : 'develop',
+                        label : '开发者',
+                    },
+                ],
             };
         },
         methods : {
-            submit() {
-                const self = this;
-                self.loading = true;
-                self.$refs.form.validate(valid => {
-                    if (valid) {
-                        self.$http.post(`${window.api}/administration`, {
-                            query : `mutation {
-                                canManagementFileExtension: setting(
-                                    key:"attachment.manager.file",
-                                    value:"${self.form.canManagementFileExtension}"
-                                ),
-                                canManagementImageExtension: setting(
-                                    key:"attachment.manager.image",
-                                    value:"${self.form.canManagementImageExtension}"
-                                ),
-                                canUploadCatcherExtension: setting(
-                                    key:"attachment.format.catcher",
-                                    value:"${self.form.canUploadCatcherExtension}"
-                                ),
-                                canUploadFileExtension: setting(
-                                    key:"attachment.format.file",
-                                    value:"${self.form.canUploadFileExtension}"
-                                ),
-                                canUploadImageExtension: setting(
-                                    key:"attachment.format.image",
-                                    value:"${self.form.canUploadImageExtension}"
-                                ),
-                                canUploadVideoExtension: setting(
-                                    key:"attachment.format.video",
-                                    value:"${self.form.canUploadVideoExtension}"
-                                ),
-                                fileMaxSize: setting(
-                                    key:"attachment.limit.file",
-                                    value:"${self.form.fileMaxSize}"
-                                ),
-                                imageMaxSize: setting(
-                                    key:"attachment.limit.image",
-                                    value:"${self.form.imageMaxSize}"
-                                ),
-                                imageProcessingEngine: setting(
-                                    key:"attachment.engine",
-                                    value:"${self.form.imageProcessingEngine}"
-                                ),
-                                videoMaxSize: setting(
-                                    key:"attachment.limit.video",
-                                    value:"${self.form.videoMaxSize}"
-                                ),
-                            }`,
-                        }).then(() => {
-                            self.$notice.open({
-                                title : '更新上传配置信息成功！',
-                            });
-                            self.$store.dispatch('setting');
-                        }).finally(() => {
-                            self.loading = false;
-                        });
-                    }
-                    else {
-                        self.loading = false;
-                        self.$notice.error({
-                            title : '请正确填写上传配置信息！',
-                        });
-                    }
-                });
-            },
             show(index) {
                 this.$Modal.info({
                     title   : 'User Info',
@@ -226,7 +176,91 @@
             },
             remove(index) {
                 this.data1.splice(index, 1);
-            }
+            },
+            // 点击新增的弹出框
+            createOrganization() {
+                this.modalCreate = true;
+            },
+            // 刷新页面
+            refresh() {
+                const self = this;
+                self.$loading.start();
+                injection.http.post(`${window.api}/g/backend`, {
+                    query         : `
+                        query roles ($filters:RoleFilter!) {
+                            roles : roles(filters: $filters){
+                                id,
+                                title,
+                                name,
+                            }
+                        }`,
+                    variables     : {
+                        filters : {
+                            type : 'backend'
+                        }
+                    },
+                    operationName : 'roles'
+                }).then(response => {
+                    const {data} = response.data;
+                    data.roles.forEach(item => {
+                        console.log(item);
+                    });
+                    self.roles_data = data.roles;
+                    self.$notice.open({
+                        title : '刷新数据成功！',
+                    });
+                    self.$loading.finish();
+                }).catch(() => {
+                    self.$loading.error();
+                    self.$notice.error({
+                        title : '刷新数据失败！',
+                    });
+                });
+            },
+            // 增加
+            submitCreate() {
+                const self = this;
+                self.loading = true;
+                console.log(self.$refs);
+                console.log(self.$refs.form);
+                self.$refs.createRole.validate(valid => {
+                    if (valid) {
+                        self.$http.post(`${window.api}/g/backend`, {
+                            query         : `
+                                mutation role_2e($item:InputRole!)
+                                {
+                                  role_2e:role_2e(item:$item){
+                                    status,
+                                    message
+                                  }
+                                }`,
+                            variables     : {
+                                item : self.role
+                            },
+                            operationName : 'role_2e'
+                        }).then((data) => {
+                            console.log(data);
+                            console.log('3');
+                            self.$notice.open({
+                                title : '数据添加成功！',
+                            });
+                            self.refresh();
+                        }).catch((error) => {
+                            console.log(error);
+                            self.$notice.error({
+                                title : '数据添加失败！',
+                            });
+                        }).finally(() => {
+                            self.loading = false;
+                        });
+                    }
+                    else {
+                        self.$notice.error({
+                            title : '请正确填写完整的数据',
+                        });
+                    }
+                });
+            },
         },
         mounted() {
             this.$store.commit('title', trans('administration.title.upload'));
@@ -235,9 +269,61 @@
 </script>
 <template>
     <div class="page-wrap">
+        <i-button class="btn-action" type="ghost"
+                  @click.native="createOrganization">╋新增
+        </i-button>
         <i-form :label-width="200" inline>
-            <i-input :rows="2" placeholder="搜索..." icon="ios-search"></i-input>
+            <i-input :rows="2" style="width: 200px" placeholder="搜索..." icon="ios-search"></i-input>
         </i-form>
-        <i-table height="200" :columns="roles_column" :data="roles_data"></i-table>
+        <i-table :columns="roles_column" :data="roles_data"></i-table>
+
+        <modal v-model="modalCreate"
+               :title="createModal.title"
+               class="setting-modal-delete setting-modal-action">
+            <div>
+                <i-form ref="createRole" :model="role" :rules="rules" :label-width="110">
+                    <row>
+                        <i-col span="14">
+                            <form-item label="角色标识" prop="name">
+                                <i-input v-model="role.name"></i-input>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col span="14">
+                            <form-item label="角色名称" prop="title">
+                                <i-input v-model="role.title"></i-input>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
+                        <form-item label="角色类型" prop="guard">
+                            <i-select v-model="role.guard" style="width:300px">
+                                <i-option v-for="item in guardList" :value="item.value" :label="item.label"
+                                          :key="item.value"></i-option>
+                            </i-select>
+                        </form-item>
+                    </row>
+                    <row>
+                        <i-col span="14">
+                            <form-item label="角色描述" prop="description">
+                                <i-input v-model="role.description"></i-input>
+                            </form-item>
+                        </i-col>
+                    </row>
+                    <row>
+                        <i-col span="14">
+                            <form-item>
+                                <i-button :loading="loading" @click.native="submitCreate"
+                                          class="btn-group" type="primary">
+                                    <span v-if="!loading">确认提交</span>
+                                    <span v-else>正在提交…</span>
+                                </i-button>
+                            </form-item>
+                        </i-col>
+                    </row>
+                </i-form>
+            </div>
+        </modal>
     </div>
 </template>

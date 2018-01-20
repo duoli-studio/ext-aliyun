@@ -117,7 +117,7 @@ trait RbacUserTrait
 		}
 		else {
 			foreach ($this->cachedRoles() as $role) {
-				if ($role->role_name == $name) {
+				if ($role->name == $name) {
 					return true;
 				}
 			}
