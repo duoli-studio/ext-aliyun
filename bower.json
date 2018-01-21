@@ -31,6 +31,8 @@
     "js-cookie": "^2.2.0",
     "requirejs": "^2.3.5",
     "layui": "sentsin/layui#^2.2.45",
-    "vkBeautify": "vkbeautify#*"
+    "vkBeautify": "vkbeautify#*",
+    "tokenize2": "*",
+    "bootstrap4": "^4.0.0"
   }
 }

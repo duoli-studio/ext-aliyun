@@ -53,7 +53,7 @@ class FeForm extends FormBuilder
 			     </div>
 			     <span id="web_uploader_preview_{$id}_ctr" {$display_str} class="">
 					  {$iconStr}
-					  <i id='web_uploader_img_del_{$id}' class="fa fa-times fa-lg"></i>
+					  <i id='web_uploader_img_del_{$id}' class="glyphicon glyphicon-remove fa-lg"></i>
 				 </span>
 		    </div>
 		    <div class="statusBar">

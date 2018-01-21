@@ -77,6 +77,20 @@ return [
 			'key'  => 'bt3',
 		],
 
+		"bootstrap4" => [
+			"js"   => [
+				'main' => 'dist/js/bootstrap.js',
+				'aim'  => 'bt4/{VERSION}/bootstrap.js',
+			],
+			"css"  => [
+				'dist/css/bootstrap.css'        => 'bt4/{VERSION}/css/bootstrap.css',
+				'dist/css/bootstrap-grid.css'   => 'bt4/{VERSION}/css/bootstrap-grid.css',
+				'dist/css/bootstrap-reboot.css' => 'bt4/{VERSION}/css/bootstrap-reboot.css',
+			],
+			'shim' => ['jquery'],
+			'key'  => 'bt4',
+		],
+
 		"bootstrap-hover-dropdown" => [
 			"js"   => [
 				'aim' => 'bt3/hover-dropdown/{VERSION}/bt3.hover-dropdown.js',

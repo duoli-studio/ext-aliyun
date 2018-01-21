@@ -37,7 +37,7 @@
 				if (!url || $('#title').val()) {
 					return;
 				}
-				util.make_request("{!! route('slt:nav.title') !!}", {url : url}, function(resp_obj) {
+				util.make_request("{!! route('slt:nav.fetch_title') !!}", {url : url}, function(resp_obj) {
 					var obj_data = resp_obj.data;
 					if (resp_obj.status == 0) {
 						$('#title').val(obj_data.title);
