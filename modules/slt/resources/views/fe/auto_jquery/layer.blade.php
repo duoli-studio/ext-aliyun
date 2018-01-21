@@ -1,6 +1,3 @@
-<link rel="stylesheet" type="text/css" href="{!! assets('css/3rd/metronic/pages/profile.css') !!}" media="all"/>
-<link rel="stylesheet" type="text/css" href="{!! assets('css/3rd/metronic/global/components-default.css') !!}"
-      media="all"/>
 <ul class="nav nav-pills">
     <li><a target="_blank" href="http://layer.layui.com/">layui首页</a></li>
     <li><a target="_blank" href="http://layer.layui.com/api.html">layui 弹出框文档</a></li>
@@ -23,5 +20,5 @@
     </div>
 </div>
 <script id="J_scriptSource">
-    require(['jquery', 'global.sample', 'jquery.layer','lemon/cp']);
+    require(['jquery',  'jquery.layer','poppy/cp']);
 </script>

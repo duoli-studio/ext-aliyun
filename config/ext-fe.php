@@ -69,8 +69,9 @@ return [
 				'aim'  => 'bt3/{VERSION}/bootstrap.js',
 			],
 			"css"  => [
-				'dist/css/*.css' => 'bt3/{VERSION}/css/',
-				'dist/fonts/*'   => 'bt3/{VERSION}/fonts/',
+				'dist/css/bootstrap.css'       => 'bt3/{VERSION}/css/bootstrap.css',
+				'dist/css/bootstrap-theme.css' => 'bt3/{VERSION}/css/bootstrap-theme.css',
+				'dist/fonts/*'                 => 'bt3/{VERSION}/fonts/',
 			],
 			'shim' => ['jquery'],
 			'key'  => 'bt3',
@@ -154,6 +155,20 @@ return [
 			'shim' => ['jquery'],
 		],
 
+		"layui" => [
+			"js"   => [
+				'main' => 'dist/layui.all.js',
+				'aim'  => 'layui/{VERSION}/layui.all.js',
+			],
+			"css"  => [
+				'dist/css/*'    => 'layui/css/',
+				'dist/font/*'   => 'layui/font/',
+				'dist/images/*' => 'layui/images/',
+			],
+			"key"  => 'jquery.layer',
+			'shim' => ['jquery'],
+		],
+
 		"image-picker" => [
 			"js"   => [
 				'aim' => 'jquery/image-picker/{VERSION}/jquery.image-picker.js',
@@ -231,6 +246,14 @@ return [
 			'shim' => [
 				"exports" => "JSON",
 			],
+		],
+
+		"requirejs" => [
+			"js"  => [
+				'main' => 'require.js',
+				'aim'  => 'requirejs/require.js',
+			],
+			'key' => 'requirejs',
 		],
 
 		"smooth-scroll" => [

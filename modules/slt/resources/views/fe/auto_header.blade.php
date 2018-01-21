@@ -1,6 +1,6 @@
 <nav class="navbar navbar-default">
 	<div class="navbar-header">
-		<a class="navbar-brand" href="{!! route('slt:fe.md') !!}"><i class="fa fa-home"></i></a>
+		<a class="navbar-brand" href="{!! route('slt:fe.md') !!}"><i class="glyphicon glyphicon-home"></i></a>
 	</div>
 	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 		@foreach($singles as $key => $single)

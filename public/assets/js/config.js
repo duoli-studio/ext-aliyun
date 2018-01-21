@@ -16,7 +16,9 @@ var alias = {
     "jquery.toastr": "assets/js/libs/jquery/toastr/2.1.3/jquery.toastr",
     "jquery.validation": "assets/js/libs/jquery/validation/1.17.0/jquery.validation",
     "jquery.webuploader": "assets/js/libs/jquery/webuploader/0.1.5/jquery.webuploader",
+    "js-cookie": "assets/js/libs/js-cookie/2.2.0/js-cookie",
     "pace": "assets/js/libs/pace/1.0.2/pace.min",
+    "requirejs": "assets/js/libs/requirejs/require",
     "smooth-scroll": "assets/js/libs/smooth-scroll/1.4.0/smooth-scroll"
 };
 
@@ -58,7 +60,10 @@ var shim  = {
     ],
     "jquery.webuploader": [
         "jquery"
-    ]
+    ],
+    "js-cookie": {
+        "exports": "Cookies"
+    }
 };
 
 // appends for single project

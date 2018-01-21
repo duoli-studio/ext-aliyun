@@ -96,8 +96,8 @@ td, th {padding: 0;}
     .table td, .table th {background-color: #fff !important;}
     .table-bordered th, .table-bordered td {border: 1px solid #ddd !important;}}
 @font-face {font-family: "Glyphicons Halflings";
-    src: url("/assets/scss/libs/bt3/3.3.7/css/glyphicons-halflings-regular.eot");
-    src: url("/assets/scss/libs/bt3/3.3.7/css/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"),url("/assets/scss/libs/bt3/3.3.7/css/glyphicons-halflings-regular.woff2") format("woff2"),url("/assets/scss/libs/bt3/3.3.7/css/glyphicons-halflings-regular.woff") format("woff"),url("/assets/scss/libs/bt3/3.3.7/css/glyphicons-halflings-regular.ttf") format("truetype"),url("/assets/scss/libs/bt3/3.3.7/css/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg");}
+    src: url("/assets/scss/libs/bt3/3.3.7/css/../fonts/glyphicons-halflings-regular.eot");
+    src: url("/assets/scss/libs/bt3/3.3.7/css/../fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"),url("/assets/scss/libs/bt3/3.3.7/css/../fonts/glyphicons-halflings-regular.woff2") format("woff2"),url("/assets/scss/libs/bt3/3.3.7/css/../fonts/glyphicons-halflings-regular.woff") format("woff"),url("/assets/scss/libs/bt3/3.3.7/css/../fonts/glyphicons-halflings-regular.ttf") format("truetype"),url("/assets/scss/libs/bt3/3.3.7/css/../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg");}
 .glyphicon {position: relative;
     top: 1px;
     display: inline-block;

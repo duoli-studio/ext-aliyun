@@ -111,7 +111,6 @@ class BowerCommand extends Command
 			$this->error('Directory is empty.');
 		}
 
-		$this->disposeRequire();
 		$this->writeGlobal();
 
 	}
@@ -528,20 +527,6 @@ JS;
 		}
 	}
 
-	/**
-	 * @throws FileNotFoundException
-	 */
-	private function disposeRequire()
-	{
-		$key = $this->getKey('requirejs');
-		$this->line($key . 'Handle ... ');
-
-		if (!$this->disk->exists($this->requireFile)) {
-			$this->disk->put($this->requireFile, $this->getFile()->get(__DIR__ . '/../../resources/mixes/require.js'));
-		}
-
-		$this->info($key . 'Write Ok');
-	}
 
 	private function getKey($key = '')
 	{

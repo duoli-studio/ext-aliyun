@@ -58,7 +58,7 @@
 	</div>
 </div>
 <script id="J_scriptSource">
-	require(['jquery', 'jquery.datatables'], function ($) {
+	require(['jquery', 'datatables.net'], function ($) {
 		$(document).ready( function () {
 			$('#table_id').DataTable();
 		} );
