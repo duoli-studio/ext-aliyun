@@ -30,6 +30,7 @@
     "highlight": "^9.12.0",
     "js-cookie": "^2.2.0",
     "requirejs": "^2.3.5",
-    "layui": "sentsin/layui#^2.2.45"
+    "layui": "sentsin/layui#^2.2.45",
+    "vkBeautify": "vkbeautify#*"
   }
 }

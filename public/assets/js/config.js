@@ -19,7 +19,8 @@ var alias = {
     "js-cookie": "assets/js/libs/js-cookie/2.2.0/js-cookie",
     "pace": "assets/js/libs/pace/1.0.2/pace.min",
     "requirejs": "assets/js/libs/requirejs/require",
-    "smooth-scroll": "assets/js/libs/smooth-scroll/1.4.0/smooth-scroll"
+    "smooth-scroll": "assets/js/libs/smooth-scroll/1.4.0/smooth-scroll",
+    "vkbeautify": "assets/js/libs/vkbeautify/vkbeautify"
 };
 
 var shim  = {
@@ -63,6 +64,9 @@ var shim  = {
     ],
     "js-cookie": {
         "exports": "Cookies"
+    },
+    "vkbeautify": {
+        "exports": "vkbeautify"
     }
 };
 

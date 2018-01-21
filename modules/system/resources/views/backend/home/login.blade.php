@@ -23,7 +23,10 @@
             <div class="form-group">
                 {!! Form::password('password', ['class'=> 'form-control', 'placeholder'=> '密码']) !!}
             </div>
-            {!! Form::button('登录', ['class'=> 'btn btn-primary block full-width m-b J_submit']) !!}
+            {!! Form::button('登录', [
+                'class'=> 'btn btn-primary block full-width m-b J_submit',
+                'type' => 'submit'
+                ]) !!}
             {!! Form::close() !!}
         </div>
     </div>

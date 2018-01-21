@@ -1,4 +1,4 @@
-@extends('slt::inc.tpl')
+@extends('slt::tpl.default')
 @section('body-class', 'user_profile')
 @section('tpl-main')
     <div class="container mb20 mt20">
@@ -104,7 +104,7 @@
         </div>
     </div>
     <script>
-		require(['jquery', 'lemon/cp']);
+	require(['jquery', 'poppy/cp']);
     </script>
-    @include('slt::inc.footer')
+    @include('slt::tpl.inc_footer')
 @endsection

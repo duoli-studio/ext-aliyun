@@ -75,6 +75,14 @@
                                             是
                                         </label>
                                     @endif
+                                    @if ($item['type'] == 'radio')
+                                        @foreach($item['opinions'] as $_value => $_label)
+                                            <label class="radio-inline">
+                                                {!! Form::radio($item['name'],$_value, $item['value']== $_value, $item['options']) !!}
+                                                {!! $_label !!}
+                                            </label>
+                                        @endforeach
+                                    @endif
                                     @if ($item['type'] == 'textarea')
                                         {!! Form::textarea($item['name'], $item['value'], $item['options']) !!}
                                     @endif
@@ -91,8 +99,8 @@
                         </div>
                         {!!Form::close()!!}
                         <script>
-						requirejs(['jquery', 'poppy/util', 'jquery.validation'], function ($, util) {
-							$(function () {
+						requirejs(['jquery', 'poppy/util', 'jquery.validation'], function($, util) {
+							$(function() {
 								$('#form_' + '{!! $group_key !!}').validate();
 							})
 						})

@@ -47,8 +47,7 @@ return [
 	| Backend Setting Pages
 	*/
 	'backend_pages'    => [
-		'futian-charge',
-		'setting-system',
+
 	],
 
 

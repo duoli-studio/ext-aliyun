@@ -1,7 +1,7 @@
 @extends('slt::tpl.default')
 @section('tpl-main')
     <div class="container">
-        @include('slt::fe.auto_header')
+        @include('slt::fe.js.auto_header')
         <h3>{!! $plugin !!}</h3>
         <div>
             <!-- Nav tabs -->
