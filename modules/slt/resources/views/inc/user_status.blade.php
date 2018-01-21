@@ -1,5 +1,5 @@
 <ul class="clearfix pull-right header_top-user_status">
-    <?php $_pam = \Auth::guard(\System\Models\PamAccount::GUARD_WEB)->user() ?>
+	<?php $_pam = \Auth::guard(\System\Models\PamAccount::GUARD_WEB)->user() ?>
     @if ($_pam)
         <li class="dropdown">
             <a href="javascript:@include('slt::inc.collection')">
@@ -26,7 +26,9 @@
         </li>
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown">
+                {{--
                 {!! Html::image('', '头像', ['width'=> 24, 'height'=>24]) !!}
+                --}}
             </a>
             <ul class="dropdown-menu">
                 <li>

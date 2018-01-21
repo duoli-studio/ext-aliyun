@@ -10,6 +10,7 @@ use Slt\Models\SiteUrl;
 use Slt\Models\SiteUrlRelTag;
 use Slt\Models\SiteUserUrl;
 use Slt\Url\Action\Collection;
+use Slt\Url\Action\Url;
 use System\Models\PamAccount;
 
 class NavController extends InitController
@@ -113,10 +114,10 @@ class NavController extends InitController
 	 */
 	public function url($id = null)
 	{
-		$Collection = (new Collection())->setPam($this->getWebGuard()->user());
+		$Collection = (new Url())->setPam($this->getWebGuard()->user());
 		if (is_post()) {
-			if ($Collection->establishUrl(\Input::all(), $id)) {
-				return Resp::web(Resp::SUCCESS, '操作成功!', 'top_reload|1');
+			if ($Collection->establish(\Input::all(), $id)) {
+				return Resp::web(Resp::SUCCESS, '添加网址成功!');
 			}
 			else {
 				return Resp::web(Resp::ERROR, $Collection->getError());
@@ -180,6 +181,7 @@ class NavController extends InitController
 	 * 批量删除
 	 * @param null $id
 	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+	 * @throws \Exception
 	 */
 	public function collectionDestroy($id = null)
 	{
@@ -196,13 +198,18 @@ class NavController extends InitController
 	}
 
 
+	/**
+	 * @param $id
+	 * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
+	 * @throws \Exception
+	 */
 	public function urlDestroy($id)
 	{
 		if (!$id) {
 			return Resp::web(Resp::ERROR, '请选中要删除的链接');
 		}
-		$Collection = (new Collection())->setPam($this->getWebGuard()->user());
-		if ($Collection->destroyUrl($id)) {
+		$Collection = (new Url())->setPam($this->getWebGuard()->user());
+		if ($Collection->delete($id)) {
 			return Resp::web(Resp::SUCCESS, '删除成功', 'top_reload | 1');
 		}
 		else {
