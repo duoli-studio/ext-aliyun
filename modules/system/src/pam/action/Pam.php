@@ -1,17 +1,20 @@
 <?php namespace System\Pam\Action;
 
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Poppy\Framework\Helper\UtilHelper;
 use Poppy\Framework\Validation\Rule;
 use System\Classes\Traits\SystemTrait;
 use System\Models\PamAccount;
 use System\Models\PamBind;
+use System\Models\PamCaptcha;
 use System\Models\PamRole;
 use System\Models\SysConfig;
 use System\Pam\Events\LoginFailed;
 use System\Pam\Events\LoginSuccess;
 use System\Pam\Events\PamRegistered;
 use Tymon\JWTAuth\JWTGuard;
+use System\Captcha\Action\Captcha;
 
 class Pam
 {
@@ -63,8 +66,8 @@ class Pam
 			return $this->setError($validator->messages());
 		}
 
-		$actUtil = app('act.util');
-		if (!$actUtil->validCaptcha($passport, $captcha)) {
+		$actUtil = new Captcha();
+		if (!$actUtil->check($passport, $captcha)) {
 			return $this->setError($actUtil->getError()->getMessage());
 		}
 
@@ -73,7 +76,7 @@ class Pam
 		// 判定账号是否存在
 		if (!PamAccount::where($passportType, $initDb['passport'])->exists()) {
 			if ($this->register($initDb['passport'])) {
-				$actUtil->deleteCaptcha($passport, $captcha);
+				$actUtil->delete($passport);
 				return true;
 			}
 			else {
@@ -285,6 +288,7 @@ class Pam
 	/**
 	 * 找回手机号
 	 * @param $passport
+	 * @return bool
 	 */
 	public function findMobile($passport)
 	{
@@ -318,51 +322,6 @@ class Pam
 		}
 
 
-	}
-
-	/**
-	 * 找回密码 -> 验证验证码
-	 * @param string $passport
-	 * @param string $captcha
-	 * @param string $password
-	 * @return bool
-	 */
-	public function updatePassword($passport, $captcha, $password)
-	{
-		$passport = strval($passport);
-		$type     = $this->passportType($passport);
-		$initDb   = [
-			'passport' => $passport,
-			'password' => $password,
-			'captcha'  => $captcha,
-		];
-
-		$rule = [
-			'captcha'  => Rule::required(),
-			'password' => [
-				Rule::required(),
-				Rule::between(6, 30),
-				Rule::password(),
-				Rule::string(),
-			],
-		];
-
-		$validator = \Validator::make($initDb, $rule);
-		if ($validator->fails()) {
-			return $this->setError($validator->messages());
-		}
-
-		$actUtil = app('act.util');
-		if (!$actUtil->validCaptcha($passport, $captcha)) {
-			return $this->setError($actUtil->getError()->getMessage());
-		}
-
-		$pam    = PamAccount::where($type, $passport)->first();
-		$result = $this->setPassword($pam, $password);
-		if (!$result) {
-			return false;
-		}
-		return true;
 	}
 
 	/**
@@ -402,6 +361,110 @@ class Pam
 	}
 
 	/**
+	 * 新手机号发送验证码
+	 * @param $verify_code
+	 * @param $newMobile
+	 * @return bool
+	 */
+	public function newSendCaptcha($verify_code, $newMobile)
+	{
+		$data      = [
+			'verify_code' => $verify_code,
+			'mobile'      => $newMobile,
+		];
+		$validator = \Validator::make($data, [
+			'verify_code' => [
+				Rule::required(),
+				Rule::string(),
+			],
+			'mobile'      => [
+				Rule::required(),
+				Rule::mobile(),
+			], [], [
+				'verify_code' => trans('system::bind_change.db.verify_code'),
+				'mobile'      => trans('system::bind_change.db.mobile'),
+			],
+		]);
+		if ($validator->fails()) {
+			return $this->setError($validator->messages());
+		}
+		$actUtil = new Captcha();
+		if (!$actUtil->verifyOnceCode($verify_code)) {
+			return $this->setError($actUtil->getError()->getMessage());
+		}
+		//验证新手机号是否已经注册
+		if (PamAccount::where('mobile', $newMobile)->exists()) {
+			return $this->setError('该手机号已经注册过');
+		}
+
+		//发送验证码
+		$actUtil->send($newMobile, $type = PamCaptcha::CON_LOGIN);
+		return true;
+	}
+
+	/**
+	 * 新的手机号验证
+	 * @param $verify_code
+	 * @param $new_passport
+	 * @param $captcha
+	 * @return bool
+	 * @throws \Exception
+	 */
+	public function rebindPassport($verify_code, $new_passport, $captcha)
+	{
+		if (!$this->checkPam()) {
+			return false;
+		}
+
+		$data      = [
+			'verify_code' => $verify_code,
+			'mobile'      => $new_passport,
+			'captcha'     => $captcha,
+		];
+		$validator = \Validator::make($data, [
+			'verify_code' => [
+				Rule::required(),
+				Rule::string(),
+			],
+			'mobile'      => [
+				Rule::required(),
+				Rule::mobile(),
+			],
+			'captcha'     => [
+				Rule::required(),
+			], [], [
+				'verify_code' => trans('system::bind_change.db.verify_code'),
+				'mobile'      => trans('system::bind_change.db.mobile'),
+				'captcha'     => trans('system::bind_change.db.captcha'),
+			],
+		]);
+		if ($validator->fails()) {
+			return $this->setError($validator->messages());
+		}
+
+		// 验证一次码
+		$Captcha = new Captcha();
+		if (!$Captcha->verifyOnceCode($verify_code)) {
+			return $this->setError($Captcha->getError()->getMessage());
+		}
+
+		// 验证验证码
+		if (!$Captcha->check($new_passport, $captcha)) {
+			return $this->setError($Captcha->getError()->getMessage());
+		}
+		$Captcha->delete($new_passport);
+
+		try {
+			$this->pam->update([
+				'mobile' => $new_passport,
+			]);
+			return true;
+		} catch (\Exception $e) {
+			return $this->setError($e->getMessage());
+		}
+	}
+
+	/**
 	 * 检测账户密码是否正确
 	 * @param PamAccount $pam      用户账户信息
 	 * @param String     $password 用户传入的密码
@@ -417,15 +480,24 @@ class Pam
 	}
 
 	/**
-	 * 生成账户密码
-	 * @param String $password     原始密码
-	 * @param String $reg_datetime 注册时间(datetime) 类型
-	 * @param String $random_key   六位随机值
-	 * @return string
+	 * 生成支持 passport 格式的数组
+	 * @param $credentials
+	 * @return array
 	 */
-	private function cryptPassword($password, $reg_datetime, $random_key)
+	public function passportData($credentials)
 	{
-		return md5(sha1($password . $reg_datetime) . $random_key);
+		if ($credentials instanceof Request) {
+			$credentials = $credentials->all();
+		}
+		$passport     = $credentials['passport'] ?? '';
+		$passport     = $passport ?: $credentials['mobile'] ?? '';
+		$passport     = $passport ?: $credentials['username'] ?? '';
+		$passport     = $passport ?: $credentials['email'] ?? '';
+		$passportType = $this->passportType($passport);
+		return [
+			$passportType => $passport,
+			'password'    => $credentials['password'] ?? '',
+		];
 	}
 
 	/**
@@ -433,7 +505,7 @@ class Pam
 	 * @param $passport
 	 * @return string
 	 */
-	private function passportType($passport)
+	public function passportType($passport)
 	{
 		if (UtilHelper::isMobile($passport)) {
 			$type = PamAccount::REG_TYPE_MOBILE;
@@ -446,4 +518,100 @@ class Pam
 		}
 		return $type;
 	}
+
+	/**
+	 * 后台用户禁用
+	 * @param $id
+	 * @param $data
+	 * @return bool
+	 */
+	public function disable($id, $data)
+	{
+		$data      = json_decode($data, true);
+		$data      = [
+			'disable_reason' => strval(array_get($data, 'disable_reason', '')),
+			'disable_to'     => strval(array_get($data, 'disable_to', date("Y-m-d",strtotime('+3 days')))),
+		];
+		$validator = \Validator::make($data, [
+			'disable_reason' => [
+				Rule::string(),
+			],
+			'disable_to'     => [
+				Rule::string(),
+				Rule::dateFormat('Y-m-d'),
+			], [], [
+				'disable_reason' => trans('system::account.action.disable_reason'),
+				'disable_to'     => trans('system::account.action.disable_to'),
+			],
+		]);
+		if ($validator->fails()) {
+			return $this->setError($validator->messages());
+		}
+		if (!PamAccount::where('id', $id)->where('is_enable', 1)->exists()) {
+			//当前用户已禁用
+			return $this->setError('当前用户已禁用');
+		}
+		try {
+			PamAccount::where('id', $id)->update([
+				'is_enable'        => PamAccount::STATUS_DISABLE,
+				'disable_reason'   => $data['disable_reason'],
+				'disable_start_at' => Carbon::now(),
+				'disable_end_at'   => Carbon::now()->addMinute($data['disable_to']),
+			]);
+			return true;
+		} catch (\Exception $e) {
+			return $this->setError($e->getMessage());
+		}
+
+	}
+
+	/**
+	 * 后台用户启用
+	 * @param $id
+	 * @return bool
+	 */
+	public function enable($id)
+	{
+		if (PamAccount::where('id', $id)->where('is_enable', 1)->exists()) {
+			return $this->setError('当前用户为启用状态');
+		}
+		try {
+			PamAccount::where('id', $id)->update([
+				'is_enable' => PamAccount::STATUS_ENABLE,
+			]);
+		} catch (\Exception $e) {
+			return $this->setError($e->getMessage());
+		}
+
+	}
+
+	/**
+	 * 自动解禁
+	 * @return bool
+	 */
+	public function autoDisable()
+	{
+		try {
+			PamAccount::where('disable_end_at', '<', Carbon::now())->update([
+				'is_enable' => PamAccount::STATUS_ENABLE,
+			]);
+		} catch (\Exception $e) {
+			return $this->setError($e->getMessage());
+		}
+
+	}
+
+	/**
+	 * 生成账户密码
+	 * @param String $password     原始密码
+	 * @param String $reg_datetime 注册时间(datetime) 类型
+	 * @param String $random_key   六位随机值
+	 * @return string
+	 */
+	private function cryptPassword($password, $reg_datetime, $random_key)
+	{
+		return md5(sha1($password . $reg_datetime) . $random_key);
+	}
+
+
 }

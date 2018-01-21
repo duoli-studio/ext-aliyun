@@ -10,6 +10,11 @@ class PamFilter extends ModelFilter
 		return $this->where('type', $type);
 	}
 
+	public function id($id)
+	{
+		return $this->where('id', $id);
+	}
+
 	public function username($username)
 	{
 		return $this->where('username', $username);

@@ -5,6 +5,7 @@ use System\Models\PamAccount;
 use System\Pam\Auth\Guard\JwtAuthGuard;
 use System\Pam\Auth\Provider\BackendProvider;
 use System\Pam\Auth\Provider\DevelopProvider;
+use System\Pam\Auth\Provider\PamProvider;
 use System\Pam\Auth\Provider\WebProvider;
 
 /**
@@ -33,6 +34,9 @@ class PamServiceProvider extends ServiceProvider
 		\Auth::provider('pam.develop', function ($app) {
 			return new DevelopProvider(PamAccount::class);
 		});
+		\Auth::provider('pam', function ($app) {
+			return new PamProvider(PamAccount::class);
+		});
 
 		\Auth::extend('jwt.backend', function ($app, $name, array $config) {
 			// dd($app['auth']->createUserProvider($config['provider']));
@@ -48,7 +52,6 @@ class PamServiceProvider extends ServiceProvider
 
 		$this->app->bind('act.role', 'System\Pam\Action\Role');
 		$this->app->bind('act.pam', 'System\Pam\Action\Pam');
-		$this->app->bind('act.area', 'System\Pam\Action\Area');
 	}
 
 	/**
@@ -59,7 +62,6 @@ class PamServiceProvider extends ServiceProvider
 		return [
 			'act.role',
 			'act.pam',
-			'act.area',
 		];
 	}
 }

@@ -3,13 +3,14 @@
  * Copyright (C) Update For IDE
  */
 
+use Illuminate\Support\Str;
+
 if (!function_exists('sys_setting')) {
 	/**
 	 * Get System Setting
 	 * @param string $key
 	 * @param null   $default
 	 * @return mixed
-	 * @throws \Illuminate\Container\EntryNotFoundException
 	 */
 	function sys_setting($key, $default = null)
 	{
@@ -30,3 +31,25 @@ if (!function_exists('sys_gen_order')) {
 		return sprintf("%s%s%s%s", strtoupper($prefix), $current, \Poppy\Framework\Helper\TimeHelper::micro(), sprintf("%'.04d", $sequence));
 	}
 }
+
+if (!function_exists('sys_trans')) {
+	/**
+	 * translate line
+	 * @param       $line
+	 * @param array $replace
+	 * @return string
+	 */
+	function sys_trans($line, $replace = [])
+	{
+		foreach ($replace as $key => $value) {
+			$line = str_replace(
+				[':' . $key, ':' . Str::upper($key), ':' . Str::ucfirst($key)],
+				[$value, Str::upper($value), Str::ucfirst($value)],
+				$line
+			);
+		}
+		return $line;
+	}
+}
+
+

@@ -215,7 +215,7 @@ class NavController extends InitController
 	 * @param Request $request
 	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
 	 */
-	public function title(Request $request)
+	public function fetchTitle(Request $request)
 	{
 		$url = $request->input('url');
 		if (!$url) {

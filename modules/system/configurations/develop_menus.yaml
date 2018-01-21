@@ -1,24 +1,15 @@
 graphql:
-    title : GraphQL
-    children :
-        -
-            title : GraphQL (未登录)状态
-            route : system:develop.cp.graphql
-        -
-            title : GraphQL (Web)状态
-            route : system:develop.cp.api
-            param : guard=web
-        -
-            title : GraphQL (Backend)状态
-            route : system:develop.cp.api
-            param : guard=backend
-docs:
     title : 文档
     children :
         -
-            title : 系统文档
-            route : system:develop.cp.doc
-            param : type=system
+            title : GraphQL
+            route : system:develop.cp.api
+        -
+            title : GraphQL 去除特殊字符
+            route : system:develop.tool.graphql_reverse
+        -
+            title : Html 代码转化为实体
+            route : system:develop.tool.html_entity
 system:
     title : 系统
     children :

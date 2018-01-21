@@ -62,6 +62,15 @@ class Authenticate extends IlluminateAuthenticate
 			elseif (in_array(PamAccount::GUARD_BACKEND, $guards)) {
 				return Resp::web(Resp::ERROR, '无权限访问', 'location|' . route('backend:home.login'));
 			}
+			elseif (in_array(PamAccount::GUARD_WEB, $guards)) {
+				$appends = [];
+				if (config('poppy.guard_location.web')) {
+					$appends = [
+						'location' => route(config('poppy.guard_location.web')),
+					];
+				}
+				return Resp::web(Resp::ERROR, '无权限访问', $appends);
+			}
 			else {
 				return response('Unauthorized.', 401);
 			}

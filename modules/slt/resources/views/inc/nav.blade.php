@@ -17,11 +17,9 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    {{--
-                    <li class="{!! route_current( ['web:fe.js'], 'active') !!}">
-                        <a href="{!! route('web:fe.js') !!}">前端</a>
+                    <li class="{!! route_current( ['slt:fe.js'], 'active') !!}">
+                        <a href="{!! route('slt:fe.js') !!}">前端</a>
                     </li>
-                    --}}
                     <li class="{!! route_current( ['slt:nav.index'], 'active') !!}">
                         <a href="{!! route('slt:nav.index') !!}">导航</a>
                     </li>

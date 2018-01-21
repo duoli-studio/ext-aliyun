@@ -12,3 +12,7 @@ system::site.close_reason :
     description : 站点关闭原因
 system::site.copyright :
     description : 版权说明
+util::captcha.mail_expired_minute :
+    type : int
+    default : 15
+    description : 邮件验证码有效期(分钟)

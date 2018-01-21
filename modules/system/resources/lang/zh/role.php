@@ -21,8 +21,11 @@ return [
 		'can_permission'                     => '可以设置权限',
 		'input_permission_desc'              => '保存的权限条目',
 		'mutation_arg_permission'            => '权限列表',
+		'filter_desc'                        => '查询过滤器',
 
 		// types
+		'list'                               => '列表项',
+		'pagination'                         => '分页',
 	],
 	'db'      => [
 		'id'            => 'ID',

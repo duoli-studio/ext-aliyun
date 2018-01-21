@@ -25,6 +25,12 @@ configurations:
                             required: true
                             trigger: change
                             type: string
+                title:
+                    default: ' '
+                    label: 网站标题
+                    key: system::site.title
+                    placeholder: 请输入网站标题, 将显示在标题栏中
+                    type: input
                 enabled:
                     default: false
                     description: '关闭后网站将不能访问'
@@ -33,45 +39,6 @@ configurations:
                     key: system::site.is_open
                     required: false
                     type: switch
-                domain:
-                    default: ''
-                    description: '不带 http:// 或 https://'
-                    label: 网站域名
-                    key: site.domain
-                    required: false
-                    type: input
-                multidomain:
-                    default: false
-                    description: '由于前后端分离机制，官方不对多域名做特殊支持，可能导致其他未知问题'
-                    format: boolean
-                    label: 开启多域名
-                    key: site.multidomain
-                    required: false
-                    type: switch
-                beian:
-                    default: ''
-                    label: 备案信息
-                    key: site.beian
-                    required: false
-                    type: input
-                company:
-                    default: ''
-                    label: 公司名称
-                    key: site.company
-                    required: false
-                    type: input
-                copyright:
-                    default: ''
-                    label: 版权信息
-                    key: site.copyright
-                    required: false
-                    type: input
-                statistics:
-                    default: ''
-                    label: 统计代码
-                    key: site.statistics
-                    required: false
-                    type: textarea
 extension:
     initialization:
         name: 扩展配置
@@ -83,200 +50,182 @@ extension:
             default: true
             show: true
             submit: api/system/page/setting-extension
-            title: 支付宝设置
+            title: 支付设置
             fields:
+                alipay_is_open:
+                    default: false
+                    label: 手机支付(支付宝)
+                    key: extension::pay_alipay.mobile_is_open
+                    type: switch
                 public_key:
-                    default: ''
+                    default: ' '
                     label: 支付宝公钥
-                    key: extension::alipay.statistics
-                    required: false
+                    key: extension::pay_alipay.mobile_public_key
                     type: textarea
-                name:
-                    default: ''
-                    description: ''
-                    label: 网站名称2
-                    key: site.name
-                    placeholder: 请输入网站名称
-                    required: true
-                    type: input
-                    validates:
-                        -
-                            message: 请输入网站名称
-                            required: true
-                            trigger: change
-                            type: string
-                enabled:
-                    default: false
-                    description: '关闭后网站将不能访问'
-                    format: boolean
-                    label: 站点开启
-                    key: site.enabled
-                    required: false
-                    type: switch
-                domain:
-                    default: ''
-                    description: '不带 http:// 或 https://'
-                    label: 网站域名
-                    key: site.domain
-                    required: false
-                    type: input
-                multidomain:
-                    default: false
-                    description: '由于前后端分离机制，官方不对多域名做特殊支持，可能导致其他未知问题'
-                    format: boolean
-                    label: 开启多域名
-                    key: site.multidomain
-                    required: false
-                    type: switch
-                beian:
-                    default: ''
-                    label: 备案信息
-                    key: site.beian
-                    required: false
-                    type: input
-                company:
-                    default: ''
-                    label: 公司名称
-                    key: site.company
-                    required: false
-                    type: input
-                copyright:
-                    default: ''
-                    label: 版权信息
-                    key: site.copyright
-                    required: false
-                    type: input
         sms:
             default: false
             show: true
             submit: api/system/page/setting-extension
             title: 发送短信配置
             fields:
-                access_key_id:
+                send_type:
+                      default: local
+                      description: '选择本地则文件存储在日志中, 需要自行查看'
+                      format: string
+                      label: 短信发送方式
+                      key: extension::sms.send_type
+                      required: true
+                      type: radio
+                      opinions:
+                          aliyun: 阿里云
+                          local : 本地
+                sign:
+                      default: 5
+                      label: 验证码有效期(分钟)
+                      key: extension::sms.expired_minute
+                      type: input
+                sign:
                     default: ' '
-                    label: accessKeyId
-                    key: extension::sms.access_key_id
-                    required: false
+                    label: 签名
+                    key: extension::sms.sign
                     type: input
-                access_key_secret:
+                aliyun_captcha_template:
                     default: ' '
-                    label: accessKeySecret
-                    key: extension::sms.access_key_secret
-                    required: false
+                    label: 验证码文本
+                    key: extension::sms_local.captcha_text
+                    type: textarea
+                    description: '可用变量名称[code:验证码], 遵循 laravel translate 写法'
+                aliyun_access_key:
+                    default: ' '
+                    label: AccessKey(阿里云)
+                    key: extension::sms_aliyun.access_key
                     type: input
-                region:
+                aliyun_access_secret:
                     default: ' '
-                    label: 发送区域
+                    label: AccessSecret(阿里云)
+                    key: extension::sms_aliyun.access_secret
+                    type: input
+                aliyun_region:
+                    default: ' '
+                    label: 发送区域(阿里云)
                     description: '暂时不支持多Region, 默认是 cn-hangzhou'
-                    key: extension::sms.region
-                    required: false
+                    key: extension::sms_aliyun.region
                     type: input
-                end_point_name:
+                aliyun_end_point:
                     default: ' '
-                    label: 服务结点
+                    label: 服务结点(阿里云)
                     description: '默认是 cn-hangzhou'
-                    key: extension::sms.end_point_name
-                    required: false
+                    key: extension::sms_aliyun.end_point
                     type: input
-                code_sign_name:
+                aliyun_captcha_template:
                     default: ' '
-                    label: 验证码签名
-                    key: extension::sms.code_sign_name
-                    required: false
-                    type: input
-                login_template:
-                    default: ' '
-                    label: 登录模版代码
-                    key: extension::sms.login_template
-                    required: false
+                    label: 验证码模板(阿里云)
+                    key: extension::sms_aliyun.captcha_template
                     type: input
                     description: '可用变量名称[code:验证码]'
-                register_template:
-                    default: ' '
-                    label: 注册模版代码
-                    key: extension::sms.register_template
-                    required: false
-                    type: input
-                    description: '可用变量名称[code:验证码]'
-                find_password_template:
-                    default: ' '
-                    label: 找回密码模版代码
-                    key: extension::sms.find_password_template
-                    required: false
-                    type: input
-                    description: '可用变量名称[code:验证码]'
-                order_template:
-                    default: ' '
-                    label: 订单操作模版代码
-                    key: extension::sms.order_template
-                    required: false
-                    type: input
-                    description: '可用变量名称[code:验证码]'
-        oss:
+        picture:
             default: false
             show: true
             submit: api/system/page/setting-extension
-            title: oss上传配置
+            title: 图片上传配置
             fields:
-                access_key_id:
+                save_type:
+                      default: local
+                      description: '选择本地则文件存储在本地'
+                      format: string
+                      label: 图片存储位置
+                      key: extension::oss.save_type
+                      required: true
+                      type: radio
+                      opinions:
+                          aliyun: 阿里云
+                          local : 本地
+                aliyun_access_key:
                     default: ' '
-                    label: accessKeyId
-                    key: extension::oss.access_key_id
+                    label: AccessKey(阿里云)
+                    key: extension::oss_aliyun.access_key
                     required: false
                     type: input
                 access_key_secret:
                     default: ' '
-                    label: accessKeySecret
-                    key: extension::oss.access_key_secret
+                    label: AccessSecret(阿里云)
+                    key: extension::oss_aliyun.access_secret
                     required: false
                     type: input
                 endpoint:
                     default: ' '
-                    label: endpoint
-                    key: extension::oss.endpoint
+                    label: EndPoint(阿里云)
+                    key: extension::oss_aliyun.endpoint
                     required: false
                     type: input
-                bucket_name:
+                bucket:
                     default: ' '
-                    label: bucket_name
-                    key: extension::oss.bucket_name
+                    label: Bucket(阿里云)
+                    key: extension::oss_aliyun.bucket
                     required: false
                     type: input
-        wechatLogin:
-            default: false
+                url_prefix:
+                    default: ' '
+                    label: 域名前缀(阿里云)
+                    key: extension::oss_aliyun.url_prefix
+                    required: false
+                    type: input
+        third_login:
             show: true
             submit: api/system/page/setting-extension
-            title: 微信
+            title: 第三方登录
             fields:
-                app_key:
+                mobile_wechat_is_open:
+                    default: false
+                    label: 手机微信登录
+                    key: extension::login_wechat.mobile_is_open
+                    type: switch
+                mobile_wechat_app_key:
                     default: ' '
-                    label: appKey
-                    key: extension::wechat.app_key
+                    label: appKey(手机微信)
+                    key: extension::login_wechat.mobile_app_key
                     required: false
                     type: input
-                app_secret:
+                mobile_wechat_app_secret:
                     default: ' '
-                    label: appSecret
-                    key: extension::wechat.app_secret
+                    label: appSecret(手机微信)
+                    key: extension::login_wechat.mobile_app_secret
                     required: false
                     type: input
-        qqLogin:
-            default: false
-            show: true
-            submit: api/system/page/setting-extension
-            title: QQ登录
-            fields:
-                app_key:
+                mobile_qq_is_open:
+                    default: false
+                    label: 手机QQ登录
+                    key: extension::login_qq.mobile_is_open
+                    type: switch
+                mobile_qq_app_key:
                     default: ' '
-                    label: appKey
-                    key: extension::qq.app_key
-                    required: false
+                    label: appKey(手机QQ)
+                    key: extension::login_qq.mobile_app_key
                     type: input
-                app_secret:
+                mobile_qq_app_secret:
                     default: ' '
-                    label: appSecret
-                    key: extension::qq.app_secret
-                    required: false
+                    label: appSecret(手机QQ)
+                    key: extension::login_qq.mobile_app_secret
+                    type: input
+        netease_im:
+             show: true
+             submit: api/system/page/setting-extension
+             title: 网易IM　即时通讯
+             fields:
+                im_app_key:
+                    default: ' '
+                    label: appKey(网易IM Key)
+                    key: extension::netease_im_app_key
+                    type: input
+                im_app_key:
+                    default: ' '
+                    label: appSecret(网易IM Secret)
+                    key: extension::netease_im_app_secret
+                    type: input
+                im_request_type:
+                    default: curl
+                    label: requestType(网易IM请求方式)
+                    key: extension::netease_im_request_type
                     type: input
 sample:
     initialization:
@@ -319,3 +268,14 @@ sample:
                     key: sample::sample.is_open
                     required: false
                     type: switch
+                radio:
+                      default: false
+                      description: '多选1'
+                      format: string
+                      label: 多选1(Radio)
+                      key: sample::sample.radio
+                      required: false
+                      type: radio
+                      opinions:
+                          aliyun: 阿里云
+                          local : 本地

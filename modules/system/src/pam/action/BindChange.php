@@ -7,7 +7,8 @@ use Poppy\Framework\Validation\Rule;
 use System\Classes\Traits\SystemTrait;
 use System\Models\PamAccount;
 use User\User\Action\User;
-use Util\Models\PamCaptcha;
+use Util\Captcha\Action\Captcha;
+use System\Models\PamCaptcha;
 
 
 class BindChange
@@ -18,10 +19,9 @@ class BindChange
 	/**
 	 * 原手机号发送验证码
 	 * @param $mobile
-	 * @param $captcha
 	 * @return bool
 	 */
-	public function oldSendCaptcha($mobile, $captcha)
+	public function oldSendCaptcha($mobile)
 	{
 		if (!$this->checkPermission()) {
 			return false;
@@ -30,12 +30,12 @@ class BindChange
 			return false;
 		}
 
-		$actUtil = app('act.util');
+		$actUtil = new Captcha();
 
 		if ($mobile != $this->pam->mobile) {
 			return $this->setError('该手机号不是本账号绑定手机');
 		}
-		$actUtil->sendCaptcha($mobile, $type = PamCaptcha::CON_FIND_PASSWORD);
+		$actUtil->send($mobile, $type = PamCaptcha::CON_PASSWORD);
 		//考虑忘记手机号，手机号失效的情况
 
 		return true;
@@ -49,11 +49,11 @@ class BindChange
 	 */
 	public function oldValidate($captcha)
 	{
-		$actUtil = app('act.util');
-		if (!$actUtil->validCaptcha($this->pam->mobile, $captcha)) {
+		$actUtil = new Captcha();
+		if (!$actUtil->check($this->pam->mobile, $captcha)) {
 			return $this->setError($actUtil->getError()->getMessage());
 		}
-		$actUtil->deleteCaptcha($this->pam->mobile, $captcha);
+		$actUtil->delete($this->pam->mobile);
 		//生成串码 包含有效期
 		try {
 			$verify_code = $actUtil->genOnceVerifyCode(10, $this->pam->mobile);
@@ -92,7 +92,7 @@ class BindChange
 		if ($validator->fails()) {
 			return $this->setError($validator->messages());
 		}
-		$actUtil = app('act.util');
+		$actUtil = new Captcha();
 		if (!$actUtil->verifyOnceCode($verify_code)) {
 			return $this->setError($actUtil->getError()->getMessage());
 		}
@@ -102,7 +102,7 @@ class BindChange
 		}
 
 		//发送验证码
-		$actUtil->sendCaptcha($newMobile, $type = PamCaptcha::CON_REGISTER);
+		$actUtil->send($newMobile, $type = PamCaptcha::CON_LOGIN);
 		return true;
 	}
 
@@ -118,12 +118,12 @@ class BindChange
 		if (!$this->checkPermission()) {
 			return false;
 		}
-		$actUtil = app('act.util');
+		$actUtil = new Captcha();
 
-		if (!$actUtil->validCaptcha($newMobile, $newCaptcha)) {
+		if (!$actUtil->check($newMobile, $newCaptcha)) {
 			return $this->setError($actUtil->getError()->getMessage());
 		}
-		$actUtil->deleteCaptcha($newMobile, $newCaptcha);
+		$actUtil->delete($newMobile);
 
 		try {
 			$this->pam->update([

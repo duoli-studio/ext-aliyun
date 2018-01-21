@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>Graphql - {!! $schema !!}</title>
     <style>
         html, body {
             height   : 100%;

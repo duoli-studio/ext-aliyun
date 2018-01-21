@@ -3,7 +3,6 @@
 use Carbon\Carbon;
 use Intervention\Image\Constraint;
 use Intervention\Image\Image;
-use OSS\OssClient;
 use Poppy\Framework\Helper\ImageHelper;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use System\Classes\Traits\SystemTrait;
@@ -85,13 +84,23 @@ class Uploader
 		],
 	];
 
-	private $saveAli = false;
-
 
 	public function __construct($folder = 'uploads')
 	{
 		$this->folder    = $folder;
 		$this->returnUrl = config('app.url') . '/';
+	}
+
+	/**
+	 * 设置返回地址
+	 * @param $url
+	 */
+	public function setReturnUrl($url)
+	{
+		if (!ends_with($url, '/')) {
+			$url .= '/';
+		}
+		$this->returnUrl = $url;
 	}
 
 	/**
@@ -159,32 +168,19 @@ class Uploader
 				}
 			}
 
+
+			$zipContent = $this->resizeContent($extension, $zipContent);
+
 			$Disk->put($fileRelativePath, $zipContent);
-
-			// 缩放图片
-			if (in_array($extension, self::type('image', 'ext_array')) && $extension != 'gif') {
-				$Image  = \Image::make($zipContent);
-				$width  = $Image->width();
-				$height = $Image->height();
-
-				try {
-					if ($width >= $this->resizeDistrict || $height >= $this->resizeDistrict) {
-						$r_width  = ($width > $height) ? $this->resizeDistrict : null;
-						$r_height = ($width > $height) ? null : $this->resizeDistrict;
-						$Disk->put($fileRelativePath, $this->resize($Image, $r_width, $r_height));
-					}
-				} catch (\Exception $e) {
-					return $this->setError($e->getMessage());
-				}
-			}
 
 			$this->destination = $fileRelativePath;
 			return true;
-		} else {
-
+		}
+		else {
 			return $this->setError($file->getErrorMessage());
 		}
 	}
+
 
 	/**
 	 * 裁剪和压缩
@@ -198,7 +194,8 @@ class Uploader
 	{
 		if ($content instanceof Image) {
 			$Image = $content;
-		} else {
+		}
+		else {
 			$Image = \Image::make($content);
 		}
 
@@ -238,18 +235,14 @@ class Uploader
 	public function saveInput($content)
 	{
 		// 磁盘对象
-		$Disk = $this->storage();
-
+		$Disk             = $this->storage();
 		$fileRelativePath = $this->genRelativePath();
 
-
 		// 缩放图片
-		$Image = \Image::make($content);
-		$Image->resize(1920, null, function(Constraint $constraint) {
-			$constraint->aspectRatio();
-			$constraint->upsize();
-		});
-		$Disk->put($fileRelativePath, $Image->stream('png', 60));
+		$Image      = \Image::make($content);
+		$zipContent = $this->resizeContent('png', $Image->stream('png', $this->quality));
+
+		$Disk->put($fileRelativePath, $zipContent);
 		$this->destination = $fileRelativePath;
 		return true;
 	}
@@ -264,7 +257,8 @@ class Uploader
 	{
 		if (!isset(self::$extensions[$type])) {
 			$ext = self::$extensions['image'];
-		} else {
+		}
+		else {
 			$ext = self::$extensions[$type];
 		}
 		switch ($return_type) {
@@ -303,36 +297,40 @@ class Uploader
 		return $this->returnUrl . $this->destination;
 	}
 
-	/**
-	 * 保存到阿里云
-	 * @param bool $delete_local
-	 * @return bool
-	 */
-	public function saveAli($delete_local = true)
-	{
-		$endpoint = $this->getSetting()->get('extension::oss.endpoint');
-		$bucket   = $this->getSetting()->get('extension::oss.bucket_name');
-
-		$accessKeyId     = $this->getSetting()->get('extension::oss.access_key_id');
-		$accessKeySecret = $this->getSetting()->get('extension::oss.access_key_secret');
-		$this->saveAli   = true;
-		try {
-			$ossClient = new OssClient($accessKeyId, $accessKeySecret, $endpoint, false);
-			$ossClient->putObject($bucket, $this->destination, $this->storage()->get($this->destination));
-			if ($delete_local) {
-				$this->storage()->delete($this->destination);
-			}
-			return true;
-		} catch (\Exception $e) {
-			return $this->setError($e->getMessage());
-		}
-	}
-
 
 	private function genRelativePath($extension = 'png')
 	{
 		$now      = Carbon::now();
 		$fileName = $now->format('is') . str_random(8) . '.' . $extension;
 		return ($this->folder ? $this->folder . '/' : '') . $now->format('Ym/d/H/') . $fileName;
+	}
+
+	/**
+	 * 重设内容
+	 * @param $extension
+	 * @param $zip_content
+	 * @return bool|\Psr\Http\Message\StreamInterface
+	 */
+	private function resizeContent($extension, $zip_content)
+	{
+		// 缩放图片
+		if (in_array($extension, self::type('image', 'ext_array')) && $extension != 'gif') {
+			$Image  = \Image::make($zip_content);
+			$width  = $Image->width();
+			$height = $Image->height();
+			try {
+				if ($width >= $this->resizeDistrict || $height >= $this->resizeDistrict) {
+					$r_width  = ($width > $height) ? $this->resizeDistrict : null;
+					$r_height = ($width > $height) ? null : $this->resizeDistrict;
+					return $this->resize($Image, $r_width, $r_height);
+				}
+			} catch (\Exception $e) {
+				return $this->setError($e->getMessage());
+			}
+		}
+		else {
+			return $zip_content;
+		}
+		return $zip_content;
 	}
 }

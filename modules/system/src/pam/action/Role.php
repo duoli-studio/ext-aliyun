@@ -42,13 +42,22 @@ class Role
 			return false;
 		}
 
-		$initDb    = [
+		$initDb = [
 			'title'       => strval(array_get($data, 'title', '')),
 			'name'        => strval(array_get($data, 'name', '')),
 			'type'        => strval(array_get($data, 'guard', '')),
 			'description' => strval(array_get($data, 'description', '')),
 		];
-		$validator = \Validator::make($initDb, [
+
+		$rule = [
+			'title' => [
+				Rule::required(),
+				Rule::unique($this->roleTable, 'title')->where(function($query) use ($id) {
+					if ($id) {
+						$query->where('id', '!=', $id);
+					}
+				}),
+			],
 			'name'  => [
 				Rule::required(),
 				Rule::string(),
@@ -60,15 +69,8 @@ class Role
 					}
 				}),
 			],
-			'title' => [
-				Rule::required(),
-				Rule::unique($this->roleTable, 'title')->where(function($query) use ($id) {
-					if ($id) {
-						$query->where('id', '!=', $id);
-					}
-				}),
-			],
-			'type'  => [
+
+			'type' => [
 				Rule::required(),
 				Rule::in([
 					PamAccount::GUARD_BACKEND,
@@ -76,7 +78,11 @@ class Role
 					PamAccount::GUARD_DEVELOP,
 				]),
 			],
-		], [], [
+		];
+		if ($id) {
+			unset($rule['name'], $rule['type']);
+		}
+		$validator = \Validator::make($initDb, $rule, [], [
 			'name'  => trans('system::role.db.name'),
 			'title' => trans('system::role.db.title'),
 			'type'  => trans('system::role.db.type'),
@@ -91,7 +97,7 @@ class Role
 		}
 
 		if ($this->roleId) {
-			if (!$this->pam->can('update', $this->role)) {
+			if (!$this->pam->can('edit', $this->role)) {
 				return $this->setError(trans('system::role.action.no_policy_to_update'));
 			}
 			// 编辑时候类型和名称不允许编辑
@@ -160,6 +166,7 @@ class Role
 		}
 	}
 
+
 	public function share()
 	{
 		\View::share(['item' => $this->role]);
@@ -171,7 +178,7 @@ class Role
 	 * @param $id
 	 * @return array|mixed|\System\Permission\Permission
 	 */
-	public function permissions($id)
+	public function permissions($id, $has_key = true)
 	{
 		$role        = PamRole::find($id);
 		$permissions = $this->getPermission()->permissions();
@@ -229,6 +236,19 @@ class Role
 
 			$permission[$rootKey]['groups'][$groupKey]['permissions'][] = $item;
 		});
+
+		if (!$has_key) {
+			$p = [];
+			foreach ($permission as $sp) {
+				$pg = $sp;
+				unset($pg['groups']);
+				foreach ($sp['groups'] as $spg) {
+					$pg['groups'][] = $spg;
+				}
+				$p[] = $pg;
+			}
+			$permission = $p;
+		}
 		return $permission;
 	}
 
@@ -264,4 +284,5 @@ class Role
 		$this->role->delete();
 		return true;
 	}
+
 }

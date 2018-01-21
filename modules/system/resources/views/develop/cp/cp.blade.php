@@ -1,7 +1,7 @@
 @extends('system::tpl.develop')
 @section('develop-main')
     @include('system::develop.inc.header')
-    @foreach($menus as $nav_key => $nav)
+    @foreach($_menus as $nav_key => $nav)
         <div class="row">
             <div class="col-md-12">
                 <h3 id="{{$nav_key}}">{!! app('poppy')->get($nav_key."::name") !!}</h3>

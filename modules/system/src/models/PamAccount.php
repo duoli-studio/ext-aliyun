@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Poppy\Framework\Http\Pagination\PageInfo;
 use System\Classes\Traits\FilterTrait;
+use System\Pam\Action\Pam;
 use System\Rbac\Traits\RbacUserTrait;
 use Tymon\JWTAuth\Contracts\JWTSubject as JWTSubjectAuthenticatable;
 
@@ -80,6 +81,9 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 	const REG_PLATFORM_WEB     = 'web';
 	const REG_PLATFORM_PC      = 'pc';
 
+	const STATUS_ENABLE  = 1;
+	const STATUS_DISABLE = 0;
+
 
 	protected $table = 'pam_account';
 
@@ -98,6 +102,12 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 		'password_key',
 		'reg_ip',
 	];
+
+	public static function passport($passport)
+	{
+		$type = (new Pam)->passportType($passport);
+		return PamAccount::where($type, $passport)->first();
+	}
 
 
 	/**

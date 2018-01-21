@@ -1,27 +1,17 @@
 <?php namespace System\Request\Develop;
 
 use Curl\Curl;
-use Illuminate\Http\Request;
-use Poppy\Framework\Application\Controller;
 use Poppy\Framework\Classes\Resp;
-use Poppy\Framework\Classes\Traits\ViewTrait;
 use Poppy\Framework\Helper\RawCookieHelper;
-use System\Classes\Traits\SystemTrait;
-use System\Models\PamAccount;
-use System\Pam\Action\Pam;
 
 
-class CpController extends Controller
+class CpController extends InitController
 {
-	use SystemTrait, ViewTrait;
 
 	public function __construct()
 	{
 		$this->middleware(['web', 'auth:develop']);
 		parent::__construct();
-		\View::share([
-			'menus' => $this->getModule()->developMenus(),
-		]);
 	}
 
 	/**
@@ -40,65 +30,64 @@ class CpController extends Controller
 	 */
 	public function graphi($schema = 'default')
 	{
-		if ($schema == 'default') {
-			$schema = '';
-		}
 		$token = RawCookieHelper::get('dev_token#' . $schema);
 		return view('system::graphql.graphiql', [
 			'graphqlPath' => route('api.graphql', $schema),
 			'token'       => $token,
+			'schema'      => ucfirst($schema),
 		]);
 	}
 
-	public function api(Request $request)
+	public function api()
 	{
-		$guard = $request->get('guard', 'web');
-		if (!in_array($guard, ['backend', 'web'])) {
-			return Resp::web(Resp::ERROR, '错误的 guard 类型');
-		}
+		$this->title('接口调试平台');
+		$tokenGet = function($cookie_key) {
+			if (RawCookieHelper::has($cookie_key)) {
+				$token = RawCookieHelper::get($cookie_key);
 
-		$tokenUrl       = route('api.token', $guard);
-		$graphqlUrl     = route('system:develop.cp.graphql', 'default');
-		$graphqlAuthUrl = route('system:develop.cp.graphql', $guard);
+				// check token is valid
+				$curl   = new Curl();
+				$access = route('system:api.access');
+				$curl->setHeader('x-requested-with', 'XMLHttpRequest');
+				$curl->setHeader('Authorization', 'Bearer ' . $token);
+				$curl->post($access);
+				if ($curl->httpStatusCode === 401) {
+					RawCookieHelper::remove($cookie_key);
+				}
+			}
+			return RawCookieHelper::get($cookie_key);
+		};
 
+		return view('system::develop.cp.api', [
+			'token_default' => $tokenGet('dev_token#default'),
+			'token_web'     => $tokenGet('dev_token#web'),
+			'token_backend' => $tokenGet('dev_token#backend'),
+			'url_system'    => route('system:develop.cp.doc', 'system'),
+		]);
+	}
+
+
+	public function apiLogin()
+
+	{
+		$type = \Input::get('type');
 		if (is_post()) {
-			$username = $request->input('username');
-			$password = $request->input('password');
-
-			/** @var Pam $pam */
-			$pam = app('act.pam');
-			if ($pam->loginCheck($username, $password, PamAccount::GUARD_DEVELOP, true)) {
-				return Resp::web(Resp::SUCCESS, '登录成功！', 'location|' . route('system:develop.cp.cp'));
+			$access = route('api.token', [$type]);
+			$curl   = new Curl();
+			$data   = $curl->post($access, [
+				'passport' => \Input::get('passport'),
+				'password' => \Input::get('password'),
+			]);
+			if ($curl->httpStatusCode === 200) {
+				$token = 'dev_token#' . $type;
+				RawCookieHelper::set($token, $data->data);
+				return Resp::web(Resp::SUCCESS, '登录成功', 'top_reload|1');
 			}
 			else {
-				return Resp::web(Resp::ERROR, $pam->getError());
+				return Resp::web(Resp::ERROR, $curl->errorMessage);
 			}
 		}
-
-		$token     = '';
-		$cookieKey = 'dev_token#' . $guard;
-		if (RawCookieHelper::has($cookieKey)) {
-			$token = RawCookieHelper::get($cookieKey);
-
-			// check token is valid
-			$curl   = new Curl();
-			$access = route('system:api.access');
-			$curl->setHeader('x-requested-with', 'XMLHttpRequest');
-			$curl->setHeader('Authorization', 'Bearer ' . $token);
-			$curl->post($access);
-			if ($curl->httpStatusCode === 401) {
-				RawCookieHelper::remove($cookieKey);
-				$token = '';
-			}
-		}
-		return view('system::develop.cp.api', [
-			'token_url'         => $tokenUrl,
-			'token'             => $token,
-			'type'              => $guard,
-			'cookie_key'        => $cookieKey,
-			'graphql_view'      => $graphqlUrl,
-			'graphql_auth_view' => $graphqlAuthUrl,
-		]);
+		return view('system::develop.cp.api_login', compact('type'));
 	}
 
 	/**

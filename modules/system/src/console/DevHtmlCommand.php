@@ -32,14 +32,16 @@ class DevHtmlCommand extends Command
 	 */
 	public function handle()
 	{
-		$path = poppy_path('system', 'resources/stubs/dev_html.blade.php');
-		$html = $this->getView()->file($path, [
+		$path  = poppy_path('system', 'resources/stubs/dev_html.blade.php');
+		$slugs = app('poppy')->slugs()->implode('","');
+		$html  = $this->getView()->file($path, [
 			'site_name'    => $this->getSetting()->get('system::site.name'),
 			'url'          => env('URL_SITE'),
+			'modules'      => '"' . $slugs . '"',
 			'translations' => json_encode($this->getTranslator()->fetch('zh'), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT),
 		])->render();
 
-		$path = poppy_path('system', 'resources/mixes/system/index.html');
+		$path = poppy_path('system', 'resources/mixes/backend/index.html');
 		$this->getFile()->put($path, $html);
 		$this->info('Generate Html Success!');
 	}

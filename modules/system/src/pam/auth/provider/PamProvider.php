@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider as UserProviderBase;
 use System\Models\PamAccount;
+use System\Pam\Action\Pam;
 
 class PamProvider implements UserProviderBase
 {
@@ -55,15 +56,14 @@ class PamProvider implements UserProviderBase
 
 
 	/**
-	 * @param Authenticatable $user
-	 * @param array           $credentials
+	 * @param Authenticatable|PamAccount $user
+	 * @param array                      $credentials
 	 * @return bool
 	 */
 	public function validateCredentials(Authenticatable $user, array $credentials)
 	{
 		$plain = $credentials['password'];
-		/** @type PamAccount $user */
-		return app('act.pam')->checkPassword($user, $plain);
+		return (new Pam)->checkPassword($user, $plain);
 	}
 
 

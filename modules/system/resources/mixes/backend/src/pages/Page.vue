@@ -122,7 +122,9 @@
                                                        field.type === 'datetime'"
                                                  v-model="field.value"></date-picker>
                                     <radio-group v-model="field.value" size="large" v-if="field.type === 'radio'">
-                                        <radio :key="i" :label="option" v-for="(option, i) in field.opinions"></radio>
+                                        <radio :key="i" :value="i" :label="i" v-for="(option, i) in field.opinions">
+											<span>{{option}}</span>
+										</radio>
                                     </radio-group>
                                     <div class="ivu-upload-wrapper" v-if="field.type === 'picture'">
                                         <div class="preview" v-if="field.value">

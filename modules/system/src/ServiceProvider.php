@@ -9,8 +9,8 @@ use Poppy\Framework\Exceptions\ModuleNotFoundException;
 use Poppy\Framework\Support\PoppyServiceProvider;
 use System\Backend\BackendServiceProvider;
 use System\Console\DevHtmlCommand;
-use System\Console\DocCommand;
 use System\Console\InstallCommand;
+use System\Console\LogCommand;
 use System\Events\ListenerServiceProvider;
 use System\Extension\ExtensionServiceProvider;
 use System\Models\PamRole;
@@ -89,7 +89,7 @@ class ServiceProvider extends PoppyServiceProvider
 
 	private function registerSchedule()
 	{
-		$this->app['events']->listen('console.schedule', function (Schedule $schedule) {
+		$this->app['events']->listen('console.schedule', function(Schedule $schedule) {
 
 			$schedule->command('clockwork:clean')->everyThirtyMinutes();
 		});
@@ -103,7 +103,7 @@ class ServiceProvider extends PoppyServiceProvider
 		$this->registerConsoleCommand('system.user', UserCommand::class);
 		$this->registerConsoleCommand('system.install', InstallCommand::class);
 		$this->registerConsoleCommand('system.dev_html', DevHtmlCommand::class);
-		$this->registerConsoleCommand('system.doc', DocCommand::class);
+		$this->registerConsoleCommand('system.log', LogCommand::class);
 	}
 
 

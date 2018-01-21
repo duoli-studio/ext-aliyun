@@ -6,6 +6,12 @@ class ExtensionTest extends TestCase
 {
 	public function testExtension()
 	{
-		dd(app('extension')->repository());
+		// \Artisan::call('cache:clear');
+
+		dd(app('extension')->has('poppy/ext-fe'));
+
+		$extensions = app('extension')->repository();
+
+		dd($extensions);
 	}
 }

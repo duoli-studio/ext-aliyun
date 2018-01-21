@@ -16,6 +16,8 @@ import SeoRule from '../pages/SeoRule.vue';
 import SeoRuleTemplate from '../pages/SeoRuleTemplate.vue';
 import Template from '../pages/Template.vue';
 import Upload from '../pages/Upload.vue';
+import Region from '../pages/Region.vue';
+import User from '../pages/User.vue';
 import Role from '../pages/Role.vue';
 
 
@@ -85,6 +87,14 @@ const configuration = [
 		component   : Upload,
 		path        : 'upload',
 	},
+    {
+        component   : Region,
+        path        : 'region',
+    },
+    {
+        component   : User,
+        path        : 'user',
+    },
 	{
 		component   : Role,
 		path        : 'role',

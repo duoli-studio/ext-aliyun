@@ -4,43 +4,65 @@ return [
 
 	/*
 	|--------------------------------------------------------------------------
-	| Custom Module Driver
+	| Default Pagination Num
 	|--------------------------------------------------------------------------
 	|
-	| This option controls the module storage driver that will be utilized.
-	| This driver manages the retrieval and management of module properties.
-	| Setting 'driver' to 'custom' can use your self definition driver.
-	|
 	*/
+	'pagesize'         => 15,
 
-	'custom_driver' => '',
 
 	/*
 	|--------------------------------------------------------------------------
-	| Remap Module Subdirectories
+	| Extension config
 	|--------------------------------------------------------------------------
 	|
-	| Redefine how module directories are structured. The mapping here will
-	| be respected by all commands and generators.
-	|
 	*/
+	'extension'        => [
 
-	'path_map' => [
-		// To change where migrations go, specify the default
-		// location as the key and the new location as the value:
-		// 'Database/Migrations' => 'src/Database/Migrations',
+		/* 前端生成技术文档的配置
+		 * ---------------------------------------- */
+		'fe' => [
+			'catalog' => [
+				'dailian' => [
+					'origin' => 'modules/system/src/request',
+					'doc'    => 'public/docs/system',
+				],
+			],
+		],
+	],
+
+	/*
+	|--------------------------------------------------------------------------
+	| Backend Control Panel
+	|--------------------------------------------------------------------------
+	| Default : \System\Request\Backend\HomeController@index
+	*/
+	'backend_cp'       => '',
+
+
+	/*
+	|--------------------------------------------------------------------------
+	| Backend Setting Paging
+	|--------------------------------------------------------------------------
+	| Backend Setting Pages
+	*/
+	'backend_pages'    => [
+		'futian-charge',
+		'setting-system',
 	],
 
 
 	/*
 	|--------------------------------------------------------------------------
-	| Default Pagination Num
+	| Message Template For Differ Modules.
 	|--------------------------------------------------------------------------
 	|
 	*/
-	'pagesize' => 15,
+	'message_template' => [
+		'futian' => 'futian::tpl.inc_message',
+	],
 
-	'extension' => [
-
+	'guard_location' => [
+		'web' => 'slt:user.login',
 	],
 ];

@@ -15,11 +15,16 @@ class PamResource extends Resource
 	public function toArray($request)
 	{
 		return [
-			'id'         => $this->id,
-			'username'   => $this->username,
-			'email'      => $this->email,
-			'created_at' => $this->created_at->toDatetimeString(),
-			'updated_at' => $this->updated_at->toDatetimeString(),
+			'id'             => $this->id,
+			'username'       => $this->username,
+			'mobile'         => $this->mobile,
+			'email'          => $this->email,
+			'password'       => $this->password,
+			'type'           => $this->type,
+			'is_enable'      => $this->is_enable,
+			'disable_reason' => $this->disable_reason,
+			'created_at'     => $this->created_at->toDatetimeString(),
+			'updated_at'     => $this->updated_at->toDatetimeString(),
 		];
 	}
 }

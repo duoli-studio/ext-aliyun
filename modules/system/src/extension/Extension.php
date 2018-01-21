@@ -5,9 +5,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use JsonSerializable;
 use Poppy\Framework\Classes\Traits\HasAttributesTrait;
 
-/**
- * Class Expand.
- */
+
 class Extension implements Arrayable, ArrayAccess, JsonSerializable
 {
 	use HasAttributesTrait;
@@ -59,7 +57,7 @@ class Extension implements Arrayable, ArrayAccess, JsonSerializable
 	 */
 	public function validate(): bool
 	{
-		return $this->offsetExists('identification')
+		return $this->offsetExists('name')
 			&& $this->offsetExists('description')
 			&& $this->offsetExists('authors');
 	}

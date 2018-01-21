@@ -8,6 +8,7 @@ return [
 	'db'      => [
 		'account_id'  => 'ID',
 		'mobile'      => '手机号',
+		'passport'    => '通行证',
 		'captcha'     => '验证码',
 		'verify_code' => '生成验证串码',
 	],

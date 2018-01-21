@@ -1,17 +1,13 @@
 <?php namespace System\Request\Develop;
 
 use Illuminate\Http\Request;
-use Poppy\Framework\Application\Controller;
 use Poppy\Framework\Classes\Resp;
-use Poppy\Framework\Classes\Traits\ViewTrait;
-use System\Classes\Traits\SystemTrait;
 use System\Models\PamAccount;
 use System\Pam\Action\Pam;
 
 
-class PamController extends Controller
+class PamController extends InitController
 {
-	use SystemTrait, ViewTrait;
 
 	public function __construct()
 	{
