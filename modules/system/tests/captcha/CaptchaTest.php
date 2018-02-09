@@ -5,7 +5,7 @@
  */
 
 use Poppy\Framework\Application\TestCase;
-use System\Captcha\Action\Captcha;
+use System\Action\Verification;
 use System\Models\PamCaptcha;
 
 class CaptchaTest extends TestCase
@@ -17,7 +17,7 @@ class CaptchaTest extends TestCase
 	public function testSend()
 	{
 
-		$actCaptcha = new Captcha();
+		$actCaptcha = new Verification();
 		$mobile     = '1388888' . rand(1111, 9999);
 		if (!$actCaptcha->send($mobile, PamCaptcha::CON_LOGIN)) {
 

@@ -43,13 +43,23 @@ class Rule extends IlluminateRule
 	}
 
 	/**
+	 * 身份证号
+	 * string rule
+	 * @return string
+	 */
+	public static function chid()
+	{
+		return 'chid';
+	}
+
+	/**
 	 * size
 	 * @param $length
 	 * @return string
 	 */
 	public static function size($length)
 	{
-		return 'size:'.$length;
+		return 'size:' . $length;
 	}
 
 	/**
@@ -67,6 +77,22 @@ class Rule extends IlluminateRule
 	public static function dateFormat($format)
 	{
 		return 'date_format:' . $format;
+	}
+
+	/**
+	 * @return string
+	 */
+	public static function date()
+	{
+		return 'date';
+	}
+
+	/**
+	 * @return string
+	 */
+	public static function nullable()
+	{
+		return 'nullable';
 	}
 
 	/**

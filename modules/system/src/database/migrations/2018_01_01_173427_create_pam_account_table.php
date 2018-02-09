@@ -33,6 +33,8 @@ class CreatePamAccountTable extends Migration
 			$table->dateTime('created_at')->nullable()->comment('创建时间');
 			$table->dateTime('logined_at')->nullable()->comment('上次登录时间');
 			$table->dateTime('updated_at')->nullable()->comment('修改时间');
+
+			$table->primary('id','id_PRIMARY');
 		});
 	}
 

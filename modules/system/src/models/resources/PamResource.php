@@ -19,7 +19,6 @@ class PamResource extends Resource
 			'username'       => $this->username,
 			'mobile'         => $this->mobile,
 			'email'          => $this->email,
-			'password'       => $this->password,
 			'type'           => $this->type,
 			'is_enable'      => $this->is_enable,
 			'disable_reason' => $this->disable_reason,

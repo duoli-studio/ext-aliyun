@@ -99,6 +99,18 @@ return [
 			'key'  => 'bt3.hover-dropdown',
 		],
 
+        "bootstrap-sass" => [
+            "css" => [
+                'assets/stylesheets/*' => 'bt3/{VERSION}/scss/',
+            ],
+        ],
+
+		"centrifuge" => [
+			"js" => [
+				'aim' => 'centrifuge/{VERSION}/centrifuge.js',
+			],
+		],
+
 		"clipboard" => [
 			"js" => [
 				'aim' => 'clipboard/{VERSION}/clipboard.min.js',
@@ -278,6 +290,20 @@ return [
 			'key' => 'smooth-scroll',
 		],
 
+		"sockjs" => [
+			"js" => [
+				'aim' => 'sockjs/{VERSION}/sockjs.js',
+			],
+		],
+
+		"underscore" => [
+			"js"   => [
+				'main' => 'underscore.js',
+				'aim'  => 'underscore/{VERSION}/underscore.js',
+			],
+			'key' => 'underscore',
+		],
+
 		"vkBeautify" => [
 			"js"   => [
 				'main' => 'vkbeautify.js',
@@ -298,6 +324,13 @@ return [
 				'dist/*.css' => 'jquery/metis-menu/',
 			],
 			"key" => 'jquery.metis-menu',
+		],
+		
+		"vue" => [
+			"js" => [
+				'main' => 'dist/vue.min.js',
+				'aim'  => 'vue/{VERSION}/vue.min.js',
+			],
 		],
 
 		"PACE" => [

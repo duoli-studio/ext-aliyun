@@ -21,8 +21,6 @@ export default function(injection, Vue) {
 	*/
 
 	axios.interceptors.response.use(response => response, error => {
-		window.console.log(error.response);
-		window.console.log(error.response.data);
 		if (error.response.status === 401) {
 			injection.notice.error({
 				title : '请重新登录！',
@@ -40,12 +38,20 @@ export default function(injection, Vue) {
 				}
 			}
 			else {
-				injection.notice.error({
-					title : error.response.data.message,
-				});
+				if (typeof error.response.data.errors === 'object') {
+					const errorMessage = error.response.data.errors[0].message;
+					injection.notice.error({
+						title : errorMessage,
+					});
+				}
+				if (error.response.data.message) {
+					injection.notice.error({
+						title : error.response.data.message,
+					});
+				}
 			}
 		}
-		const dispatch = new Error('Error');
+		const dispatch = new Error('Error In Axios');
 		dispatch.response = error.response;
 		throw dispatch;
 	});

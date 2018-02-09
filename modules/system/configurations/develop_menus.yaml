@@ -2,14 +2,26 @@ graphql:
     title : 文档
     children :
         -
-            title : GraphQL
+            title : 接口调试
             route : system:develop.cp.api
-        -
-            title : GraphQL 去除特殊字符
-            route : system:develop.tool.graphql_reverse
         -
             title : Html 代码转化为实体
             route : system:develop.tool.html_entity
+        -
+            title : 系统日志
+            # 这里是表明依赖, 当存在这个扩展的时候才存在这个地址
+            depend : extension:poppy/ext-fe
+            route : system:develop.log.index
+        -
+            title : Restful-前台
+            depend : extension:poppy/ext-fe
+            route : system:develop.doc.index
+        -
+            title : Restful-后台
+            depend : extension:poppy/ext-fe
+            route : system:develop.doc.index
+            route_param :
+              - backend
 system:
     title : 系统
     children :

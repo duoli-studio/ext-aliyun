@@ -9,7 +9,7 @@
 <div id="app"></div>
 <script>
 window.url = "{!! $url !!}";
-window.api = url + "/api";
+window.api = url + "/api_v1/";
 window.asset = url + "/assets";
 window.admin = "{!! $url !!}/system";
 window.local = {!! $translations !!};

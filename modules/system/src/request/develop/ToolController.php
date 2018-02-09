@@ -10,12 +10,6 @@ class ToolController extends InitController
 {
 	use SystemTrait, ViewTrait;
 
-	public function __construct()
-	{
-		$this->middleware(['web']);
-		parent::__construct();
-	}
-
 
 	public function graphqlReverse(Request $request)
 	{
@@ -40,10 +34,9 @@ class ToolController extends InitController
 	{
 		if (is_post()) {
 			$content = $request->input('content');
-
-
 			return Resp::web(Resp::SUCCESS, '转化成功', [
-				'content' => htmlentities($content),
+				'content'        => htmlentities($content),
+				'content_origin' => $content,
 			]);
 		}
 

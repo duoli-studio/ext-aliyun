@@ -5,7 +5,10 @@
  */
 
 use Poppy\Framework\Application\TestCase;
+use Poppy\Framework\Http\Pagination\PageInfo;
+use System\Models\Filters\RoleFilter;
 use System\Models\PamAccount;
+use System\Models\PamRole;
 
 class RoleTest extends TestCase
 {
@@ -16,9 +19,18 @@ class RoleTest extends TestCase
 		$item = $role->establish([
 			'name'  => 'abc',
 			'title' => 'abc',
-			'type' => 'backend',
+			'type'  => 'backend',
 		]);
 
 		dd($role->getError());
+	}
+
+	public function testList()
+	{
+		$pageInfo = new PageInfo(['page' => 1]);
+		$Db       = PamRole::filter([], RoleFilter::class);
+		return PamRole::paginationInfo($Db, $pageInfo, function($item) {
+			return $item;
+		});
 	}
 }

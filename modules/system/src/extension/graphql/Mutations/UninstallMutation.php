@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Extension\GraphQL\Mutations;
+namespace System\Extension\Graphql\Mutations;
 
 use GraphQL\Type\Definition\Type;
 use Poppy\Framework\GraphQL\Abstracts\Mutation;

@@ -7,18 +7,13 @@
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Routing\Router;
 use Poppy\Framework\GraphQL\GraphQLController;
-use System\Request\System\Api\AuthController;
-use System\Request\System\Api\DashboardsController;
-use System\Request\System\Api\HomeController as SysApiHomeController;
-use System\Request\System\Api\OrderController as SysApiOrderController;
 use System\Request\Backend\HomeController as BackendHomeController;
-use System\Request\Backend\RoleController as BackendRoleController;
 use System\Request\Backend\PamController as BackendPamController;
+use System\Request\Backend\RoleController as BackendRoleController;
 use System\Request\Develop\CpController as DevCpController;
-use System\Request\Develop\ToolController as DevToolController;
-use System\Request\Develop\PamController as DevPamController;
 use System\Request\Develop\EnvController as DevEnvController;
-use System\Request\Util\HomeController as UtilHomeController;
+use System\Request\Develop\PamController as DevPamController;
+use System\Request\Develop\ToolController as DevToolController;
 use System\Request\System\HomeController;
 
 class RouteServiceProvider extends ServiceProvider
@@ -36,9 +31,6 @@ class RouteServiceProvider extends ServiceProvider
 		$this->mapDevRoutes();
 
 		$this->mapApiRoutes();
-
-		$this->mapUtilRoutes();
-
 	}
 
 	/**
@@ -52,7 +44,6 @@ class RouteServiceProvider extends ServiceProvider
 			'prefix' => 'system',
 		], function(Router $router) {
 			$router->get('/', HomeController::class . '@layout');
-
 			$router->get('/login', HomeController::class . '@login');
 		});
 
@@ -62,6 +53,7 @@ class RouteServiceProvider extends ServiceProvider
 			'prefix'     => 'backend',
 		], function(Router $router) {
 			$router->any('/', BackendHomeController::class . '@login')->name('backend:home.login');
+			$router->any('/test', BackendHomeController::class . '@test')->name('backend:home.test');
 			$router->group([
 				'middleware' => 'auth:backend',
 			], function(Router $router) {
@@ -105,34 +97,41 @@ class RouteServiceProvider extends ServiceProvider
 			'middleware' => 'web',
 			'prefix'     => 'develop',
 		], function(Router $router) {
-			$router->get('/', DevCpController::class . '@index')
-				->name('system:develop.cp.cp');
 			$router->any('login', DevPamController::class . '@login')
 				->name('system:develop.pam.login');
-			$router->get('api', DevCpController::class . '@api')
-				->name('system:develop.cp.api');
-			$router->any('set_token', DevCpController::class . '@setToken')
-				->name('system:develop.cp.set_token');
-			$router->any('api_login', DevCpController::class . '@apiLogin')
-				->name('system:develop.cp.api_login');
-			$router->get('doc', DevCpController::class . '@doc')
-				->name('system:develop.cp.doc');
-			$router->get('/graphi/{schema?}', DevCpController::class . '@graphi')
-				->name('system:develop.cp.graphql');
-			$router->get('/phpinfo', DevEnvController::class . '@phpinfo')
-				->name('system:develop.env.phpinfo');
-			$router->any('/tool/graphql-reverse', DevToolController::class . '@graphqlReverse')
-				->name('system:develop.tool.graphql_reverse');
-			$router->any('/tool/html-entity', DevToolController::class . '@htmlEntity')
-				->name('system:develop.tool.html_entity');
 
-			if (app('extension')->has('poppy/ext-fe')) {
-				if (class_exists('Poppy\Extension\Fe\Http\LogController')) {
-					$router->any('/log', 'Poppy\Extension\Fe\Http\LogController@index')
-						->name('system:develop.doc.index');
+			$router->group([
+				'middleware' => ['web', 'auth:develop'],
+			], function(Router $router) {
+				$router->get('/', DevCpController::class . '@index')
+					->name('system:develop.cp.cp');
+
+				$router->get('api', DevCpController::class . '@api')
+					->name('system:develop.cp.api');
+				$router->any('set_token', DevCpController::class . '@setToken')
+					->name('system:develop.cp.set_token');
+				$router->any('api_login', DevCpController::class . '@apiLogin')
+					->name('system:develop.cp.api_login');
+				$router->get('doc/{type?}', DevCpController::class . '@doc')
+					->name('system:develop.cp.doc');
+				$router->get('/graphi/{schema?}', DevCpController::class . '@graphi')
+					->name('system:develop.cp.graphql');
+				$router->get('/phpinfo', DevEnvController::class . '@phpinfo')
+					->name('system:develop.env.phpinfo');
+				$router->any('/tool/graphql-reverse', DevToolController::class . '@graphqlReverse')
+					->name('system:develop.tool.graphql_reverse');
+				$router->any('/tool/html-entity', DevToolController::class . '@htmlEntity')
+					->name('system:develop.tool.html_entity');
+
+				if (app('extension')->has('poppy/ext-fe')) {
+					if (class_exists('Poppy\Extension\Fe\Http\LogController')) {
+						$router->any('/log', 'Poppy\Extension\Fe\Http\LogController@index')
+							->name('system:develop.log.index');
+						$router->any('/api_doc/{type?}', 'Poppy\Extension\Fe\Http\ApiDocController@auto')
+							->name('system:develop.doc.index');
+					}
 				}
-			}
-
+			});
 		});
 	}
 
@@ -143,54 +142,26 @@ class RouteServiceProvider extends ServiceProvider
 	 */
 	protected function mapApiRoutes()
 	{
+
+		// Api V1 版本
+		\Route::group([
+			'middleware' => ['cross'],
+			'prefix'     => 'api_v1',
+		], function() {
+			require_once poppy_path('system', 'src/request/routes/web_v1.php');
+			require_once poppy_path('system', 'src/request/routes/backend_v1.php');
+		});
+
+
 		$this->graphqlApi();
-
-		\Route::group([
-			'middleware' => ['cross'],
-			'prefix'     => 'api/system',
-		], function(Router $route) {
-			$route->any('/information', SysApiHomeController::class . '@information');
-			$route->any('/dashboard', DashboardsController::class . '@list');
-			$route->get('/price', SysApiOrderController::class . '@price');
-			$route->group([
-				'middleware' => ['auth:jwt_backend'],
-			], function(Router $route) {
-				$route->any('/access', AuthController::class . '@access')
-					->name('system:api.access');
-				$route->any('/page/{path?}', SysApiHomeController::class . '@page');
-				$route->get('/permission', SysApiHomeController::class . '@permission');
-			});
-		});
 	}
 
-	/**
-	 * @return void
-	 */
-	protected function mapUtilRoutes()
-	{
-		\Route::group([
-			'middleware' => ['cross'],
-			'prefix'     => 'util',
-		], function(Router $route) {
-			$route->get('/captcha', UtilHomeController::class . '@captcha');
-			$route->get('/area', UtilHomeController::class . '@area');
-			// 只要是用户就可以
-			$route->group([
-				'middleware' => ['auth:jwt'],
-			], function(Router $route) {
-				$route->post('/image', UtilHomeController::class . '@image')
-					->name('system:util.home.image');
-			});
-		});
-	}
 
 	private function graphqlApi()
 	{
 		\Route::group([
 			'middleware' => ['cross'],
 		], function(Router $route) {
-			$route->any('api/token/{guard?}', AuthController::class . '@token')
-				->name('api.token');
 			$route->any('api/g/{graphql_schema?}', GraphQLController::class . '@query')
 				->name('api.graphql');
 		});

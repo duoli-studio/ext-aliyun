@@ -9,42 +9,45 @@ global:
             injection: global
             text: 全局设置
         -
+            icon: ios-paper
+            text: 附件设置
             children:
                 -
                     path: /upload
                     text: 上传设置
-            icon: ios-paper
-            text: 附件设置
         -
+            icon: help-circled
+            text: 辅助
             children:
                 -
-                    path: /extension
-                    text: 拓展配置
+                    path: /area
+                    text: 地区管理
                 -
-                    path: /module
-                    text: 模块配置
+                    path: /system/category
+                    text: 帮助分类
                 -
-                    path: /addon
-                    text: 插件配置
-            icon: cube
-            text: 应用管理
+                    path: /system/article
+                    text: 帮助列表
         -
-            icon: shuffle
-            injection: addon
-            text: 全局插件
+            icon: qr-scanner
+            text: 用户管理
+            children:
+                -
+                    path: /pam/role
+                    text: 用户角色
+                -
+                    path: /pam/account
+                    text: 用户账户
         -
+            icon: stats-bars
+            text: 系统插件
             children:
                 -
                     path: /menu
                     text: 菜单管理
-                -
-                    path: /seo
-                    text: SEO 管理
                 -
                     path: /mail
                     text: 邮件设置
                 -
                     path: /debug
                     text: 调试工具
-            icon: stats-bars
-            text: 系统插件

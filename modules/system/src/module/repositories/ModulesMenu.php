@@ -28,15 +28,15 @@ class ModulesMenu extends Repository
 	public function initialize(Collection $menus)
 	{
 		// check serve setting
-		$configuration       = json_decode($this->getSetting()->get('administration.menus', ''), true);
+		$configuration       = json_decode($this->getSetting()->get('system::system.menus', ''), true);
 		$this->configuration = is_array($configuration) ? $configuration : [];
 		$this->items         = $this->getCache('poppy')->rememberForever(
-			'modules.menu', function () use ($menus) {
-			$menus = $menus->map(function ($definition, $slug) {
+			'modules.menu', function() use ($menus) {
+			$menus = $menus->map(function($definition, $slug) {
 				if ($slug != 'system') {
 					return $definition;
 				}
-				return collect($definition)->map(function ($definition, $key) {
+				return collect($definition)->map(function($definition, $key) {
 					/*
 					'global' = [
 						[icon] => settings
@@ -49,18 +49,18 @@ class ModulesMenu extends Repository
 					if ($key != 'global') {
 						return $definition;
 					}
-					return collect($definition)->map(function ($definition, $key) {
+					return collect($definition)->map(function($definition, $key) {
 						if ($key != 'children') {
 							return $definition;
 						}
-						return collect($definition)->map(function ($definition) {
+						return collect($definition)->map(function($definition) {
 							if (!isset($definition['injection'])) {
 								return $definition;
 							}
 							$children = isset($definition['children']) ? collect((array) $definition['children']) : collect();
 							switch ($definition['injection']) {
 								case 'extension':
-									$this->getExtension()->navigations()->each(function ($definition) use ($children) {
+									$this->getExtension()->navigations()->each(function($definition) use ($children) {
 										$children->push([
 											'path' => $definition['path'] ?? '/',
 											'text' => $definition['text'] ?? '未定义',
@@ -68,7 +68,7 @@ class ModulesMenu extends Repository
 									});
 									break;
 								case 'global':
-									$this->getBackend()->pages()->each(function ($definition) use ($children) {
+									$this->getBackend()->pages()->each(function($definition) use ($children) {
 										if ($definition['initialization']['target'] == 'global') {
 											$children->push([
 												'path' => $definition['initialization']['path'],
@@ -86,7 +86,7 @@ class ModulesMenu extends Repository
 			});
 
 			$collection = collect();
-			$menus->each(function ($definition, $slug) use ($collection) {
+			$menus->each(function($definition, $slug) use ($collection) {
 				$this->parse($definition, $slug, $collection);
 			});
 
@@ -101,7 +101,7 @@ class ModulesMenu extends Repository
 	{
 		if ($this->structures == null) {
 			$collection = collect();
-			collect($this->items)->each(function ($definition, $index) use ($collection) {
+			collect($this->items)->each(function($definition, $index) use ($collection) {
 				$treeKey = $definition['parent'];
 				if (!$this->has($treeKey) && $this->getModule()->has($definition['parent'])) {
 					$this->structure($index, $collection);
@@ -121,9 +121,9 @@ class ModulesMenu extends Repository
 	protected function structure($index, Collection $collection)
 	{
 		$children = collect();
-		collect($this->items)->filter(function ($item) use ($index) {
+		collect($this->items)->filter(function($item) use ($index) {
 			return $item['parent'] == $index;
-		})->each(function ($definition, $index) use ($children) {
+		})->each(function($definition, $index) use ($children) {
 			$this->structure($index, $children);
 		});
 		$definition             = $this->items[$index];
@@ -139,7 +139,7 @@ class ModulesMenu extends Repository
 	 */
 	private function parse(array $items, string $prefix, Collection $collection)
 	{
-		collect($items)->each(function ($definition, $key) use ($collection, $prefix) {
+		collect($items)->each(function($definition, $key) use ($collection, $prefix) {
 			$key = $prefix . '/' . $key;
 			if (isset($this->configuration[$key])) {
 				$definition['enabled'] = isset($this->configuration[$key]['enabled']) ? boolval($this->configuration[$key]['enabled']) : false;

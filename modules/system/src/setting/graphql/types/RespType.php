@@ -1,13 +1,10 @@
-<?php namespace System\Setting\GraphQL\Types;
+<?php namespace System\Setting\Graphql\Types;
 
 use GraphQL\Type\Definition\Type;
 use Poppy\Framework\Classes\Resp;
-use Poppy\Framework\GraphQL\Exception\TypeNotFound;
 use Poppy\Framework\GraphQL\Support\Type as AbstractType;
 
-/**
- * Class SettingType.
- */
+
 class RespType extends AbstractType
 {
 
@@ -15,7 +12,7 @@ class RespType extends AbstractType
 	{
 		parent::__construct($attributes);
 		$this->attributes['name']        = 'Resp';
-		$this->attributes['description'] = trans('system::act.graphql.resp_desc');
+		$this->attributes['description'] = trans('system::setting.type.resp.desc');
 	}
 
 	/**
@@ -26,17 +23,17 @@ class RespType extends AbstractType
 		return [
 			'status'  => [
 				'type'         => Type::nonNull(Type::int()),
-				'description'  => trans('system::act.graphql.resp_status'),
+				'description'  => trans('system::setting.type.resp.field_status'),
 				'defaultValue' => Resp::SUCCESS,
 			],
 			'message' => [
 				'type'        => Type::nonNull(Type::string()),
-				'description' => trans('system::act.graphql.resp_message'),
+				'description' => trans('system::setting.type.resp.field_message'),
 			],
 			'data'    => [
 				'type'        => Type::string(),
 				// todo 注释
-				'description' => trans('system::act.graphql.resp_message'),
+				'description' => trans('system::setting.type.resp.field_message'),
 			],
 		];
 	}

@@ -33,6 +33,9 @@
     "layui": "sentsin/layui#^2.2.45",
     "vkBeautify": "vkbeautify#*",
     "tokenize2": "*",
-    "bootstrap4": "^4.0.0"
+    "bootstrap4": "^4.0.0",
+    "bootstrap-sass": "^3.3.7",
+    "centrifuge": "^1.4.8",
+    "sockjs": "^0.3.4"
   }
 }

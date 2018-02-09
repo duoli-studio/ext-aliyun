@@ -4,6 +4,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Poppy\Framework\Application\Controller;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Helper\FileHelper;
+use Poppy\Framework\Helper\StrHelper;
 
 class ApiDocController extends Controller
 {
@@ -28,11 +29,11 @@ class ApiDocController extends Controller
 	 */
 	public function index()
 	{
-		$apidocDir = base_path('public/docs/dailian/api_data.json');
+		$apidocDir = base_path('public/docs/system/api_data.json');
 		$api       = json_decode(file_get_contents($apidocDir));
 		$content   = new Collection($api);
 		$group     = $content->groupBy('groupTitle');
-		return view('ext-fe::index', [
+		return view('ext-fe::api_doc.index', [
 			'group' => $group,
 		]);
 	}
@@ -45,7 +46,7 @@ class ApiDocController extends Controller
 	 */
 	public function auto($type = '')
 	{
-		$catalog = config('duoli-api_doc.catalog');
+		$catalog = config('ext-fe.apidoc');
 		if (!$catalog) {
 			return Resp::web(Resp::ERROR, "尚未配置 apidoc 生成目录");
 		}
@@ -84,7 +85,7 @@ class ApiDocController extends Controller
 			if (!isset($data['current'])) {
 				return Resp::web(Resp::ERROR, "没有找到对应 URL 地址");
 			}
-			return view('l5-api_doc::auto', [
+			return view('ext-fe::api_doc.auto', [
 				'data'    => $data,
 				'success' => $success,
 				'user'    => $user,
@@ -99,7 +100,7 @@ class ApiDocController extends Controller
 
 	protected function apiData($type, $prefix = null, $method = 'get', $version = '1.0.0')
 	{
-		$catalog  = config('duoli-api_doc.catalog');
+		$catalog  = config('ext-fe.apidoc');
 		$docs     = $catalog[$type];
 		$jsonFile = base_path($docs['doc'] . '/api_data.json');
 		$data     = [];
@@ -113,7 +114,7 @@ class ApiDocController extends Controller
 			$data['versions']    = [];
 			$url                 = $prefix;
 			if (!$url) {
-				$url = '/' . $type . '/' . trim($docs['default_url'], '/');
+				$url = '/' . trim($docs['default_url'] ?? '', '/');
 			}
 			if ($url) {
 				foreach ($content as $key => $val) {
@@ -145,5 +146,62 @@ class ApiDocController extends Controller
 		return $data;
 	}
 
+	protected function getParamValue($param)
+	{
+		/*
+		"group": "Parameter"
+		"type": "<p>String</p> "
+		"optional": false
+		"field": "device_id"
+		"size": "2..5"
+		"description": "<p>设备ID, 设备唯一的序列号</p> "
+		 */
+		$type          = strtolower(strip_tags(trim($param->type)));
+		$allowedValues = isset($param->allowedValues) ? $param->allowedValues : '';
+		$size          = isset($param->size) ? $param->size : '';
+		switch ($type) {
+			case 'string':
+				if (strpos($size, '..') !== false) {
+					list($start, $end) = explode('..', $size);
+					$start = (int) $start;
+					$end   = (int) $end;
+
+					$length = rand($start, $end);
+					return StrHelper::random($length);
+				}
+				if ($allowedValues) {
+					shuffle($allowedValues);
+					return $allowedValues[0];
+				}
+				return '';
+				break;
+			case 'boolean':
+				return rand(0, 1);
+				break;
+			case 'number':
+				if (strpos($size, '-') !== false) {
+					list($start, $end) = explode('-', $size);
+					$start = (int) $start;
+					$end   = (int) $end;
+					return rand($start, $end);
+				}
+				if (strpos($size, '..') !== false) {
+					list($start, $end) = explode('..', $size);
+					$start = (int) $start;
+					$end   = (int) $end;
+
+					$start = ((int) str_pad(1, $start, 0));
+					$end   = ((int) str_pad(1, $end + 1, 0)) - 1;
+					return rand($start, $end);
+				}
+				if ($allowedValues) {
+					shuffle($allowedValues);
+					return $allowedValues[0];
+				}
+				return rand(0, 99999999);
+				break;
+		}
+		return '';
+	}
 }
 

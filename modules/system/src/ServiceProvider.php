@@ -8,24 +8,23 @@ use Illuminate\Console\Scheduling\Schedule;
 use Poppy\Framework\Exceptions\ModuleNotFoundException;
 use Poppy\Framework\Support\PoppyServiceProvider;
 use System\Backend\BackendServiceProvider;
-use System\Console\DevHtmlCommand;
-use System\Console\InstallCommand;
-use System\Console\LogCommand;
-use System\Events\ListenerServiceProvider;
+use System\Commands\DevHtmlCommand;
+use System\Commands\InstallCommand;
+use System\Commands\LogCommand;
 use System\Extension\ExtensionServiceProvider;
+use System\Models\PamAccount;
 use System\Models\PamRole;
+use System\Models\Policies\AccountPolicy;
+use System\Models\Policies\RolePolicy;
 use System\Module\ModuleServiceProvider;
-use System\Pam\BindChangeServiceProvider;
-use System\Pam\Commands\UserCommand;
+use System\Commands\UserCommand;
 use System\Pam\PamServiceProvider;
-use System\Pam\Policies\RolePolicy;
 use System\Permission\Commands\PermissionCommand;
 use System\Permission\PermissionServiceProvider;
 use System\Rbac\RbacServiceProvider;
 use System\Request\MiddlewareServiceProvider;
 use System\Request\RouteServiceProvider;
 use System\Setting\SettingServiceProvider;
-
 
 class ServiceProvider extends PoppyServiceProvider
 {
@@ -41,7 +40,8 @@ class ServiceProvider extends PoppyServiceProvider
 	];
 
 	protected $policies = [
-		PamRole::class => RolePolicy::class,
+		PamRole::class    => RolePolicy::class,
+		PamAccount::class => AccountPolicy::class,
 	];
 
 	/**
@@ -53,6 +53,7 @@ class ServiceProvider extends PoppyServiceProvider
 	 * Bootstrap the module services.
 	 * @return void
 	 * @throws ModuleNotFoundException
+	 * @throws \Illuminate\Container\EntryNotFoundException
 	 */
 	public function boot()
 	{
@@ -62,6 +63,19 @@ class ServiceProvider extends PoppyServiceProvider
 
 		// register extension
 		$this->app['extension']->register();
+
+		// mail config
+		$Setting = app('setting');
+		config([
+			'mail.driver'       => $Setting->get('system::mail.driver') ?: config('mail.driver'),
+			'mail.encryption'   => $Setting->get('system::mail.encryption') ?: config('mail.encryption'),
+			'mail.port'         => $Setting->get('system::mail.port') ?: config('mail.port'),
+			'mail.host'         => $Setting->get('system::mail.host') ?: config('mail.host'),
+			'mail.from.address' => $Setting->get('system::mail.from') ?: config('mail.from.address'),
+			'mail.from.name'    => $Setting->get('system::mail.from') ?: config('mail.from.name'),
+			'mail.username'     => $Setting->get('system::mail.username') ?: config('mail.username'),
+			'mail.password'     => $Setting->get('system::mail.password') ?: config('mail.password'),
+		]);
 	}
 
 	/**
@@ -77,13 +91,13 @@ class ServiceProvider extends PoppyServiceProvider
 		$this->app->register(ExtensionServiceProvider::class);
 		$this->app->register(ModuleServiceProvider::class);
 		$this->app->register(RbacServiceProvider::class);
-		$this->app->register(ListenerServiceProvider::class);
 		$this->app->register(PermissionServiceProvider::class);
 		$this->app->register(PamServiceProvider::class);
-		$this->app->register(BindChangeServiceProvider::class);
+
+		$this->registerConsole();
 
 		$this->registerSchedule();
-		$this->registerConsole();
+
 	}
 
 
@@ -91,7 +105,7 @@ class ServiceProvider extends PoppyServiceProvider
 	{
 		$this->app['events']->listen('console.schedule', function(Schedule $schedule) {
 
-			$schedule->command('clockwork:clean')->everyThirtyMinutes();
+			$schedule->command('clockwork:clean')->everyThirtyMinutes()->appendOutputTo($this->consoleLog());
 		});
 	}
 
@@ -99,11 +113,13 @@ class ServiceProvider extends PoppyServiceProvider
 	private function registerConsole()
 	{
 		// system
-		$this->registerConsoleCommand('system.permission', PermissionCommand::class);
-		$this->registerConsoleCommand('system.user', UserCommand::class);
-		$this->registerConsoleCommand('system.install', InstallCommand::class);
-		$this->registerConsoleCommand('system.dev_html', DevHtmlCommand::class);
-		$this->registerConsoleCommand('system.log', LogCommand::class);
+		$this->commands([
+			PermissionCommand::class,
+			UserCommand::class,
+			InstallCommand::class,
+			DevHtmlCommand::class,
+			LogCommand::class,
+		]);
 	}
 
 

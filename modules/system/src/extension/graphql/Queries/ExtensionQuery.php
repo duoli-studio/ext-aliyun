@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Extension\GraphQL\Queries;
+namespace System\Extension\Graphql\Queries;
 
 use GraphQL\Type\Definition\ListOfType;
 use GraphQL\Type\Definition\Type;
@@ -39,7 +39,7 @@ class ExtensionQuery extends Query
     }
 
     /**
-     * @return \GraphQL\Type\Definition\ListOfType
+     * @return \Graphql\Type\Definition\ListOfType
      */
     public function type(): ListOfType
     {

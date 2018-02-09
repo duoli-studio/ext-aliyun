@@ -13,7 +13,7 @@
         </div>
     </div>
     <script>
-	requirejs(['jquery', 'lemon/util'], function ($) {
+	requirejs(['jquery', 'poppy/util'], function ($) {
 		$(function () {
 			$('#J_input').on('change mouseup input', _do_convert)
 			_do_convert();

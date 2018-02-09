@@ -9,12 +9,6 @@ use System\Pam\Action\Pam;
 class PamController extends InitController
 {
 
-	public function __construct()
-	{
-		$this->middleware(['web']);
-		parent::__construct();
-	}
-
 
 	public function login(Request $request)
 	{
@@ -23,7 +17,7 @@ class PamController extends InitController
 			$password = $request->input('password');
 
 			/** @var Pam $pam */
-			$pam = app('act.pam');
+			$pam = new Pam();
 			if ($pam->loginCheck($username, $password, PamAccount::GUARD_DEVELOP, true)) {
 				return Resp::web(Resp::SUCCESS, '登录成功！', 'location|' . route('system:develop.cp.cp'));
 			}

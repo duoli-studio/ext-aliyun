@@ -11,15 +11,11 @@ import Mail from '../pages/Mail.vue';
 import Menu from '../pages/Menu.vue';
 import Module from '../pages/Module.vue';
 import Navigation from '../pages/Navigation.vue';
-import Seo from '../pages/Seo.vue';
-import SeoRule from '../pages/SeoRule.vue';
-import SeoRuleTemplate from '../pages/SeoRuleTemplate.vue';
 import Template from '../pages/Template.vue';
 import Upload from '../pages/Upload.vue';
-import Region from '../pages/Region.vue';
-import User from '../pages/User.vue';
 import Role from '../pages/Role.vue';
-
+import Pam from '../pages/Pam.vue';
+import Area from '../pages/Area.vue';
 
 import requireAuth from '../middlewares/auth';
 import store from '../stores';
@@ -64,21 +60,6 @@ const configuration = [
 	},
 	{
 		beforeEnter : requireAuth,
-		component   : Seo,
-		path        : 'seo',
-	},
-	{
-		beforeEnter : requireAuth,
-		component   : SeoRule,
-		path        : 'seo/:module',
-	},
-	{
-		beforeEnter : requireAuth,
-		component   : SeoRuleTemplate,
-		path        : 'seo/:module/:rule',
-	},
-	{
-		beforeEnter : requireAuth,
 		component   : Template,
 		path        : 'template',
 	},
@@ -87,18 +68,18 @@ const configuration = [
 		component   : Upload,
 		path        : 'upload',
 	},
-    {
-        component   : Region,
-        path        : 'region',
-    },
-    {
-        component   : User,
-        path        : 'user',
-    },
 	{
-		component   : Role,
-		path        : 'role',
-	}
+		component : Role,
+		path      : 'pam/role',
+	},
+	{
+		component : Pam,
+		path      : 'pam/account',
+	},
+	{
+		component : Area,
+		path      : 'area',
+	},
 ];
 
 export default {

@@ -4,7 +4,7 @@
 	export default {
 		beforeRouteEnter(to, from, next) {
 			injection.loading.start();
-			injection.http.get(`${window.api}/system/dashboard`).then(response => {
+			injection.http.get(`${window.api}backend/system/layout/dashboards`).then(response => {
 				next(vm => {
 					vm.dashboards.hidden = response.data.data.hidden;
 					vm.dashboards.left = response.data.data.left;
@@ -52,7 +52,7 @@
 			},
 			saveDashboard() {
 				const self = this;
-				injection.http.post(`${window.api}/system/dashboard`, self.dashboards).then(() => {
+				injection.http.post(`${window.api}backend/system/layout/dashboards`, self.dashboards).then(() => {
 					self.$notice.open({
 						title : '保存仪表盘页面布局成功！',
 					});
@@ -66,7 +66,7 @@
 			},
 		},
 		mounted() {
-			this.$store.commit('title', trans('administration.title.dashboard'));
+			this.$store.commit('title', trans('system.seo.system.system_dashboard'));
 		},
 		name     : 'Administration-Dashboard',
 	};

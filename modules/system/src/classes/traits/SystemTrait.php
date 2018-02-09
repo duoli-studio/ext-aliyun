@@ -33,17 +33,6 @@ trait SystemTrait
 		return $this->pam;
 	}
 
-	/**
-	 * Check Set Password
-	 * @return bool
-	 */
-	public function existsPassword()
-	{
-		if (!$this->pam->password) {
-			return $this->setError('密码为空');
-		}
-		return true;
-	}
 
 	/**
 	 * 检查 pam 用户
@@ -53,24 +42,6 @@ trait SystemTrait
 	{
 		if (!$this->pam) {
 			return $this->setError(trans('system::act.check_permission_need_login'));
-		}
-		return true;
-	}
-
-	/**
-	 * Check Backend User login and permission.
-	 * @param string $permission
-	 * @return bool
-	 */
-	public function checkPermission($permission = '')
-	{
-		if (!$this->pam) {
-			return $this->setError(trans('system::act.check_permission_need_login'));
-		}
-
-		// check permission
-		if ($permission && !$this->pam->capable($permission)) {
-			return $this->setError(trans('system::act.check_permission_failed'));
 		}
 		return true;
 	}
@@ -201,4 +172,20 @@ trait SystemTrait
 	{
 		return $this->getContainer()->make('extension');
 	}
+
+
+	/**
+	 * 检查当前是否是在事务中
+	 * @return bool
+	 */
+	protected function inTransaction()
+	{
+		if (\DB::transactionLevel() <= 0) {
+			return $this->setError('当前操作未在事务中');
+		}
+		else {
+			return true;
+		}
+	}
+
 }

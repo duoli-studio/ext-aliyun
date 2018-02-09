@@ -1,5 +1,6 @@
 <?php namespace Poppy\Framework\Support;
 
+use Poppy\Framework\Agamotto\Agamotto;
 use Poppy\Framework\Exceptions\ModuleNotFoundException;
 use Illuminate\Support\ServiceProvider as ServiceProviderBase;
 
@@ -73,7 +74,7 @@ abstract class PoppyServiceProvider extends ServiceProviderBase
 	public function registerConsoleCommand($key, $class)
 	{
 		$key = 'command.poppy.' . $key;
-		$this->app->singleton($key, function ($app) use ($class) {
+		$this->app->singleton($key, function($app) use ($class) {
 			return new $class;
 		});
 		$this->commands($key);
@@ -100,6 +101,12 @@ abstract class PoppyServiceProvider extends ServiceProviderBase
 				\Event::listen($event, $listener);
 			}
 		}
+	}
+
+	protected function consoleLog()
+	{
+		$day = Agamotto::now()->toDateString();
+		return storage_path('logs/console-' . $day . '.log');
 	}
 
 

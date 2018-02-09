@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Extension\GraphQL\Types;
+namespace System\Extension\Graphql\Types;
 
 use GraphQL\Type\Definition\Type;
 use Poppy\Framework\GraphQL\Abstracts\Type as AbstractType;

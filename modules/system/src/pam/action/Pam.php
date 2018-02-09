@@ -4,26 +4,22 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Poppy\Framework\Helper\UtilHelper;
 use Poppy\Framework\Validation\Rule;
+use System\Action\Verification;
 use System\Classes\Traits\SystemTrait;
 use System\Models\PamAccount;
 use System\Models\PamBind;
 use System\Models\PamCaptcha;
 use System\Models\PamRole;
 use System\Models\SysConfig;
-use System\Pam\Events\LoginFailed;
-use System\Pam\Events\LoginSuccess;
-use System\Pam\Events\PamRegistered;
+use System\Event\Events\LoginFailed;
+use System\Event\Events\LoginSuccess;
+use System\Event\Events\PamRegistered;
 use Tymon\JWTAuth\JWTGuard;
-use System\Captcha\Action\Captcha;
 
 class Pam
 {
 	use SystemTrait;
 
-	/**
-	 * @var PamAccount
-	 */
-	protected $pam;
 
 	/**
 	 * @var string Pam table
@@ -48,7 +44,6 @@ class Pam
 	 * @param $passport
 	 * @param $captcha
 	 * @return bool
-	 * @throws \Throwable
 	 */
 	public function captchaLogin($passport, $captcha)
 	{
@@ -66,7 +61,7 @@ class Pam
 			return $this->setError($validator->messages());
 		}
 
-		$actUtil = new Captcha();
+		$actUtil = new Verification();
 		if (!$actUtil->check($passport, $captcha)) {
 			return $this->setError($actUtil->getError()->getMessage());
 		}
@@ -90,7 +85,7 @@ class Pam
 			if ($this->pam->is_enable == SysConfig::NO) {
 				// 账户被禁用
 				$this->webLogout();
-				return $this->setError('本账户被禁用, 不得登入');
+				return $this->setError(trans('system::pam.action.pam.account_disable_not_login'));
 			}
 			//登录时间
 			$this->pam->logined_at  = Carbon::now();
@@ -106,7 +101,6 @@ class Pam
 	 * @param string $password
 	 * @param string $role_name
 	 * @return bool
-	 * @throws \Throwable
 	 */
 	public function register($passport, $password = '', $role_name = PamRole::FE_USER)
 	{
@@ -142,7 +136,7 @@ class Pam
 		}
 		else {
 			if (preg_match('/\s+/', $passport)) {
-				return $this->setError('用户名中不得包含空格');
+				return $this->setError(trans('system::pam.action.pam.user_name_not_space'));
 			}
 			$rule[$type][] = 'regex:/[a-zA-Z\x{4e00}-\x{9fa5}][a-zA-Z0-9_\x{4e00}-\x{9fa5}]/u';
 		}
@@ -162,10 +156,17 @@ class Pam
 			return $this->setError($validator->messages());
 		}
 
-		/** @var PamRole $role */
-		$role = PamRole::where('name', $role_name)->first();
+
+		if (is_numeric($role_name)) {
+			/** @var PamRole $role */
+			$role = PamRole::find($role_name);
+		}
+		else {
+			/** @var PamRole $role */
+			$role = PamRole::where('name', $role_name)->first();
+		}
 		if (!$role) {
-			return $this->setError('给定的用户角色不存在');
+			return $this->setError(trans('system::pam.action.pam.role_not_exists'));
 		}
 
 		// 自动设置前缀
@@ -174,7 +175,7 @@ class Pam
 			$hasAccountName = false;
 			// 检查是否设置了前缀
 			if (!$prefix) {
-				return $this->setError('尚未设置用户名默认前缀, 无法注册, 请联系管理员!');
+				return $this->setError(trans('system::pam.action.pam.not_set_name_prefix'));
 			}
 			$username = $prefix . '_' . Carbon::now()->format('YmdHis') . str_random(6);
 		}
@@ -216,6 +217,8 @@ class Pam
 				return true;
 			});
 		} catch (\Exception $e) {
+			return $this->setError($e->getMessage());
+		} catch (\Throwable $e) {
 			return $this->setError($e->getMessage());
 		}
 	}
@@ -266,7 +269,7 @@ class Pam
 			if ($user->is_enable == SysConfig::NO) {
 				// 账户被禁用
 				$guard->logout();
-				return $this->setError('本账户被禁用, 不得登入');
+				return $this->setError(trans('system::pam.action.pam.account_disable_not_login'));
 			}
 
 			$this->getEvent()->dispatch(new LoginSuccess($user));
@@ -280,7 +283,7 @@ class Pam
 				'passport' => $passport,
 			];
 			$this->getEvent()->dispatch(new LoginFailed($credentials));
-			return $this->setError('登录失败, 请重试');
+			return $this->setError(trans('system::pam.action.pam.login_fail_again'));
 		}
 
 	}
@@ -311,7 +314,7 @@ class Pam
 		}
 		else {
 			if (preg_match('/\s+/', $passport)) {
-				return $this->setError('用户名中不得包含空格');
+				return $this->setError(trans('system::pam.action.pam.account_disable_not_login'));
 			}
 			$rule[$type][] = 'regex:/[a-zA-Z\x{4e00}-\x{9fa5}][a-zA-Z0-9_\x{4e00}-\x{9fa5}]/u';
 		}
@@ -381,20 +384,20 @@ class Pam
 				Rule::required(),
 				Rule::mobile(),
 			], [], [
-				'verify_code' => trans('system::bind_change.db.verify_code'),
-				'mobile'      => trans('system::bind_change.db.mobile'),
+				'verify_code' => trans('system::pam.db.bind_change.verify_code'),
+				'mobile'      => trans('system::pam.db.bind_change.mobile'),
 			],
 		]);
 		if ($validator->fails()) {
 			return $this->setError($validator->messages());
 		}
-		$actUtil = new Captcha();
+		$actUtil = new Verification();
 		if (!$actUtil->verifyOnceCode($verify_code)) {
 			return $this->setError($actUtil->getError()->getMessage());
 		}
 		//验证新手机号是否已经注册
 		if (PamAccount::where('mobile', $newMobile)->exists()) {
-			return $this->setError('该手机号已经注册过');
+			return $this->setError(trans('system::pam.action.pam.mobile_already_registered'));
 		}
 
 		//发送验证码
@@ -405,12 +408,11 @@ class Pam
 	/**
 	 * 新的手机号验证
 	 * @param $verify_code
-	 * @param $new_passport
+	 * @param $passport
 	 * @param $captcha
 	 * @return bool
-	 * @throws \Exception
 	 */
-	public function rebindPassport($verify_code, $new_passport, $captcha)
+	public function newPassport($verify_code, $passport, $captcha)
 	{
 		if (!$this->checkPam()) {
 			return false;
@@ -418,7 +420,7 @@ class Pam
 
 		$data      = [
 			'verify_code' => $verify_code,
-			'mobile'      => $new_passport,
+			'mobile'      => $passport,
 			'captcha'     => $captcha,
 		];
 		$validator = \Validator::make($data, [
@@ -433,9 +435,9 @@ class Pam
 			'captcha'     => [
 				Rule::required(),
 			], [], [
-				'verify_code' => trans('system::bind_change.db.verify_code'),
-				'mobile'      => trans('system::bind_change.db.mobile'),
-				'captcha'     => trans('system::bind_change.db.captcha'),
+				'verify_code' => trans('system::pam.db.bind_change.verify_code'),
+				'mobile'      => trans('system::pam.db.bind_change.mobile'),
+				'captcha'     => trans('system::pam.db.bind_change.captcha'),
 			],
 		]);
 		if ($validator->fails()) {
@@ -443,20 +445,20 @@ class Pam
 		}
 
 		// 验证一次码
-		$Captcha = new Captcha();
+		$Captcha = new Verification();
 		if (!$Captcha->verifyOnceCode($verify_code)) {
 			return $this->setError($Captcha->getError()->getMessage());
 		}
 
 		// 验证验证码
-		if (!$Captcha->check($new_passport, $captcha)) {
+		if (!$Captcha->check($passport, $captcha)) {
 			return $this->setError($Captcha->getError()->getMessage());
 		}
-		$Captcha->delete($new_passport);
+		$Captcha->delete($passport);
 
 		try {
 			$this->pam->update([
-				'mobile' => $new_passport,
+				'mobile' => $passport,
 			]);
 			return true;
 		} catch (\Exception $e) {
@@ -494,6 +496,7 @@ class Pam
 		$passport     = $passport ?: $credentials['username'] ?? '';
 		$passport     = $passport ?: $credentials['email'] ?? '';
 		$passportType = $this->passportType($passport);
+
 		return [
 			$passportType => $passport,
 			'password'    => $credentials['password'] ?? '',
@@ -520,17 +523,36 @@ class Pam
 	}
 
 	/**
-	 * 后台用户禁用
+	 * 修改账户密码
 	 * @param $id
-	 * @param $data
+	 * @param $password
 	 * @return bool
 	 */
-	public function disable($id, $data)
+	public function setPasswordById($id, $password)
 	{
-		$data      = json_decode($data, true);
+		if (!PamAccount::where('id', $id)->exists()) {
+			return $this->setError('该账户不存在');
+		}
+		$pam = PamAccount::find($id);
+
+		if (!$this->setPassword($pam, $password)) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * 后台用户禁用
+	 * @param $id
+	 * @param $to
+	 * @param $reason
+	 * @return bool
+	 */
+	public function disable($id, $to, $reason)
+	{
 		$data      = [
-			'disable_reason' => strval(array_get($data, 'disable_reason', '')),
-			'disable_to'     => strval(array_get($data, 'disable_to', date("Y-m-d",strtotime('+3 days')))),
+			'disable_reason' => strval($reason),
+			'disable_to'     => strval($to),
 		];
 		$validator = \Validator::make($data, [
 			'disable_reason' => [
@@ -540,29 +562,28 @@ class Pam
 				Rule::string(),
 				Rule::dateFormat('Y-m-d'),
 			], [], [
-				'disable_reason' => trans('system::account.action.disable_reason'),
-				'disable_to'     => trans('system::account.action.disable_to'),
+				'disable_reason' => trans('system::pam.action.pam.disable_reason'),
+				'disable_to'     => trans('system::pam.action.pam.disable_to'),
 			],
 		]);
 		if ($validator->fails()) {
 			return $this->setError($validator->messages());
 		}
-		if (!PamAccount::where('id', $id)->where('is_enable', 1)->exists()) {
-			//当前用户已禁用
-			return $this->setError('当前用户已禁用');
-		}
-		try {
-			PamAccount::where('id', $id)->update([
-				'is_enable'        => PamAccount::STATUS_DISABLE,
-				'disable_reason'   => $data['disable_reason'],
-				'disable_start_at' => Carbon::now(),
-				'disable_end_at'   => Carbon::now()->addMinute($data['disable_to']),
-			]);
-			return true;
-		} catch (\Exception $e) {
-			return $this->setError($e->getMessage());
+
+		/** @var PamAccount $pam */
+		$pam = PamAccount::find($id);
+		//当前用户已禁用
+		if (!$pam->is_enable) {
+			return $this->setError(trans('system::pam.action.pam.account_disabled'));
 		}
 
+		$pam->update([
+			'is_enable'        => PamAccount::STATUS_DISABLE,
+			'disable_reason'   => $data['disable_reason'],
+			'disable_start_at' => Carbon::now(),
+			'disable_end_at'   => Carbon::createFromFormat('Y-m-d', $data['disable_to']),
+		]);
+		return true;
 	}
 
 	/**
@@ -573,32 +594,26 @@ class Pam
 	public function enable($id)
 	{
 		if (PamAccount::where('id', $id)->where('is_enable', 1)->exists()) {
-			return $this->setError('当前用户为启用状态');
+			return $this->setError(trans('system::pam.action.pam.account_enabled'));
 		}
 		try {
 			PamAccount::where('id', $id)->update([
 				'is_enable' => PamAccount::STATUS_ENABLE,
 			]);
+			return true;
 		} catch (\Exception $e) {
 			return $this->setError($e->getMessage());
 		}
-
 	}
 
 	/**
 	 * 自动解禁
-	 * @return bool
 	 */
-	public function autoDisable()
+	public function autoEnable()
 	{
-		try {
-			PamAccount::where('disable_end_at', '<', Carbon::now())->update([
-				'is_enable' => PamAccount::STATUS_ENABLE,
-			]);
-		} catch (\Exception $e) {
-			return $this->setError($e->getMessage());
-		}
-
+		PamAccount::where('disable_end_at', '<', Carbon::now())->update([
+			'is_enable' => PamAccount::STATUS_ENABLE,
+		]);
 	}
 
 	/**

@@ -3,11 +3,10 @@
 use EloquentFilter\Filterable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder;
+use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Http\Pagination\PageInfo;
 
-/**
- * Class Helpers.
- */
+
 trait FilterTrait
 {
 	use Filterable;
@@ -25,10 +24,9 @@ trait FilterTrait
 	}
 
 	/**
-	 * @param Builder  $Db
-	 * @param PageInfo $pageInfo
-	 * @param string   $resource
-	 * @param array    $append
+	 * @param Builder|FilterTrait|\Eloquent $Db
+	 * @param PageInfo                      $pageInfo
+	 * @param string                        $resource
 	 * @return array
 	 */
 	public static function paginationInfo($Db, PageInfo $pageInfo, $resource, $append = [])
@@ -42,6 +40,7 @@ trait FilterTrait
 			$cacheKey = md5($sql);
 		}
 		*/
+
 		$total = (clone $Db)->count();
 		$page  = $pageInfo->page();
 		$size  = $pageInfo->size();
@@ -51,22 +50,38 @@ trait FilterTrait
 		$list = $Db->pageFilter($pageInfo)->get();
 		$data = collect();
 		if ($list->count()) {
-
-			$list->each(function($item) use ($resource, $data) {
-				$res = (new $resource($item))->toArray(app('request'));
-				$data->push($res);
-			});
+			if (is_string($resource) && class_exists($resource)) {
+				$list->each(function($item) use ($resource, $data) {
+					$res = (new $resource($item))->toArray(app('request'));
+					$data->push($res);
+				});
+			}
+			if (is_callable($resource)) {
+				$list->each(function($payload) use ($resource, $data) {
+					$res = $resource(...array_values(func_get_args()));
+					$data->push($res);
+				});
+			}
 		}
 		$return = [
-			'list'       => $data->toArray(),
-			'pagination' => [
-				'total' => $total,
-				'page'  => $page,
-				'size'  => $size,
-				'pages' => $pages,
+			'status'  => Resp::SUCCESS,
+			'message' => '获取列表成功',
+			'data'    => [
+				'list'       => $data->toArray(),
+				'pagination' => [
+					'total' => $total,
+					'page'  => $page,
+					'size'  => $size,
+					'pages' => $pages,
+				],
 			],
 		];
-		return $return + $append;
+
+		// 附加数据
+		if ($append) {
+			$return['data'] += $append;
+		}
+		return $return;
 	}
 
 }

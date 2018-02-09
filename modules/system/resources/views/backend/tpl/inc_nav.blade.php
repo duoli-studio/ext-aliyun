@@ -19,7 +19,7 @@ $_menus = app('module')->backendMenus()->toArray();
                     </ul>
                 </div>
                 <div class="logo-element">
-                    SLF
+                    {!! sys_setting('system::site.short_name')?:'SLF' !!}
                 </div>
             </li>
             @if(isset($_menus))

@@ -8,7 +8,7 @@
 			if (path.indexOf('-') === 0) {
 				path = path.substring(1, path.length);
 			}
-			injection.http.get(`${window.api}/system/page/${path}`).then(response => {
+			injection.http.get(`${window.api}backend/system/layout/page/${path}`).then(response => {
 				const {initialization, tabs} = response.data.data;
 				next(vm => {
 					Object.keys(tabs).forEach(index => {
@@ -41,7 +41,7 @@
 					title : '正在刷新数据...',
 				});
 				self.$loading.start();
-				self.$http.get(`${window.api}/system/page/${self.path}`).then(response => {
+				self.$http.get(`${window.api}backend/system/layout/page/${self.path}`).then(response => {
 					const {initialization, tabs} = response.data.data;
 					Object.keys(tabs).forEach(index => {
 						tabs[index].loading = false;

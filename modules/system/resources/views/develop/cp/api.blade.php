@@ -50,7 +50,10 @@
             </p>
             <p class="alert alert-success">
                 <a target="_blank" class="btn btn-default" href="{!! $url_system !!}">
-                    系统文档
+                    Restful 接口文档
+                </a>
+                <a target="_blank" class="btn btn-default" href="{!! $url_poppy !!}">
+                    Poppy 后端文档
                 </a>
             </p>
         </div>

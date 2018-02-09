@@ -5,6 +5,8 @@ use Poppy\Framework\Classes\Resp;
 use System\Classes\SettingUI;
 use System\Models\PamAccount;
 use System\Models\SysConfig;
+use System\Pam\Action\Pam;
+use User\Classes\Socialite\QqMobile\Provider;
 
 
 class HomeController extends InitController
@@ -23,7 +25,7 @@ class HomeController extends InitController
 				'username' => \Input::get('username'),
 				'password' => \Input::get('password'),
 			];
-			$actPam      = app('act.pam');
+			$actPam      = new Pam();
 			if ($actPam->loginCheck($credentials['username'], $credentials['password'], PamAccount::GUARD_BACKEND)) {
 				return Resp::web(Resp::SUCCESS, '登录成功', 'location|' . route('backend:home.cp'));
 			}
@@ -42,6 +44,19 @@ class HomeController extends InitController
 		return view('system::backend.home.login');
 	}
 
+	public function test()
+	{
+		/** @var Provider $qqMobile */
+		$qqMobile = \Socialite::with('qq_mobile');
+
+		$token = '32698E8780BFD7FF878B679C75AF72B4';
+
+		if (!($pam = $qqMobile->setAccessToken($token)->user())) {
+			dd($qqMobile->getError());
+		} else {
+			dd($pam);
+		}
+	}
 
 	/**
 	 * 修改本账户密码
@@ -65,7 +80,7 @@ class HomeController extends InitController
 
 			/** @var PamAccount $pam */
 			$pam    = $this->getBeGuard()->user();
-			$actPam = app('act.pam');
+			$actPam = new Pam();
 			if (!$actPam->checkPassword($pam, $old_password)) {
 				return Resp::web(Resp::ERROR, '原密码错误!');
 			}

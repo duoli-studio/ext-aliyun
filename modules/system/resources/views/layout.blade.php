@@ -21,17 +21,17 @@
              transform: translate(-50%, -50%);">
 </div>
 <script>
-	window.admin = "{{ url('system') }}";
-	window.api = "{{ url('api') }}";
-	window.asset = "{{ asset('assets') }}";
-	window.csrf_token = "{{ csrf_token() }}";
-	window.domain = "{{ url('') }}";
-	window.local = {!! $translations !!};
-	window.monacoPath = "https://cdn.bootcss.com/monaco-editor/0.10.0/min/vs";
-	window.token = "{{ url('system/token') }}";
-	window.upload = "{{ url('editor') }}";
-	window.url = "{{ url('') }}";
-	window.UEDITOR_HOME_URL = "https://src.neditor.notadd.com/0.1.0/";
+window.admin = "{{ url('system') }}";
+window.api = "{{ url('api_v1') }}/";
+window.asset = "{{ asset('assets') }}";
+window.csrf_token = "{{ csrf_token() }}";
+window.domain = "{{ url('') }}";
+window.local = {!! $translations !!};
+window.monacoPath = "https://cdn.bootcss.com/monaco-editor/0.10.0/min/vs";
+window.token = "{{ url('system/token') }}";
+window.upload = "{{ url('editor') }}";
+window.url = "{{ url('') }}";
+window.UEDITOR_HOME_URL = "https://src.neditor.notadd.com/0.1.0/";
 </script>
 <script src="{{ asset('assets/backend/js/app.min.js') }}"></script>
 </body>

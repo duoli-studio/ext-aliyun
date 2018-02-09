@@ -16,12 +16,13 @@ class ModulesDevelopMenu extends Repository
 	public function initialize(Collection $data)
 	{
 		$this->items = $this->getCache('poppy')->rememberForever(
-			'modules.develop_menus', function () use ($data) {
+			'modules.develop_menus', function() use ($data) {
 			$collection = collect();
-			$data->each(function ($items, $slug) use ($collection) {
+			$data->each(function($items, $slug) use ($collection) {
 				$items = collect($items);
-				$items->count() && $items->each(function ($item, $entry) use ($collection, $slug, $items) {
+				$items->count() && $items->each(function($item, $entry) use ($collection, $slug, $items) {
 					$items[$entry] = $this->handleNavigation($item);
+
 					$collection->put($slug, $items);
 				});
 			});
@@ -34,12 +35,25 @@ class ModulesDevelopMenu extends Repository
 	{
 		if (isset($definition['children']) && is_array($definition['children'])) {
 			foreach ($definition['children'] as $key => $define) {
-				$definition['children'][$key] = $this->handleNavigation($define);
+				$calc = $this->handleNavigation($define);
+				if (!is_null($calc)) {
+					$definition['children'][$key] = $calc;
+				}
+
 			}
 		}
-		$route             = $definition['route'] ?? '';
-		$route_params      = $definition['route_param'] ?? '';
-		$param             = $definition['param'] ?? '';
+		$route        = $definition['route'] ?? '';
+		$route_params = $definition['route_param'] ?? '';
+		$param        = $definition['param'] ?? '';
+		$depend       = $definition['depend'] ?? '';
+		if ($depend) {
+			if (str_start($depend, 'extension')) {
+				$extension = substr($depend, strlen('extension:'));
+				if (!app('extension')->has($extension)) {
+					$definition['url'] = '#';
+				}
+			}
+		}
 		$url               = $route ? route_url($route, $route_params, $param) : '#';
 		$definition['url'] = $url;
 		unset($definition['route'], $definition['param'], $definition['route_param']);

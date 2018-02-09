@@ -5,7 +5,7 @@
 		beforeRouteEnter(to, from, next) {
 			injection.loading.start();
 			injection.loading.start();
-			injection.http.post(`${window.api}/administration`, {
+			injection.http.post(`${window.api}/api/g/backend`, {
 				query : 'query {' +
 				'canManagementFileExtension:setting(key:"attachment.manager.file"),' +
 				'canManagementImageExtension:setting(key:"attachment.manager.image"),' +

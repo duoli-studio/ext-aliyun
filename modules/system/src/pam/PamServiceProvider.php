@@ -8,9 +8,6 @@ use System\Pam\Auth\Provider\DevelopProvider;
 use System\Pam\Auth\Provider\PamProvider;
 use System\Pam\Auth\Provider\WebProvider;
 
-/**
- * Class PermissionServiceProvider.
- */
 class PamServiceProvider extends ServiceProvider
 {
 	/**

@@ -35,7 +35,7 @@ class SettingRepository implements SettingContract
 	public function delete($key)
 	{
 		if (!$this->keyParserMatch($key)) {
-			return $this->setError(trans('system::conf.resp.key_not_match', [
+			return $this->setError(trans('system::setting.repository.setting.key_not_match', [
 				'key' => $key,
 			]));
 		}
@@ -149,10 +149,10 @@ class SettingRepository implements SettingContract
 	{
 		$collection = collect([]);
 		$this->getModule()->settings()->each(
-			function ($define, $settingKey) use ($namespace, $group, $collection) {
+			function($define, $settingKey) use ($namespace, $group, $collection) {
 				$key = $namespace . '::' . $group;
 				if (str_start($settingKey, $key)) {
-					$value       = $this->get($settingKey);
+					$value = $this->get($settingKey);
 					$collection->push([
 						'value'       => $value,
 						'type'        => data_get($define, 'type') ?: 'string',

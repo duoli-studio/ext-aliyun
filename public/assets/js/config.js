@@ -5,6 +5,7 @@ var alias = {
     "bt3.data-tables": "assets/js/libs/bt3/data-tables/2.1.1/bt3.data-tables",
     "bt3.hover-dropdown": "assets/js/libs/bt3/hover-dropdown/2.2.1/bt3.hover-dropdown",
     "bt4": "assets/js/libs/bt4/4.0.0/bootstrap",
+    "centrifuge": "assets/js/libs/centrifuge/1.4.8/centrifuge",
     "clipboard": "assets/js/libs/clipboard/1.7.1/clipboard.min",
     "datatables.net": "assets/js/libs/jquery/data-tables/1.10.16/jquery.data-tables",
     "global": "assets/js/global",
@@ -22,6 +23,8 @@ var alias = {
     "pace": "assets/js/libs/pace/1.0.2/pace.min",
     "requirejs": "assets/js/libs/requirejs/require",
     "smooth-scroll": "assets/js/libs/smooth-scroll/1.4.0/smooth-scroll",
+    "sockjs": "assets/js/libs/sockjs/0.3.4/sockjs",
+    "underscore": "assets/js/libs/underscore/1.8.3/underscore",
     "vkbeautify": "assets/js/libs/vkbeautify/vkbeautify"
 };
 

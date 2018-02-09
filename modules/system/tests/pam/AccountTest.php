@@ -23,13 +23,20 @@ class AccountTest extends TestCase
 
 	public function testLogout()
 	{
-		/** @var Pam $actPam */
-		$actPam = app('act.pam');
-		if (!$actPam->webLogout()) {
-			dd($actPam->getError());
+		try {
+			$Pam = new Pam();
+		} catch (\Exception $e) {
+			die($e);
+		}
+
+		die('3');
+		if (!$Pam->webLogout()) {
+			dd($Pam->getError());
 		}
 		else {
-			dd($actPam->getSuccess());
+			dd($Pam->getSuccess());
 		}
 	}
+
+
 }

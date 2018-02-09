@@ -11,17 +11,49 @@
             props:
                 auxiliaryList:
                     -
-                        name: 半缕阳光
-                        url: https://github.com/ganlanshu0211
+                        name: NotAdd
+                        url: https://github.com/notadd/notadd
                     -
-                        name: 加菲猫
-                        url: https://github.com/mustangzhong
+                        name: Laravel
+                        url: https://d.laravel-china.org/5.5/
                 list:
                     -
-                        image: https://ww4.sinaimg.cn/large/0060lm7Tly1flat9vypmpj302o02odg7.jpg
-                        name: 寻风
-                        url: https://github.com/twilroad
+                        image: https://sfault-avatar.b0.upaiyun.com/259/863/2598636452-5a42f6652a717_huge256
+                        name: 多厘
+                        url: https://segmentfault.com/u/duoli
                     -
-                        image: https://ww3.sinaimg.cn/large/0060lm7Tly1flata92g2gj302o02ojrd.jpg
-                        name: 依剑听雨
-                        url: https://www.zuohuadong.cn/
+                        image: http://7xkiq1.com1.z0.glb.clouddn.com/18-2-1/68750462.jpg
+                        name: cqiu
+                        url: http://www.cqiu.top/
+                    -
+                        image: http://7xkiq1.com1.z0.glb.clouddn.com/18-2-1/8060504.jpg
+                        name: 明天你好
+                        url: http://blog.csdn.net/mingtiannihao0522
+                    -
+                        image: http://7xkiq1.com1.z0.glb.clouddn.com/18-2-1/47173090.jpg
+                        name: Yelvin
+                        url: http://blog.csdn.net/weixin_39733659
+                    -
+                        image: http://7xkiq1.com1.z0.glb.clouddn.com/18-2-1/40783436.jpg
+                        name: 你真萌啊
+                        url: https://weibo.com/u/5772699813
+                    -
+                        image: http://7xkiq1.com1.z0.glb.clouddn.com/18-2-1/95549732.jpg
+                        name: empty
+                        url: https://segmentfault.com/u/kaikaixinxin_58d516aadf185
+                    -
+                        image: http://7xkiq1.com1.z0.glb.clouddn.com/18-2-1/83881728.jpg
+                        name: 人
+                        url: \#
+                    -
+                        image: http://7xkiq1.com1.z0.glb.clouddn.com/18-2-1/1619684.jpg
+                        name: Wendy
+                        url: \#
+                    -
+                        image: http://7xkiq1.com1.z0.glb.clouddn.com/18-2-1/60815074.jpg
+                        name: 少年彭
+                        url: \#
+                    -
+                        image: http://7xkiq1.com1.z0.glb.clouddn.com/18-2-1/48598348.jpg
+                        name: 乔华
+                        url: \#

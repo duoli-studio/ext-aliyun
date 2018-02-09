@@ -7,13 +7,6 @@ use Poppy\Framework\Helper\RawCookieHelper;
 
 class CpController extends InitController
 {
-
-	public function __construct()
-	{
-		$this->middleware(['web', 'auth:develop']);
-		parent::__construct();
-	}
-
 	/**
 	 * 开发者控制台
 	 * @return \Illuminate\View\View
@@ -47,7 +40,7 @@ class CpController extends InitController
 
 				// check token is valid
 				$curl   = new Curl();
-				$access = route('system:api.access');
+				$access = route('system:pam.auth.access');
 				$curl->setHeader('x-requested-with', 'XMLHttpRequest');
 				$curl->setHeader('Authorization', 'Bearer ' . $token);
 				$curl->post($access);
@@ -63,16 +56,21 @@ class CpController extends InitController
 			'token_web'     => $tokenGet('dev_token#web'),
 			'token_backend' => $tokenGet('dev_token#backend'),
 			'url_system'    => route('system:develop.cp.doc', 'system'),
+			'url_poppy'     => route('system:develop.cp.doc', 'poppy'),
 		]);
 	}
 
 
+	/**
+	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector|\Illuminate\View\View
+	 * @throws \ErrorException
+	 */
 	public function apiLogin()
 
 	{
 		$type = \Input::get('type');
 		if (is_post()) {
-			$access = route('api.token', [$type]);
+			$access = route('system:pam.auth.token', [$type]);
 			$curl   = new Curl();
 			$data   = $curl->post($access, [
 				'passport' => \Input::get('passport'),
@@ -80,7 +78,7 @@ class CpController extends InitController
 			]);
 			if ($curl->httpStatusCode === 200) {
 				$token = 'dev_token#' . $type;
-				RawCookieHelper::set($token, $data->data);
+				RawCookieHelper::set($token, $data->token);
 				return Resp::web(Resp::SUCCESS, '登录成功', 'top_reload|1');
 			}
 			else {
@@ -113,11 +111,12 @@ class CpController extends InitController
 
 	/**
 	 * 文档地址
+	 * @param null $type
 	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
 	 */
-	public function doc()
+	public function doc($type = null)
 	{
-		$type = \Input::get('type', 'system');
+		$type = $type ?: 'system';
 		return redirect(url('docs/' . $type));
 	}
 }

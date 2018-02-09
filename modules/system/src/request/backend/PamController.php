@@ -52,8 +52,7 @@ class PamController extends InitController
 			$password  = $request->input('password');
 			$role_name = $request->input('role_name');
 
-			/** @var Pam $actPam */
-			$actPam = app('act.pam');
+			$actPam = new Pam();
 			if ($actPam->register($username, $password, $role_name)) {
 				return Resp::web(Resp::SUCCESS, '用户添加成功', 'top_reload|1');
 			}
@@ -91,7 +90,7 @@ class PamController extends InitController
 			$password = \Input::get('password');
 
 			/** @var Pam $actPam */
-			$actPam = app('act.pam');
+			$actPam = new Pam();
 			$actPam->setPam($this->getBeGuard()->user());
 			if ($actPam->setPassword($pam, $password)) {
 				return Resp::web(Resp::SUCCESS, '设置密码成功', 'top_reload|1');
