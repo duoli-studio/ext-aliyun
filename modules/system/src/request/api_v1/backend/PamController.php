@@ -10,7 +10,7 @@ use System\Models\Filters\RoleFilter;
 use System\Models\PamAccount;
 use System\Models\PamRole;
 use System\Models\Resources\PamResource;
-use System\Pam\Action\Pam as ActPam;
+use System\Action\Pam as ActPam;
 
 
 class PamController extends ApiController

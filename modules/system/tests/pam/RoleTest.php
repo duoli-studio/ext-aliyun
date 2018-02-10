@@ -9,13 +9,14 @@ use Poppy\Framework\Http\Pagination\PageInfo;
 use System\Models\Filters\RoleFilter;
 use System\Models\PamAccount;
 use System\Models\PamRole;
+use System\Action\Role;
 
 class RoleTest extends TestCase
 {
 	public function testCreate()
 	{
 		\Auth::guard(PamAccount::GUARD_BACKEND)->loginUsingId(1);
-		$role = app('act.role');
+		$role = new Role();
 		$item = $role->establish([
 			'name'  => 'abc',
 			'title' => 'abc',

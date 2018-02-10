@@ -22,6 +22,13 @@ class SysConfig extends \Eloquent
 	const YES = 1;
 	const NO  = 0;
 
+	// time define
+	const HOUR_MIN      = 60;
+	const HALF_DAY_MIN  = 720;
+	const DAY_MIN       = 1440;
+	const HALF_WEEK_MIN = 5040;
+	const WEEK_MIN      = 10080;
+	const MONTH_MIN     = 43200;
 
 	protected $table = 'sys_config';
 

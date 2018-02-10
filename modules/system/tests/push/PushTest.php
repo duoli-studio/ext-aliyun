@@ -7,8 +7,8 @@
 use Poppy\Framework\Application\TestCase;
 use System\Models\PamAccount;
 use System\Models\SysHelp;
-use System\Push\Action\AliPush;
-use System\Push\Notifications\HelpNotification;
+use User\Classes\extension\AliPush;
+use System\Notifications\HelpNotification;
 
 class PushTest extends TestCase
 {

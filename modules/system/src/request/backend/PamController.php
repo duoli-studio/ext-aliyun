@@ -7,7 +7,7 @@ use System\Models\Filters\PamFilter;
 use System\Models\PamAccount;
 use System\Models\PamRole;
 use System\Models\PamRoleAccount;
-use System\Pam\Action\Pam;
+use System\Action\Pam;
 
 /**
  * 账户管理

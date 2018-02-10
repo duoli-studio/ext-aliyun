@@ -1,4 +1,4 @@
-<?php namespace System\Pam\Action;
+<?php namespace System\Action;
 
 use Poppy\Framework\Validation\Rule;
 use System\Classes\Traits\SystemTrait;

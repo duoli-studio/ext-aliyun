@@ -1,4 +1,4 @@
-<?php namespace System\Pam\Auth\Provider;
+<?php namespace System\Classes\Auth\Provider;
 
 use System\Models\PamAccount;
 

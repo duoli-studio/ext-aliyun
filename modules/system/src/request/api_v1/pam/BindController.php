@@ -5,8 +5,8 @@ use Illuminate\Http\JsonResponse;
 use Poppy\Framework\Application\ApiController;
 use Poppy\Framework\Classes\Resp;
 use System\Classes\Traits\SystemTrait;
-use System\Pam\Action\OAuth;
-use System\Pam\Action\Pam;
+use System\Action\OAuth;
+use System\Action\Pam;
 
 
 class BindController extends ApiController

@@ -11,7 +11,7 @@ use System\Models\Filters\RoleFilter;
 use System\Models\PamAccount;
 use System\Models\PamRole;
 use System\Models\Resources\RoleResource;
-use System\Pam\Action\Role as ActRole;
+use System\Action\Role as ActRole;
 
 
 class RoleController extends ApiController

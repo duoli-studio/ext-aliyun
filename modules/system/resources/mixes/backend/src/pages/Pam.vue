@@ -222,6 +222,8 @@ export default {
 				kw     : self.filter.kw,
 				field  : self.filter.field,
 				type   : self.filter.type,
+				page   : self.pagination.page,
+				size   : self.pagination.size,
 				append : 'role',
 			}).then(response => {
 				const {status, message, data} = response.data;

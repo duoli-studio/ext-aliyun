@@ -7,7 +7,7 @@ use System\Action\Verification;
 use System\Classes\Traits\SystemTrait;
 use System\Models\PamAccount;
 use System\Models\PamCaptcha;
-use System\Pam\Action\Pam;
+use System\Action\Pam;
 use System\Action\ImageCaptcha;
 
 

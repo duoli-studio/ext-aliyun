@@ -7,27 +7,46 @@
                 Api Doc 文件不存在, 请运行 <code>php artisan ext:fe_doc api</code> 来生成 Api 文档
             </div>
         @else
-            <div class="row mt10">
+            <div class="row mt10" id="app">
                 <div class="col-sm-6">
                     {{-- ajax 方式, 便于调试, 需要服务器配置跨域 --}}
-                    {!! Form::model(isset($data['params']) ? $data['params'] : null,['url' => $api_url.$data['current']->url, 'method' => $data['current']->type,  'id'=> 'form_auto']) !!}
+                    {!! Form::model(isset($data['params']) ? $data['params'] : null,[
+                        'url' => $api_url.'/'.$data['current']->url,
+                        'method' => $data['current']->type,
+                        'id'=> 'form_auto'
+                    ]) !!}
                     {{-- 使用 curl 方式
                     {!! Form::model(isset($data['params']) ? $data['params'] : null,['route' => 'dev_api.auto', 'id'=> 'form_auto']) !!}
                     {!! Form::hidden('u_url' , $api_url.$data['current']->url) !!}
                     {!! Form::hidden('u_method' , $data['current']->type) !!}
                     --}}
-                    @if(isset($data['access_token']))
+                    @if(isset($data['token']))
                         <p class="alert alert-info form-group">
-                            {!! Form::label('access_token', '当前 Access Token:') !!}
-                            {!! Form::text('access_token',$data['access_token'], ['class' => 'form-control J_calc', 'readonly'=> true]) !!}
-                            {!! Form::label('sign', 'Sign:') !!}
-                            {!! Form::text('sign','', ['class' => 'form-control', 'readonly'=> true]) !!}
+                            {!! Form::label('token', '当前 Token:') !!}
+                            @if (Route::has('system:develop.cp.set_token'))
+                                <a href="{!! route_url('system:develop.cp.set_token', null, ['type'=> $guard]) !!}"
+                                   data-title="设置 Token {!! $guard !!}"
+                                   class="J_iframe pull-right btn btn-info btn-sm">设置 Token</a>
+                            @endif
+                            @if (Route::has('system:develop.cp.api_login'))
+                                <a href="{!! route_url('system:develop.cp.api_login', null, ['type'=> $guard]) !!}"
+                                   data-title="登录 {!! $guard !!}"
+                                   class="J_iframe pull-right btn btn-primary btn-sm mr10">登录</a>
+                            @endif
+                            {!! Form::text('token',$data['token'], [
+                                'class' => 'form-control J_calc mt3',
+                                'readonly'=> true,
+                                'disabled'=> true,
+                            ]) !!}
                         </p>
                     @endif
 
                     @if (isset($data['current_params']) && $data['current_params'])
                         @foreach($data['current_params'] as $param)
                             @if ($param->field != 'access_token')
+                                @if (starts_with($param->field, ':'))
+									<?php continue; ?>
+                                @endif
                                 <div class="form-group">
                                     {!! ($param->optional ? '' : '<span style="color:red">*</span>') !!}
                                     {!! Form::label($param->field, strip_tags($param->description)) !!}
@@ -35,7 +54,7 @@
                                     {!! strip_tags($param->type) !!}
                                     @if(isset($param->size)){ {!! $param->size !!} }@endif
                                     @if(isset($param->allowedValues))
-                                        { {!! \Duoli\ExtBase\Helper\ArrHelper::combine($param->allowedValues) !!} }@endif
+                                        { {!! \Poppy\Framework\Helper\ArrayHelper::combine($param->allowedValues) !!} }@endif
 								    )
                                     [{!! $param->field !!}]
                                     {!! Form::text($param->field, null, ['class' => 'form-control J_calc']) !!}
@@ -65,12 +84,23 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="alert alert-success">
-                        <div class="clearfix">
-                            {!! Form::label('url', '访问地址{'.$data['current']->type.'}:') !!}
-                            <span class="pull-right" id="return_desc">返回值</span>
+                        <p class="alert alert-info">{
+                            @{{ requestType }}
+                            }
+                            @{{ url }}
+                            <i class="pull-right glyphicon glyphicon-list-alt" v-on:click="openParam"></i>
+                        </p>
+                        <div class="clearfix api-versions pt8">
+                            @foreach($variables as $key => $item)
+                                {!! Form::select($key, $item, null, [
+                                    'class' => 'form-control w120 J_variable',
+                                    'style' => 'display:inline-block',
+                                    'v-on:change' => 'changeVariable',
+                                    'placeholder' => '选择 '.$key,
+                                ]) !!}
+                            @endforeach
                         </div>
-                        {!! Form::text('url',$api_url.$data['current']->url, ['class' => 'form-control', 'readonly'=> true]) !!}
-                        <div class="clearfix api-versions" id="api_version">
+                        <div class="clearfix api-versions pt8" id="api_version">
                             @foreach($data['versions'] as $kv => $version)
                                 <a @if ($kv == $data['version']) class="current"
                                    @endif href="{!! route_url('', null, ['url' => $data['current']->url, 'method' => $data['current']->type, 'version' => $version]) !!}"> {{$version}} </a>
@@ -124,7 +154,6 @@
 					_.each(params, function(key) {
 						str += key + '=' + _val(key) + ','
 					});
-					console.log(str);
 					str = str.slice(0, -1);
 					var token = _val('access_token');
 					_sign(token);
@@ -142,8 +171,8 @@
 							).css('color', 'grey');
 							$(form).ajaxSubmit({
 								beforeSend : function(request) {
-                                    @if(isset($data['access_token']))
-									request.setRequestHeader("X-ACCESS-TOKEN", "{!! $data['access_token'] !!}");
+                                    @if(isset($data['token']))
+									request.setRequestHeader("Authorization", "Bearer {!! $data['token'] !!}");
                                     @endif
                                     @if(isset($data['version']))
 									request.setRequestHeader("Accept", "application/{!! config('api.standardsTree').'.'.config('api.subtype').'.'.$data['version'].'+json' !!}");
@@ -172,6 +201,9 @@
 						'rules'       : {
                     @if (isset($data['current_params']) && $data['current_params'])
                     @foreach($data['current_params'] as $param)
+                    @if (starts_with($param->field, ':'))
+					<?php continue; ?>
+                    @endif
                     {!! $param->field !!}:
 					{
 						required: {!! ($param->optional ? 'false' : 'true') !!} }
@@ -182,26 +214,54 @@
 						required:false
 					}
 				}
-				},true)
+				},
+					true
+				)
 					;
 					$('#form_auto').validate(conf);
 				});
-				$('#return_desc').on('click', function() {
-					layer.open({
-						type    : 1,
-						shade   : false,
-						title   : '返回参数',
-						area    : '400px',
-						maxmin  : true,
-						shift   : 5,
-						offset  : 'rb',
-						content : $('#return_param'), //捕获的元素
-						cancel  : function(index) {
-							layer.close(index);
+			})
+            </script>
+            <script>
+			require(['vue', 'jquery', 'jquery.layer'], function(Vue, $, layer) {
+				new Vue({
+					el      : '#app',
+					data    : {
+						requestType : '{!! $data['current']->type !!}',
+						url         : '{!! $api_url.'/'.$data['current']->url !!}',
+						url_origin  : '{!! $api_url.'/'.$data['current']->url !!}',
+						variables   : {}
+					},
+					methods : {
+						changeVariable : function(e) {
+							const self = this;
+							var name = e.target.name;
+							this.variables[name] = e.target.value;
+							var url = this.url_origin;
+							Object.keys(this.variables).forEach(function(name) {
+								console.log(name);
+								url = url.replace(':' + name, self.variables[name])
+							});
+							this.url = url;
+							$('#form_auto').attr('action', this.url);
+						},
+						openParam      : function() {
+							layer.open({
+								type    : 1,
+								shade   : false,
+								title   : '返回参数',
+								area    : '400px',
+								maxmin  : true,
+								shift   : 5,
+								offset  : 'rb',
+								content : $('#return_param'), //捕获的元素
+								cancel  : function(index) {
+									layer.close(index);
+								}
+							});
 						}
-					});
+					}
 				});
-
 			})
             </script>
         @endif

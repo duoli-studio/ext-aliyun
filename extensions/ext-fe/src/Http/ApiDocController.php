@@ -1,9 +1,11 @@
 <?php namespace Poppy\Extension\Fe\Http;
 
+use Curl\Curl;
 use Illuminate\Database\Eloquent\Collection;
 use Poppy\Framework\Application\Controller;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Helper\FileHelper;
+use Poppy\Framework\Helper\RawCookieHelper;
 use Poppy\Framework\Helper\StrHelper;
 
 class ApiDocController extends Controller
@@ -14,27 +16,19 @@ class ApiDocController extends Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$this->self_menu = [
-			'接口文档'   => config('app.url') . '/docs/dailian/',
-			'apiDoc' => 'http://apidocjs.com',
-		];
+		$catlog = config('ext-fe.apidoc');
+
+		if (count($catlog)) {
+			foreach ($catlog as $api_doc) {
+				if (isset($api_doc['title']) && $api_doc['title']) {
+					$this->self_menu[$api_doc['title']] = config('app.url') . ltrim($api_doc['doc'], 'public');
+				}
+
+			}
+		}
+		$this->self_menu['apiDoc'] = 'http://apidocjs.com';
 		\View::share([
 			'self_menu' => $this->self_menu,
-		]);
-	}
-
-	/**
-	 * 获取接口列表
-	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-	 */
-	public function index()
-	{
-		$apidocDir = base_path('public/docs/system/api_data.json');
-		$api       = json_decode(file_get_contents($apidocDir));
-		$content   = new Collection($api);
-		$group     = $content->groupBy('groupTitle');
-		return view('ext-fe::api_doc.index', [
-			'group' => $group,
 		]);
 	}
 
@@ -46,6 +40,7 @@ class ApiDocController extends Controller
 	 */
 	public function auto($type = '')
 	{
+
 		$catalog = config('ext-fe.apidoc');
 		if (!$catalog) {
 			return Resp::web(Resp::ERROR, "尚未配置 apidoc 生成目录");
@@ -55,16 +50,43 @@ class ApiDocController extends Controller
 			$type = $keys[0];
 		}
 
+		$this->seo('Restful-' . $type, '优雅的在线接口调试方案');
+
+		$tokenGet = function($cookie_key) {
+			if (RawCookieHelper::has($cookie_key)) {
+				$token = RawCookieHelper::get($cookie_key);
+
+				// check token is valid
+				$curl   = new Curl();
+				$access = route('system:pam.auth.access');
+				$curl->setHeader('x-requested-with', 'XMLHttpRequest');
+				$curl->setHeader('Authorization', 'Bearer ' . $token);
+				$curl->post($access);
+				if ($curl->httpStatusCode === 401) {
+					RawCookieHelper::remove($cookie_key);
+				}
+			}
+			return RawCookieHelper::get($cookie_key);
+		};
+
 		try {
 			$index   = \Input::get('url');
 			$version = \Input::get('version', '1.0.0');
 			$method  = \Input::get('method', 'get');
 
-			$data = $this->apiData($type, $index, $method, $version);
+			$data      = $this->apiData($type, $index, $method, $version);
+			$variables = [];
 			if (isset($data['current_params'])) {
 				foreach ($data['current_params'] as $current_param) {
 					if (!isset($data['params'][$current_param->field]) && !$current_param->optional) {
-						$data['params'][$current_param->field] = $this->getParamValue($current_param);
+						if (starts_with($current_param->field, ':')) {
+							$variableName             = trim($current_param->field, ':');
+							$values                   = StrHelper::parseKey(strip_tags($current_param->description));
+							$variables[$variableName] = $values;
+						}
+						else {
+							$data['params'][$current_param->field] = $this->getParamValue($current_param);
+						}
 					}
 				}
 			}
@@ -79,6 +101,8 @@ class ApiDocController extends Controller
 				$success = [];
 			}
 
+			$data['token'] = $tokenGet('dev_token#' . $type);
+
 			// user
 			$user  = [];
 			$front = [];
@@ -86,11 +110,13 @@ class ApiDocController extends Controller
 				return Resp::web(Resp::ERROR, "没有找到对应 URL 地址");
 			}
 			return view('ext-fe::api_doc.auto', [
-				'data'    => $data,
-				'success' => $success,
-				'user'    => $user,
-				'front'   => $front,
-				'api_url' => (config('api.domain') ? 'http://' . config('api.domain') : config('app.url')) . '/' . config('api.prefix'),
+				'guard'     => $type,
+				'data'      => $data,
+				'variables' => $variables,
+				'success'   => $success,
+				'user'      => $user,
+				'front'     => $front,
+				'api_url'   => config('app.url'),
 			]);
 		} catch (\Exception $e) {
 			return Resp::web(Resp::ERROR, $e->getMessage());
@@ -106,7 +132,7 @@ class ApiDocController extends Controller
 		$data     = [];
 		if (file_exists($jsonFile)) {
 			$data['file_exists'] = true;
-			$data['url_base']    = config('app.url') . '/' . config('api.prefix');
+			$data['url_base']    = config('app.url');
 			$data['content']     = json_decode(FileHelper::get($jsonFile));
 			$content             = new Collection($data['content']);
 			$group               = $content->groupBy('groupTitle');

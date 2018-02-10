@@ -15,7 +15,7 @@ return [
 		'pam'         => [
 			'not_set_name_prefix'       => '尚未设置用户名默认前缀, 无法注册, 请联系管理员',
 			'account_disable_not_login' => '本账户被禁用, 不得登入',
-			'login_fail_again'          => '登录失败, 请重试',
+			'login_fail_again'          => '您输入的账号或密码有误！',
 			'user_name_not_space'       => '用户名中不得包含空格',
 			'role_not_exists'           => '给定的用户角色不存在',
 			'mobile_already_registered' => '该手机号已经注册过',

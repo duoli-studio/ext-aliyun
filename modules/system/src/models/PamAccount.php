@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Poppy\Framework\Http\Pagination\PageInfo;
 use System\Classes\Traits\FilterTrait;
-use System\Pam\Action\Pam;
+use System\Action\Pam;
 use System\Rbac\Traits\RbacUserTrait;
 use Tymon\JWTAuth\Contracts\JWTSubject as JWTSubjectAuthenticatable;
 

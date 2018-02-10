@@ -1,12 +1,12 @@
-<?php namespace System\Push\Notifications;
+<?php namespace System\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Notification;
 use System\Models\SysHelp;
-use System\Push\Channels\AliPushChannel;
-use System\Push\Contracts\AliPush;
+use User\Channels\AliPushChannel;
+use User\Channels\Contracts\AliPush;
 
 class HelpNotification extends Notification implements ShouldQueue, AliPush
 {
@@ -26,7 +26,7 @@ class HelpNotification extends Notification implements ShouldQueue, AliPush
 	 * Create a new notification instance.
 	 * ArticleAndActivity constructor.
 	 * @param            $type
-	 * @param SysHelp $help
+	 * @param SysHelp    $help
 	 */
 	public function __construct($type, $help)
 	{

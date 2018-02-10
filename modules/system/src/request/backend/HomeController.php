@@ -5,7 +5,7 @@ use Poppy\Framework\Classes\Resp;
 use System\Classes\SettingUI;
 use System\Models\PamAccount;
 use System\Models\SysConfig;
-use System\Pam\Action\Pam;
+use System\Action\Pam;
 use User\Classes\Socialite\QqMobile\Provider;
 
 

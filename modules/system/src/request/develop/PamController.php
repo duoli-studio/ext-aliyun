@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Poppy\Framework\Classes\Resp;
 use System\Models\PamAccount;
-use System\Pam\Action\Pam;
+use System\Action\Pam;
 
 
 class PamController extends InitController

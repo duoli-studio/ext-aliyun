@@ -1,8 +1,13 @@
 <nav class="navbar navbar-default">
     <div class="navbar-header">
-        <a class="navbar-brand" href="/develop/api_doc"><i class="glyphicon glyphicon-home"></i></a>
+        <a class="navbar-brand" href="/develop">
+            <i class="glyphicon glyphicon-home"></i>
+        </a>
     </div>
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <ul class="nav navbar-nav">
+        <li><a href="#">[{!! $guard !!}]</a></li>
+    </ul>
+    <div class="collapse navbar-collapse">
         @if (isset($data['group']) )
             <ul class="nav navbar-nav">
                 @foreach($data['group'] as $group_key => $group)
@@ -12,7 +17,7 @@
                         <ul class="dropdown-menu">
                             @foreach($group as $link)
                                 <li>
-                                    <a href="{!! route_url('',null, ['url'=>$link->url, 'method' => $link->type]) !!}">{!! $link->title !!}</a>
+                                    <a href="{!! route_url('',$guard, ['url'=>$link->url, 'method' => $link->type]) !!}">{!! $link->title !!}</a>
                                 </li>
                             @endforeach
                         </ul>

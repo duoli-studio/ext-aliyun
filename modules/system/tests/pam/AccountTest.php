@@ -6,7 +6,7 @@
 
 use Illuminate\Support\Facades\Crypt;
 use Poppy\Framework\Application\TestCase;
-use System\Pam\Action\Pam;
+use System\Action\Pam;
 
 class AccountTest extends TestCase
 {

@@ -19,13 +19,16 @@ class CreateSysHelpTable extends Migration
     {
         Schema::create('sys_help', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedTinyInteger('cat_id')->default(0)->comment('帮助分类ID');
-            $table->string('title', 45)->default('')->comment('帮助标题');
-            $table->text('content', 255)->default('')->comment('帮助内容');
+            $table->unsignedTinyInteger('cat_id')->comment('帮助分类ID');
+            $table->string('title', 45)->comment('帮助标题');
+            $table->text('content')->comment('帮助内容');
             $table->dateTime('created_at')->nullable()->comment('创建时间');
             $table->dateTime('updated_at')->nullable()->comment('修改时间');
 
-	        $table->unique('title');
+            $table->unique('title', 'sys_help_title_unique');
+
+            
+
         });
     }
 

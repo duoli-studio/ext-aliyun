@@ -1,7 +1,8 @@
-<?php namespace System\Pam\Action;
+<?php namespace System\Action;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use PHPUnit\Runner\Exception;
 use Poppy\Framework\Helper\UtilHelper;
 use Poppy\Framework\Validation\Rule;
 use System\Action\Verification;
@@ -611,9 +612,14 @@ class Pam
 	 */
 	public function autoEnable()
 	{
-		PamAccount::where('disable_end_at', '<', Carbon::now())->update([
-			'is_enable' => PamAccount::STATUS_ENABLE,
-		]);
+		try {
+			PamAccount::where('disable_end_at', '<', Carbon::now())->update([
+				'is_enable' => PamAccount::STATUS_ENABLE,
+			]);
+			return true;
+		} catch (Exception $e) {
+			return $this->setError($e->getMessage());
+		}
 	}
 
 	/**

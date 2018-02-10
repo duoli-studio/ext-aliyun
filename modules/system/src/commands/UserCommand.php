@@ -4,7 +4,7 @@ use System\Models\PamAccount;
 use Illuminate\Console\Command;
 use System\Models\PamRole;
 use System\Models\SysConfig;
-use System\Pam\Action\Pam;
+use System\Action\Pam;
 
 /**
  * User

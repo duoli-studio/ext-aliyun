@@ -20,10 +20,10 @@ class CreateSysAreaTable extends Migration
         Schema::create('sys_area', function (Blueprint $table) {
             $table->increments('id');
             $table->string('code', 45)->comment('编码');
-            $table->string('province', 20)->comment('省份');
-            $table->string('city', 20)->comment('城市');
-            $table->string('district', 20)->comment('区');
-            $table->string('parent', 45)->comment('父级');
+            $table->string('title', 50)->comment('地区名称');
+            $table->integer('parent_id')->comment('父级ID');
+            $table->tinyInteger('top_parent_id')->comment('顶层ID, 父元素');
+            $table->text('children')->comment('所有的子元素');
 
             
 

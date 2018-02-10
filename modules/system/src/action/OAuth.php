@@ -1,4 +1,4 @@
-<?php namespace System\Pam\Action;
+<?php namespace System\Action;
 
 use System\Classes\Traits\SystemTrait;
 use System\Models\PamBind;

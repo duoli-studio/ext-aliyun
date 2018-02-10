@@ -71,12 +71,21 @@ class DocCommand extends Command
 	{
 		$path = base_path($dir['origin']);
 		$aim  = base_path($dir['doc']);
+
 		if (!file_exists($path)) {
 			$this->error('Err > 目录 `' . $path . '` 不存在');
 			return;
 		}
-		$lower   = strtolower($key);
-		$shell   = "apidoc -i " . $path . '  -o ' . $aim;
+		$filter = data_get($dir, 'filter');
+		$f      = '';
+		if (is_array($filter) && count($filter)) {
+			foreach ($filter as $sf) {
+				$f .= ' -f ' . $sf;
+			}
+		}
+		$lower = strtolower($key);
+		$shell = "apidoc -i " . $path . '  -o ' . $aim . ' ' . $f;
+		$this->info($shell);
 		$process = new Process($shell);
 		$process->start();
 		$process->wait(function($type, $buffer) use ($lower) {

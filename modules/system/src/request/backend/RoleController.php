@@ -6,7 +6,7 @@ use System\Classes\Traits\SystemTrait;
 use System\Models\Filters\RoleFilter;
 use System\Models\PamAccount;
 use System\Models\PamRole;
-use System\Pam\Action\Role;
+use System\Action\Role;
 
 
 class RoleController extends InitController
@@ -93,7 +93,7 @@ class RoleController extends InitController
 				return Resp::web(Resp::SUCCESS, '保存会员权限配置成功!', 'reload|1');
 			}
 		}
-		$permission = app('act.role')->permissions($id);
+		$permission = (new Role())->permissions($id);
 		if (!$permission) {
 			return Resp::web(Resp::ERROR, '暂无权限信息！');
 		}
@@ -107,6 +107,6 @@ class RoleController extends InitController
 	 */
 	private function role()
 	{
-		return app('act.role')->setPam($this->getBeGuard()->user());
+		return (new Role())->setPam($this->getBeGuard()->user());
 	}
 }

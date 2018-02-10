@@ -9,7 +9,7 @@ use System\Action\Verification;
 use System\Classes\Traits\SystemTrait;
 use System\Models\PamAccount;
 use System\Models\Resources\PamResource as PamResource;
-use System\Pam\Action\Pam;
+use System\Action\Pam;
 
 
 class AuthController extends ApiController
@@ -141,7 +141,7 @@ class AuthController extends ApiController
 	}
 
 	/**
-	 * @api                    {post} api_v1/pam/auth/login [O]登录
+	 * @api                    {post} api_v1/pam/auth/login [O]登录-无资料
 	 * @apiVersion             1.0.0
 	 * @apiName                PamAuthLogin
 	 * @apiGroup               Pam

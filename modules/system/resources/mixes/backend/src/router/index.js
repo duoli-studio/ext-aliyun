@@ -16,6 +16,8 @@ import Upload from '../pages/Upload.vue';
 import Role from '../pages/Role.vue';
 import Pam from '../pages/Pam.vue';
 import Area from '../pages/Area.vue';
+import Category from '../pages/Category.vue';
+import Article from '../pages/Article.vue';
 
 import requireAuth from '../middlewares/auth';
 import store from '../stores';
@@ -79,6 +81,14 @@ const configuration = [
 	{
 		component : Area,
 		path      : 'area',
+	},
+	{
+		component : Category,
+		path      : 'category',
+	},
+	{
+		component : Article,
+		path      : 'article',
 	},
 ];
 
