@@ -5,7 +5,7 @@
  */
 define(function (require) {
 	var $     = require('jquery'),
-	    util  = require('lemon/util'),
+	    util  = require('poppy/util'),
 	    layer = require('jquery.layer'),
 	    $body = $('body');
 	require('jquery.form');

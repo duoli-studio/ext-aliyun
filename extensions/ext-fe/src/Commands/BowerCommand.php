@@ -35,9 +35,8 @@ class BowerCommand extends Command
 	private $scssPath;
 	private $cssPath;
 	private $fontPath;
-	private $configFile;
-	private $requireFile;
-	private $globalFile;
+	private $jsConfigFile;
+	private $jsGlobalFile;
 	private $force   = false;
 	private $debug   = false;
 	private $mapData = [];
@@ -62,15 +61,14 @@ class BowerCommand extends Command
 	 */
 	public function handle()
 	{
-		$this->jsPath      = config('ext-fe.folder.js_dir', 'assets/js');
-		$this->jsLibPath   = $this->jsPath . '/libs';
-		$this->imagePath   = config('ext-fe.folder.image_dir', 'assets/css_images');
-		$this->scssPath    = config('ext-fe.folder.scss_dir', 'assets/sass') . '/libs';
-		$this->cssPath     = config('ext-fe.folder.css_dir', 'assets/css') . '/libs';
-		$this->fontPath    = config('ext-fe.folder.font_dir', 'assets/font');
-		$this->configFile  = $this->jsPath . '/config.js';
-		$this->requireFile = $this->jsPath . '/require.js';
-		$this->globalFile  = $this->jsPath . '/global.js';
+		$this->jsPath       = config('ext-fe.folder.js_dir', 'assets/js');
+		$this->jsLibPath    = $this->jsPath . '/libs';
+		$this->imagePath    = config('ext-fe.folder.image_dir', 'assets/css_images');
+		$this->scssPath     = config('ext-fe.folder.scss_dir', 'assets/sass') . '/libs';
+		$this->cssPath      = config('ext-fe.folder.css_dir', 'assets/css') . '/libs';
+		$this->fontPath     = config('ext-fe.folder.font_dir', 'assets/font');
+		$this->jsConfigFile = $this->jsPath . '/config.js';
+		$this->jsGlobalFile = $this->jsPath . '/global.js';
 
 		$this->force = (bool) $this->option('force');
 		$this->debug = (bool) $this->option('debug');
@@ -483,7 +481,8 @@ requirejs.config({
 	shim   : shim
 });
 CONFIG;
-		$this->disk->put($this->configFile, $config);
+		$this->disk->put($this->jsConfigFile, $config);
+		$this->disk->put($this->jsPath . '/config.json', json_encode($this->config, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
 		$this->info($this->getKey('config') . 'Write OK');
 	}
 
@@ -495,7 +494,7 @@ define(function(){
 	return $global;
 });
 JS;
-		$this->disk->put($this->globalFile, $js);
+		$this->disk->put($this->jsGlobalFile, $js);
 	}
 
 

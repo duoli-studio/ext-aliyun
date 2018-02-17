@@ -2,7 +2,7 @@
 return [
 	/*
 	|--------------------------------------------------------------------------
-	| disk to save public url
+	| disk to save
 	|--------------------------------------------------------------------------
 	*/
 	'disk'    => 'public',
@@ -13,9 +13,9 @@ return [
 	|--------------------------------------------------------------------------
 	*/
 	'folder'  => [
-		'js_dir'   => 'assets/js',
-		'font_dir' => 'assets/fonts',
-		'scss_dir' => 'assets/scss',
+		'js_dir'   => 'resources/js',
+		'font_dir' => 'resources/fonts',
+		'scss_dir' => 'resources/scss',
 	],
 
 	/*
@@ -99,11 +99,11 @@ return [
 			'key'  => 'bt3.hover-dropdown',
 		],
 
-        "bootstrap-sass" => [
-            "css" => [
-                'assets/stylesheets/*' => 'bt3/{VERSION}/scss/',
-            ],
-        ],
+		"bootstrap-sass" => [
+			"css" => [
+				'assets/stylesheets/*' => 'bt3/{VERSION}/scss/',
+			],
+		],
 
 		"centrifuge" => [
 			"js" => [
@@ -297,7 +297,7 @@ return [
 		],
 
 		"underscore" => [
-			"js"   => [
+			"js"  => [
 				'main' => 'underscore.js',
 				'aim'  => 'underscore/{VERSION}/underscore.js',
 			],
@@ -325,7 +325,7 @@ return [
 			],
 			"key" => 'jquery.metis-menu',
 		],
-		
+
 		"vue" => [
 			"js" => [
 				'main' => 'dist/vue.min.js',

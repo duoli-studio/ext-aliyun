@@ -5,17 +5,13 @@
  */
 define(function (require) {
 	var $    = require('jquery');
-	var util = require('lemon/util');
-	require('lemon/cp');
-	var layer  = require('jquery.layer');
-	var moment = require('moment');
+	var util = require('poppy/util');
+	require('poppy/cp');
 	require('pace');
 	require('bt3');
 	require('jquery.metis-menu');
 	require('jquery.slimscroll');
-	require('jquery.datatables');
-	var toastr = require('jquery.toastr');
-	var helper = require('lemon/backend/util');
+	var helper = require('poppy/backend/util');
 
 
 	// inspinia 2.0
@@ -194,17 +190,6 @@ define(function (require) {
 		$('.contact-box').each(function () {
 			helper.animation_hover(this, 'pulse');
 		});
-
-
-		$('.J_data-tables').dataTable({
-			scrollX  : true,
-			autoWidth: true,
-			ordering : false,
-			paging   : false,
-			searching: false,
-			info     : false
-		});
-
 	});
 
 });

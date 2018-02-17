@@ -1,125 +1,123 @@
-# Alipay 在 Laravel 5 的封装包
+## 支持 bower 文档解析
 
-修改自 [Latrell/Alipay](https://github.com/Latrell/Alipay), 目的是在 Laravel5框架下更便捷使用支付宝付款功能。
+### 简介
+Bower 是 twitter 推出的一款包管理工具，基于nodejs的模块化思想，把功能分散到各个模块中，让模块和模块之间存在联系，通过 Bower 来管理模块间的这种联系。
 
-## 安装
-
-```
-composer require imvkmark/l5-alipay dev-master
-```
-
-更新你的依赖包 ```composer update``` 或者全新安装 ```composer install```。
-
-## 发布配置
+### 命令
 
 ```
-php artisan vendor:publish
+php artisan ext:fe_bower
 ```
 
-## 使用
-
-要使用支付宝SDK服务提供者，你必须自己注册服务提供者到Laravel服务提供者列表中。
-基本上有两种方法可以做到这一点。
-
-找到 `config/app.php` 配置文件中，key为 `providers` 的数组，在数组中添加服务提供者。
-
-```php
-'providers' => [
-    // ...
-    Poppy\Extension\Alipay\L5AlipayServiceProvider::class,
-]
-```
-
-运行 `php artisan vendor:publish` 命令，发布配置文件到你的项目中。
-
-配置文件 `config/polly-alipay.php` 为公共配置信息文件， `web_direct_` 为Web版支付宝SDK配置前缀。
-配置 回调地址的时候使用 url 函数， 填写的是完整的回调地址， 不是部分地址， 例如填写
+### 配置文件解析
 
 ```
-// 服务器异步通知页面路径
-'web_direct_notify_url' => env('URL_SITE') . '/callback/alipay-charge-notify',
+/*
+|--------------------------------------------------------------------------
+| 配置 scss / js 文件夹位置
+|--------------------------------------------------------------------------
+*/
+'folder'  => [
+    'js_dir'   => 'resources/js',
+    'font_dir' => 'resources/fonts',
+    'scss_dir' => 'resources/scss',
+],
 
-// 页面跳转同步通知页面路径
-// 这里不支持url， config 函数调用
-'web_direct_return_url' => env('URL_SITE') . '/finance/alipay-charge-callback',
+/*
+|--------------------------------------------------------------------------
+| 配置 bower 文件的定义的
+|--------------------------------------------------------------------------
+*/
+"ace-builds" => [
+    // requirejs 引用 key 的定义
+    'key'  => 'ace',
+
+    // js 文件定义
+    "js"   => [
+        // 定义 main 的位置
+        'main'    => 'src/ace.js',
+        // 定义目标文件
+        'aim'     => 'ace/{VERSION}/ace.js',
+        // js dispose 文件内容
+        'dispose' => [
+            'src/*' => 'ace/{VERSION}/',
+        ],
+        'config'  => [
+            // 和 key 相同, 覆盖掉 key 的定义位置
+            '__same' => '',
+        ],
+    ],
+
+    // shim 配置, 原封不动输出
+    'shim' => [
+        "exports" => "ace",
+    ],
+],
+
+/*
+|--------------------------------------------------------------------------
+| 配置全局变量的导入
+|--------------------------------------------------------------------------
+*/
+'global'  => [
+    'url_site' => env('URL_SITE'),
+    'url_js'   => env('URL_SITE') . '/assets/js',
+],
+
+/*
+|--------------------------------------------------------------------------
+| 引入 require js 文件定义引入文件夹 alias
+|--------------------------------------------------------------------------
+*/
+'appends' => [
+    'poppy'   => env('URL_SITE') . "/assets/js/poppy",
+    'slt'     => env('URL_SITE') . "/modules/slt/js",
+    'develop' => env('URL_SITE') . "/modules/develop/js",
+],
 ```
-## 例子
 
-### 支付申请
+## 生成 apidoc 文档 / 接口文档
 
-#### Web 版即时到账 (web_direct)
+apidoc 是一个简单的 RESTful API 文档生成工具，它从代码注释中提取特定格式的内容，生成文档。
 
-```php
-// 创建支付单。
-$alipay = app('l5.alipay.web-direct');
-$alipay->setOutTradeNo('order_id');
-$alipay->setTotalFee('order_price');
-$alipay->setSubject('goods_name');
-$alipay->setBody('goods_description');
-//该设置为可选，添加该参数设置，支持二维码支付。
-$alipay->setQrPayMode(2);
-
-// 跳转到支付页面。
-return redirect()->to($alipay->getPayLink());
+```
+php artisan ext:fe_doc api
 ```
 
-### 结果通知
+配置信息
+```
+'apidoc' => [
+    // key : 标识
+    'backend' => [
+        // 标题
+        'title'       => '后台接口',
+        // 源文件夹
+        'origin'      => 'modules',
+        // 过滤器
+        'filter'      => [
+            'system/src/request/api_v1/backend/.*\.php$',
+        ],
+        // 生成目录
+        'doc'         => 'public/docs/backend',
+        // 默认访问的url
+        'default_url' => 'api_v1/backend/system/role/permissions',
+    ],
+],
+```
 
-#### 网页
+## 生成 PHP 文档
 
-```php
-/**
- * 异步通知
- */
-public function webNotify()
-{
-    // 验证请求。
-    if (! app('l5.alipay.web-direct')->verify()) {
-        Log::notice('Alipay notify post data verification fail.', [
-        'data' => Request::instance()->getContent()
-    ]);
-    return 'fail';
-}
+sami 作为一款优秀的生成 PHP 文档的工具也已经纳入到这个项目中来, [Sami](https://github.com/FriendsOfPHP/Sami) , 这个工具生成的是 `modules` 文件夹下面的文档, 然后生成项目的技术文档.
 
-    // 判断通知类型。
-    switch (Input::get('trade_status')) {
-        case 'TRADE_SUCCESS':
-        case 'TRADE_FINISHED':
-            // TODO: 支付成功，取得订单号进行其它相关操作。
-            Log::debug('Alipay notify post data verification success.', [
-                'out_trade_no' => Input::get('out_trade_no'),
-                'trade_no' => Input::get('trade_no')
-            ]);
-        break;
-    }
-    return 'success';
-}
+```
+php artisan ext:fe_doc php
+```
 
-/**
- * 同步通知
- */
-public function webReturn()
-{
-    // 验证请求。
-    if (! app('l5.alipay.web-direct')->verify()) {
-        Log::notice('Alipay return query data verification fail.', [
-            'data' => Request::getQueryString()
-        ]);
-        return view('alipay.fail');
-    }
+## 生成项目文档
 
-    // 判断通知类型。
-    switch (Input::get('trade_status')) {
-        case 'TRADE_SUCCESS':
-        case 'TRADE_FINISHED':
-            // TODO: 支付成功，取得订单号进行其它相关操作。
-            Log::debug('Alipay notify get data verification success.', [
-                'out_trade_no' => Input::get('out_trade_no'),
-                'trade_no' => Input::get('trade_no')
-            ]);
-            break;
-    }
+项目文档使用 : [Docsify](https://docsify.js.org/) 这个优秀的工具, 所有放到 `resources/docs` 文件夹下的目录都会作为项目文档生成.访问地址是
+`(url_site)docs/poppy/`.
 
-	return view('alipay.success');
-}
+```
+php artisan ext:fe_doc poppy
 ```

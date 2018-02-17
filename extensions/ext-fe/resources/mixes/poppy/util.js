@@ -7,7 +7,8 @@ define(function(require, exports) {
 	    layer  = require('jquery.layer'),
 	    toastr = require('jquery.toastr');
 	require('jquery.form');
-	require('lemon/plugin');
+	require('jquery.validation');
+	require('poppy/plugin');
 
 	/**
 	 * 返回浏览器的版本和ie的判定
@@ -28,213 +29,6 @@ define(function(require, exports) {
 		}
 	};
 
-	/**
-	 * 验证配置文件
-	 * @param settings
-	 * @param conf_type
-	 */
-	exports.validate_conf = function(settings, conf_type) {
-		if (typeof conf_type == 'undefined' || conf_type == '' || conf_type == 'default') {
-			settings = (typeof settings == 'undefined') ? {} : settings;
-			// 默认是使用 ajax 提交的, 需要 加载 form 插件
-			var conf_default = {
-				submitHandler : function(form) {
-					$(form).ajaxSubmit({
-						success : exports.splash
-					});
-				},
-				success       : function(label) {
-					label.addClass('valid');
-				},
-				onfocusout    : function(element) {
-					$(element).valid();
-				},
-				onfocusin     : function(element) {
-					$(element).valid();
-				}
-			};
-			return $.extend(conf_default, settings);
-		}
-		if (typeof conf_type != 'undefined' && conf_type == 'form') {
-			settings = (typeof settings == 'undefined') ? {} : settings;
-			var conf_form = {
-				success    : function(label) {
-					label.addClass('valid');
-				},
-				onfocusout : function(element) {
-					$(element).valid();
-				},
-				onfocusin  : function(element) {
-					$(element).valid();
-				}
-			};
-			return $.extend(conf_form, settings);
-		}
-		if (typeof conf_type != 'undefined' && conf_type == 'dsk_ajax') {
-			settings = (typeof settings == 'undefined') ? {} : settings;
-			var conf_dsk_ajax = {
-				submitHandler : function(form) {
-					$(form).ajaxSubmit({
-						success : exports.splash
-					});
-				},
-				success       : function(label) {
-					label.addClass('valid');
-				},
-				onfocusout    : function(element) {
-					$(element).valid();
-				},
-				onfocusin     : function(element) {
-					$(element).valid();
-				}
-			};
-			return $.extend(conf_dsk_ajax, settings);
-		}
-		if (typeof conf_type != 'undefined' && (conf_type == 'bt3' || conf_type == 'bootstrap')) {
-			settings = (typeof settings == 'undefined') ? {} : settings;
-			var conf_bt3 = {
-				//success : function (label) {
-				//	label.addClass('valid');
-				//},
-				highlight      : function(element) {
-					$(element).closest('.form-group').addClass('has-error');
-				},
-				unhighlight    : function(element) {
-					$(element).closest('.form-group').removeClass('has-error');
-				},
-				errorElement   : 'span',
-				errorClass     : 'help-block',
-				errorPlacement : function(error, element) {
-					if (element.parent('.input-group').length) {
-						error.insertAfter(element.parent());
-					}
-					else {
-						error.insertAfter(element);
-					}
-				}
-				//validClass: 'has-success',
-				//onfocusout : function (element) {
-				//	$(element).valid();
-				//},
-				//onfocusin : function (element) {
-				//	$(element).valid();
-				//}
-			};
-			return $.extend(conf_bt3, settings);
-		}
-		if (typeof conf_type != 'undefined' && conf_type == 'bt3_ajax') {
-			settings = (typeof settings == 'undefined') ? {} : settings;
-			var conf_bt3_ajax = {
-				submitHandler  : function(form) {
-					$(form).ajaxSubmit({
-						success : exports.splash
-					});
-				},
-				highlight      : function(element) {
-					$(element).closest('.form-group').addClass('has-error');
-				},
-				unhighlight    : function(element) {
-					$(element).closest('.form-group').removeClass('has-error');
-				},
-				errorElement   : 'span',
-				errorClass     : 'help-block',
-				errorPlacement : function(error, element) {
-					if (element.parent('.input-group').length) {
-						error.insertAfter(element.parent());
-					}
-					else {
-						error.insertAfter(element);
-					}
-				}
-			};
-			return $.extend(conf_bt3_ajax, settings);
-		}
-		if (typeof conf_type != 'undefined' && (conf_type == 'bt3_inline' || conf_type == 'bootstrap_inline')) {
-			settings = (typeof settings == 'undefined') ? {} : settings;
-			var conf_bootstrap_inline = {
-				//success : function (label) {
-				//	label.addClass('valid');
-				//},
-				highlight      : function(element) {
-					$(element).closest('.form-group').addClass('has-error');
-				},
-				unhighlight    : function(element) {
-					$(element).closest('.form-group').removeClass('has-error');
-				},
-				errorElement   : 'span',
-				errorClass     : 'help-block',
-				errorPlacement : function(error, element) {
-					if ($(element).closest('.form-group').find('.help-block').length == 0) {
-						$(element).closest('.form-group').append(error);
-						error.insertAfter();
-					}
-				}
-				//validClass: 'has-success',
-				//onfocusout : function (element) {
-				//	$(element).valid();
-				//},
-				//onfocusin : function (element) {
-				//	$(element).valid();
-				//}
-			};
-			return $.extend(conf_bootstrap_inline, settings);
-		}
-
-		if (typeof conf_type != 'undefined' && (conf_type == 'bt3_self' || conf_type == 'bootstrap_self')) {
-			settings = (typeof settings == 'undefined') ? {} : settings;
-			var conf_bootstrap_self = {
-				highlight      : function(element) {
-					$(element).closest('.form-group').addClass('has-error');
-				},
-				unhighlight    : function(element) {
-					$(element).closest('.form-group').removeClass('has-error');
-				},
-				errorElement   : 'span',
-				errorClass     : 'help-block',
-				errorPlacement : function(error, element) {
-					$(element).prop('placeholder', error.text())
-				}
-			};
-			return $.extend(conf_bootstrap_self, settings);
-		}
-		if (typeof conf_type != 'undefined' && (conf_type == 'bt3_self_ajax')) {
-			settings = (typeof settings == 'undefined') ? {} : settings;
-			var conf_bt3_self_ajax = {
-				submitHandler  : function(form) {
-					$(form).ajaxSubmit({
-						success : exports.splash
-					});
-				},
-				highlight      : function(element) {
-					$(element).closest('.form-group').addClass('has-error');
-				},
-				unhighlight    : function(element) {
-					$(element).closest('.form-group').removeClass('has-error');
-				},
-				errorElement   : 'span',
-				errorClass     : 'help-block',
-				errorPlacement : function(error, element) {
-					$(element).prop('placeholder', error.text())
-				}
-			};
-			return $.extend(conf_bt3_self_ajax, settings);
-		}
-		if (typeof conf_type != 'undefined' && (conf_type == 'bt3_metronic' || conf_type == 'bt3_ajax_tip')) {
-			settings = (typeof settings == 'undefined') ? {} : settings;
-			var conf_bt3_metronic_ajax = {
-				submitHandler  : function(form) {
-					$(form).ajaxSubmit({
-						success : exports.splash
-					});
-				},
-				errorPlacement : function(error, element) {
-					$(element).plugin_validate_tip(error.text());
-				}
-			};
-			return $.extend(conf_bt3_metronic_ajax, settings);
-		}
-	};
-
 	exports.validate_config = function(rules, is_ajax, error_place) {
 		var config = {
 			ignore : '.ignore'
@@ -246,7 +40,7 @@ define(function(require, exports) {
 				});
 			};
 		}
-		if (error_place == 'bt3') {
+		if (error_place === 'bt3') {
 			config.highlight = function(element) {
 				$(element).closest('.form-group').addClass('has-error');
 			};
@@ -264,7 +58,7 @@ define(function(require, exports) {
 				}
 			}
 		}
-		if (error_place == 'bt3_poshytip') {
+		if (error_place === 'bt3_poshytip') {
 			config.highlight = function(element) {
 				$(element).closest('.form-group').addClass('has-error');
 			};
@@ -277,7 +71,7 @@ define(function(require, exports) {
 				$(element).plugin_validate_tip(error.text());
 			}
 		}
-		if (error_place == 'table') {
+		if (error_place === 'table') {
 			config.highlight = function(element) {
 				$(element).closest('tr').addClass('has-error');
 			};
@@ -347,7 +141,7 @@ define(function(require, exports) {
 	 */
 	exports.scroll_switch = function(selector, sep_top, class_name) {
 		var doc_element = document.documentElement, query_selector = document.querySelector(selector),
-		    markable = false, offset_location = sep_top;
+		    markable                                               = false, offset_location                      = sep_top;
 
 		function go() {
 			window.addEventListener("scroll", function(h) {
@@ -812,7 +606,7 @@ define(function(require, exports) {
 	exports.obj_size = function(obj) {
 		var count = 0;
 
-		if (typeof obj == "object") {
+		if (typeof obj === "object") {
 
 			if (Object.keys) {
 				count = Object.keys(obj).length;
@@ -841,108 +635,104 @@ define(function(require, exports) {
 	exports.splash = function(resp, append_callback) {
 		var obj_resp = exports.to_json(resp);
 		var obj_init = {
-			time         : 0,
-			msg          : 'No Message Send By Server!',
-			status       : 'error',
-			callback     : '',
-			show         : 'tip',
-			tip_callback : 'toastr'
+			message : 'No Message Send By Server!',
+			status  : 1,
+			data    : {
+				callback : '',
+				show     : 'tip',
+				time     : 0
+			}
 		};
 
 		obj_resp = $.extend(obj_init, obj_resp);
-
-		if (obj_resp.show == 'tip' && obj_resp.msg && (obj_resp.status == 'error' || obj_resp.status == 'success')) {
-			obj_resp.time = parseInt(obj_resp.time) ? parseInt(obj_resp.time) : 0;
-			if (obj_resp.tip_callback == 'tip') {
-				exports.tip(obj_resp);
+		if (obj_resp.data.show === 'tip') {
+			obj_resp.data.time = parseInt(obj_resp.data.time) ? parseInt(obj_resp.data.time) : 0;
+			var jump_time;
+			if (obj_resp.data.location) {
+				jump_time = 800;
 			}
-
-			if (obj_resp.tip_callback == 'toastr') {
-				var jump_time;
-				if (obj_resp.location) {
-					jump_time = 800;
-				}
-				if (obj_resp.reload) {
-					jump_time = 800;
-				}
-				if (obj_resp.reload_opener) {
-					jump_time = 800;
-				}
-				setTimeout(function() {
-					toastr.options = {
-						closeButton   : true,
-						progressBar   : true,
-						showMethod    : 'slideDown',
-						timeOut       : 4000,
-						positionClass : "toast-top-center"
-					};
-					if (obj_resp.status == 'error') {
-						toastr.error(obj_resp.msg);
-					}
-					if (obj_resp.status == 'success') {
-						toastr.success(obj_resp.msg);
-					}
-				}, jump_time);
+			if (obj_resp.data.reload) {
+				jump_time = 800;
 			}
-
+			if (obj_resp.data.reload_opener) {
+				jump_time = 800;
+			}
+			setTimeout(function() {
+				toastr.options = {
+					closeButton   : true,
+					progressBar   : true,
+					showMethod    : 'slideDown',
+					timeOut       : 3000,
+					positionClass : "toast-top-center"
+				};
+				if (obj_resp.status === 'success' || obj_resp.status === 0) {
+					toastr.success(obj_resp.message);
+				}
+				else {
+					toastr.error(obj_resp.message);
+				}
+			}, jump_time);
 		}
 
-		if (obj_resp.show == 'dialog' && obj_resp.msg && (obj_resp.status == 'error' || obj_resp.status == 'success')) {
+		if (obj_resp.data.show === 'dialog') {
 			delete obj_resp.show;
 			var conf = {};
-			conf.title = !conf.hasOwnProperty('title') ? conf.msg : conf.title;
-			conf.content = !conf.hasOwnProperty('content') ? conf.msg : conf.content;
-			dialog(conf).show();
+			var title = !conf.hasOwnProperty('title') ? conf.msg : conf.title;
+			var content = !conf.hasOwnProperty('content') ? conf.msg : conf.content;
+			layer.open({
+				title   : title,
+				content : content
+			});
 			return false;
 		}
 
-		if (obj_resp.status == 'callback' || obj_resp.callback) {
+		if (obj_resp.status === 'callback' || obj_resp.callback) {
 			var func = obj_resp.callback;
 			setTimeout(function() {
 				eval(func + ";");
 			}, obj_init.time);
 		}
 
-		if (obj_resp.reload) {
+		if (obj_resp.data.reload) {
 			setTimeout(function() {
 				window.location.reload()
 			}, obj_init.time);
 			return;
 		}
-		if (obj_resp.top_reload) {
+		if (obj_resp.data.top_reload) {
 			setTimeout(function() {
 				top.window.location.reload()
 			}, obj_init.time);
 			return;
 		}
 
-		if (obj_resp.location) {
+		if (obj_resp.data.location) {
 			setTimeout(function() {
-				window.location.href = obj_resp.location;
+				window.location.href = obj_resp.data.location;
 			}, obj_init.time);
 		}
 
-		if (obj_resp.top_location) {
+		if (obj_resp.data.top_location) {
 			setTimeout(function() {
-				top.window.location.href = obj_resp.top_location;
+				top.window.location.href = obj_resp.data.top_location;
 			}, obj_init.time);
 		}
 
-		if (obj_resp.reload_opener) {
+		if (obj_resp.data.reload_opener) {
 			setTimeout(function() {
-				var opener = exports.opener(obj_resp.reload_opener);
+				var opener = exports.opener(obj_resp.data.reload_opener);
 				opener.location.reload();
 			}, obj_init.time);
 		}
 
-		if (obj_resp.iframe_close) {
+		if (obj_resp.data.iframe_close) {
 			setTimeout(function() {
-				var opener = exports.opener(obj_resp.iframe_close);
+				var opener = exports.opener(obj_resp.data.iframe_close);
 				opener.iframe.close();
 			}, obj_init.time);
 		}
 
-		if (typeof append_callback == 'function') {
+		if (typeof append_callback === 'function') {
 			append_callback(obj_resp);
 		}
 	};
@@ -1019,13 +809,13 @@ define(function(require, exports) {
 	};
 
 	/**
-	 * 获取openner
+	 * 获取 openner
 	 * @param workspace
 	 * @returns {*}
 	 */
 	exports.opener = function(workspace) {
 		var opener = top.frames[workspace];
-		if (typeof opener == 'undefined') {
+		if (typeof opener === 'undefined') {
 			opener = top;
 		}
 		return opener;
@@ -1358,5 +1148,133 @@ define(function(require, exports) {
 		$(selector).addClass('animated ' + animation_name).one(animationEnd, function() {
 			$(this).removeClass('animated ' + animation_name);
 		});
-	}
+	};
+
+	exports.validator_extend = function() {
+		$.validator.addMethod("mobile", function(phone_number, element) {
+			phone_number = phone_number.replace(/\(|\)|\s+|-/g, "");
+			return this.optional(element) || phone_number.length > 9 &&
+				phone_number.match(/^1[3|4|5|8|7][0-9]\d{4,8}$/);
+		}, "Please specify a valid mobile number");
+
+		$.validator.addMethod("qq", function(qq_number, element) {
+			qq_number = qq_number.replace(/\(|\)|\s+|-/g, "");
+			return this.optional(element) || qq_number.length > 4 &&
+				qq_number.match(/^[1-9]\d{3,10}$/);
+		}, "Please specify a valid qq number");
+
+		// 中国电话号码的验证
+		$.validator.addMethod("phoneZh", function(value, element) {
+			return this.optional(element) || /^(([0\+]\d{2,3}-?)?(0\d{2,3})-?)?(\d{7,8})(-(\d{3,}))?$/.test(value);
+		}, "Please specify a valid phone number.");
+
+		// 中国电话号码和手机的验证
+		$.validator.addMethod("phoneAmobile", function(value, element) {
+			var phone_number = value.replace(/\(|\)|\s+|-/g, "");
+			return (this.optional(element) || /^(([0\+]\d{2,3}-?)?(0\d{2,3})-?)?(\d{7,8})(-(\d{3,}))?$/.test(value))
+				||
+				(this.optional(element) || phone_number.length > 9 &&
+					phone_number.match(/^1[3|4|5|8][0-9]\d{4,8}$/));
+		}, "Please specify a valid phone number.");
+
+		// 中文身份证验证
+		$.validator.addMethod("chId", function(chId, element) {
+			var iW = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2, 1];
+			var iSum = 0;
+			var iC, iVal;
+			for (var i = 0; i < 17; i++) {
+				iC = chId.charAt(i);
+				iVal = parseInt(iC, 10);
+				iSum += iVal * iW[i];
+			}
+			var iJYM = iSum % 11;
+			var sJYM = '';
+			if (iJYM === 0) sJYM = "1";
+			else if (iJYM === 1) sJYM = "0";
+			else if (iJYM === 2) sJYM = "x";
+			else if (iJYM === 3) sJYM = "9";
+			else if (iJYM === 4) sJYM = "8";
+			else if (iJYM === 5) sJYM = "7";
+			else if (iJYM === 6) sJYM = "6";
+			else if (iJYM === 7) sJYM = "5";
+			else if (iJYM === 8) sJYM = "4";
+			else if (iJYM === 9) sJYM = "3";
+			else if (iJYM === 10) sJYM = "2";
+			var cCheck = chId.charAt(17).toLowerCase();
+			return sJYM && cCheck == sJYM;
+		}, "Please specify a valid chinese id");
+
+		// 不允许含有空格
+		$.validator.addMethod("noSpace", function(value, element) {
+			return !/\s+/.test(value);
+		}, "Please do not insert space");
+
+		/* 小数验证，小数点位数按照max参数的小数点位数进行判断
+		 * 不能为空、只能输入数字 */
+		$.validator.addMethod("decimal", function(value, element, params) {
+			if (!value) {
+				return true;
+			}
+			if (isNaN(params[0])) {
+				return false;
+			}
+			if (isNaN(params[1])) {
+				return false;
+			}
+			if (isNaN(params[2])) {
+				return false;
+			}
+			if (isNaN(value)) {
+				return false;
+			}
+			if (typeof(value) == undefined || value == "") {
+				return false;
+			}
+			var min = Number(params[0]);
+			var max = Number(params[1]);
+			var testVal = Number(value);
+			if (typeof(params[2]) == undefined || params[2] == 0) {
+				var regX = /^\d+$/;
+			}
+			else {
+				var regxStr = "^\\d+(\\.\\d{1," + params[2] + "})?$";
+				var regX = new RegExp(regxStr);
+			}
+//		console.debug("regX: %o, value: %o, test: %o", regX, value, regX.test(value));
+			return this.optional(element) || (regX.test(value) && testVal >= min && testVal <= max);
+		}, $.validator.format("请正确输入在{0}到{1}之间，最多只保留小数点后{2}的数值"));
+
+		$.extend($.validator.messages, {
+			required     : "必须填写",
+			remote       : "请修正此栏位",
+			email        : "请输入有效的电子邮件",
+			qq           : '请输入正确的QQ号',
+			mobile       : '请输入正确的手机号',
+			phoneZh      : '请输入正确的固定电话号码',
+			phoneAmobile : '请输入正确的固话或者手机号',
+			url          : "请输入有效的网址",
+			date         : "请输入有效的日期",
+			dateISO      : "请输入有效的日期 (YYYY-MM-DD)",
+			number       : "请输入正确的数字",
+			digits       : "只可输入数字",
+			creditcard   : "请输入有效的信用卡号码",
+			equalTo      : "你的输入不相同",
+			extension    : "请输入有效的后缀",
+			maxlength    : $.validator.format("最多 {0} 个字"),
+			minlength    : $.validator.format("最少 {0} 个字"),
+			eqlength     : $.validator.format("请输入 {0} 长度的字符!"),
+			rangelength  : $.validator.format("请输入长度为 {0} 至 {1} 之间的字串"),
+			range        : $.validator.format("请输入 {0} 至 {1} 之间的数值"),
+			max          : $.validator.format("请输入不大于 {0} 的数值"),
+			min          : $.validator.format("请输入不小于 {0} 的数值"),
+			ipv4         : '请输入正确的IP地址',
+			chId         : '请输入正确的身份证信息',
+			noSpace      : '请不要在此输入空格',
+			alphanumeric : '请输入字母, 数字, 下划线的组合!',
+			decimal      : '请正确输入在{0}到{1}之间，最多只保留小数点后{2}的数值'
+		});
+	};
+
+	exports.validator_extend();
+
 });

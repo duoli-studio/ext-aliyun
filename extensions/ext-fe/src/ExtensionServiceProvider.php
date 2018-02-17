@@ -20,15 +20,15 @@ class ExtensionServiceProvider extends PoppyServiceProvider
 	 */
 	public function boot()
 	{
+		$jsPath = config('ext-fe.folder.js_dir');
 		$this->publishes([
 			__DIR__ . '/../config/fe.php'                         => config_path('ext-fe.php'),
-			__DIR__ . '/../resources/css/be_login.css'            => public_path('assets/css/poppy-ext-fe/be_login.css'),
-			__DIR__ . '/../resources/mixes/poppy/cp.js'           => public_path('assets/js/poppy/cp.js'),
-			__DIR__ . '/../resources/mixes/poppy/doc.js'          => public_path('assets/js/poppy/doc.js'),
-			__DIR__ . '/../resources/mixes/poppy/plugin.js'       => public_path('assets/js/poppy/plugin.js'),
-			__DIR__ . '/../resources/mixes/poppy/util.js'         => public_path('assets/js/poppy/util.js'),
-			__DIR__ . '/../resources/mixes/poppy/backend/cp.js'   => public_path('assets/js/poppy/backend/cp.js'),
-			__DIR__ . '/../resources/mixes/poppy/backend/util.js' => public_path('assets/js/poppy/backend/util.js'),
+			__DIR__ . '/../resources/mixes/poppy/cp.js'           => public_path($jsPath . '/poppy/cp.js'),
+			__DIR__ . '/../resources/mixes/poppy/doc.js'          => public_path($jsPath . '/poppy/doc.js'),
+			__DIR__ . '/../resources/mixes/poppy/plugin.js'       => public_path($jsPath . '/poppy/plugin.js'),
+			__DIR__ . '/../resources/mixes/poppy/util.js'         => public_path($jsPath . '/poppy/util.js'),
+			__DIR__ . '/../resources/mixes/poppy/backend/cp.js'   => public_path($jsPath . '/poppy/backend/cp.js'),
+			__DIR__ . '/../resources/mixes/poppy/backend/util.js' => public_path($jsPath . '/poppy/backend/util.js'),
 		], 'ext-fe');
 
 		$this->loadViewsFrom(__DIR__ . '/../resources/views/', 'ext-fe');

@@ -18,16 +18,14 @@ var mix = require('laravel-mix');
  */
 mix.sass(
 	'resources/assets/scss/basic.scss',
-	'public/assets/css'
+	'public/resources/css'
 ).sass(
 	'resources/assets/scss/slt.scss',
-	'public/assets/css'
+	'public/resources/css'
 ).sass(
-    'extensions/ext-fe/resources/scss/develop/style.scss',
-    'public/assets/css'
+	'extensions/ext-fe/resources/scss/develop/style.scss',
+	'public/resources/css'
 ).sass(
-    'extensions/ext-fe/resources/scss/backend/style.scss',
-    'public/assets/css'
-).browserSync({
-	proxy : 'l.slt.sour-lemon.com'
-});
+	'extensions/ext-fe/resources/scss/backend/style.scss',
+	'public/resources/css'
+);
