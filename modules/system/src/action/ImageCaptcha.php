@@ -18,16 +18,16 @@ class ImageCaptcha
 	public function check($mobile, $captcha)
 	{
 		if (!$captcha) {
-			return $this->setError('请填写验证码');
+			return $this->setError(trans('system::action.image_captcha.check_not_input'));
 		}
 		else {
 			$captchaCache = \Cache::get('captcha_' . $mobile);
 			if (!$captchaCache) {
-				return $this->setError('验证码已经过期');
+				return $this->setError(trans('system::action.image_captcha.check_not_exist'));
 			}
 			else {
 				if (strtolower($captchaCache) !== strtolower($captcha)) {
-					return $this->setError('验证码不正确');
+					return $this->setError(trans('system::action.image_captcha.check_error'));
 				}
 				else {
 					\Cache::forget('captcha_' . $mobile);

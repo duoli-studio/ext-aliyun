@@ -77,6 +77,9 @@ class CpController extends InitController
 				'password' => \Input::get('password'),
 			]);
 			if ($curl->httpStatusCode === 200) {
+				if ($data->status == Resp::ERROR) {
+					return Resp::web(Resp::ERROR, $data->message);
+				}
 				$token = 'dev_token#' . $type;
 				RawCookieHelper::set($token, $data->token);
 				return Resp::web(Resp::SUCCESS, '登录成功', 'top_reload|1');

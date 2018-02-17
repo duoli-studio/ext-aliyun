@@ -55,7 +55,7 @@ class RouteServiceProvider extends ServiceProvider
 			$router->any('/', BackendHomeController::class . '@login')->name('backend:home.login');
 			$router->any('/test', BackendHomeController::class . '@test')->name('backend:home.test');
 			$router->group([
-				'middleware' => 'auth:backend',
+				'middleware' => ['auth:backend', 'disabled_pam'],
 			], function(Router $router) {
 				$router->any('/cp', config('poppy.backend_cp') ?: BackendHomeController::class . '@cp')
 					->name('backend:home.cp');
@@ -101,7 +101,7 @@ class RouteServiceProvider extends ServiceProvider
 				->name('system:develop.pam.login');
 
 			$router->group([
-				'middleware' => ['web', 'auth:develop'],
+				'middleware' => ['web', 'auth:develop', 'disabled_pam'],
 			], function(Router $router) {
 				$router->get('/', DevCpController::class . '@index')
 					->name('system:develop.cp.cp');

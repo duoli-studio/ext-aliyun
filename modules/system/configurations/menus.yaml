@@ -9,13 +9,6 @@ global:
             injection: global
             text: 全局设置
         -
-            icon: ios-paper
-            text: 附件设置
-            children:
-                -
-                    path: /upload
-                    text: 上传设置
-        -
             icon: help-circled
             text: 辅助
             children:

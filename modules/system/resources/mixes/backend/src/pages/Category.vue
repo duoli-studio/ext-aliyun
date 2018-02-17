@@ -24,6 +24,34 @@ export default {
 		});
 	},
 	data() {
+		const that = this;
+		// 操作渲染函数
+		const handleRender = (h, params) => {
+			const btns = [];
+			const btnDelete = h('poptip', {
+				props : {
+					confirm   : true,
+					width     : 200,
+					title     : '确认删除此地区 ? ',
+					placement : 'left'
+				},
+				on    : {
+					'on-ok' : () => {
+						that.removeItem(params);
+					}
+				}
+			}, [
+				h('i-button', {
+					props : {
+						type : 'error',
+						size : 'small'
+					},
+				}, '删除')
+			]);
+			btns.push(btnDelete);
+			// 返回操作按钮
+			return h('div', btns);
+		};
 		return {
 			// 查询条件
 			filter      : {
@@ -58,7 +86,13 @@ export default {
 				{
 					title : '标题',
 					key   : 'title'
-				}
+				},
+				{
+					title  : '操作',
+					key    : 'handle',
+					align  : 'center',
+					render : handleRender,
+				},
 			],
 			c2e         : {
 				display : false,
@@ -66,7 +100,7 @@ export default {
 				title   : '创建分类',
 				type    : 'create',
 				data    : {
-					// id      : 0,
+					id      : '',
 					title   : '',
 					cat_id  : '',
 					content : '',
@@ -140,16 +174,38 @@ export default {
 				}
 			});
 		},
+		// 删除数据
+		removeItem(params) {
+			const self = this;
+			self.loading = true;
+			injection.http.post(`${window.api}backend/system/category/do`, {
+				action : 'delete',
+				id     : params.row.id
+			}).then((response) => {
+				const {status, message} = response.data;
+				if (status) {
+					throw new Error(message);
+				}
+				self.$notice.open({
+					title : '删除数据成功！',
+				});
+				self.refresh();
+			}).catch((error) => {
+				self.$loading.error();
+				self.$notice.error({
+					title : error,
+				});
+			}).finally(() => {
+				self.loading = false;
+			});
+		},
 		// 刷新页面
 		refresh() {
 			const self = this;
 			self.$loading.start();
 			injection.http.post(`${window.api}backend/system/category/lists`, {
-				field    : self.filter.field,
-				kw       : self.filter.kw,
+				id       : self.filter.id,
 				type     : self.filter.type,
-				start_at : self.filter.start_at,
-				end_at   : self.filter.end_at,
 				page     : self.pagination.page,
 				size     : self.pagination.size,
 			}).then(response => {

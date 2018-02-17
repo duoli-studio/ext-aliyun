@@ -28,8 +28,8 @@ use Tymon\JWTAuth\Contracts\JWTSubject as JWTSubjectAuthenticatable;
  * @property integer                   $login_times        登录次数
  * @property string                    $reg_ip             注册IP
  * @property string                    $is_enable
- * @property \Carbon\Carbon            $created_at
- * @property \Carbon\Carbon            $updated_at
+ * @property Carbon                    $created_at
+ * @property Carbon                    $updated_at
  * @property string                    $remember_token
  * @property-read PamRoleAccount       $role
  * @property-read Collection|PamRole[] $roles
@@ -101,6 +101,10 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 		'is_enable',
 		'password_key',
 		'reg_ip',
+
+		'disable_reason',
+		'disable_start_at',
+		'disable_end_at',
 	];
 
 	public static function passport($passport)

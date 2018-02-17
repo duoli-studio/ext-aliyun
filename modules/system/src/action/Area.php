@@ -56,8 +56,8 @@ class Area
 				Rule::integer(),
 			],
 		], [], [
-			'title'     => trans('system::area.db.title'),
-			'parent_id' => trans('system::area.db.parent_id'),
+			'title'     => trans('system::db.area.title'),
+			'parent_id' => trans('system::db.area.parent_id'),
 		]);
 		if ($validator->fails()) {
 			return $this->setError($validator->messages());
@@ -70,7 +70,7 @@ class Area
 		$this->matchKv(true);
 		if ($id) {
 			if ($id == $initDb['parent_id']) {
-				return $this->setError(trans('system::area.message.same_error'));
+				return $this->setError(trans('system::action.area.same_error'));
 			}
 			$needUpdate = array_merge(
 				$needUpdate,
@@ -109,7 +109,7 @@ class Area
 			return false;
 		}
 		if (SysArea::where('parent_id', $id)->exists()) {
-			return $this->setError(trans('system::area.message.exist_error'));
+			return $this->setError(trans('system::action.area.exist_error'));
 		}
 		$parentIds = $this->parentIds($id, 'array');
 		$this->area->delete();
@@ -176,7 +176,7 @@ class Area
 			$this->areaId = $this->area->id;
 			return true;
 		} catch (\Exception $e) {
-			return $this->setError(trans('system::area.message.undefined_error'));
+			return $this->setError(trans('system::action.area.undefined_error'));
 		}
 	}
 

@@ -3,8 +3,8 @@ import injection from '../helpers/injection';
 export const information = ({commit}) => {
 	commit('loading', true);
 	injection.http.post(`${window.api}backend/system/setting/fetch`, {
-		namespace : 'test',
-		group     : 'test'
+		namespace : 'system',
+		group     : 'site'
 	}).then(response => {
 		const settings = [];
 		const {data} = response.data;
@@ -36,8 +36,8 @@ export const information = ({commit}) => {
 
 export const setting = ({commit}) => (new Promise((resolve, reject) => {
 	injection.http.post(`${window.api}backend/system/setting/fetch`, {
-		namespace : 'test',
-		group     : 'test'
+		namespace : 'system',
+		group     : 'site'
 	}).then(response => {
 		const settings = [];
 		const {data} = response.data;

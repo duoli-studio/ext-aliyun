@@ -10,6 +10,7 @@ use System\Classes\Traits\SystemTrait;
 use System\Models\PamAccount;
 use System\Models\Resources\PamResource as PamResource;
 use System\Action\Pam;
+use System\Models\SysConfig;
 
 
 class AuthController extends ApiController
@@ -98,6 +99,14 @@ class AuthController extends ApiController
 		$this->clearLoginAttempts($this->getRequest());
 		/** @var PamAccount $user */
 		$user = $this->guard($guard)->user();
+
+		if ($user->is_enable == SysConfig::NO) {
+			return $this->getResponse()->json([
+				'message' => '用户被禁用, 原因 : ' . $user->disable_reason . ', 解禁时间 : ' . $user->disable_end_at,
+				'status'  => Resp::ERROR,
+			], 200, [], JSON_UNESCAPED_UNICODE);
+		}
+
 		if (!$token = $this->getJwt()->fromUser($user)) {
 			return $this->getResponse()->json([
 				'message' => '凭证有误',
@@ -162,7 +171,7 @@ class AuthController extends ApiController
 		$password = input('password', '');
 
 		if (!$captcha && !$password) {
-			return Resp::web(Resp::ERROR, trans('user::user.graphql.login_key_need'));
+			return Resp::web(Resp::ERROR, trans('user::action.profile.login_key_need'));
 		}
 
 		/** @var Pam $Pam */

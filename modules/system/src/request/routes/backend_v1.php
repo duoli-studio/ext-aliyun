@@ -55,5 +55,8 @@
 		$route->post('category/lists', 'CategoryController@lists');
 		$route->post('category/establish', 'CategoryController@establish');
 		$route->post('category/do', 'CategoryController@do');
+
+		//netease im
+		$route->post('im/send_notice','NeteaseImController@systemNotice');
 	});
 });

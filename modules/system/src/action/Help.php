@@ -44,11 +44,11 @@ class Help
 
 		$cat_id    = intval(array_get($data, 'cat_id'));
 		if (!SysCategory::find($cat_id)){
-			return $this->setError(trans('system::help.action.help.parent_id_not_exists'));
+			return $this->setError(trans('system::action.help.parent_id_not_exists'));
 		}
 		$parent_id = intval(SysCategory::find($cat_id)->parent_id);
 		if ($cat_id === SysConfig::NO || $parent_id === SysConfig::NO) {
-			return $this->setError(trans('system::help.action.help.parent_error'));
+			return $this->setError(trans('system::action.help.parent_error'));
 		}
 
 		$initDb    = [
@@ -71,9 +71,9 @@ class Help
 				Rule::string(),
 			],
 		], [], [
-			'cat_id'  => trans('system::help.db.help.cat_id'),
-			'title'   => trans('system::help.db.help.title'),
-			'content' => trans('system::help.db.help.content'),
+			'cat_id'  => trans('system::db.help.cat_id'),
+			'title'   => trans('system::db.help.title'),
+			'content' => trans('system::db.help.content'),
 		]);
 		if ($validator->fails()) {
 			return $this->setError($validator->messages());
@@ -128,7 +128,7 @@ class Help
 			$this->helpId = $this->help->id;
 			return true;
 		} catch (\Exception $e) {
-			return $this->setError(trans('system::help.action.help.item_not_exist'));
+			return $this->setError(trans('system::action.help.item_not_exist'));
 		}
 	}
 }

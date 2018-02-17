@@ -48,7 +48,7 @@ class Verification
 			$expiredMin   = $this->getSetting()->get('extension::sms.expired_minute');
 		}
 		else {
-			return $this->setError(trans('system::captcha.action.send_passport_format_error'));
+			return $this->setError(trans('system::action.verification.send_passport_format_error'));
 		}
 
 		// 发送验证码数据库操作
@@ -108,7 +108,7 @@ class Verification
 			return true;
 		}
 		else {
-			return $this->setError('验证码有误!');
+			return $this->setError(trans('system::action.verification.check_captcha_error'));
 		}
 	}
 
@@ -194,11 +194,11 @@ class Verification
 			$cacheKey = cache_name(__CLASS__, 'once_verify_code');
 			$data     = (array) \Cache::get($cacheKey);
 			if ($expire < Carbon::now()->timestamp) {
-				return $this->setError('安全校验已经过期, 请重新请求');
+				return $this->setError(trans('system::action.verification.verify_code_expired'));
 			}
 
 			if (!isset($data[$key])) {
-				return $this->setError('安全校验已经过期, 请重新请求');
+				return $this->setError(trans('system::action.verification.verify_code_expired'));
 			}
 			else {
 				unset($data[$key]);
@@ -208,7 +208,7 @@ class Verification
 			}
 		}
 		else {
-			return $this->setError('非法请求');
+			return $this->setError(trans('system::action.verification.verify_code_error'));
 		}
 	}
 
@@ -297,11 +297,11 @@ class Verification
 
 		// 暂时不支持多Region
 		// cn-hangzhou
-		$region = $this->getSetting()->get('extension::sms_aliyun.region');
+		$region = 'cn-hangzhou';
 
 		// 服务结点
 		// cn-hangzhou
-		$endPointName = $this->getSetting()->get('extension::sms_aliyun.end_point');
+		$endPointName = 'cn-hangzhou';
 
 		if (static::$acsClient == null) {
 

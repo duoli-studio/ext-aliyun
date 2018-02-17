@@ -24,6 +24,34 @@ export default {
 		});
 	},
 	data() {
+		const that = this;
+		// 操作渲染函数
+		const handleRender = (h, params) => {
+			const btns = [];
+			const btnDelete = h('poptip', {
+				props : {
+					confirm   : true,
+					width     : 200,
+					title     : '确认删除此地区 ? ',
+					placement : 'left'
+				},
+				on    : {
+					'on-ok' : () => {
+						that.removeItem(params);
+					}
+				}
+			}, [
+				h('i-button', {
+					props : {
+						type : 'error',
+						size : 'small'
+					},
+				}, '删除')
+			]);
+			btns.push(btnDelete);
+			// 返回操作按钮
+			return h('div', btns);
+		};
 		return {
 			// 查询条件
 			filter      : {
@@ -58,19 +86,14 @@ export default {
 				{
 					title : '帮助内容',
 					key   : 'content'
-				}
+				},
+				{
+					title  : '操作',
+					key    : 'handle',
+					align  : 'center',
+					render : handleRender,
+				},
 			],
-			// dsField     : {
-			// 	id         : 'ID',
-			// 	account_id : '账户ID',
-			// 	charge_no  : '提现流水号',
-			// },
-			// dsType      : {
-			// 	ali  : '提现到支付宝',
-			// 	wx   : '提现到微信',
-			// 	bank : '提现到银行卡',
-			// },
-
 			c2e : {
 				display : false,
 				loading : false,
@@ -115,7 +138,7 @@ export default {
 			this.c2e.data.title = '';
 			this.c2e.data.content = '';
 		},
-		// 增加分类
+		// 新增分类
 		onC2eSubmit() {
 			const self = this;
 			const variable = {
@@ -123,10 +146,6 @@ export default {
 				title   : self.c2e.data.title,
 				content : self.c2e.data.content,
 			};
-			// if (self.c2e.type !== 'create') {
-			// 	variable['id'] = self.c2e.data.id;
-			// }
-
 			self.$refs.c2e.validate(valid => {
 				if (valid) {
 					self.c2e.loading = true;
@@ -154,6 +173,31 @@ export default {
 						self.c2e.display = false;
 					});
 				}
+			});
+		},
+		// 删除分类
+		removeItem(params) {
+			const self = this;
+			self.loading = true;
+			injection.http.post(`${window.api}backend/system/help/do`, {
+				action : 'delete',
+				id     : params.row.id
+			}).then((response) => {
+				const {status, message} = response.data;
+				if (status) {
+					throw new Error(message);
+				}
+				self.$notice.open({
+					title : '删除数据成功！',
+				});
+				self.refresh();
+			}).catch((error) => {
+				self.$loading.error();
+				self.$notice.error({
+					title : error,
+				});
+			}).finally(() => {
+				self.loading = false;
 			});
 		},
 		// 刷新页面
@@ -231,29 +275,6 @@ export default {
 			<icon type="android-add"></icon>
 			新增
 		</i-button>
-		<!--<i-form inline>-->
-		<!--<form-item prop="field">-->
-		<!--<i-select placeholder="查询类型" v-model="filter.field" clearable>-->
-		<!--<i-option v-for="(value ,type) in dsField" :value="type" :key="type">{{ value }}</i-option>-->
-		<!--</i-select>-->
-		<!--</form-item>-->
-		<!--<form-item prop="kw">-->
-		<!--<i-input type="text" placeholder="关键词" v-model="filter.kw"></i-input>-->
-		<!--</form-item>-->
-		<!--<form-item prop="type">-->
-		<!--<i-select placeholder="提现类型" v-model="filter.type" clearable style="width:200px">-->
-		<!--<i-option v-for="(value ,type) in dsType" :value="type" :key="type">{{ value }}</i-option>-->
-		<!--</i-select>-->
-		<!--</form-item>-->
-		<!--<form-item prop="type">-->
-		<!--<date-picker type="daterange" @on-change="onDateRangeChange" placement="bottom-end" placeholder="选择开始时间"-->
-		<!--style="width: 180px"></date-picker>-->
-		<!--</form-item>-->
-		<!--<i-button class="btn-action" type="primary" @click.native="search">-->
-		<!--<icon type="search"></icon>-->
-		<!--搜索-->
-		<!--</i-button>-->
-		<!--</i-form>-->
 		<i-table :columns="listColumns" :data="list"></i-table>
 		<!--c2e-->
 		<modal v-model="c2e.display" class="liex-modal-delete"

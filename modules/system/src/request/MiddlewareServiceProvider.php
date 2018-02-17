@@ -6,6 +6,7 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Http\Kernel as KernelContract;
 use Poppy\Framework\Http\Middlewares\CrossPreflight;
+use System\Request\Middleware\DisabledPam;
 
 class MiddlewareServiceProvider extends ServiceProvider
 {
@@ -25,6 +26,8 @@ class MiddlewareServiceProvider extends ServiceProvider
 			$router->pushMiddlewareToGroup('web', ClockworkMiddleware::class);
 			$router->pushMiddlewareToGroup('backend', ClockworkMiddleware::class);
 		}
+
+		$router->aliasMiddleware('disabled_pam', DisabledPam::class);
 
 		// add options
 		if ($this->app->make('request')->getMethod() == 'OPTIONS') {

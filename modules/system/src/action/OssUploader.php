@@ -68,7 +68,7 @@ class OssUploader extends Uploader
 		$this->setReturnUrl($returnUrl);
 
 		if (!$returnUrl) {
-			return $this->setError('保存 AliOss 时候返回的域名地址不能为空!');
+			return $this->setError(trans('system::action.oss_uploader.return_url_error'));
 		}
 
 		$endpoint = $this->getSetting()->get('extension::oss_aliyun.endpoint');

@@ -41,7 +41,7 @@ trait SystemTrait
 	public function checkPam()
 	{
 		if (!$this->pam) {
-			return $this->setError(trans('system::act.check_permission_need_login'));
+			return $this->setError(trans('system::action.pam.check_permission_need_login'));
 		}
 		return true;
 	}

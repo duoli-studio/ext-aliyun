@@ -88,7 +88,7 @@ class CaptchaController extends ApiController
 
 				// 系统中需要存在这个账号
 				if (!PamAccount::where($passportType, $passport)->exists()) {
-					return Resp::web(Resp::ERROR, trans('system::captcha.action.account_miss'));
+					return Resp::web(Resp::ERROR, trans('system::action.captcha.account_miss'));
 				}
 				break;
 
@@ -116,7 +116,7 @@ class CaptchaController extends ApiController
 
 				// 新绑定手机号不能存在
 				if (PamAccount::where($passportType, $passport)->exists()) {
-					return Resp::web(Resp::ERROR, trans('system::captcha.action.account_exists'));
+					return Resp::web(Resp::ERROR, trans('system::action.captcha.account_exists'));
 				}
 				break;
 		}

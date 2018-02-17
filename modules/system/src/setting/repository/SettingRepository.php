@@ -151,7 +151,7 @@ class SettingRepository implements SettingContract
 		$this->getModule()->settings()->each(
 			function($define, $settingKey) use ($namespace, $group, $collection) {
 				$key = $namespace . '::' . $group;
-				if (str_start($settingKey, $key)) {
+				if (starts_with($settingKey, $key)) {
 					$value = $this->get($settingKey);
 					$collection->push([
 						'value'       => $value,

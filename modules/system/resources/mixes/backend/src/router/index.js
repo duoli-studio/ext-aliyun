@@ -14,6 +14,7 @@ import Navigation from '../pages/Navigation.vue';
 import Template from '../pages/Template.vue';
 import Upload from '../pages/Upload.vue';
 import Role from '../pages/Role.vue';
+import Im from '../pages/Im.vue';
 import Pam from '../pages/Pam.vue';
 import Area from '../pages/Area.vue';
 import Category from '../pages/Category.vue';
@@ -89,6 +90,10 @@ const configuration = [
 	{
 		component : Article,
 		path      : 'article',
+	},
+	{
+		component : Im,
+		path      : 'im',
 	},
 ];
 

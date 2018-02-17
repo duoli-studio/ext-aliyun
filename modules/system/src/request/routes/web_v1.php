@@ -20,7 +20,7 @@
 
 	// 只要是用户就可以
 	$route->group([
-		'middleware' => ['auth:jwt'],
+		'middleware' => ['auth:jwt', 'disabled_pam'],
 	], function(Illuminate\Routing\Router $route) {
 		$route->post('/image/upload', 'ImageController@upload');
 		$route->post('/approve/status', 'ApproveController@approveStatus');
@@ -46,7 +46,7 @@
 	$route->post('auth/login', 'AuthController@login');
 
 	$route->group([
-		'middleware' => ['auth:jwt'],
+		'middleware' => ['auth:jwt', 'disabled_pam'],
 	], function(Illuminate\Routing\Router $route) {
 		// bind
 		$route->post('bind/cancel', 'BindController@cancel');

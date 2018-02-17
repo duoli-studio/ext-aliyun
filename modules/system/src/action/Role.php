@@ -84,9 +84,9 @@ class Role
 			unset($rule['name'], $rule['type']);
 		}
 		$validator = \Validator::make($initDb, $rule, [], [
-			'name'  => trans('system::pam.db.role.name'),
-			'title' => trans('system::pam.db.role.title'),
-			'type'  => trans('system::pam.db.role.type'),
+			'name'  => trans('system::db.role.name'),
+			'title' => trans('system::db.role.title'),
+			'type'  => trans('system::db.role.type'),
 		]);
 		if ($validator->fails()) {
 			return $this->setError($validator->messages());
@@ -99,7 +99,7 @@ class Role
 
 		if ($this->roleId) {
 			if (!$this->pam->can('edit', $this->role)) {
-				return $this->setError(trans('system::pam.action.role.no_policy_to_update'));
+				return $this->setError(trans('system::action.role.no_policy_to_update'));
 			}
 			// 编辑时候类型和名称不允许编辑
 			unset($initDb['type'], $initDb['name']);
@@ -107,7 +107,7 @@ class Role
 		}
 		else {
 			if (!$this->pam->can('create', PamRole::class)) {
-				return $this->setError(trans('system::pam.action.role.no_policy_to_create'));
+				return $this->setError(trans('system::action.role.no_policy_to_create'));
 			}
 			$this->role = PamRole::create($initDb);
 		}
@@ -138,19 +138,19 @@ class Role
 				Rule::required(),
 			],
 		], [], [
-			'permission_ids' => trans('system::pam.action.role.permissions'),
+			'permission_ids' => trans('system::action.role.permissions'),
 		]);
 		if ($validator->fails()) {
 			return $this->setError($validator->messages());
 		}
 
 		if ($this->pam->can('savePermission', PamRole::class)) {
-			return $this->setError(trans('system::pam.action.role.no_policy_to_save_permission'));
+			return $this->setError(trans('system::action.role.no_policy_to_save_permission'));
 		}
 
 		$objPermissions = PamPermission::whereIn('id', $permission_ids)->where('type', $this->role->type)->get();
 		if (!$objPermissions->count()) {
-			return $this->setError(trans('system::pam.action.role.permission_error'));
+			return $this->setError(trans('system::action.role.permission_error'));
 		}
 		$this->role->savePermissions($objPermissions);
 		$this->role->flushPermissionRole();
@@ -164,7 +164,7 @@ class Role
 			$this->roleId = $this->role->id;
 			return true;
 		} catch (\Exception $e) {
-			return $this->setError(trans('system::pam.action.role.role_not_exists'));
+			return $this->setError(trans('system::action.role.role_not_exists'));
 		}
 	}
 
@@ -276,11 +276,11 @@ class Role
 		}
 
 		if (!$this->pam->can('delete', $this->role)) {
-			return $this->setError(trans('system::pam.action.role.no_policy_to_delete'));
+			return $this->setError(trans('system::action.role.no_policy_to_delete'));
 		}
 
 		if (PamRoleAccount::where('role_id', $this->roleId)->exists()) {
-			return $this->setError(trans('system::pam.action.role.role_has_account'));
+			return $this->setError(trans('system::action.role.role_has_account'));
 		}
 
 		// 删除权限

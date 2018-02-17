@@ -64,9 +64,9 @@ class Category
 				Rule::unique($this->categoryTable, 'title')->where('parent_id', $data['parent_id'])
 			],
 		], [], [
-			'type'      => trans('system::help.db.category.type'),
-			'parent_id' => trans('system::help.db.category.cat_id'),
-			'title'     => trans('system::help.db.category.title'),
+			'type'      => trans('system::db.category.type'),
+			'parent_id' => trans('system::db.category.cat_id'),
+			'title'     => trans('system::db.category.title'),
 		]);
 		if ($validator->fails()) {
 			return $this->setError($validator->messages());
@@ -121,7 +121,7 @@ class Category
 			$this->categoryId = $this->category->id;
 			return true;
 		} catch (\Exception $e) {
-			return $this->setError(trans('system::help.action.category.item_not_exist'));
+			return $this->setError(trans('system::action.category.item_not_exist'));
 		}
 	}
 }

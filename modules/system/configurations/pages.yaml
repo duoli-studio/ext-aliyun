@@ -75,11 +75,6 @@ extension:
                     label: 手机支付(支付宝)
                     key: extension::pay_alipay.mobile_is_open
                     type: switch
-                alipay_env:
-                    default: ' '
-                    label: 支付宝支付环境
-                    key: extension::pay_alipay.alipay_env
-                    type: input
                 alipay_app_id:
                     default: ' '
                     label: 支付宝APPID
@@ -100,11 +95,6 @@ extension:
                     label: 支付标题
                     key: extension::pay_alipay.alipay_subject
                     type: input
-                payee_type:
-                    default: ' '
-                    label: 收款方账户类型
-                    key: extension::pay_alipay.payee_type
-                    type: input
                 payer_show_name:
                     default: ' '
                     label: 付款方姓名
@@ -114,11 +104,6 @@ extension:
                     default: ' '
                     label: 转账备注
                     key: extension::pay_alipay.remark
-                    type: input
-                alipay_notify:
-                    default: ' '
-                    label: 支付宝回调地址
-                    key: extension::pay_alipay.alipay_notify
                     type: input
                 wxpay_is_open:
                     default: false
@@ -144,11 +129,6 @@ extension:
                     default: ' '
                     label: 公众账号secret
                     key: extension::pay_wxpay.app_secret
-                    type: input
-                wxpay_notify:
-                    default: ' '
-                    label: 微信回调地址
-                    key: extension::pay_wxpay.wxpay_notify
                     type: input
         sms:
             default: false
@@ -192,18 +172,6 @@ extension:
                     default: ' '
                     label: AccessSecret(阿里云)
                     key: extension::sms_aliyun.access_secret
-                    type: input
-                sms_aliyun_region:
-                    default: ' '
-                    label: 发送区域(阿里云)
-                    description: '暂时不支持多Region, 默认是 cn-hangzhou'
-                    key: extension::sms_aliyun.region
-                    type: input
-                sms_aliyun_end_point:
-                    default: ' '
-                    label: 服务结点(阿里云)
-                    description: '默认是 cn-hangzhou'
-                    key: extension::sms_aliyun.end_point
                     type: input
                 sms_aliyun_captcha_template:
                     default: ' '
@@ -295,26 +263,6 @@ extension:
                     label: appSecret(手机QQ)
                     key: extension::login_qq.mobile_app_secret
                     type: input
-        netease_im:
-             show: true
-             submit: api_v1/backend/system/layout/page/setting-extension
-             title: 网易IM
-             fields:
-                im_app_key:
-                    default: ''
-                    label: appKey
-                    key: extension::netease_im.app_key
-                    type: input
-                im_app_secret:
-                    default: ''
-                    label: appSecret
-                    key: extension::netease_im.app_secret
-                    type: input
-                im_request_type:
-                    default: 'curl'
-                    label: requestType(请求方式)
-                    key: extension::netease_im.request_type
-                    type: input
         questions:
              show: true
              submit: api_v1/backend/system/layout/page/setting-extension
@@ -328,7 +276,7 @@ extension:
         push:
             show: true
             submit: api_v1/backend/system/layout/page/setting-extension
-            title: 推送消息配置
+            title: 消息配置
             fields:
                 send_type:
                     default: false
@@ -349,6 +297,21 @@ extension:
                     default: ' '
                     label: AppKey(阿里云)
                     key: extension::push.app_key
+                    type: input
+                im_is_open:
+                    default: false
+                    label: 是否开启
+                    key: extension::netease_im.is_open
+                    type: switch
+                im_app_key:
+                    default: ''
+                    label: appKey(网易IM)
+                    key: extension::netease_im.app_key
+                    type: input
+                im_app_secret:
+                    default: ''
+                    label: appSecret(网易IM)
+                    key: extension::netease_im.app_secret
                     type: input
         count_down:
             show: true

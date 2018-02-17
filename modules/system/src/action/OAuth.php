@@ -25,7 +25,7 @@ class OAuth
 		], [
 			'type' => 'required|in:qq,wx',
 		], [], [
-			'type' => '第三方绑定账号类型',
+			'type' => trans('system::action.o_auth.bind_type'),
 		]);
 
 		if ($validator->fails()) {
@@ -46,7 +46,7 @@ class OAuth
 			]);
 			return true;
 		}
-		return $this->setError('第三方绑定账号类型错误');
+		return $this->setError(trans('system::action.o_auth.bind_type_error'));
 	}
 
 
