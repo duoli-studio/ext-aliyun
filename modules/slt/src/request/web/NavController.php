@@ -9,8 +9,8 @@ use Slt\Models\SiteTag;
 use Slt\Models\SiteUrl;
 use Slt\Models\SiteUrlRelTag;
 use Slt\Models\SiteUserUrl;
-use Slt\Url\Action\Collection;
-use Slt\Url\Action\Url;
+use Slt\Action\Collection;
+use Slt\Action\Url;
 use System\Models\PamAccount;
 
 class NavController extends InitController

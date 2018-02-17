@@ -1,4 +1,4 @@
-<?php namespace Slt\Url\Action;
+<?php namespace Slt\Action;
 
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;

@@ -1,4 +1,4 @@
-<?php namespace Slt\Url\Action;
+<?php namespace Slt\Action;
 
 
 use Poppy\Framework\Helper\StrHelper;
@@ -60,7 +60,7 @@ class Url
 	 */
 	public function establish($data, $id = null)
 	{
-		if (!$this->checkPermission()) {
+		if (!$this->checkPam()) {
 			return false;
 		}
 		// data
@@ -142,7 +142,7 @@ class Url
 
 	public function hasCreate($url)
 	{
-		if (!$this->checkPermission()) {
+		if (!$this->checkPam()) {
 			return false;
 		}
 		$objUrl = SiteUrl::where('url', '=', $url)->first();
@@ -166,7 +166,7 @@ class Url
 	 */
 	public function destroy($id)
 	{
-		if (!$this->checkPermission()) {
+		if (!$this->checkPam()) {
 			return false;
 		}
 		// init
