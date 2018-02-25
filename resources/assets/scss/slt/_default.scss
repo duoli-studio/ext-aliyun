@@ -1,6 +1,5 @@
 @charset "UTF-8";
 @import 'variables';
-
 /*
 |--------------------------------------------------------------------------
 | 公共样式文件
@@ -14,14 +13,12 @@ body {
 	background  : #ffffff;
 	font-size   : 13px;
 }
-
 a {
 	color : $purple;
 	&:hover {
 		color : $light-purple;
 	}
 }
-
 // fix media query
 @media (max-width : 768px) {
 	.form-horizontal .control-label {
@@ -30,34 +27,33 @@ a {
 		padding-top   : 7px;
 	}
 }
-
 .sour--page_dialog {
 	margin : 10px 0;
 }
-
 .sour--header_top {
 	.navbar {
 		margin-bottom : 0;
-	}
-	.navbar .navbar-brand {
-		font-size   : 12px;
-		height      : auto;
-		margin-top  : 8px;
-		color       : #fff;
-		display     : block;
-		margin-left : 0;
-		padding     : 0;
+		.navbar-brand {
+			font-size   : 12px;
+			height      : auto;
+			margin-top  : 8px;
+			color       : #ffffff;
+			display     : block;
+			margin-left : 0;
+			padding     : 0;
+			background  : transparent;
+		}
 	}
 	.navbar-header {
 		margin-right : 15px;
 	}
 	.navbar-default {
-		background : #fff;
+		background : #ffffff;
 		.navbar-toggle {
 			&:hover, &:focus {
 				background : $color-green;
 				.icon-bar {
-					background-color : #fff !important;
+					background-color : #ffffff !important;
 				}
 			}
 			
@@ -171,7 +167,6 @@ a {
 		}
 	}
 }
-
 .sour--footer {
 	height      : 50px;
 	line-height : 50px;
@@ -188,7 +183,6 @@ a {
 		padding    : 0 5px;
 	}
 }
-
 .sour--my_title {
 	border     : 1px solid #cccccc;;
 	background : #f2f2f2;
@@ -208,11 +202,11 @@ a {
 		small {
 			font-size    : 12px;
 			padding-left : 1em;
-			color        : #ccc;
+			color        : #cccccc;
 		}
 		em {
 			padding-left : 4px;
-			color        : #ccc;
+			color        : #cccccc;
 			font-weight  : normal;
 			font-style   : normal;
 		}

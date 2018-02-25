@@ -1,7 +1,7 @@
 @extends('system::tpl.default')
 @section('head-css')
-    {!! Html::style('assets/css/basic.css') !!}
-    {!! Html::style('assets/css/slt.css') !!}
+    {!! Html::style('resources/css/basic.css') !!}
+    {!! Html::style('resources/css/slt.css') !!}
 @endsection
 @section('head-script')
     @include('slt::tpl.inc_requirejs')

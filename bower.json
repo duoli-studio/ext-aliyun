@@ -36,6 +36,7 @@
     "bootstrap4": "^4.0.0",
     "bootstrap-sass": "^3.3.7",
     "centrifuge": "^1.4.8",
-    "sockjs": "^0.3.4"
+    "sockjs": "^0.3.4",
+    "wow": "^1.1.2"
   }
 }

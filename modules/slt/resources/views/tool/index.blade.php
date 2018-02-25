@@ -1,7 +1,6 @@
 @extends('slt::tpl.default')
-@section('body-class', 'tool--editor')
 @section('tpl-main')
-    <div class="container mb20 mt20">
+    <div class="container mb20 mt20 tool--editor">
         <div class="row">
             <div class="col-sm-3">
                 <ul class="list-group">

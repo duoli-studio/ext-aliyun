@@ -33,7 +33,7 @@ class CpController extends InitController
 
 	public function api()
 	{
-		$this->title('接口调试平台');
+		$this->seo('接口调试平台');
 		$tokenGet = function($cookie_key) {
 			if (RawCookieHelper::has($cookie_key)) {
 				$token = RawCookieHelper::get($cookie_key);

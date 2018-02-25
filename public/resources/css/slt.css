@@ -363,10 +363,11 @@ a:hover {
   font-size: 12px;
   height: auto;
   margin-top: 8px;
-  color: #fff;
+  color: #ffffff;
   display: block;
   margin-left: 0;
   padding: 0;
+  background: transparent;
 }
 
 .sour--header_top .navbar-header {
@@ -374,7 +375,7 @@ a:hover {
 }
 
 .sour--header_top .navbar-default {
-  background: #fff;
+  background: #ffffff;
 }
 
 .sour--header_top .navbar-default .navbar-toggle:hover,
@@ -384,7 +385,7 @@ a:hover {
 
 .sour--header_top .navbar-default .navbar-toggle:hover .icon-bar,
 .sour--header_top .navbar-default .navbar-toggle:focus .icon-bar {
-  background-color: #fff !important;
+  background-color: #ffffff !important;
 }
 
 .sour--header_top .navbar-default .navbar-nav > li,
@@ -507,12 +508,12 @@ a:hover {
 .sour--my_title h3 small {
   font-size: 12px;
   padding-left: 1em;
-  color: #ccc;
+  color: #cccccc;
 }
 
 .sour--my_title h3 em {
   padding-left: 4px;
-  color: #ccc;
+  color: #cccccc;
   font-weight: normal;
   font-style: normal;
 }

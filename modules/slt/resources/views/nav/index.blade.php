@@ -1,7 +1,6 @@
 @extends('slt::tpl.default')
-@section('body-class', 'site--url')
 @section('tpl-main')
-    <div class="container">
+    <div class="container site--url">
         <div class="row">
             <div class="col-md-3">
                 <div class="url-description url-box mt15">
@@ -101,5 +100,4 @@
             </div>
         </div>
     </div>
-    @include('slt::tpl.inc_footer')
 @endsection

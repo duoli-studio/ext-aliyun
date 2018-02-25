@@ -287,7 +287,6 @@ return [
 				'main' => 'smooth-scroll.js',
 				'aim'  => 'smooth-scroll/{VERSION}/smooth-scroll.js',
 			],
-			'key' => 'smooth-scroll',
 		],
 
 		"sockjs" => [
@@ -301,7 +300,6 @@ return [
 				'main' => 'underscore.js',
 				'aim'  => 'underscore/{VERSION}/underscore.js',
 			],
-			'key' => 'underscore',
 		],
 
 		"vkBeautify" => [
@@ -330,6 +328,15 @@ return [
 			"js" => [
 				'main' => 'dist/vue.min.js',
 				'aim'  => 'vue/{VERSION}/vue.min.js',
+			],
+		],
+
+		"wow" => [
+			"js" => [
+				'aim'  => 'wow/{VERSION}/wow.min.js',
+			],
+			'shim' => [
+				"exports" => "WOW",
 			],
 		],
 
