@@ -349,7 +349,7 @@ return [
 		'url_js'   => env('URL_SITE') . '/assets/js',
 	],
 	'appends' => [
-		'poppy'   => env('URL_SITE') . "/assets/js/poppy",
+		'poppy'   => env('URL_SITE') . "/resources/js/poppy",
 		'slt'     => env('URL_SITE') . "/modules/slt/js",
 		'develop' => env('URL_SITE') . "/modules/develop/js",
 	],

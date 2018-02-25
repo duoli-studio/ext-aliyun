@@ -14,7 +14,7 @@ class NeteaseImController extends ApiController
 	 * @api                  {post} api_v1/backend/system/im/send_notice 发送系统通知
 	 * @apiVersion           1.0.0
 	 * @apiName              HelpEstablish
-	 * @apiGroup             System
+	 * @apiGroup             Notice
 	 * @apiParam  {String}   push_type      推送类型
 	 *            [order|订单;system|系统通知;activity|官方公告]
 	 * @apiParam  {Integer}  account        Account Id

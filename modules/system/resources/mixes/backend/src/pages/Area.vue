@@ -89,6 +89,7 @@ export default {
 			// 地区列定义
 			listColumns : [
 				{
+					width : 75,
 					title : '地区ID',
 					key   : 'id'
 				},

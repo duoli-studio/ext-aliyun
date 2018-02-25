@@ -72,6 +72,7 @@ export default {
 			},
 			listColumns : [
 				{
+					width : 75,
 					title : 'ID',
 					key   : 'id'
 				},

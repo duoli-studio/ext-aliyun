@@ -1,6 +1,7 @@
 <?php namespace Slt\Request\Web;
 
 
+use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Helper\FileHelper;
 use Poppy\Framework\Helper\StrHelper;
 use Symfony\Component\Process\Process;
@@ -45,31 +46,37 @@ class FeController extends InitController
 	 */
 	public function js($plugin = null)
 	{
-		$disk        = \Storage::disk('public');
-		$directories = $disk->directories('assets/js/libs', true);
+		$disk       = \Storage::disk('public');
+		$configJson = 'resources/js/config.json';
+
+		if (!$disk->exists($configJson)) {
+			return Resp::web(Resp::ERROR, '配置文件不存在!');
+		}
+		$config      = json_decode($disk->get($configJson), true);
+		$directories = array_keys($config['path']);
 		$unset       = [];
 		$single      = [];
 		$jquery      = [];
 		$bt3         = [];
 
 		foreach ($directories as $dir) {
-			$dir = str_replace('assets/js/libs/', '', $dir);
+
 			if (in_array($dir, $unset)) {
 				continue;
 			}
-			if (strpos($dir, 'jquery') === false) {
+			if (strpos($dir, 'jquery.') === false) {
 				if (strpos($dir, '/') === false) {
 					$single[] = $dir;
 				}
 			}
-			elseif (strpos($dir, 'jquery/') !== false) {
-				$dir = str_replace('jquery/', '', $dir);
+			elseif (strpos($dir, 'jquery.') !== false) {
+				$dir = str_replace('jquery.', '', $dir);
 				if (strpos($dir, '/') === false) {
 					$jquery[] = $dir;
 				}
 			}
-			elseif (strpos($dir, 'bt3/') !== false) {
-				$dir = str_replace('bt3/', '', $dir);
+			elseif (strpos($dir, 'bt3.') !== false) {
+				$dir = str_replace('bt3.', '', $dir);
 				if (strpos($dir, '/') === false) {
 					$bt3[] = $dir;
 				}
@@ -115,23 +122,24 @@ class FeController extends InitController
 			$plugin = $single[0];
 		}
 
+		$folder = 'resources/js/libs/';
 		if (strpos($plugin, 'bt3') !== false) {
 			// bt3
 			$viewDir   = 'auto_jquery_bt3';
 			$viewName  = substr($plugin, 11);
-			$pluginDir = 'assets/js/libs/bt3/' . $viewName;
+			$pluginDir = $folder . 'bt3/' . $viewName;
 		}
 		elseif (strpos($plugin, 'jquery') !== false) {
 			// jquery
 			$viewDir   = 'auto_jquery';
 			$viewName  = substr($plugin, 7);
-			$pluginDir = 'assets/js/libs/jquery/' . $viewName;
+			$pluginDir = $folder . 'jquery/' . $viewName;
 		}
 		else {
 			// common
 			$viewDir   = 'auto';
 			$viewName  = $plugin;
-			$pluginDir = 'assets/js/libs/' . $viewName;
+			$pluginDir = $folder . $viewName;
 		}
 
 		$viewContent = '';
@@ -141,7 +149,7 @@ class FeController extends InitController
 		}
 
 
-		$files = $disk->files($pluginDir);
+		$files = $disk->files($pluginDir, true);
 
 		$markdownPath = '';
 		if (is_array($files)) {
@@ -156,11 +164,10 @@ class FeController extends InitController
 		if ($markdownPath && file_exists($markdownPath)) {
 			$content = file_get_contents($markdownPath);
 			try {
-				$markdownContent = StrHelper::markdownToHtml($content);
+				$markdownContent = $content;
 			} catch (\Exception $e) {
-				die($e->getMessage());
+				return Resp::web(Resp::ERROR, $e->getMessage());
 			}
-
 		}
 
 

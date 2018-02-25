@@ -23,9 +23,12 @@ mix.sass(
 	'resources/assets/scss/slt.scss',
 	'public/resources/css'
 ).sass(
-	'extensions/ext-fe/resources/scss/develop/style.scss',
+	'resources/assets/scss/landing.scss',
 	'public/resources/css'
 ).sass(
+	'extensions/ext-fe/resources/scss/develop/style.scss',
+	'public/resources/css/develop.css'
+).sass(
 	'extensions/ext-fe/resources/scss/backend/style.scss',
-	'public/resources/css'
+	'public/resources/css/backend.css'
 );

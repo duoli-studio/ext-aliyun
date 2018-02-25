@@ -32,6 +32,23 @@ if (!function_exists('sys_gen_order')) {
 	}
 }
 
+if (!function_exists('sys_order_prefix')) {
+	/**
+	 * 生成订单号
+	 * @param string $order_no
+	 * @return string
+	 */
+	function sys_order_prefix($order_no)
+	{
+		if (preg_match('/^([a-zA-z]{1,})\d*/i', $order_no, $matches)) {
+			return $matches[1];
+		}
+		else {
+			return 'other';
+		}
+	}
+}
+
 if (!function_exists('sys_trans')) {
 	/**
 	 * translate line

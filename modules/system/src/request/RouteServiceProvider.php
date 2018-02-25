@@ -118,6 +118,8 @@ class RouteServiceProvider extends ServiceProvider
 					->name('system:develop.cp.graphql');
 				$router->get('/phpinfo', DevEnvController::class . '@phpinfo')
 					->name('system:develop.env.phpinfo');
+				$router->get('/check', DevEnvController::class . '@check')
+					->name('system:develop.env.check');
 				$router->any('/tool/graphql-reverse', DevToolController::class . '@graphqlReverse')
 					->name('system:develop.tool.graphql_reverse');
 				$router->any('/tool/html-entity', DevToolController::class . '@htmlEntity')

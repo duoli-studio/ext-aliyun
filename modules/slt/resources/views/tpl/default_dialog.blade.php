@@ -4,7 +4,7 @@
     {!! Html::style('assets/css/slt.css') !!}
 @endsection
 @section('head-script')
-    @include('ext-fe::requirejs')
+    @include('slt::tpl.inc_requirejs')
 @endsection
 @section('body-class') slt--page_dialog @yield('body-dialog_class') @endsection
 @section('body-main')

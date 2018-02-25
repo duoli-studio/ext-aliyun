@@ -7,7 +7,7 @@
 use Poppy\Framework\Application\TestCase;
 use System\Models\PamAccount;
 use System\Models\SysHelp;
-use User\Classes\extension\AliPush;
+use Finance\Classes\Extension\AliPush;
 use System\Notifications\HelpNotification;
 
 class PushTest extends TestCase

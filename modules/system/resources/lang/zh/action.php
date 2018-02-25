@@ -77,9 +77,10 @@ return [
 	/* netease im
       ---------------------------------------- */
 	'im'            => [
-		'push_type'  => '推送消息类型错误',
-		'account_id' => '用户id错误',
-		'msgtype'    => '推送类型错误',
-		'msg'        => '消息内容错误',
+		'push_type'        => '推送消息类型',
+		'account_id'       => '用户id',
+		'msgtype'          => '推送类型',
+		'msg'              => '消息内容',
+		'start_push_error' => '推送消息失败',
 	],
 ];

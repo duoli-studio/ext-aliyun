@@ -88,7 +88,7 @@ class NeteaseIm
 			}
 		}
 		else {
-			return $this->setError('有错误');
+			return $this->setError(trans('system::action.im.start_push_error'));
 		}
 	}
 
@@ -118,7 +118,7 @@ class NeteaseIm
 			}
 		}
 		else {
-			return $this->setError('有错误');
+			return $this->setError(trans('system::action.im.start_push_error'));
 		}
 	}
 }
