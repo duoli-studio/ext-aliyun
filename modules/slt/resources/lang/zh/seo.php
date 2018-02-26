@@ -12,4 +12,7 @@ return [
 	'nav_index' => [
 		'title' => '导航',
 	],
+	'fe_js'     => [
+		'title' => 'Js示例',
+	],
 ];

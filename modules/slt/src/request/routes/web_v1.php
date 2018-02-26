@@ -15,7 +15,7 @@
 	$route->post('util/image', 'UtilController@image')
 		->name('slt:util.image');
 
-	$route->get('fe/js/{name?}', 'FeController@js')
+	$route->any('fe/js/{name?}', 'FeController@js')
 		->name('slt:fe.js');
 	\Route::get('fe/md', 'FeController@markdown')
 		->name('slt:fe.md');
