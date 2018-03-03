@@ -61,6 +61,10 @@ class AccountPolicy
 	 */
 	public function disable(PamAccount $pam, PamAccount $item)
 	{
+		// 不得禁用自身
+		if ($pam->id == $item->id) {
+			return false;
+		}
 		return !$this->enable($pam, $item);
 	}
 }

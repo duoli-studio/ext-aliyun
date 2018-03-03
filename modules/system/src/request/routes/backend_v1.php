@@ -20,43 +20,46 @@
 		$route->any('/setting/establish', 'SettingController@establish');
 
 		// role
-		$route->post('role/permissions', 'RoleController@permissions');
-		$route->post('role/permissions_store', 'RoleController@permissionsStore');
-		$route->post('role/lists', 'RoleController@lists');
-		$route->post('role/establish', 'RoleController@establish');
-		$route->post('role/do', 'RoleController@do');
+		$route->any('role/permissions', 'RoleController@permissions');
+		$route->any('role/permissions_store', 'RoleController@permissionsStore');
+		$route->any('role/lists', 'RoleController@lists');
+		$route->any('role/establish', 'RoleController@establish');
+		$route->any('role/do', 'RoleController@do');
 
 		// core
-		$route->post('/core/cache_clear', 'CoreController@cacheClear');
+		$route->any('/core/cache_clear', 'CoreController@cacheClear');
 
 		// mail
-		$route->post('mail/fetch', 'MailController@fetch');
-		$route->post('mail/store', 'MailController@store');
-		$route->post('mail/test', 'MailController@test');
+		$route->any('mail/fetch', 'MailController@fetch');
+		$route->any('mail/store', 'MailController@store');
+		$route->any('mail/test', 'MailController@test');
 
 		// pam
-		$route->post('pam/lists', 'PamController@lists');
-		$route->post('pam/establish', 'PamController@establish');
-		$route->post('pam/do', 'PamController@do');
-		$route->post('pam/disable', 'PamController@disable');
-		$route->post('pam/password', 'PamController@password');
+		$route->any('pam/lists', 'PamController@lists');
+		$route->any('pam/establish', 'PamController@establish');
+		$route->any('pam/do', 'PamController@do');
+		$route->any('pam/disable', 'PamController@disable');
+		$route->any('pam/password', 'PamController@password');
 
 		// area
-		$route->post('area/lists', 'AreaController@lists');
-		$route->post('area/establish', 'AreaController@establish');
-		$route->post('area/do', 'AreaController@do');
+		$route->any('area/lists', 'AreaController@lists');
+		$route->any('area/establish', 'AreaController@establish');
+		$route->any('area/do', 'AreaController@do');
+		$route->any('area/fix', 'AreaController@fix')->name('backend:api_v1.area.fix');
+		$route->any('area/child', 'AreaController@child')->name('backend:api_v1.area.child');
 
 		// help
-		$route->post('help/lists', 'HelpController@lists');
-		$route->post('help/establish', 'HelpController@establish');
-		$route->post('help/do', 'HelpController@do');
+		$route->any('help/lists', 'HelpController@lists');
+		$route->any('help/establish', 'HelpController@establish');
+		$route->any('help/do', 'HelpController@do');
 
 		// category
-		$route->post('category/lists', 'CategoryController@lists');
-		$route->post('category/establish', 'CategoryController@establish');
-		$route->post('category/do', 'CategoryController@do');
+		$route->any('category/lists', 'CategoryController@lists');
+		$route->any('category/establish', 'CategoryController@establish');
+		$route->any('category/do', 'CategoryController@do');
 
 		//netease im
-		$route->post('im/send_notice','NeteaseImController@systemNotice');
+		$route->any('im/send','NeteaseImController@systemNotice');
+		$route->any('im/set','NeteaseImController@set');
 	});
 });

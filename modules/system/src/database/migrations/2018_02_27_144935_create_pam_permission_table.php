@@ -19,13 +19,13 @@ class CreatePamPermissionTable extends Migration
     {
         Schema::create('pam_permission', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 255);
-            $table->string('title', 255);
-            $table->string('description', 255);
-            $table->string('group', 50);
-            $table->string('root', 50);
-            $table->string('module', 50);
-            $table->string('type', 50);
+            $table->string('name', 255)->default('');
+            $table->string('title', 255)->default('');
+            $table->string('description', 255)->default('');
+            $table->string('group', 50)->default('');
+            $table->string('root', 50)->default('');
+            $table->string('module', 50)->default('');
+            $table->string('type', 50)->default('');
 
             $table->unique('name', 'permission_name_unique');
 

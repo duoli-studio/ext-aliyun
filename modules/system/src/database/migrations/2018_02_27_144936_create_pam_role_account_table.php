@@ -18,8 +18,8 @@ class CreatePamRoleAccountTable extends Migration
     public function up()
     {
         Schema::create('pam_role_account', function (Blueprint $table) {
-            $table->unsignedMediumInteger('account_id')->comment('账户id');
-            $table->unsignedMediumInteger('role_id')->comment('角色id');
+            $table->unsignedMediumInteger('account_id')->default(0)->comment('账户id');
+            $table->unsignedMediumInteger('role_id')->default(0)->comment('角色id');
 
             $table->primary('account_id');
             $table->index('role_id', 'role_id');

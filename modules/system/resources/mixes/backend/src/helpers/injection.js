@@ -95,6 +95,7 @@ function install(Vue) {
 	if (token && token.length) {
 		Vue.http.defaults.headers.common.Accept = 'application/json';
 		Vue.http.defaults.headers.common.Authorization = `Bearer ${token}`;
+		store.commit('token', token);
 	}
 	mixinRouter(injection);
 	mixinUse(injection);

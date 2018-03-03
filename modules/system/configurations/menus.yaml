@@ -21,6 +21,9 @@ global:
                 -
                     path: /system/article
                     text: 帮助列表
+                -
+                    path: /system/im
+                    text: 通知
         -
             icon: qr-scanner
             text: 用户管理

@@ -1,15 +1,16 @@
-configurations:
+system:
     initialization:
-        name: 参数配置
+        name: 系统设置
+        # 路由, 用于页面打开
         path: setting-system
         tabs: true
         target: global
     tabs:
-        configuration:
+        site:
             default: true
             show: true
             submit: api_v1/backend/system/layout/page/setting-system
-            title: 全局设置
+            title: 站点设置
             fields:
                 name:
                     default: ''
@@ -39,21 +40,9 @@ configurations:
                     type: input
                 short_name:
                     default: ' '
-                    label: 短字母
+                    label: 短字母标识
                     key: system::site.short_name
                     placeholder: 请输入简短的标识
-                    type: input
-                account_prefix:
-                    default: ' '
-                    label: 账号前缀
-                    key: system::site.account_prefix
-                    placeholder: 请输入账号前缀, 用于账号注册默认用户名生成
-                    type: input
-                unallowed_nickname:
-                    default: ' '
-                    label: 昵称黑名单
-                    key: system::site.unallowed_nickname
-                    description: 请输入昵称敏感词汇,词汇之间用英文逗号隔开
                     type: input
                 enabled:
                     default: false
@@ -63,13 +52,23 @@ configurations:
                     key: system::site.is_open
                     required: false
                     type: switch
-extension:
-    initialization:
-        name: 扩展配置
-        path: setting-extension
-        tabs: true
-        target: global
-    tabs:
+                close_reason:
+                    default: ' '
+                    label: 网站停止服务说明
+                    key: system::site.close_reason
+                    placeholder: 网站暂停服务描述
+                    type: textarea
+        pam:
+            show: true
+            submit: api_v1/backend/system/layout/page/setting-system
+            title: Pam设置
+            fields:
+                prefix:
+                    default: ' '
+                    label: 账号前缀
+                    key: system::pam.prefix
+                    placeholder: 请输入账号前缀, 用于账号注册默认用户名生成
+                    type: input
         sms:
             default: false
             show: true
@@ -99,10 +98,10 @@ extension:
                     type: input
                 sms_local_captcha_text:
                     default: ' '
-                    label: 验证码文本
+                    label: 验证码文本(本地)
                     key: extension::sms_local.captcha_text
                     type: textarea
-                    description: '可用变量名称[code:验证码], 遵循 laravel translate 写法'
+                    description: '可用变量名称[code:验证码], 遵循 laravel translate 写法, 会显示在日志中'
                 sms_aliyun_access_key:
                     default: ' '
                     label: AccessKey(阿里云)
@@ -243,110 +242,3 @@ extension:
                     label: appSecret(网易IM)
                     key: extension::netease_im.app_secret
                     type: input
-        count_down:
-            show: true
-            submit: api_v1/backend/system/layout/page/setting-extension
-            title: 订单支付倒计时
-            fields:
-                send_type:
-                    default: false
-                    label: 是否开启
-                    key: extension::time.is_open
-                    type: switch
-                aliyun_app_key:
-                    default: ' '
-                    label: 倒计时时间(分钟)
-                    key: extension::time.count_down_time
-                    type: input
-        point:
-            show: true
-            submit: api_v1/backend/system/layout/page/setting-extension
-            title: 惩戒值设置
-            fields:
-                send_type:
-                    default: false
-                    label: 是否开启
-                    key: extension::point.is_open
-                    type: switch
-                order_ing_point:
-                    default: ' '
-                    label: 订单进行中取消订单
-                    key: extension::point.order_ing_point
-                    type: input
-        fee:
-            show: true
-            submit: api_v1/backend/system/layout/page/setting-extension
-            title: 手续费设置
-            fields:
-                send_type:
-                    default: false
-                    label: 是否开启
-                    key: extension::fee.is_open
-                    type: switch
-                fee_rate:
-                    default: ' '
-                    label: 手续费金额(%)
-                    key: extension::fee.fee_rate
-                    type: input
-                min_fee_money:
-                    default: ' '
-                    label: 最低手续费金额
-                    key: extension::fee.min_fee_money
-                    type: input
-                max_fee_money:
-                    default: ' '
-                    label: 最高手续费金额
-                    key: extension::fee.max_fee_money
-                    type: input
-sample:
-    initialization:
-        name: 示例
-        path: setting-sample
-        tabs: true
-        target: global
-    tabs:
-        configuration:
-            default: true
-            show: true
-            submit: api_v1/backend/system/layout/page/setting-sample
-            title: 示例项
-            fields:
-                textarea:
-                    default: ''
-                    label: 多行文本输入框
-                    key: sample::sample.textarea
-                    required: true
-                    type: textarea
-                input:
-                    default: ' '
-                    description: ''
-                    label: 单行文本输入
-                    key: sample::sample.input
-                    placeholder: 请输入网站名称
-                    required: true
-                    type: input
-                    validates:
-                        -
-                            message: 请输入网站名称
-                            required: true
-                            trigger: change
-                            type: string
-                switch:
-                    default: false
-                    description: '关闭后网站将不能访问'
-                    format: boolean
-                    label: 开关
-                    key: sample::sample.is_open
-                    required: false
-                    type: switch
-                radio:
-                      default: false
-                      description: '多选1'
-                      format: string
-                      label: 多选1(Radio)
-                      key: sample::sample.radio
-                      required: false
-                      type: radio
-                      opinions:
-                          aliyun: 阿里云
-                          local : 本地

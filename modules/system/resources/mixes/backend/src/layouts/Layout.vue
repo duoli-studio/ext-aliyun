@@ -224,7 +224,7 @@ export default {
 			<div class="layout-content-main">
 				<router-view></router-view>
 			</div>
-			<div class="layout-copy" v-if="!design">2017 &copy; Notadd</div>
+			<div class="layout-copy" v-if="!design">2017-2018 &copy; 山东猎象网络科技有限公司</div>
 		</div>
 	</div>
 </template>

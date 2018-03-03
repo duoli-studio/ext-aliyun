@@ -55,12 +55,8 @@ export default {
 		return {
 			// 查询条件
 			filter      : {
-				field    : '',
-				kw       : '',
-				type     : '',
-				status   : '',
-				start_at : '',
-				end_at   : '',
+				id   : '',
+				type : '',
 			},
 			// 提现记录列表
 			list        : [],
@@ -101,10 +97,8 @@ export default {
 				title   : '创建分类',
 				type    : 'create',
 				data    : {
-					id      : '',
-					title   : '',
-					cat_id  : '',
-					content : '',
+					id    : '',
+					title : '',
 				},
 				rules   : {
 					parent_id : [
@@ -128,6 +122,10 @@ export default {
 							trigger  : 'blur',
 						},
 					],
+				},
+				dsField : {
+					id   : 'ID',
+					type : '类型',
 				},
 			}
 		};
@@ -205,10 +203,10 @@ export default {
 			const self = this;
 			self.$loading.start();
 			injection.http.post(`${window.api}backend/system/category/lists`, {
-				id       : self.filter.id,
-				type     : self.filter.type,
-				page     : self.pagination.page,
-				size     : self.pagination.size,
+				id   : self.filter.id,
+				type : self.filter.type,
+				page : self.pagination.page,
+				size : self.pagination.size,
 			}).then(response => {
 				const {status, message, data} = response.data;
 				if (status) {
@@ -272,6 +270,15 @@ export default {
 			<icon type="android-add"></icon>
 			新增
 		</i-button>
+		<i-form inline>
+			<form-item prop="user">
+				<i-input type="text" placeholder="查询类型" v-model="filter.type"></i-input>
+			</form-item>
+			<i-button class="btn-action" type="primary" @click.native="search">
+				<icon type="search"></icon>
+				搜索
+			</i-button>
+		</i-form>
 		<i-table :columns="listColumns" :data="list"></i-table>
 		<!--c2e modal-->
 		<modal v-model="c2e.display" class="liex-modal-delete"

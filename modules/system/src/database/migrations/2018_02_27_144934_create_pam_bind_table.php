@@ -18,11 +18,11 @@ class CreatePamBindTable extends Migration
     public function up()
     {
         Schema::create('pam_bind', function (Blueprint $table) {
-            $table->unsignedInteger('account_id');
-            $table->string('qq_key', 255)->comment('qq绑定id');
-            $table->string('qq_union_id', 255)->comment('qq union id');
-            $table->string('wx_union_id', 255)->comment('微信union');
-            $table->string('wx_key', 255)->comment('微信绑定id');
+            $table->unsignedInteger('account_id')->default(0);
+            $table->string('qq_key', 255)->default('')->comment('qq绑定id');
+            $table->string('qq_union_id', 255)->default('')->comment('qq union id');
+            $table->string('wx_union_id', 255)->default('')->comment('微信union');
+            $table->string('wx_key', 255)->default('')->comment('微信绑定id');
             $table->dateTime('updated_at')->nullable();
             $table->dateTime('created_at')->nullable();
 

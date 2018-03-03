@@ -170,7 +170,7 @@ class Pam
 		}
 
 		// 自动设置前缀
-		$prefix = strtoupper(strtolower($this->getSetting()->get('system::site.account_prefix')));
+		$prefix = strtoupper(strtolower($this->getSetting()->get('system::pam.prefix')));
 		if ($type != PamAccount::REG_TYPE_USERNAME) {
 			$hasAccountName = false;
 			// 检查是否设置了前缀

@@ -165,6 +165,54 @@ class Area
 	}
 
 	/**
+	 * 修复分类代码
+	 * @param $id
+	 */
+	public function fix($id)
+	{
+		$children    = $this->getChildren($id);
+		$topParentId = $this->topParentId($id);
+		SysArea::where('id', $id)->update([
+			'children'      => implode(',', $children),
+			'top_parent_id' => $topParentId,
+		]);
+	}
+
+	//判断是否有子集
+	public function hasChild($id)
+	{
+		$parent = SysArea::where('id', $id)->value('parent_id');
+		if (SysArea::where('id', $id)->where('top_parent_id', $id)->exists() || SysArea::where('id', $id)->where('top_parent_id', $parent)->exists()) {
+			SysArea::where('id', $id)->update([
+				'has_child' => 1,
+			]);
+		}
+		else {
+			SysArea::where('id', $id)->update([
+				'has_child' => 0,
+			]);
+		}
+		return true;
+	}
+
+	//等级
+	public function level($id)
+	{
+		//省级
+		SysArea::where('id', $id)->where('parent_id', 0)->update([
+			'level' => 1,
+		]);
+		// 市级
+		$parent = SysArea::where('id', $id)->value('parent_id');
+		if (SysArea::where('id', $parent)->where('parent_id', 0)->exists()) {
+			SysArea::where('id', $id)->update([
+				'level' => 2,
+			]);
+		};
+		return true;
+	}
+
+	/**
 	 * 初始化id
 	 * @param int $id
 	 * @return bool
@@ -195,19 +243,6 @@ class Area
 		});
 	}
 
-	/**
-	 * 修复分类代码
-	 * @param $id
-	 */
-	private function fix($id)
-	{
-		$children    = $this->getChildren($id);
-		$topParentId = $this->topParentId($id);
-		SysArea::where('id', $id)->update([
-			'children'      => implode(',', $children),
-			'top_parent_id' => $topParentId,
-		]);
-	}
 
 	/**
 	 * @param $ids

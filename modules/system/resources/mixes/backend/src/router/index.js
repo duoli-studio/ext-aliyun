@@ -93,7 +93,7 @@ const configuration = [
 	},
 	{
 		component : Im,
-		path      : 'im',
+		path      : 'system/im',
 	},
 ];
 

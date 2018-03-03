@@ -18,8 +18,8 @@ class CreatePamPermissionRoleTable extends Migration
     public function up()
     {
         Schema::create('pam_permission_role', function (Blueprint $table) {
-            $table->unsignedInteger('permission_id');
-            $table->unsignedInteger('role_id');
+            $table->unsignedInteger('permission_id')->default(0);
+            $table->unsignedInteger('role_id')->default(0);
 
             $table->primary(['permission_id', 'role_id']);
 

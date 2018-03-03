@@ -15,6 +15,8 @@ use System\Classes\Traits\FilterTrait;
  * @property string $parent_id       父级
  * @property string $top_parent_id   顶层ID
  * @property string $children        所有的子元素
+ * @property int    $has_child       是否有子元素
+ * @property int    $level           级别
  * @mixin \Eloquent
  * @method static Builder|SysArea filter($input = [], $filter = null)
  * @method static Builder|SysArea pageFilter(PageInfo $pageInfo)
@@ -33,9 +35,10 @@ class SysArea extends \Eloquent
 	public $timestamps = false;
 
 	protected $fillable = [
-		'code',
 		'title',
 		'parent_id',
+		'has_child',   // 是否有子集
+		'level',       // 级别
 		'top_parent_id',
 		'children',
 	];

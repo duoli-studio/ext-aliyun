@@ -19,10 +19,10 @@ class CreatePamCaptchaTable extends Migration
     {
         Schema::create('pam_captcha', function (Blueprint $table) {
             $table->increments('id')->comment('id');
-            $table->string('type', 45)->comment('值类型 mobile/email');
-            $table->integer('num')->comment('发送验证码的次数');
-            $table->string('passport', 45)->comment('手机号 或邮箱');
-            $table->string('captcha', 45)->comment('验证码');
+            $table->string('type', 45)->default('')->comment('值类型 mobile/email');
+            $table->integer('num')->default(0)->comment('发送验证码的次数');
+            $table->string('passport', 45)->default('')->comment('手机号 或邮箱');
+            $table->string('captcha', 45)->default('')->comment('验证码');
             $table->dateTime('created_at')->nullable()->comment('创建时间');
             $table->dateTime('disabled_at')->nullable()->comment('失效时间');
             $table->dateTime('updated_at')->nullable()->comment('修改时间');

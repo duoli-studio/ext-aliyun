@@ -27,6 +27,7 @@ trait FilterTrait
 	 * @param Builder|FilterTrait|\Eloquent $Db
 	 * @param PageInfo                      $pageInfo
 	 * @param string                        $resource
+	 * @param array                         $append
 	 * @return array
 	 */
 	public static function paginationInfo($Db, PageInfo $pageInfo, $resource, $append = [])

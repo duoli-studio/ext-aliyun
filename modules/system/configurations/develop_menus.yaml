@@ -26,5 +26,11 @@ system:
     title : 系统
     children :
         -
-            title : PHP状态
+            title : PhpInfo
             route : system:develop.env.phpinfo
+        -
+            title : 环境检测
+            route : system:develop.env.check
+        -
+            title : 数据库字典
+            route : system:develop.env.db

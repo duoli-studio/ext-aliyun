@@ -1,6 +1,5 @@
 <script>
 import injection, {trans} from '../helpers/injection';
-import options from '../helpers/options';
 
 export default {
 	/**
@@ -13,15 +12,17 @@ export default {
 		injection.loading.start();
 		injection.http.post(`${window.api}backend/system/area/lists`, {
 			parent_id : 0,
-			page      : 1
+			page      : 1,
+			append    : 'parent'
 		}).then(response => {
 			const {status, message, data} = response.data;
 			if (status) {
 				throw new Error(message);
 			}
 			next(vm => {
-				vm.list = data.list;
-				vm.pagination = data.pagination;
+				vm.list.items = data.list;
+				vm.list.pagination = data.pagination;
+				vm.dataSource.parent = data.parent;
 				injection.loading.finish();
 			});
 		}).catch(() => {
@@ -37,18 +38,20 @@ export default {
 			const btns = [];
 			const btnEdit = h('i-button', {
 				props : {
-					type : 'primary',
-					size : 'small'
+					type  : 'primary',
+					size  : 'small',
+					icon  : 'edit',
+					shape : 'circle',
 				},
 				style : {
 					marginRight : '5px'
 				},
 				on    : {
 					click : () => {
-						that.fetchRole(params);
+						that.onC2eEdit(params);
 					}
 				}
-			}, '编辑');
+			});
 			const btnDelete = h('poptip', {
 				props : {
 					confirm   : true,
@@ -58,16 +61,18 @@ export default {
 				},
 				on    : {
 					'on-ok' : () => {
-						that.removeItem(params);
+						that.onDo(params, 'delete');
 					}
 				}
 			}, [
 				h('i-button', {
 					props : {
-						type : 'error',
-						size : 'small'
+						type  : 'error',
+						size  : 'small',
+						icon  : 'close',
+						shape : 'circle',
 					},
-				}, '删除')
+				})
 			]);
 			btns.push(btnEdit);
 			btns.push(btnDelete);
@@ -76,208 +81,177 @@ export default {
 		};
 
 		return {
-			// 角色列表
-			list        : [],
-			// 分页
-			pagination  : {
-				page  : 1,
-				size  : 15,
-				total : 0,
-			},
-			// 定义的各种选项
-			options,
-			// 地区列定义
-			listColumns : [
-				{
-					width : 75,
-					title : '地区ID',
-					key   : 'id'
+			list       : {
+				items      : [],
+				pagination : {
+					page  : 1,
+					size  : 20,
+					total : 0,
 				},
-				{
-					title : '名称',
-					key   : 'title'
+				filter     : {
+					parent_id : 0,
 				},
-				{
-					title  : '操作',
-					key    : 'handle',
-					align  : 'center',
-					render : handleRender,
-				},
-			],
-			modalItem   : {
-				display : false,
-				title   : '创建地区',
-				type    : 'create',
-				loading : false
-			},
-			loading     : false,
-			rules       : {
-				title : [
+				columns    : [
 					{
-						message  : '地区名称不能为空',
-						required : true,
-						trigger  : 'blur',
+						width : 75,
+						title : '地区ID',
+						key   : 'id'
 					},
-				],
+					{
+						title : '名称',
+						key   : 'title'
+					},
+					{
+						title  : '操作',
+						key    : 'handle',
+						align  : 'right',
+						render : handleRender,
+					},
+				]
 			},
-			item        : {
-				id          : 0,
-				name        : '',
-				title       : '',
-				guard       : '',
-				description : '',
+			c2e        : {
+				display : false,
+				loading : false,
+				type    : 'create',
+				data    : {
+					id        : 0,
+					parent_id : '',
+					title     : '',
+				},
+				rules   : {
+					title : [
+						{
+							message  : '地区名称不能为空',
+							required : true,
+							trigger  : 'blur',
+						},
+					],
+				},
 			},
-			// 新增角色类型
-			guardList   : [
-				{
-					value : 'backend',
-					label : '后台',
-				},
-				{
-					value : 'web',
-					label : '用户',
-				},
-				{
-					value : 'develop',
-					label : '开发者',
-				},
-			],
+			do         : {
+				loading : false,
+			},
+			dataSource : {
+				parent : []
+			},
 		};
 	},
 	methods : {
 		// 清空再次点击新增的数据
-		resetItem() {
-			this.item.id = 0;
-			this.item.title = '';
-			this.item.parent_id = '';
-			this.modalItem.type = 'create';
-		},
-		resetPermission() {
-			this.permissions = [];
-			this.permissionValue = [];
-			this.modalPermission.display = false;
+		c2eReset() {
+			this.c2e.data.id = 0;
+			this.c2e.data.title = '';
+			this.c2e.data.parent_id = '';
+			this.c2e.type = 'create';
 		},
 		// 删除数据
-		removeItem(params) {
+		onDo(params, action) {
 			const self = this;
-			self.loading = true;
+			self.do.loading = true;
 			injection.http.post(`${window.api}backend/system/area/do`, {
-				action : 'delete',
-				id     : params.row.id
+				action,
+				id : params.row.id
 			}).then((response) => {
 				const {status, message} = response.data;
 				if (status) {
 					throw new Error(message);
 				}
 				self.$notice.open({
-					title : '删除数据成功！',
+					title : '操作成功！',
 				});
-				self.refresh();
+				self.listRefresh();
 			}).catch((error) => {
 				self.$notice.error({
-					title : error,
+					title : '操作失败',
+					desc  : error,
 				});
 			}).finally(() => {
-				self.loading = false;
+				self.do.loading = false;
 			});
 		},
 		// 点击新增的弹出框
-		createItem() {
+		onC2eAdd() {
 			// 重置弹框数据
-			this.resetItem();
-			this.modalItem.display = true;
-			this.modalItem.title = '创建地区';
+			this.c2eReset();
+			this.c2e.display = true;
 		},
-		// 刷新页面
-		refresh() {
-			const self = this;
-			self.$loading.start();
-			injection.http.post(`${window.api}backend/system/area/lists`, {
-				page : self.pagination.page,
-				size : self.pagination.size,
-			}).then(response => {
-				const {status, message, data} = response.data;
-				if (status) {
-					throw new Error(message);
-				}
-				self.list = data.list;
-				self.pagination = data.pagination;
-				self.$notice.open({
-					title : '刷新数据成功！',
-				});
-				self.$loading.finish();
-			}).catch(() => {
-				self.$loading.error();
-				self.$notice.error({
-					title : '刷新数据失败！',
-				});
-			});
-			this.loading = false;
+		onC2eEdit(params) {
+			// 重置弹框数据
+			this.c2e.data.id = params.row.id;
+			this.c2e.data.title = params.row.title;
+			this.c2e.data.parent_id = params.row.parent_id;
+			this.c2e.type = 'edit';
+			this.c2e.display = true;
 		},
 		// 增加地区
-		submitItem() {
+		onC2eSubmit() {
 			const self = this;
-			let variable = {};
-			if (self.modalItem.type === 'create') {
-				variable = {
-					title     : self.item.title,
-					parent_id : 0,
-				};
-			}
-			else {
-				variable = {
-					title     : self.item.title,
-					parent_id : 0,
-					id        : self.item.id
-				};
-			}
-			self.$refs.item.validate(valid => {
+			self.$refs.c2e.validate(valid => {
 				if (valid) {
-					self.loading = true;
+					self.c2e.loading = true;
 					self.$http.post(
 						`${window.api}backend/system/area/establish`,
-						variable,
+						self.c2e.data,
 					).then(() => {
 						self.$notice.open({
 							title : '保存成功！',
 						});
 						// 重置弹窗
-						self.resetItem();
+						self.c2eReset();
 						// 刷新页面
-						self.refresh();
+						self.listRefresh();
+						self.c2e.display = false;
 					}).catch(() => {
 						self.$notice.error({
 							title : '保存失败！',
 						});
 					}).finally(() => {
-						self.loading = false;
-						self.modalItem.display = false;
+						self.c2e.loading = false;
 					});
 				}
 			});
 		},
-		// 编辑地区
-		fetchRole(params) {
-			this.modalItem.display = true;
-			this.modalItem.type = 'edit';
-			this.item.title = params.row.title;
-			this.item.parent_id = 0;
-		},
 		// 查找
-//            search() {
-//                this.pagination.page = 1;
-//                this.refresh();
-//            },
-		pageChange(page) {
-			const self = this;
-			self.pagination.page = page;
-			self.refresh();
+		listSearch() {
+			this.list.pagination.page = 1;
+			this.listRefresh();
 		},
-		pageSizeChange(pagesize) {
+		// 刷新界面
+		listRefresh() {
 			const self = this;
-			self.pagination.size = pagesize;
-			self.refresh();
-		}
+			self.$loading.start();
+			injection.http.post(`${window.api}backend/system/area/lists`, {
+				parent_id : self.list.filter.parent_id,
+				page      : self.list.pagination.page,
+				size      : self.list.pagination.size,
+			}).then(response => {
+				const {status, message, data} = response.data;
+				if (status) {
+					throw new Error(message);
+				}
+				self.list.items = data.list;
+				self.list.pagination = data.pagination;
+				self.$notice.open({
+					title : '刷新数据成功！',
+				});
+				self.$loading.finish();
+			}).catch(error => {
+				self.$loading.error();
+				self.$notice.error({
+					title : error,
+				});
+			});
+		},
+		listPageChange(page) {
+			const self = this;
+			self.list.pagination.page = page;
+			self.listRefresh();
+		},
+		listPageSizeChange(pagesize) {
+			const self = this;
+			self.list.pagination.size = pagesize;
+			self.listRefresh();
+		},
 	},
 	mounted() {
 		this.$store.commit('title', trans('地区管理'));
@@ -288,45 +262,48 @@ export default {
 	<card :bordered="false">
 		<p slot="title">地区管理</p>
 		<i-button slot="extra" type="info" size="small"
-				  @click.native="createItem">
+				  @click.native="onC2eAdd">
 			<icon type="android-add"></icon>
 			新增
 		</i-button>
-		<!--<i-form inline>-->
-		<!--<form-item prop="user">-->
-		<!--<i-input type="text" placeholder="关键词" v-model="listFilter.keyword"></i-input>-->
-		<!--</form-item>-->
-		<!--<form-item prop="type">-->
-		<!--<i-select placeholder="用户类型" v-model="listFilter.type">-->
-		<!--<i-option v-for="item in guardList" :value="item.value" :key="item.value">{{ item.label }}-->
-		<!--</i-option>-->
-		<!--</i-select>-->
-		<!--</form-item>-->
-		<!--<i-button class="btn-action" type="primary" @click.native="search">-->
-		<!--<icon type="search"></icon>-->
-		<!--搜索-->
-		<!--</i-button>-->
-		<!--</i-form>-->
-
-		<i-table :columns="listColumns" :data="list"></i-table>
+		<i-form inline>
+			<form-item prop="parent_id">
+				<i-select v-model="list.filter.parent_id" style="width:150px;" placeholder="选择父级" clearable filterable>
+					<i-option v-for="item in dataSource.parent" :value="item.key" :label="item.value"
+							  :key="item.key"></i-option>
+				</i-select>
+			</form-item>
+			<i-button class="btn-action" type="primary" @click.native="listSearch">
+				<icon type="search"></icon>
+				搜索
+			</i-button>
+		</i-form>
+		<i-table :columns="list.columns" :data="list.items"></i-table>
+		<!--pagination-->
 		<page show-sizer show-elevator
-			  :current="pagination.page"
-			  :page-size-opts="options.pageSize"
-			  :total="pagination.total"
-			  :page-size="pagination.size" class-name="liex-pager"
-			  @on-change="pageChange"
-			  @on-page-size-change="pageSizeChange"></page>
+			  :current="list.pagination.page"
+			  :total="list.pagination.total"
+			  :page-size="list.pagination.size" class-name="liex-pager"
+			  @on-change="listPageChange"
+			  @on-page-size-change="listPageSizeChange"
+		></page>
 		<!--新增弹出框start-->
-		<modal v-model="modalItem.display" class="liex-modal-delete"
-			   :title="modalItem.title">
-			<i-form ref="item" :model="item" :rules="rules" :label-width="110">
+		<modal v-model="c2e.display" class="liex-modal-delete"
+			   :title="c2e.type==='create'? '创建地区' : '编辑地区'">
+			<i-form ref="c2e" :model="c2e.data" :rules="c2e.rules" :label-width="110">
 				<form-item label="地区名称" prop="title">
-					<i-input v-model="item.title"></i-input>
+					<i-input v-model="c2e.data.title"></i-input>
+				</form-item>
+				<form-item label="上级地区" prop="parent_id">
+					<i-select v-model="c2e.data.parent_id" style="width:150px;" placeholder="选择父级" clearable filterable>
+						<i-option v-for="item in dataSource.parent" :value="item.key" :label="item.value"
+								  :key="item.key"></i-option>
+					</i-select>
 				</form-item>
 				<form-item>
-					<i-button :loading="loading" @click.native="submitItem"
+					<i-button :loading="c2e.loading" @click.native="onC2eSubmit"
 							  class="btn-group" type="success">
-						<span v-if="!loading">{{modalItem.type === 'create' ? '创建' : '编辑'}}</span>
+						<span v-if="!c2e.loading">{{c2e.type === 'create' ? '创建' : '编辑'}}</span>
 						<span v-else>正在提交…</span>
 					</i-button>
 				</form-item>

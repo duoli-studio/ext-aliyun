@@ -8,7 +8,6 @@ export default {
 			Vue.http.defaults.headers.common.Accept = 'application/json';
 			Vue.http.defaults.headers.common.Authorization = `Bearer ${token}`;
 			store.commit('token', token);
-
 			return true;
 		}
 		return false;

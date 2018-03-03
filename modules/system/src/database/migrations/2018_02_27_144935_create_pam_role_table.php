@@ -19,12 +19,12 @@ class CreatePamRoleTable extends Migration
     {
         Schema::create('pam_role', function (Blueprint $table) {
             $table->mediumIncrements('id');
-            $table->string('name', 100)->comment('角色组名称');
-            $table->string('title', 100)->comment('中文名称');
-            $table->string('description', 100);
-            $table->string('type', 20)->comment('账户类型');
+            $table->string('name', 100)->default('')->comment('角色组名称');
+            $table->string('title', 100)->default('')->comment('中文名称');
+            $table->string('description', 100)->default('');
+            $table->string('type', 20)->default('')->comment('账户类型');
             $table->tinyInteger('is_enable')->default(1)->comment('是否可用');
-            $table->tinyInteger('is_system');
+            $table->tinyInteger('is_system')->default(0);
 
             $table->unique('name', 'role_name');
 

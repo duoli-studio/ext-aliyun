@@ -55,12 +55,7 @@ export default {
 		return {
 			// 查询条件
 			filter      : {
-				field    : '',
-				kw       : '',
-				type     : '',
-				status   : '',
-				start_at : '',
-				end_at   : '',
+				cat_id : '',
 			},
 			// 提现记录列表
 			list        : [],
@@ -95,7 +90,7 @@ export default {
 					render : handleRender,
 				},
 			],
-			c2e : {
+			c2e         : {
 				display : false,
 				loading : false,
 				title   : '创建分类',
@@ -114,7 +109,7 @@ export default {
 							trigger  : 'blur',
 						},
 					],
-					title : [
+					title   : [
 						{
 							message  : '分类标题不能为空',
 							required : true,
@@ -206,13 +201,9 @@ export default {
 			const self = this;
 			self.$loading.start();
 			injection.http.post(`${window.api}backend/system/help/lists`, {
-				field    : self.filter.field,
-				kw       : self.filter.kw,
-				type     : self.filter.type,
-				start_at : self.filter.start_at,
-				end_at   : self.filter.end_at,
-				page     : self.pagination.page,
-				size     : self.pagination.size,
+				cat_id : self.filter.cat_id,
+				page   : self.pagination.page,
+				size   : self.pagination.size,
 			}).then(response => {
 				const {status, message, data} = response.data;
 				if (status) {
@@ -257,9 +248,6 @@ export default {
 		onC2eAdd() {
 			// 重置弹框数据
 			this.onC2eReset();
-			// this.c2e.data.parent_id = 0;
-			// this.c2e.display = true;
-			// this.c2e.title = '创建';
 		},
 	},
 	mounted() {
@@ -276,6 +264,15 @@ export default {
 			<icon type="android-add"></icon>
 			新增
 		</i-button>
+		<i-form inline>
+			<form-item prop="user">
+				<i-input type="text" placeholder="分类ID" v-model="filter.cat_id"></i-input>
+			</form-item>
+			<i-button class="btn-action" type="primary" @click.native="search">
+				<icon type="search"></icon>
+				搜索
+			</i-button>
+		</i-form>
 		<i-table :columns="listColumns" :data="list"></i-table>
 		<!--c2e-->
 		<modal v-model="c2e.display" class="liex-modal-delete"
