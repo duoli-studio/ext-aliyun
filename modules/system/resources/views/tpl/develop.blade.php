@@ -1,10 +1,10 @@
 @extends('system::tpl.default')
 @section('head-css')
-    {!! Html::style('assets/css/basic.css') !!}
-    {!! Html::style('assets/css/develop.css') !!}
+    {!! Html::style('resources/css/basic.css') !!}
+    {!! Html::style('resources/css/develop.css') !!}
 @endsection
 @section('head-script')
-    @include('ext-fe::requirejs')
+    @include('system::tpl.inc_requirejs')
 @endsection
 @section('body-main')
     @include('system::tpl.inc_toastr')

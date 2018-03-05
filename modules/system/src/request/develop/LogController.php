@@ -1,8 +1,6 @@
-<?php namespace Poppy\Extension\Fe\Http;
+<?php namespace System\Request\Develop;
 
-use Poppy\Extension\Fe\Support\LogViewer;
-use System\Request\Develop\InitController;
-
+use System\Classes\LogViewer;
 
 class LogController extends InitController
 {
@@ -28,7 +26,7 @@ class LogController extends InitController
 
 		$logs = LogViewer::all();
 
-		return view('ext-fe::log.index', [
+		return view('system::develop.log.index', [
 			'logs'         => $logs,
 			'files'        => LogViewer::getFiles(true),
 			'current_file' => LogViewer::getFileName(),

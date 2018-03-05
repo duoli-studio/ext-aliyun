@@ -1,4 +1,4 @@
-<?php namespace System\Classes;
+
 
 use Illuminate\Http\Request;
 use Poppy\Framework\Classes\Traits\KeyParserTrait;

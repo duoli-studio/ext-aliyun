@@ -14,7 +14,10 @@ use System\Classes\Auth\Provider\BackendProvider;
 use System\Classes\Auth\Provider\DevelopProvider;
 use System\Classes\Auth\Provider\PamProvider;
 use System\Classes\Auth\Provider\WebProvider;
+use System\Classes\FeForm;
+use System\Commands\BowerCommand;
 use System\Commands\DevHtmlCommand;
+use System\Commands\DocCommand;
 use System\Commands\InstallCommand;
 use System\Commands\LogCommand;
 use System\Commands\PamAutoEnableCommand;
@@ -64,7 +67,10 @@ class ServiceProvider extends PoppyServiceProvider
 	{
 		parent::boot($this->name);
 		$path = poppy_path($this->name);
+
+		// 配置文件
 		$this->mergeConfigFrom($path . '/resources/config/graphql.php', 'graphql');
+		$this->mergeConfigFrom($path . '/resources/config/fe.php', 'fe');
 
 		// register extension
 		$this->app['extension']->register();
@@ -117,6 +123,8 @@ class ServiceProvider extends PoppyServiceProvider
 			DevHtmlCommand::class,
 			LogCommand::class,
 			PamAutoEnableCommand::class,
+			BowerCommand::class,
+			DocCommand::class,
 		]);
 	}
 
@@ -145,6 +153,11 @@ class ServiceProvider extends PoppyServiceProvider
 			$app->refresh('request', $guard, 'setRequest');
 			return $guard;
 		});
+
+		$this->app->singleton('poppy.form', function($app) {
+			$form = new FeForm($app['html'], $app['url'], $app['view'], $app['session.store']->token());
+			return $form->setSessionStore($app['session.store']);
+		});
 	}
 
 
@@ -171,6 +184,8 @@ class ServiceProvider extends PoppyServiceProvider
 
 	public function provides()
 	{
-		return [];
+		return [
+			'poppy.form'
+		];
 	}
 }

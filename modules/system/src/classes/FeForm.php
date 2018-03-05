@@ -1,8 +1,7 @@
-<?php namespace Poppy\Extension\Fe\Form;
+<?php namespace System\Classes;
 
 
 use Collective\Html\FormBuilder;
-use System\Classes\Uploader;
 
 class FeForm extends FormBuilder
 {

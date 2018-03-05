@@ -1,4 +1,4 @@
-<?php namespace Poppy\Extension\Fe\Commands;
+<?php namespace System\Commands;
 
 use Illuminate\Console\Command;
 use Poppy\Framework\Helper\FileHelper;
@@ -12,7 +12,7 @@ class DocCommand extends Command
 {
 	use SystemTrait;
 
-	protected $signature = 'ext:fe_doc
+	protected $signature = 'system:doc
 		{type : action}
 	';
 

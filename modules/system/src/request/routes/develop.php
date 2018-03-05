@@ -40,14 +40,11 @@ use Illuminate\Routing\Router;
 			->name('system:develop.tool.html_entity');
 
 		// 扩展
-		if (app('extension')->has('poppy/ext-fe')) {
-			if (class_exists('\Poppy\Extension\Fe\Http\LogController')) {
-				$router->any('/log', '\Poppy\Extension\Fe\Http\LogController@index')
-					->name('system:develop.log.index');
-				$router->any('/api_doc/{type?}', '\Poppy\Extension\Fe\Http\ApiDocController@auto')
-					->name('system:develop.doc.index');
-			}
-		}
+		$router->any('/log', 'LogController@index')
+			->name('system:develop.log.index');
+		$router->any('/api_doc/{type?}', 'ApiDocController@auto')
+			->name('system:develop.doc.index');
+
 	});
 });
 

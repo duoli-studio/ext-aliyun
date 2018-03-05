@@ -1,4 +1,4 @@
-<?php namespace Poppy\Extension\Fe\Commands;
+<?php namespace System\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -18,7 +18,7 @@ class BowerCommand extends Command
 	 * 前端部署.
 	 * @var string
 	 */
-	protected $signature = 'ext:fe_bower
+	protected $signature = 'system:bower
 		{--force= : Force update}
 		{--debug= : debug}
 	';
