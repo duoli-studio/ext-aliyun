@@ -52,7 +52,6 @@ class AreaController extends ApiController
 	{
 		$input              = input();
 		$input['parent_id'] = intval($input['parent_id'] ?? 0);
-		$pageInfo           = new PageInfo($input);
 
 		// append
 		$strAppend = data_get($input, 'append');
@@ -76,7 +75,7 @@ class AreaController extends ApiController
 
 		/** @var SysArea $Db */
 		$Db = SysArea::filter($input, SysAreaFilter::class);
-		return SysArea::paginationInfo($Db, $pageInfo, AreaResource::class, $append);
+		return SysArea::paginationInfo($Db, AreaResource::class, $append);
 	}
 
 

@@ -76,7 +76,6 @@ class PamController extends ApiController
 		}
 		/** @var PamAccount $user */
 		$user      = $this->getJwtBeGuard()->user();
-		$pageInfo  = new PageInfo($input);
 		$Db        = PamAccount::filter($input, PamFilter::class);
 		$strAppend = data_get($input, 'append');
 		$arrAppend = StrHelper::separate(',', $strAppend);
@@ -88,7 +87,7 @@ class PamController extends ApiController
 			$roles          = PamRole::filter($filter, RoleFilter::class)->get();
 			$append['role'] = $roles;
 		}
-		return PamAccount::paginationInfo($Db, $pageInfo, function($item) use ($user) {
+		return PamAccount::paginationInfo($Db, function($item) use ($user) {
 			$pam                = (new PamResource($item))->toArray(app('request'));
 			$pam['can_enable']  = $user->can('enable', $item);
 			$pam['can_disable'] = $user->can('disable', $item);

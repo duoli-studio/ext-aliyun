@@ -16,7 +16,7 @@ class ApiDocController extends Controller
 	public function __construct()
 	{
 		parent::__construct();
-		$catlog = config('ext-fe.apidoc');
+		$catlog = config('fe.apidoc');
 
 		if (count($catlog)) {
 			foreach ($catlog as $api_doc) {
@@ -41,7 +41,7 @@ class ApiDocController extends Controller
 	public function auto($type = '')
 	{
 
-		$catalog = config('ext-fe.apidoc');
+		$catalog = config('fe.apidoc');
 		if (!$catalog) {
 			return Resp::web(Resp::ERROR, "尚未配置 apidoc 生成目录");
 		}
@@ -109,7 +109,7 @@ class ApiDocController extends Controller
 			if (!isset($data['current'])) {
 				return Resp::web(Resp::ERROR, "没有找到对应 URL 地址");
 			}
-			return view('ext-fe::api_doc.auto', [
+			return view('system::develop.api_doc.auto', [
 				'guard'     => $type,
 				'data'      => $data,
 				'variables' => $variables,
@@ -126,7 +126,7 @@ class ApiDocController extends Controller
 
 	protected function apiData($type, $prefix = null, $method = 'get', $version = '1.0.0')
 	{
-		$catalog  = config('ext-fe.apidoc');
+		$catalog  = config('fe.apidoc');
 		$docs     = $catalog[$type];
 		$jsonFile = base_path($docs['doc'] . '/api_data.json');
 		$data     = [];

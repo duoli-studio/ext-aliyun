@@ -29,7 +29,7 @@ class BindController extends ApiController
 			return Resp::web(Resp::ERROR, $OAuth->getError());
 		}
 		else {
-			return Resp::web(Resp::SUCCESS, '操作成功');
+			return Resp::web(Resp::SUCCESS, '绑定成功');
 		}
 	}
 
@@ -53,7 +53,7 @@ class BindController extends ApiController
 			return Resp::web(Resp::ERROR, $Pam->getError());
 		}
 		else {
-			return Resp::web(Resp::SUCCESS, '操作成功');
+			return Resp::web(Resp::SUCCESS, '更换成功');
 		}
 	}
 }

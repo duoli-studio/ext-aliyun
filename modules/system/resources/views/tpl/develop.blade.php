@@ -1,4 +1,5 @@
 @extends('system::tpl.default')
+@section('title', $_title ?? '')
 @section('head-css')
     {!! Html::style('resources/css/basic.css') !!}
     {!! Html::style('resources/css/develop.css') !!}

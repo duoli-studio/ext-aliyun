@@ -86,6 +86,6 @@ class AreaController extends ApiController
 			}
 			$return[$province_key] = $new_province_value;
 		}
-		return Resp::web(Resp::SUCCESS, '操作成功', $return);
+		return Resp::web(Resp::SUCCESS, '获取数据成功', $return);
 	}
 }

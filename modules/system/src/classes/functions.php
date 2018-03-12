@@ -11,6 +11,7 @@ if (!function_exists('sys_setting')) {
 	 * @param string $key
 	 * @param null   $default
 	 * @return mixed
+	 * @throws \Illuminate\Container\EntryNotFoundException
 	 */
 	function sys_setting($key, $default = null)
 	{
@@ -69,4 +70,16 @@ if (!function_exists('sys_trans')) {
 	}
 }
 
+if (!function_exists('sys_seo')) {
+	function sys_seo()
+	{
+		$route = \Route::currentRouteName();
+		if ($route) {
+			// fetch route defination
+		}
+		else {
+			// default
+		}
+	}
+}
 

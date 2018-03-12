@@ -85,11 +85,11 @@ const configuration = [
 	},
 	{
 		component : Category,
-		path      : 'category',
+		path      : 'system/category',
 	},
 	{
 		component : Article,
-		path      : 'article',
+		path      : 'system/article',
 	},
 	{
 		component : Im,

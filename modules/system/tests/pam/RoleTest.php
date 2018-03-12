@@ -28,9 +28,8 @@ class RoleTest extends TestCase
 
 	public function testList()
 	{
-		$pageInfo = new PageInfo(['page' => 1]);
 		$Db       = PamRole::filter([], RoleFilter::class);
-		return PamRole::paginationInfo($Db, $pageInfo, function($item) {
+		return PamRole::paginationInfo($Db, function($item) {
 			return $item;
 		});
 	}

@@ -263,7 +263,6 @@ class Role
 	 * 删除数据
 	 * @param int $id
 	 * @return bool
-	 * @throws \Exception
 	 */
 	public function delete($id)
 	{
@@ -284,11 +283,15 @@ class Role
 		}
 
 		// 删除权限
-		PamPermissionRole::where('role_id', $this->roleId)->delete();
+		try {
+			PamPermissionRole::where('role_id', $this->roleId)->delete();
+			// 删除角色
+			$this->role->delete();
+			return true;
+		} catch (\Exception $e) {
+			return $this->setError($e->getMessage());
+		}
 
-		// 删除角色
-		$this->role->delete();
-		return true;
 	}
 
 }

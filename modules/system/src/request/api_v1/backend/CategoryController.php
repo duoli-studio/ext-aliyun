@@ -62,11 +62,9 @@ class CategoryController extends ApiController
 			}
 		}
 
-		$pageInfo = new PageInfo($input);
-
 		/** @var SysCategory $Db */
 		$Db = SysCategory::filter($input, SysCategoryFilter::class);
-		return SysCategory::paginationInfo($Db, $pageInfo, CategoryResource::class);
+		return SysCategory::paginationInfo($Db, CategoryResource::class);
 	}
 
 	/**

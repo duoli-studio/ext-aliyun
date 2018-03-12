@@ -5,7 +5,7 @@ export default {
 	beforeRouteEnter(to, from, next) {
 		injection.loading.start();
 		injection.http.post(`${window.api}backend/system/category/lists `, {
-			page : 1
+			parent_id : 0
 		}).then(response => {
 			const {status, message, data} = response.data;
 			if (status) {
@@ -37,17 +37,35 @@ export default {
 				},
 				on    : {
 					'on-ok' : () => {
-						that.removeItem(params);
+						that.onDoClick(params);
 					}
 				}
 			}, [
 				h('i-button', {
 					props : {
-						type : 'error',
-						size : 'small'
+						type  : 'error',
+						size  : 'small',
+						icon  : 'close',
+						shape : 'circle',
 					},
-				}, '删除')
+				})
 			]);
+
+			const btnEdit = h('i-button', {
+				props : {
+					type  : 'primary',
+					size  : 'small',
+					icon  : 'edit',
+					shape : 'circle',
+				},
+				style : 'margin-right:5px;',
+				on    : {
+					click : () => {
+						that.onC2eEditClick(params);
+					}
+				}
+			});
+			btns.push(btnEdit);
 			btns.push(btnDelete);
 			// 返回操作按钮
 			return h('div', btns);
@@ -55,8 +73,9 @@ export default {
 		return {
 			// 查询条件
 			filter      : {
-				id   : '',
-				type : '',
+				id        : '',
+				type      : '',
+				parent_id : 0,
 			},
 			// 提现记录列表
 			list        : [],
@@ -73,39 +92,35 @@ export default {
 					key   : 'id'
 				},
 				{
-					title : '父级ID',
-					key   : 'parent_id'
+					title : '标题',
+					key   : 'title',
 				},
 				{
 					title : '类型',
-					key   : 'type'
-				},
-				{
-					title : '标题',
-					key   : 'title'
+					key   : 'type',
 				},
 				{
 					title  : '操作',
 					key    : 'handle',
-					align  : 'center',
+					align  : 'right',
 					render : handleRender,
 				},
 			],
 			c2e         : {
-				display : false,
-				loading : false,
-				title   : '创建分类',
-				type    : 'create',
-				data    : {
-					id    : '',
-					title : '',
+				display    : false,
+				loading    : false,
+				type       : 'create',
+				data       : {
+					type      : '',
+					parent_id : '',
+					title     : '',
 				},
-				rules   : {
+				rules      : {
 					parent_id : [
 						{
 							message  : '父级ID不能为空',
 							required : true,
-							trigger  : 'blur',
+							trigger  : 'blur'
 						},
 					],
 					title     : [
@@ -123,58 +138,63 @@ export default {
 						},
 					],
 				},
-				dsField : {
-					id   : 'ID',
-					type : '类型',
+				dataSource : {
+					help     : '帮助',
+					activity : '活动'
 				},
-			}
+				dsSource   : {
+					help     : '帮助',
+					activity : '活动'
+				}
+			},
 		};
 	},
 	methods : {
-		onC2eReset() {
-			this.c2e.data.parent_id = '';
-			this.c2e.data.type = '';
+		c2eReset() {
+			this.c2e.data.id = 0;
 			this.c2e.data.title = '';
+			this.c2e.data.parent_id = null;
+			this.c2e.type = 'create';
 		},
-		// 增加分类
+		// 增加
 		onC2eSubmit() {
 			const self = this;
-			const variable = {
-				parent_id : self.c2e.data.parent_id,
-				type      : self.c2e.data.type,
-				title     : self.c2e.data.title,
-			};
 			self.$refs.c2e.validate(valid => {
 				if (valid) {
 					self.c2e.loading = true;
 					self.$http.post(
 						`${window.api}backend/system/category/establish`,
-						variable
-					).then((response) => {
-						const {status, message} = response.data;
-						if (status) {
-							throw new Error(message);
-						}
+						self.c2e.data,
+					).then(() => {
 						self.$notice.open({
 							title : '保存成功！',
 						});
 						// 重置弹窗
-						self.onC2eReset();
+						self.c2eReset();
 						// 刷新页面
 						self.refresh();
+						self.c2e.display = false;
 					}).catch(() => {
 						self.$notice.error({
 							title : '保存失败！',
 						});
 					}).finally(() => {
 						self.c2e.loading = false;
-						self.c2e.display = false;
 					});
 				}
 			});
 		},
-		// 删除数据
-		removeItem(params) {
+		// 编辑
+		onC2eEditClick(params) {
+			this.c2e.type = 'edit';
+			this.c2e.title = '编辑';
+			this.c2e.display = true;
+			this.c2e.data.type = params.row.type;
+			this.c2e.data.title = params.row.title;
+			this.c2e.data.parent_id = params.row.parent_id.toString();
+		},
+		// 删除
+		onDoClick(params) {
 			const self = this;
 			self.loading = true;
 			injection.http.post(`${window.api}backend/system/category/do`, {
@@ -198,15 +218,16 @@ export default {
 				self.loading = false;
 			});
 		},
-		// 刷新页面
+		// 刷新
 		refresh() {
 			const self = this;
 			self.$loading.start();
 			injection.http.post(`${window.api}backend/system/category/lists`, {
-				id   : self.filter.id,
-				type : self.filter.type,
-				page : self.pagination.page,
-				size : self.pagination.size,
+				id        : self.filter.id,
+				type      : self.filter.type,
+				parent_id : self.filter.parent_id,
+				page      : self.pagination.page,
+				size      : self.pagination.size,
 			}).then(response => {
 				const {status, message, data} = response.data;
 				if (status) {
@@ -224,7 +245,6 @@ export default {
 					title : '刷新数据失败！',
 				});
 			});
-			this.loading = false;
 		},
 		// 查找
 		search() {
@@ -241,19 +261,9 @@ export default {
 			self.pagination.size = pagesize;
 			self.refresh();
 		},
-		onDateRangeChange(e) {
-			const self = this;
-			const startAt = e[0];
-			const endAt = e[1];
-			self.filter.start_at = startAt;
-			self.filter.end_at = endAt;
-		},
 		onC2eAdd() {
-			// 重置弹框数据
-			this.onC2eReset();
-			this.c2e.data.parent_id = '';
+			this.c2eReset();
 			this.c2e.display = true;
-			this.c2e.title = '创建';
 		},
 	},
 	mounted() {
@@ -272,7 +282,12 @@ export default {
 		</i-button>
 		<i-form inline>
 			<form-item prop="user">
-				<i-input type="text" placeholder="查询类型" v-model="filter.type"></i-input>
+				<i-input type="text" placeholder="ID" v-model="filter.id"></i-input>
+			</form-item>
+			<form-item prop="parent_id">
+				<i-select v-model="filter.type" style="width:150px;" placeholder="选择类型" clearable>
+					<i-option v-for="(value ,type) in c2e.dataSource" :value="type" :key="type">{{ value }}</i-option>
+				</i-select>
 			</form-item>
 			<i-button class="btn-action" type="primary" @click.native="search">
 				<icon type="search"></icon>
@@ -282,13 +297,16 @@ export default {
 		<i-table :columns="listColumns" :data="list"></i-table>
 		<!--c2e modal-->
 		<modal v-model="c2e.display" class="liex-modal-delete"
-		       :title="c2e.title">
+		       :title="c2e.type==='create'? '创建' : '编辑'">
 			<i-form ref="c2e" :model="c2e.data" :rules="c2e.rules" :label-width="110">
-				<form-item label="父级ID" prop="parent_id">
-					<i-input v-model="c2e.data.parent_id"></i-input>
-				</form-item>
 				<form-item label="类型" prop="type">
-					<i-input v-model="c2e.data.type"></i-input>
+					<i-select v-model="c2e.data.type" style="width:150px;" placeholder="选择类型" clearable>
+						<i-option v-for="(value ,type) in c2e.dsSource" :value="type" :key="type">{{ value }}
+						</i-option>
+					</i-select>
+				</form-item>
+				<form-item label="父级ID" prop="parent_id">
+					<i-input placeholder="0为顶级,1为0的子集" v-model="c2e.data.parent_id"></i-input>
 				</form-item>
 				<form-item label="标题" prop="title">
 					<i-input v-model="c2e.data.title"></i-input>

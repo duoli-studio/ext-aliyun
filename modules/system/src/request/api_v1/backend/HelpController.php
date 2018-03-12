@@ -2,11 +2,13 @@
 
 use Poppy\Framework\Application\ApiController;
 use Poppy\Framework\Classes\Resp;
-use Poppy\Framework\Http\Pagination\PageInfo;
+use Poppy\Framework\Helper\StrHelper;
+use Poppy\Framework\Helper\TreeHelper;
 use System\Classes\Traits\SystemTrait;
-use System\Action\Help as ActHelp;
+use System\Action\Help;
 use System\Models\Filters\SysHelpFilter;
 use System\Models\Resources\HelpResource;
+use System\Models\SysCategory;
 use System\Models\SysHelp;
 
 class HelpController extends ApiController
@@ -23,6 +25,7 @@ class HelpController extends ApiController
 	 * @apiParam   {Integer}  [cat_id]            分类ID
 	 * @apiParam   {Integer}  [page]              分页
 	 * @apiParam   {Integer}  [size]              页数
+	 * @apiParam   {String}   [append]            附加, 支持 category
 	 * @apiSuccess {Object[]} list                列表
 	 * @apiSuccess {Integer}  list.id             ID
 	 * @apiSuccess {String}   list.cat_id         分类ID
@@ -55,11 +58,29 @@ class HelpController extends ApiController
 			return Resp::web(Resp::ERROR, '帮助ID 和 分类ID 不能同时查询');
 		}
 
-		$pageInfo = new PageInfo($input);
+		// append
+		$strAppend = data_get($input, 'append');
+		$arrAppend = StrHelper::separate(',', $strAppend);
+		$append    = [];
+		if (in_array('category', $arrAppend)) {
+			$parent = SysCategory::select(['id', 'parent_id', 'title'])
+				->where('type', SysCategory::TYPE_HELP)->get();
+
+			$parent = $parent->keyBy('id')->toArray();
+			if (count($parent)) {
+				$Tree = new TreeHelper();
+				$Tree->replaceSpace();
+				$Tree->init($parent, 'id', 'parent_id', 'title');
+				$append['category'] = $Tree->getTreeArray(0, '', 'kv');
+			}
+			else {
+				$append['category'] = [];
+			}
+		}
 
 		/** @var SysHelp $Db */
 		$Db = SysHelp::filter($input, SysHelpFilter::class);
-		return SysHelp::paginationInfo($Db, $pageInfo, HelpResource::class);
+		return SysHelp::paginationInfo($Db, HelpResource::class, $append);
 	}
 
 	/**
@@ -76,8 +97,7 @@ class HelpController extends ApiController
 	{
 		$id    = input('id', 0);
 		$input = input();
-		/** @var ActHelp $help */
-		$Help = new ActHelp();
+		$Help  = new Help();
 		if (!$Help->setPam($this->getJwtBeGuard()->user())->establish($input, $id)) {
 			return Resp::web(Resp::ERROR, $Help->getError());
 		}
@@ -99,7 +119,7 @@ class HelpController extends ApiController
 	{
 		$id     = input('id', 0);
 		$action = input('action', '');
-		$Help   = (new ActHelp())->setPam($this->getJwtBeGuard()->user());
+		$Help   = (new Help())->setPam($this->getJwtBeGuard()->user());
 		if (in_array($action, ['delete'])) {
 			$action = camel_case($action);
 			if (is_callable([$Help, $action])) {

@@ -61,12 +61,12 @@ class BowerCommand extends Command
 	 */
 	public function handle()
 	{
-		$this->jsPath       = config('ext-fe.folder.js_dir', 'assets/js');
+		$this->jsPath       = config('fe.folder.js_dir', 'assets/js');
 		$this->jsLibPath    = $this->jsPath . '/libs';
-		$this->imagePath    = config('ext-fe.folder.image_dir', 'assets/css_images');
-		$this->scssPath     = config('ext-fe.folder.scss_dir', 'assets/sass') . '/libs';
-		$this->cssPath      = config('ext-fe.folder.css_dir', 'assets/css') . '/libs';
-		$this->fontPath     = config('ext-fe.folder.font_dir', 'assets/font');
+		$this->imagePath    = config('fe.folder.image_dir', 'assets/css_images');
+		$this->scssPath     = config('fe.folder.scss_dir', 'assets/sass') . '/libs';
+		$this->cssPath      = config('fe.folder.css_dir', 'assets/css') . '/libs';
+		$this->fontPath     = config('fe.folder.font_dir', 'assets/font');
 		$this->jsConfigFile = $this->jsPath . '/config.js';
 		$this->jsGlobalFile = $this->jsPath . '/global.js';
 
@@ -76,12 +76,12 @@ class BowerCommand extends Command
 
 		$this->config['path']['global'] = $this->jsPath . '/global';
 
-		$this->mapData = config('ext-fe');
+		$this->mapData = config('fe');
 
-		$disk = config('ext-fe.disk');
+		$disk = config('fe.disk');
 		try {
 			if (!$disk) {
-				$this->error($this->getKey('fe') . 'No disk defined at `ext-fe` config file');
+				$this->error($this->getKey('fe') . 'No disk defined at `fe` config file');
 				return;
 			}
 			$this->disk = \Storage::disk($disk);

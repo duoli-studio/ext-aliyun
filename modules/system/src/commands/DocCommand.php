@@ -32,7 +32,7 @@ class DocCommand extends Command
 					$this->error("apidoc 命令不存在\n");
 				}
 				else {
-					$catalog = config('ext-fe.apidoc');
+					$catalog = config('fe.apidoc');
 					if (!$catalog) {
 						$this->error("尚未配置 apidoc 生成目录");
 						return;
@@ -61,17 +61,15 @@ class DocCommand extends Command
 			case 'poppy':
 			case 'project':
 				$aimFolder = public_path('docs/poppy');
-				$this->getFile()->copyDirectory(base_path('extensions/ext-fe/resources/docs'), $aimFolder);
-
 				// root readme
 				$this->getFile()->copyDirectory(base_path('README.md'), $aimFolder . '/README.md');
-
-				// project common
-				$this->getFile()->copyDirectory(base_path('resources/docs'), $aimFolder);
 
 				// extension doc
 				$this->modulesDoc();
 				$this->extensionDoc();
+
+				// project common
+				$this->getFile()->copyDirectory(base_path('resources/docs'), $aimFolder);
 				$this->info('Publish Success!');
 				break;
 

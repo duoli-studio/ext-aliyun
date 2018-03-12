@@ -138,7 +138,7 @@ class AuthController extends ApiController
 			$Pam      = new Pam();
 			$pam      = PamAccount::passport($passport);
 			if ($Pam->setPassword($pam, $password)) {
-				return Resp::web(Resp::SUCCESS, '操作成功');
+				return Resp::web(Resp::SUCCESS, '密码已经重新设置');
 			}
 			else {
 				return Resp::web(Resp::ERROR, $Pam->getError());
@@ -192,7 +192,7 @@ class AuthController extends ApiController
 			return Resp::web(Resp::ERROR, trans('user::login.graphql.get_token_fail'));
 		}
 		else {
-			return Resp::web(Resp::SUCCESS, '操作成功', [
+			return Resp::web(Resp::SUCCESS, '登录成功', [
 				'token' => $token,
 			]);
 		}

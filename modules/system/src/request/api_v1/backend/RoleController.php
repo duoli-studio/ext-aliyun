@@ -2,16 +2,14 @@
 
 
 use Poppy\Framework\Application\ApiController;
-use Poppy\Framework\Application\Controller;
 use Poppy\Framework\Classes\Resp;
-use Poppy\Framework\Http\Pagination\PageInfo;
 use Poppy\Framework\Validation\Rule;
+use System\Action\Role as ActRole;
 use System\Classes\Traits\SystemTrait;
 use System\Models\Filters\RoleFilter;
 use System\Models\PamAccount;
 use System\Models\PamRole;
 use System\Models\Resources\RoleResource;
-use System\Action\Role as ActRole;
 
 
 class RoleController extends ApiController
@@ -69,9 +67,8 @@ class RoleController extends ApiController
 		}
 		/** @var PamAccount $pam */
 		$pam      = $this->getJwtBeGuard()->user();
-		$pageInfo = new PageInfo($input);
 		$Db       = PamRole::filter($input, RoleFilter::class);
-		return PamRole::paginationInfo($Db, $pageInfo, function($item) use ($pam) {
+		return PamRole::paginationInfo($Db, function($item) use ($pam) {
 			$role                   = (new RoleResource($item))->toArray(app('request'));
 			$role['can_permission'] = $pam->can('menu', $item);
 			$role['can_delete']     = $pam->can('delete', $item);

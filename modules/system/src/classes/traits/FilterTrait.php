@@ -25,13 +25,13 @@ trait FilterTrait
 
 	/**
 	 * @param Builder|FilterTrait|\Eloquent $Db
-	 * @param PageInfo                      $pageInfo
 	 * @param string                        $resource
 	 * @param array                         $append
-	 * @return array
+	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public static function paginationInfo($Db, PageInfo $pageInfo, $resource, $append = [])
+	public static function paginationInfo($Db, $resource, $append = [])
 	{
+		$pageInfo = new PageInfo(input());
 		/* 缓存查询结果数量, 暂不开启
 		 --------------------------------------------
 		if ($cache) {
@@ -82,7 +82,7 @@ trait FilterTrait
 		if ($append) {
 			$return['data'] += $append;
 		}
-		return $return;
+		return \Response::json($return, 200, [], JSON_UNESCAPED_UNICODE);
 	}
 
 }

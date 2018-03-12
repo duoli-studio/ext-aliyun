@@ -4,7 +4,7 @@
     {!! Html::style('assets/css/backend.css') !!}
 @endsection
 @section('head-script')
-    @include('ext-fe::requirejs')
+    @include('system::tpl.inc_requirejs')
 @endsection
 @section('body-class', 'gray-bg')
 @section('body-main')

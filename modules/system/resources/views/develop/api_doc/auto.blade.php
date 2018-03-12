@@ -1,7 +1,7 @@
 @extends('system::tpl.develop')
 @section('body-main')
     <div class="container">
-        @include('ext-fe::api_doc.nav')
+        @include('system::develop.api_doc.nav')
         @if (!$data['file_exists'])
             <div class="alert alert-danger">
                 Api Doc 文件不存在, 请运行 <code>php artisan ext:fe_doc api</code> 来生成 Api 文档
@@ -48,16 +48,22 @@
 									<?php continue; ?>
                                 @endif
                                 <div class="form-group">
-                                    {!! ($param->optional ? '' : '<span style="color:red">*</span>') !!}
-                                    {!! Form::label($param->field, strip_tags($param->description)) !!}
-                                    (
-                                    {!! strip_tags($param->type) !!}
-                                    @if(isset($param->size)){ {!! $param->size !!} }@endif
-                                    @if(isset($param->allowedValues))
-                                        { {!! \Poppy\Framework\Helper\ArrayHelper::combine($param->allowedValues) !!} }@endif
-								    )
-                                    [{!! $param->field !!}]
-                                    {!! Form::text($param->field, null, ['class' => 'form-control J_calc']) !!}
+                                    <label for="field_{!! $param->field !!}">
+                                        {!! ($param->optional ? '' : '<span style="color:red">*</span>') !!}
+                                        {!! $param->field !!}
+                                        ({!! strip_tags($param->type) !!})
+                                    </label>
+                                    &nbsp;&nbsp;
+                                    <span>
+                                        {!! strip_tags($param->description) !!}
+                                        @if(isset($param->size))
+                                            { {!! $param->size !!} }
+                                        @endif
+                                        @if(isset($param->allowedValues))
+                                            { {!! \Poppy\Framework\Helper\ArrayHelper::combine($param->allowedValues) !!} }
+                                        @endif
+                                    </span>
+                                    {!! Form::text($param->field, null, ['class' => 'form-control', 'id'=> 'field_'.$param->field]) !!}
                                 </div>
                             @endif
                         @endforeach

@@ -79,7 +79,6 @@ export default {
 			// 返回操作按钮
 			return h('div', btns);
 		};
-
 		return {
 			list       : {
 				items      : [],

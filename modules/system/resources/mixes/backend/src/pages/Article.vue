@@ -5,15 +5,17 @@ export default {
 	beforeRouteEnter(to, from, next) {
 		injection.loading.start();
 		injection.http.post(`${window.api}backend/system/help/lists`, {
-			page : 1
+			page   : 1,
+			append : 'category'
 		}).then(response => {
 			const {status, message, data} = response.data;
 			if (status) {
 				throw new Error(message);
 			}
 			next(vm => {
-				vm.list = data.list;
-				vm.pagination = data.pagination;
+				vm.list.items = data.list;
+				vm.list.pagination = data.pagination;
+				vm.dataSource.category = data.category;
 				injection.loading.finish();
 			});
 		}).catch(error => {
@@ -32,71 +34,89 @@ export default {
 				props : {
 					confirm   : true,
 					width     : 200,
-					title     : '确认删除此地区 ? ',
+					title     : '确认删除 ? ',
 					placement : 'left'
 				},
 				on    : {
 					'on-ok' : () => {
-						that.removeItem(params);
+						that.onDoClick(params);
 					}
 				}
 			}, [
 				h('i-button', {
 					props : {
-						type : 'error',
-						size : 'small'
+						type  : 'error',
+						size  : 'small',
+						icon  : 'close',
+						shape : 'circle',
 					},
-				}, '删除')
+				})
 			]);
+
+			const btnEdit = h('i-button', {
+				props : {
+					type  : 'primary',
+					size  : 'small',
+					icon  : 'edit',
+					shape : 'circle',
+				},
+				style : 'margin-right:5px;',
+				on    : {
+					click : () => {
+						that.onC2eEditClick(params);
+						console.log(params);
+					}
+				}
+			});
+			btns.push(btnEdit);
 			btns.push(btnDelete);
 			// 返回操作按钮
 			return h('div', btns);
 		};
 		return {
-			// 查询条件
-			filter      : {
-				cat_id : '',
+			list       : {
+				items      : [],
+				pagination : {
+					page  : 1,
+					size  : 20,
+					total : 0,
+				},
+				filter     : {
+					cat_id  : '',
+					title   : '',
+					content : '',
+				},
+				columns    : [
+					{
+						width : 75,
+						title : 'ID',
+						key   : 'id'
+					},
+					{
+						title : '分类ID',
+						key   : 'cat_title'
+					},
+					{
+						title : '分类标题',
+						key   : 'title',
+					},
+					{
+						title : '帮助内容',
+						key   : 'content',
+					},
+					{
+						title  : '操作',
+						key    : 'handle',
+						align  : 'right',
+						render : handleRender,
+					},
+				],
 			},
-			// 提现记录列表
-			list        : [],
-			// 分页
-			pagination  : {
-				page  : 1,
-				size  : 20,
-				total : 0,
-			},
-			listColumns : [
-				{
-					width : 75,
-					title : 'ID',
-					key   : 'id'
-				},
-				{
-					title : '分类ID',
-					key   : 'cat_id'
-				},
-				{
-					title : '分类标题',
-					key   : 'title'
-				},
-				{
-					title : '帮助内容',
-					key   : 'content'
-				},
-				{
-					title  : '操作',
-					key    : 'handle',
-					align  : 'center',
-					render : handleRender,
-				},
-			],
-			c2e         : {
+			c2e        : {
 				display : false,
 				loading : false,
-				title   : '创建分类',
 				type    : 'create',
 				data    : {
-					// id      : 0,
 					title   : '',
 					cat_id  : '',
 					content : '',
@@ -104,7 +124,7 @@ export default {
 				rules   : {
 					cat_id  : [
 						{
-							message  : '分类ID不能为空',
+							message  : 'ID不能为空',
 							required : true,
 							trigger  : 'blur',
 						},
@@ -124,30 +144,28 @@ export default {
 						},
 					],
 				},
+			},
+			dataSource : {
+				category : [],
 			}
 		};
 	},
 	methods : {
-		// 初始值
 		onC2eReset() {
-			this.c2e.data.cat_id = '';
+			this.c2e.data.cat_id = null;
 			this.c2e.data.title = '';
 			this.c2e.data.content = '';
+			this.c2e.type = 'create';
 		},
 		// 新增分类
 		onC2eSubmit() {
 			const self = this;
-			const variable = {
-				cat_id  : self.c2e.data.cat_id,
-				title   : self.c2e.data.title,
-				content : self.c2e.data.content,
-			};
 			self.$refs.c2e.validate(valid => {
 				if (valid) {
 					self.c2e.loading = true;
 					self.$http.post(
 						`${window.api}backend/system/help/establish`,
-						variable
+						self.c2e.data,
 					).then((response) => {
 						const {status, message} = response.data;
 						if (status) {
@@ -171,8 +189,8 @@ export default {
 				}
 			});
 		},
-		// 删除分类
-		removeItem(params) {
+		// 删除
+		onDoClick(params) {
 			const self = this;
 			self.loading = true;
 			injection.http.post(`${window.api}backend/system/help/do`, {
@@ -196,21 +214,31 @@ export default {
 				self.loading = false;
 			});
 		},
+		// 编辑
+		onC2eEditClick(params) {
+			this.c2e.type = 'edit';
+			this.c2e.title = '编辑';
+			this.c2e.display = true;
+			this.c2e.data.id = params.row.id;
+			this.c2e.data.title = params.row.title;
+			this.c2e.data.cat_id = params.row.cat_id.toString();
+			this.c2e.data.content = params.row.content;
+		},
 		// 刷新页面
 		refresh() {
 			const self = this;
 			self.$loading.start();
 			injection.http.post(`${window.api}backend/system/help/lists`, {
 				cat_id : self.filter.cat_id,
-				page   : self.pagination.page,
-				size   : self.pagination.size,
+				page   : self.list.pagination.page,
+				size   : self.list.pagination.size,
 			}).then(response => {
 				const {status, message, data} = response.data;
 				if (status) {
 					throw new Error(message);
 				}
-				self.list = data.list;
-				self.pagination = data.pagination;
+				self.list.items = data.list;
+				self.list.pagination = data.pagination;
 				self.$notice.open({
 					title : '刷新数据成功！',
 				});
@@ -224,30 +252,23 @@ export default {
 			this.loading = false;
 		},
 		// 查找
-		search() {
-			this.pagination.page = 1;
-			this.refresh();
+		listSearch() {
+			this.list.pagination.page = 1;
+			this.listRefresh();
 		},
-		pageChange(page) {
+		listPageChange(page) {
 			const self = this;
-			self.pagination.page = page;
-			self.refresh();
+			self.list.pagination.page = page;
+			self.listRefresh();
 		},
-		pageSizeChange(pagesize) {
+		listPageSizeChange(pagesize) {
 			const self = this;
-			self.pagination.size = pagesize;
-			self.refresh();
-		},
-		onDateRangeChange(e) {
-			const self = this;
-			const startAt = e[0];
-			const endAt = e[1];
-			self.filter.start_at = startAt;
-			self.filter.end_at = endAt;
+			self.list.pagination.size = pagesize;
+			self.listRefresh();
 		},
 		onC2eAdd() {
-			// 重置弹框数据
 			this.onC2eReset();
+			this.c2e.display = true;
 		},
 	},
 	mounted() {
@@ -265,18 +286,21 @@ export default {
 			新增
 		</i-button>
 		<i-form inline>
-			<form-item prop="user">
-				<i-input type="text" placeholder="分类ID" v-model="filter.cat_id"></i-input>
+			<form-item prop="cat_id">
+				<i-select v-model="list.filter.cat_id" style="width:150px;" placeholder="选择分类" clearable>
+					<i-option v-for="item in dataSource.category" :value="item.key" :label="item.value"
+							  :key="item.key"></i-option>
+				</i-select>
 			</form-item>
-			<i-button class="btn-action" type="primary" @click.native="search">
+			<i-button class="btn-action" type="primary" @click.native="listSearch">
 				<icon type="search"></icon>
 				搜索
 			</i-button>
 		</i-form>
-		<i-table :columns="listColumns" :data="list"></i-table>
+		<i-table :columns="list.columns" :data="list.items"></i-table>
 		<!--c2e-->
 		<modal v-model="c2e.display" class="liex-modal-delete"
-		       :title="c2e.title">
+			   :title="c2e.type==='create'? '创建' : '编辑'">
 			<i-form ref="c2e" :model="c2e.data" :rules="c2e.rules" :label-width="110">
 				<form-item label="分类ID" prop="cat_id">
 					<i-input v-model="c2e.data.cat_id"></i-input>
@@ -289,19 +313,21 @@ export default {
 				</form-item>
 				<form-item>
 					<i-button :loading="c2e.loading" @click.native="onC2eSubmit"
-					          class="btn-group" type="success">
+							  class="btn-group" type="success">
 						<span v-if="!c2e.loading">{{c2e.type === 'create' ? '创建' : '编辑'}}</span>
 						<span v-else>正在提交…</span>
 					</i-button>
 				</form-item>
 			</i-form>
 		</modal>
-		<!--分页-->
+
+		<!--pagination-->
 		<page show-sizer show-elevator
-		      :current="pagination.page"
-		      :total="pagination.total"
-		      :page-size="pagination.size" class-name="liex-pager"
-		      @on-change="pageChange"
-		      @on-page-size-change="pageSizeChange"></page>
+			  :current="list.pagination.page"
+			  :total="list.pagination.total"
+			  :page-size="list.pagination.size" class-name="liex-pager"
+			  @on-change="listPageChange"
+			  @on-page-size-change="listPageSizeChange"
+		></page>
 	</card>
 </template>

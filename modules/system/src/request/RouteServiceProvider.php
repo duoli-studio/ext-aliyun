@@ -95,6 +95,12 @@ class RouteServiceProvider extends ServiceProvider
 			$route->any('api/g/{graphql_schema?}', GraphQLController::class . '@query')
 				->name('api.graphql');
 		});
+		\Route::group([
+			'middleware' => ['cross'],
+		], function(Router $router) {
+			$router->any('api/j/{url}', HomeController::class . '@json')
+				->where('url', '[a-zA-z/]+');
+		});
 
 	}
 }

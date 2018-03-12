@@ -16,9 +16,52 @@ class EnvController extends InitController
 	{
 
 		$env = [
-			'weixin' => class_exists('\Poppy\Extension\Wxpay\Lib\WxPayAppApiPay'),
-			'alipay' => class_exists('\Finance\Classes\Extension\AliPay'),
-			'yunxin' => class_exists('\Poppy\Extension\NetEase\Im\Yunxin'),
+			'weixin'       => [
+				'title'  => '微信',
+				'result' => class_exists('\Poppy\Extension\Wxpay\Lib\WxPayAppApiPay'),
+			],
+			'alipay'       => [
+				'title'  => '支付宝',
+				'result' => class_exists('\Finance\Classes\Extension\AliPay'),
+			],
+			'yunxin'       => [
+				'title'  => '网易云信',
+				'result' => class_exists('\Poppy\Extension\NetEase\Im\Yunxin'),
+			],
+			'node'       => [
+				'title'  => 'Node',
+				'result' =>  command_exist('node'),
+			],
+			'apidoc'       => [
+				'title'  => 'Node-apidoc',
+				'result' =>  command_exist('apidoc'),
+			],
+			'php-gd'       => [
+				'title'  => 'PHP-Gd',
+				'result' =>  extension_loaded('gd'),
+			],
+			'php-json'       => [
+				'title'  => 'PHP-JSON',
+				'result' =>  extension_loaded('json'),
+			],
+
+			'php-iconv'       => [
+				'title'  => 'PHP-iconv',
+				'result' =>  extension_loaded('iconv'),
+			],
+
+			'php-mysqlnd'       => [
+				'title'  => 'PHP-mysqlnd',
+				'result' =>  extension_loaded('mysqlnd'),
+			],
+			'php-mbstring'       => [
+				'title'  => 'PHP-mbstring',
+				'result' =>  extension_loaded('mbstring'),
+			],
+			'php-bcmath'       => [
+				'title'  => 'PHP-bcmath',
+				'result' =>  extension_loaded('bcmath'),
+			],
 		];
 		return view('system::develop.env.check', [
 			'env' => $env,

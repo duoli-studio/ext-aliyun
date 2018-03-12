@@ -18,14 +18,14 @@
 	$route->post('/captcha/send', 'CaptchaController@send');
 	$route->post('/captcha/verify_code', 'CaptchaController@verifyCode');
 
+	$route->post('/system/info', 'SystemController@info');
+
 	// 只要是用户就可以
 	$route->group([
 		'middleware' => ['auth:jwt', 'disabled_pam'],
 	], function(Illuminate\Routing\Router $route) {
 		$route->post('/image/upload', 'ImageController@upload');
-		$route->post('/approve/status', 'ApproveController@approveStatus');
 	});
-
 });
 
 /*
