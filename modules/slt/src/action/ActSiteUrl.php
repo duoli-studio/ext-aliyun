@@ -7,15 +7,15 @@
  */
 
 
-use Poppy\Framework\Traits\BaseTrait;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Slt\Classes\Traits\SltTrait;
 use Slt\Models\SiteRelCat;
 use Slt\Models\SiteUrl;
 
 class ActSiteUrl
 {
 
-	use BaseTrait, AuthorizesRequests;
+	use SltTrait, AuthorizesRequests;
 
 	/** @var  SiteUrl */
 	protected $item;

@@ -12,7 +12,7 @@
  * @property string         $deleted_at
  * @property \Carbon\Carbon $updated_at
  */
-class PrdVersion extends \Eloquent
+class ArticleVersion extends \Eloquent
 {
 
 

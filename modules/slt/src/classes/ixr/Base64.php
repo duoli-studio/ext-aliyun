@@ -1,4 +1,4 @@
-<?php namespace Slt\Classes\IXR;
+<?php namespace Slt\Classes\Ixr;
 
 /**
  * Base64

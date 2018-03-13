@@ -1,32 +1,32 @@
 <?php namespace Slt\Action;
 
 
-use Poppy\Framework\Traits\BaseTrait;
 use Illuminate\Validation\Rule;
-use Slt\Models\PrdBook;
-use Slt\Models\PrdContent;
-use Slt\Models\PrdTag;
+use Slt\Classes\Traits\SltTrait;
+use Slt\Models\ArticleBook;
+use Slt\Models\ArticleContent;
+use Slt\Models\SiteTag;
 
-class ActPrd
+class Article
 {
 
-	use BaseTrait;
+	use SltTrait;
 
-	/** @type  PrdContent */
-	private $prd;
+	/** @type  ArticleContent */
+	private $article;
 
-	/** @var PrdBook */
+	/** @var ArticleBook */
 	private $book;
 
 	private $prdTable;
 
 	public function __construct()
 	{
-		$this->prdTable = (new PrdContent())->getTable();
+		$this->prdTable = (new ArticleContent())->getTable();
 	}
 
 
-	public function handle($data, $id = null)
+	public function establish($data, $id = null)
 	{
 
 		if (!$this->checkPam()) {
@@ -49,28 +49,28 @@ class ActPrd
 			if (!$this->init($id)) {
 				return false;
 			}
-			if (!$this->policy('self', [$this->prd], '此文档不是您创建, 您无权操作')) {
+			if (!$this->policy('self', [$this->article], '此文档不是您创建, 您无权操作')) {
 				return false;
 			}
-			$oldContent = $this->prd->content_origin;
-			$this->prd->update($data);
+			$oldContent = $this->article->content_origin;
+			$this->article->update($data);
 		}
 		else {
-			$oldContent               = '';
-			$this->prd                = PrdContent::create($data);
-			$this->prd->top_parent_id = PrdContent::topParentId($this->prd->id);
-			$this->prd->save();
+			$oldContent    = '';
+			$this->article = ArticleContent::create($data);
+			// $this->prd->top_parent_id = ArticleContent::topParentId($this->prd->id);
+			// $this->prd->save();
 		}
 
 
 		// 处理标签关联
-		$Tag = new ActPrdTag();
-		$Tag->handle($this->prd);
+		// $Tag = new ActPrdTag();
+		// $Tag->handle($this->article);
 
 		// 版本创建
-		if (md5($oldContent) != md5($this->prd->content_origin)) {
-			$Version = new ActPrdVersion();
-			$Version->create($this->prd);
+		if (md5($oldContent) != md5($this->article->content_origin)) {
+			// $Version = new ActPrdVersion();
+			// $Version->create($this->article);
 		}
 		return true;
 	}
@@ -93,7 +93,7 @@ class ActPrd
 		$rule      = [
 			'title'   => [
 				'required',
-				Rule::unique($this->prdTable, 'title')->where(function ($query) use ($id, $cat_id) {
+				Rule::unique($this->prdTable, 'title')->where(function($query) use ($id, $cat_id) {
 					$query->where('account_id', $this->pam->id);
 					if ($id) {
 						$query->where('id', '!=', $id);
@@ -128,16 +128,16 @@ class ActPrd
 			if (!$this->init($id)) {
 				return false;
 			}
-			if (!$this->policy('self', [$this->prd], '此文档不是您创建, 您无权操作')) {
+			if (!$this->policy('self', [$this->article], '此文档不是您创建, 您无权操作')) {
 				return false;
 			}
-			$this->prd->update($data);
+			$this->article->update($data);
 		}
 		else {
 			$data = array_merge($data, [
 				'good_num'       => 0,
 				'bad_num'        => 0,
-				'role_status'    => PrdContent::ROLE_STATUS_NONE,
+				'role_status'    => ArticleContent::ROLE_STATUS_NONE,
 				'password'       => '',
 				'description'    => '',
 				'content_origin' => '',
@@ -151,7 +151,7 @@ class ActPrd
 			]);
 
 			// db create
-			$this->prd = PrdContent::create($data);
+			$this->article = ArticleContent::create($data);
 		}
 		return true;
 	}
@@ -174,7 +174,7 @@ class ActPrd
 		$rule      = [
 			'title' => [
 				'required',
-				Rule::unique($this->prdTable, 'title')->where(function ($query) use ($id) {
+				Rule::unique($this->prdTable, 'title')->where(function($query) use ($id) {
 					$query->where('account_id', $this->pam->id);
 					if ($id) {
 						$query->where('id', '!=', $id);
@@ -213,7 +213,7 @@ class ActPrd
 			]);
 
 			// db create
-			$this->book = PrdBook::create($data);
+			$this->book = ArticleBook::create($data);
 		}
 		return true;
 	}
@@ -225,10 +225,10 @@ class ActPrd
 	 */
 	public function init($id)
 	{
-		if (!PrdContent::where('id', $id)->exists()) {
+		if (!ArticleContent::where('id', $id)->exists()) {
 			return $this->setError('此条目不存在!');
 		}
-		$this->prd = PrdContent::find($id);
+		$this->article = ArticleContent::find($id);
 		return true;
 	}
 
@@ -239,10 +239,10 @@ class ActPrd
 	 */
 	public function initBook($id)
 	{
-		if (!PrdBook::where('id', $id)->exists()) {
+		if (!ArticleBook::where('id', $id)->exists()) {
 			return $this->setError('此条目不存在!');
 		}
-		$this->book = PrdBook::find($id);
+		$this->book = ArticleBook::find($id);
 		return true;
 	}
 
@@ -250,7 +250,7 @@ class ActPrd
 	public function data($data)
 	{
 		if (isset($data['prd_tag']) && $data['prd_tag']) {
-			$data['prd_tag'] = PrdTag::format($data['prd_tag']);
+			$data['prd_tag'] = SiteTag::encode($data['prd_tag']);
 		}
 		if (isset($data['_token'])) {
 			unset($data['_token']);
@@ -264,9 +264,9 @@ class ActPrd
 		return $data;
 	}
 
-	public function getPrd()
+	public function getArticle()
 	{
-		return $this->prd;
+		return $this->article;
 	}
 
 	public function getBook()

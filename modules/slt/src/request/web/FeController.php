@@ -52,71 +52,10 @@ class FeController extends InitController
 		if (!$disk->exists($configJson)) {
 			return Resp::web(Resp::ERROR, '配置文件不存在!');
 		}
-		$config      = json_decode($disk->get($configJson), true);
-		$directories = array_keys($config['path']);
-		$unset       = [];
-		$single      = [];
-		$jquery      = [];
-		$bt3         = [];
 
-		foreach ($directories as $dir) {
-
-			if (in_array($dir, $unset)) {
-				continue;
-			}
-			if (strpos($dir, 'jquery.') === false) {
-				if (strpos($dir, '/') === false) {
-					$single[] = $dir;
-				}
-			}
-			elseif (strpos($dir, 'jquery.') !== false) {
-				$dir = str_replace('jquery.', '', $dir);
-				if (strpos($dir, '/') === false) {
-					$jquery[] = $dir;
-				}
-			}
-			elseif (strpos($dir, 'bt3.') !== false) {
-				$dir = str_replace('bt3.', '', $dir);
-				if (strpos($dir, '/') === false) {
-					$bt3[] = $dir;
-				}
-			}
-		}
-		sort($single);
-		sort($jquery);
-		sort($bt3);
-
-		$alphaSplit = function($array, $split = 3) {
-			//  计算总数
-			sort($array);
-			$num     = count($array);
-			$partNum = $num / $split;
-			$temp    = [];
-			for ($i = 1; $i <= $split; $i++) {
-				$temp[$i] = [];
-				while (is_array($array) && !empty($array)) {
-					if (count($temp[$i]) <= $partNum) {
-						$temp[$i][] = array_shift($array);
-					}
-					else {
-						break;
-					}
-				}
-				if (!empty($temp[$i])) {
-					$clone                                                    = $temp[$i];
-					$firstLetter                                              = substr(array_shift($clone), 0, 1);
-					$lastLetter                                               = substr(array_pop($clone), 0, 1);
-					$temp[ucfirst($firstLetter) . '-' . ucfirst($lastLetter)] = $temp[$i];
-					unset($temp[$i]);
-				}
-			}
-			return $temp;
-		};
+		$single = [];
 
 
-		$singles = $alphaSplit($single, 3);
-		$jquerys = $alphaSplit($jquery, 4);
-		$bt3s    = $alphaSplit($bt3, 2);
 		// 默认插件
 		if (!$plugin) {
 			$plugin = $single[0];
@@ -171,12 +110,10 @@ class FeController extends InitController
 		}
 
 
+		$this->autoJs();
 		$data = [
 			'view'      => $viewContent,
 			'plugin'    => $plugin,
-			'singles'   => $singles,
-			'jquerys'   => $jquerys,
-			'bt3s'      => $bt3s,
 			'readme'    => $markdownContent,
 			'self_menu' => $this->selfMenu,
 		];
@@ -271,6 +208,7 @@ class FeController extends InitController
 
 		return $data;
 	}
+
 
 	/**
 	 * 首页
@@ -373,6 +311,86 @@ HTML;
 				echo('OUT > ' . $buffer);
 			}
 		});
+	}
+
+	private function autoJs()
+	{
+		$disk       = \Storage::disk('public');
+		$configJson = 'resources/js/config.json';
+
+		if (!$disk->exists($configJson)) {
+			return Resp::web(Resp::ERROR, '配置文件不存在!');
+		}
+		$config      = json_decode($disk->get($configJson), true);
+		$directories = array_keys($config['path']);
+		$unset       = [];
+		$single      = [];
+		$jquery      = [];
+		$bt3         = [];
+
+		foreach ($directories as $dir) {
+
+			if (in_array($dir, $unset)) {
+				continue;
+			}
+			if (strpos($dir, 'jquery.') === false) {
+				if (strpos($dir, '/') === false) {
+					$single[] = $dir;
+				}
+			}
+			elseif (strpos($dir, 'jquery.') !== false) {
+				$dir = str_replace('jquery.', '', $dir);
+				if (strpos($dir, '/') === false) {
+					$jquery[] = $dir;
+				}
+			}
+			elseif (strpos($dir, 'bt3.') !== false) {
+				$dir = str_replace('bt3.', '', $dir);
+				if (strpos($dir, '/') === false) {
+					$bt3[] = $dir;
+				}
+			}
+		}
+		sort($single);
+		sort($jquery);
+		sort($bt3);
+
+		$alphaSplit = function($array, $split = 3) {
+			//  计算总数
+			sort($array);
+			$num     = count($array);
+			$partNum = $num / $split;
+			$temp    = [];
+			for ($i = 1; $i <= $split; $i++) {
+				$temp[$i] = [];
+				while (is_array($array) && !empty($array)) {
+					if (count($temp[$i]) <= $partNum) {
+						$temp[$i][] = array_shift($array);
+					}
+					else {
+						break;
+					}
+				}
+				if (!empty($temp[$i])) {
+					$clone                                                    = $temp[$i];
+					$firstLetter                                              = substr(array_shift($clone), 0, 1);
+					$lastLetter                                               = substr(array_pop($clone), 0, 1);
+					$temp[ucfirst($firstLetter) . '-' . ucfirst($lastLetter)] = $temp[$i];
+					unset($temp[$i]);
+				}
+			}
+			return $temp;
+		};
+
+
+		$singles = $alphaSplit($single, 3);
+		$jquerys = $alphaSplit($jquery, 4);
+		$bt3s    = $alphaSplit($bt3, 2);
+		\View::share([
+			'singles' => $singles,
+			'jquerys' => $jquerys,
+			'bt3s'    => $bt3s,
+		]);
 	}
 }
 

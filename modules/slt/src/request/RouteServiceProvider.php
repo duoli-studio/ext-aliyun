@@ -20,8 +20,6 @@ class RouteServiceProvider extends ServiceProvider
 	 */
 	public function boot()
 	{
-		//
-
 		parent::boot();
 	}
 
@@ -32,6 +30,7 @@ class RouteServiceProvider extends ServiceProvider
 	public function map()
 	{
 		$this->mapWebRoutes();
+		$this->mapApiRoutes();
 	}
 
 	/**
@@ -43,6 +42,19 @@ class RouteServiceProvider extends ServiceProvider
 	{
 		\Route::group([
 			'middleware' => ['cross', 'web'],
+		], function() {
+			require_once poppy_path('slt', 'src/request/routes/web.php');
+		});
+
+
+	}
+
+	protected function mapApiRoutes()
+	{
+		// Api V1 版本
+		\Route::group([
+			'middleware' => ['cross'],
+			'prefix'     => 'api_v1/slt',
 		], function() {
 			require_once poppy_path('slt', 'src/request/routes/web_v1.php');
 		});

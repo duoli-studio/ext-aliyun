@@ -338,8 +338,7 @@ class BowerCommand extends Command
 					$content = preg_replace_callback('/url\(([\'"]?)(.*?)\1\)/i', function($matches) use ($aim_file) {
 						$match = $matches[2];
 
-
-						if ($match == 'about:blank' || strpos($match, 'data:image/png') !== false) {
+						if ($match == 'about:blank' || strpos($match, 'data:image/') !== false) {
 							return 'url("' . $match . '")';
 						}
 						else {

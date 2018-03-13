@@ -2,8 +2,7 @@
 
 use Poppy\Framework\Helper\StrHelper;
 use Illuminate\Support\Collection;
-use Slt\Models\PrdContent;
-use Slt\Models\PrdTag;
+use Slt\Models\ArticleContent;
 class ActPrdTag
 {
 
@@ -11,7 +10,7 @@ class ActPrdTag
 
 	/**
 	 * 更新博客的标签关联
-	 * @param $blog PrdContent
+	 * @param $blog ArticleContent
 	 * @return bool
 	 * @throws \Exception
 	 */

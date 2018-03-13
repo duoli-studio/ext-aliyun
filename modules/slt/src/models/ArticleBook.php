@@ -5,7 +5,6 @@ use System\Models\PamAccount;
 
 
 /**
- * Slt\Models\PrdBook
  * @property int             $id
  * @property string          $title      书籍标题
  * @property int             $account_id User Id
@@ -17,10 +16,10 @@ use System\Models\PamAccount;
  * @property-read PamAccount $pam
  * @mixin \Eloquent
  */
-class PrdBook extends \Eloquent
+class ArticleBook extends \Eloquent
 {
 
-	protected $table = 'prd_book';
+	protected $table = 'article_book';
 
 	protected $fillable = [
 		'title',

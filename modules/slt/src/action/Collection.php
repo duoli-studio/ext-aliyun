@@ -54,7 +54,7 @@ class Collection
 	 */
 	public function establish($data, $id = null)
 	{
-		if (!$this->checkPermission()) {
+		if (!$this->checkPam()) {
 			return false;
 		}
 		$validator = \Validator::make($data, [
@@ -123,7 +123,7 @@ class Collection
 	 */
 	public function destroy($id)
 	{
-		if (!$this->checkPermission()) {
+		if (!$this->checkPam()) {
 			return false;
 		}
 		// init

@@ -111,9 +111,22 @@ return [
 			],
 		],
 
-		"clipboard" => [
+		"clipboard"  => [
 			"js" => [
 				'aim' => 'clipboard/{VERSION}/clipboard.min.js',
+			],
+		],
+		"codemirror" => [
+			"js"  => [
+				'main'    => 'lib/codemirror.js',
+				'aim'     => 'codemirror/{VERSION}/lib/codemirror.js',
+				'dispose' => [
+					'addon/*' => 'codemirror/{VERSION}/addon/',
+					'mode/*'  => 'codemirror/{VERSION}/mode/',
+				],
+			],
+			"css" => [
+				'lib/codemirror.css' => 'codemirror/codemirror.css',
 			],
 		],
 
@@ -159,7 +172,7 @@ return [
 			],
 			'shim' => [
 				"exports" => "hljs",
-			],
+			]
 		],
 
 		"jquery" => [
@@ -283,7 +296,7 @@ return [
 		],
 
 		"smooth-scroll" => [
-			"js"  => [
+			"js" => [
 				'main' => 'smooth-scroll.js',
 				'aim'  => 'smooth-scroll/{VERSION}/smooth-scroll.js',
 			],
@@ -296,13 +309,13 @@ return [
 		],
 
 		"underscore" => [
-			"js"  => [
+			"js" => [
 				'main' => 'underscore.js',
 				'aim'  => 'underscore/{VERSION}/underscore.js',
 			],
 		],
 
-		"vkBeautify" => [
+		"vkBeautify"  => [
 			"js"   => [
 				'main' => 'vkbeautify.js',
 				'aim'  => 'vkbeautify/vkbeautify.js',
@@ -312,8 +325,13 @@ return [
 				"exports" => "vkbeautify",
 			],
 		],
-
-		"metisMenu" => [
+		"markdown-it" => [
+			"js" => [
+				'main' => 'dist/markdown-it.js',
+				'aim'  => 'markdown-it/{VERSION}/markdown-it.js',
+			],
+		],
+		"metisMenu"   => [
 			"js"  => [
 				'main' => 'dist/metisMenu.js',
 				'aim'  => 'jquery/metis-menu/{VERSION}/jquery.metis-menu.js',
@@ -324,7 +342,7 @@ return [
 			"key" => 'jquery.metis-menu',
 		],
 
-		"vue" => [
+		"vue"         => [
 			"js" => [
 				'main' => 'dist/vue.min.js',
 				'aim'  => 'vue/{VERSION}/vue.min.js',
@@ -332,8 +350,8 @@ return [
 		],
 
 		"wow" => [
-			"js" => [
-				'aim'  => 'wow/{VERSION}/wow.min.js',
+			"js"   => [
+				'aim' => 'wow/{VERSION}/wow.min.js',
 			],
 			'shim' => [
 				"exports" => "WOW",
@@ -350,6 +368,7 @@ return [
 			],
 			"key" => 'pace',
 		],
+
 	],
 	'global'  => [
 		'url_site' => env('URL_SITE'),

@@ -32,7 +32,7 @@ use System\Models\PamAccount;
  * @property-read PamAccount $pam
  * @mixin \Eloquent
  */
-class PrdContent extends \Eloquent
+class ArticleContent extends \Eloquent
 {
 
 
@@ -49,7 +49,7 @@ class PrdContent extends \Eloquent
 	const TYPE_TRANS   = 2;
 	const TYPE_TEAM    = 3;
 
-	protected $table = 'prd_content';
+	protected $table = 'article_content';
 
 	protected $fillable = [
 		'title',
@@ -57,7 +57,7 @@ class PrdContent extends \Eloquent
 		'parent_id',
 		'top_parent_id',
 		'content',
-		'content_origin',
+		'content_md',
 		'account_id',
 		'role_status',
 		'password',

@@ -31,4 +31,20 @@ class SiteTag extends \Eloquent
 		'ref_num',
 	];
 
+	public static function decode($tags, $implode = '')
+	{
+		$tags   = trim($tags, '_,_');
+		$return = $tags ? explode('_,_', $tags) : [];
+		if ($implode) {
+			return implode($implode, $return);
+		}
+		else {
+			return $return;
+		}
+	}
+
+	public static function encode($tags)
+	{
+		return $tags ? '_,_' . implode('_,_', $tags) . '_,_' : '';
+	}
 }

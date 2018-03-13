@@ -2,15 +2,15 @@
 
 
 use User\Models\PamAccount;
-use Slt\Models\PrdBook;
+use Slt\Models\ArticleBook;
 
 class PrdBookPolicy
 {
 
 	/**
 	 * 是否自己
-	 * @param PamAccount $pam
-	 * @param PrdBook    $prd
+	 * @param PamAccount  $pam
+	 * @param ArticleBook $prd
 	 * @return bool
 	 */
 	public function self($pam, $prd)

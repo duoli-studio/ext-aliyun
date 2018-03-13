@@ -2,15 +2,15 @@
 
 
 use User\Models\PamAccount;
-use Slt\Models\PrdContent;
+use Slt\Models\ArticleContent;
 
 class PrdContentPolicy
 {
 
 	/**
 	 * 是否自己
-	 * @param PamAccount $pam
-	 * @param PrdContent $prd
+	 * @param PamAccount     $pam
+	 * @param ArticleContent $prd
 	 * @return bool
 	 */
 	public function self($pam, $prd)

@@ -1,21 +1,23 @@
-<?php namespace Slt\Request\Web\Controllers;
+<?php namespace Slt\Request\ApiV1\Web;
 
 use Illuminate\Http\Request;
-use Sour\Lemon\Support\Resp;
-use Sour\Poppy\Action\ActAccount;
-use Sour\Poppy\Classes\MetaWeblog\Response as MetaWeblogResponse;
-use Sour\Poppy\Contracts\Creator as CreatorContract;
-use Sour\Poppy\Contracts\XmlRpc as XmlRpcContract;
-use Sour\Poppy\Models\PrdBook;
-use Sour\System\Models\PamAccount;
+use Poppy\Framework\Classes\Resp;
+use Slt\Action\Article;
+use Slt\Classes\MetaWeblog\Response as MetaWeblogResponse;
+use Slt\Classes\Contracts\Creator as CreatorContract;
+use Slt\Classes\Contracts\XmlRpc as XmlRpcContract;
+use Slt\Classes\Traits\SltTrait;
+use Slt\Models\ArticleBook;
+use System\Action\Pam;
+use Slt\Classes\MetaWeblog\Request as MetaWeblogRequest;
 
 /**
  * 文档 https://codex.wordpress.org/XML-RPC_MetaWeblog_API
  * Class XmlRpcController
- * @package App\Http\Controllers\Web
  */
-class XmlRpcController extends InitController implements CreatorContract, XmlRpcContract
+class XmlRpcController implements CreatorContract, XmlRpcContract
 {
+	use SltTrait;
 
 	private $client_ip;
 
@@ -53,11 +55,7 @@ class XmlRpcController extends InitController implements CreatorContract, XmlRpc
 		 */
 		list($appkey, $username, $password) = $response;
 		if (!$this->authenticate($username, $password)) {
-			$response = [
-				'faultCode'   => '2',
-				'faultString' => $this->resp->getMessage(),
-			];
-			MetaWeblogResponse::response($response, 'error');
+			$this->creatorFail($this->resp->getMessage());
 			exit();
 		}
 		/**
@@ -67,7 +65,7 @@ class XmlRpcController extends InitController implements CreatorContract, XmlRpc
 			call_user_func_array([$this, $methods[$method]], [$method, $response]);
 		}
 		else {
-			$this->methodNotFound($method);
+			$this->creatorFail("The method you requested, '$method', was not found.");
 		}
 	}
 
@@ -109,14 +107,13 @@ class XmlRpcController extends InitController implements CreatorContract, XmlRpc
 	 */
 	public function authenticate($email, $password)
 	{
-		$Account = new ActAccount();
-		$Account->setGuard(PamAccount::GUARD_WEB);
-		if ($Account->loginCheck($email, $password, PamAccount::ACCOUNT_TYPE_USER)) {
-			$this->pam = $Account->getPam();
+		$Pam = new Pam();
+		if ($Pam->loginCheck($email, $password)) {
+			$this->pam = $Pam->getPam();
 			return true;
 		}
 		else {
-			$this->resp = $Account->getError();
+			$this->resp = $Pam->getError();
 			return false;
 		}
 	}
@@ -158,11 +155,10 @@ class XmlRpcController extends InitController implements CreatorContract, XmlRpc
 	 */
 	public function getCategories($method, $params)
 	{
-		$category = Categorys::all(['id as categoryid', 'category_name as title', 'category_name as description', 'category_flag as slug'])->toArray();
-
-		$books = PrdBook::where('account_id', $this->pam->id)->get();
+		$books    = ArticleBook::where('account_id', $this->pam->id)->get();
+		$category = [];
 		foreach ($books as $book) {
-
+			$category[] = $book;
 		}
 		MetaWeblogResponse::response($category);
 	}
@@ -181,7 +177,7 @@ class XmlRpcController extends InitController implements CreatorContract, XmlRpc
 		$tags                = $post->tags->toArray();
 		$data['categories']  = $post->categories->category_name;
 		$data['link']        = route('posts', [$post->wp_slug]);
-		$tags                = array_map(function ($item) {
+		$tags                = array_map(function($item) {
 			return $item['tags_name'];
 		}, $tags);
 		$data['mt_keywords'] = implode(',', $tags);
@@ -204,7 +200,7 @@ class XmlRpcController extends InitController implements CreatorContract, XmlRpc
 			$tags                      = $post->tags->toArray();
 			$data[$key]['categories']  = $post->categories->category_name;
 			$data[$key]['link']        = route('posts', [$post->wp_slug]);
-			$tags                      = array_map(function ($item) {
+			$tags                      = array_map(function($item) {
 				return $item['tags_name'];
 			}, $tags);
 			$data[$key]['mt_keywords'] = implode(',', $tags);
@@ -236,7 +232,13 @@ class XmlRpcController extends InitController implements CreatorContract, XmlRpc
 	{
 		list($blogid, $username, $password, $struct, $publish) = $params;
 		$request = $this->transform($struct);
-		app(\Persimmon\Creator\PostsCreator::class)->create($this, $request);
+		$Article = (new Article())->setPam($this->pam);
+		if ($Article->establish($request)) {
+			MetaWeblogResponse::response($Article->getArticle()->id);
+		}
+		else {
+			$this->creatorFail($Article->getError());
+		}
 	}
 
 	/**
@@ -269,31 +271,27 @@ class XmlRpcController extends InitController implements CreatorContract, XmlRpc
 	 */
 	protected function methodNotFound($methodName)
 	{
-		$response = [
-			'faultCode'   => '2',
-			'faultString' => "The method you requested, '$methodName', was not found.",
-		];
-		MetaWeblogResponse::response($response, 'error');
+		$this->creatorFail("The method you requested, '$methodName', was not found.");
 	}
 
 	/**
 	 * transform data
-	 * @param $struct
-	 * @return Request
+	 * @param $structure
+	 * @return array
 	 */
-	private function transform($struct)
+	private function transform($structure)
 	{
-		$tags                 = strpos($struct['mt_keywords'], ',') !== false ? explode(',', $struct['mt_keywords']) : $struct['mt_keywords'];
-		$category             = Categorys::where('category_name', $struct['categories'][0])->select('id')->first();
-		$request              = new Request();
-		$request->title       = $struct['title'];
-		$request->flag        = $struct['wp_slug'];
-		$request->thumb       = '';
-		$request->tags        = is_array($struct['mt_keywords']) ? $struct['mt_keywords'] : $tags;
-		$request->category_id = $category->id;
-		$request->user_id     = Auth::id();
-		$request->markdown    = $struct['description'];
-		$request->ipaddress   = !empty($this->client_ip) ? $this->client_ip : '127.0.0.1';
+		$tags    = strpos($structure['mt_keywords'], ',') !== false ? explode(',', $structure['mt_keywords']) : $structure['mt_keywords'];
+		$request = [
+			'title'       => $structure['title'],
+			'flag'        => $structure['wp_slug'],
+			'thumb'       => '',
+			'tags'        => is_array($structure['mt_keywords']) ? $structure['mt_keywords'] : $tags,
+			'category_id' => 0,
+			'user_id'     => $this->pam->id,
+			'content'     => $structure['description'],
+			'ipaddress'   => !empty($this->client_ip) ? $this->client_ip : '127.0.0.1',
+		];
 		return $request;
 	}
 
