@@ -1,10 +1,10 @@
 <?php namespace Slt\Policies;
 
 
-use User\Models\PamAccount;
 use Slt\Models\ArticleContent;
+use System\Models\PamAccount;
 
-class PrdContentPolicy
+class ArticleContentPolicy
 {
 
 	/**
@@ -13,7 +13,7 @@ class PrdContentPolicy
 	 * @param ArticleContent $prd
 	 * @return bool
 	 */
-	public function self($pam, $prd)
+	public function edit($pam, $prd)
 	{
 		if ($prd->account_id != $pam->id) {
 			return false;

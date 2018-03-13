@@ -1,15 +1,17 @@
 <?php namespace Slt\Request\ApiV1\Web;
 
+use Comodojo\Exception\XmlrpcException;
+use Comodojo\Xmlrpc\XmlrpcDecoder;
 use Illuminate\Http\Request;
 use Poppy\Framework\Classes\Resp;
 use Slt\Action\Article;
-use Slt\Classes\MetaWeblog\Response as MetaWeblogResponse;
 use Slt\Classes\Contracts\Creator as CreatorContract;
 use Slt\Classes\Contracts\XmlRpc as XmlRpcContract;
+use Slt\Classes\MetaWeblog\Response as MetaWeblogResponse;
 use Slt\Classes\Traits\SltTrait;
 use Slt\Models\ArticleBook;
+use System\Action\OssUploader;
 use System\Action\Pam;
-use Slt\Classes\MetaWeblog\Request as MetaWeblogRequest;
 
 /**
  * 文档 https://codex.wordpress.org/XML-RPC_MetaWeblog_API
@@ -19,12 +21,18 @@ class XmlRpcController implements CreatorContract, XmlRpcContract
 {
 	use SltTrait;
 
-	private $client_ip;
+	private $clientIp;
 
-	/** @var  Resp */
-	private $resp;
+	private $postId;
+
+	private $username;
+
+	private $password;
 
 
+	/**
+	 * @param Request $request
+	 */
 	public function on(Request $request)
 	{
 		$methods = [
@@ -41,31 +49,43 @@ class XmlRpcController implements CreatorContract, XmlRpcContract
 		/**
 		 * 获取客户端IP
 		 */
-		$this->client_ip = $request->getClientIp();
+		$this->clientIp = $request->getClientIp();
 		/**
 		 * 消息处理，具体函数细节，可参看
 		 * @link http://php.net/manual/zh/book.xmlrpc.php
 		 * 接受客户端POST过来的XML数据
 		 */
-		$request  = $request->getContent();
-		$method   = null;
-		$response = xmlrpc_decode_request($request, $method);
-		/**
-		 * 如果用户名密码不正确
-		 */
-		list($appkey, $username, $password) = $response;
-		if (!$this->authenticate($username, $password)) {
-			$this->creatorFail($this->resp->getMessage());
-			exit();
-		}
-		/**
-		 * 正常执行
-		 */
-		if (isset($methods[$method])) {
-			call_user_func_array([$this, $methods[$method]], [$method, $response]);
-		}
-		else {
-			$this->creatorFail("The method you requested, '$method', was not found.");
+		$request = $request->getContent();
+		$method  = null;
+
+		// create a decoder instance
+		$decoder = new XmlrpcDecoder();
+		try {
+			$response       = $decoder->decodeCall($request);
+			$method         = $response[0] ?? '';
+			$params         = $response[1] ?? [];
+			$this->postId   = $params[0] ?? 0;
+			$this->username = $params[1] ?? '';
+			$this->password = $params[2] ?? '';
+
+			\Log::debug($method, $params);
+
+			// 验证用户名
+			if (!$this->authenticate($this->username, $this->password)) {
+				$this->creatorFail($this->getError());
+				exit();
+			}
+			/**
+			 * 正常执行
+			 */
+			if (isset($methods[$method])) {
+				call_user_func_array([$this, $methods[$method]], [$params]);
+			}
+			else {
+				$this->creatorFail("The method you requested, '$method', was not found.");
+			}
+		} catch (XmlrpcException $e) {
+			$this->creatorFail($e->getMessage());
 		}
 	}
 
@@ -83,11 +103,11 @@ class XmlRpcController implements CreatorContract, XmlRpcContract
 	 */
 	public function creatorFail($error)
 	{
-		$response = [
+		MetaWeblogResponse::response([
 			'faultCode'   => '2',
 			'faultString' => $error,
-		];
-		MetaWeblogResponse::response($response, 'error');
+		], 'error');
+		exit();
 	}
 
 	/**
@@ -97,6 +117,7 @@ class XmlRpcController implements CreatorContract, XmlRpcContract
 	public function creatorSuccess($model)
 	{
 		MetaWeblogResponse::response($model->id);
+		exit();
 	}
 
 	/**
@@ -113,8 +134,7 @@ class XmlRpcController implements CreatorContract, XmlRpcContract
 			return true;
 		}
 		else {
-			$this->resp = $Pam->getError();
-			return false;
+			return $this->setError($Pam->getError());
 		}
 	}
 
@@ -123,7 +143,7 @@ class XmlRpcController implements CreatorContract, XmlRpcContract
 	 * 获取用户的所有的 blog
 	 * @param $params
 	 */
-	public function getUsersBlogs($method, $params)
+	public function getUsersBlogs($params)
 	{
 		$response[0] = [
 			'url'      => url('/'),
@@ -138,22 +158,25 @@ class XmlRpcController implements CreatorContract, XmlRpcContract
 
 	/**
 	 * edit Post
-	 * @param $method
 	 * @param $params
 	 */
-	public function editPost($method, $params)
+	public function editPost($params)
 	{
-		list($post_id, $username, $password, $struct, $publish) = $params;
-		$request = $this->transform($struct);
-		app(\Persimmon\Creator\PostsCreator::class)->update($this, $request);
+		$request = $this->transform($params[3]);
+		$Article = (new Article())->setPam($this->pam);
+		if ($Article->establish($request, $this->postId)) {
+			MetaWeblogResponse::response($Article->getArticle()->id);
+		}
+		else {
+			$this->creatorFail($Article->getError());
+		}
 	}
 
 	/**
 	 * Get Categories
-	 * @param $method
 	 * @param $params
 	 */
-	public function getCategories($method, $params)
+	public function getCategories($params)
 	{
 		$books    = ArticleBook::where('account_id', $this->pam->id)->get();
 		$category = [];
@@ -165,10 +188,9 @@ class XmlRpcController implements CreatorContract, XmlRpcContract
 
 	/**
 	 * Get Post
-	 * @param $method
 	 * @param $params
 	 */
-	public function getPost($method, $params)
+	public function getPost($params)
 	{
 		list($post_id, $username, $password) = $params;
 		$data                = [];
@@ -187,10 +209,9 @@ class XmlRpcController implements CreatorContract, XmlRpcContract
 
 	/**
 	 * Get Recent Posts
-	 * @param $method
 	 * @param $params
 	 */
-	public function getRecentPosts($method, $params)
+	public function getRecentPosts($params)
 	{
 		list($blogid, $username, $password, $numberOfPosts) = $params;
 		$posts = Posts::orderBy('id', 'desc')->select('id', 'id as postid', 'title', 'category_id', 'markdown as description', 'user_id as userid', 'flag as wp_slug', 'created_at as dateCreated')->paginate($numberOfPosts);
@@ -211,27 +232,31 @@ class XmlRpcController implements CreatorContract, XmlRpcContract
 
 	/**
 	 * Upload new Media Object
-	 * @param $method
-	 * @param $params
+	 * @param array $params
+	 * @throws \Illuminate\Container\EntryNotFoundException
 	 */
-	public function newMediaObject($method, $params)
+	public function newMediaObject($params)
 	{
-		list($blogid, $username, $password, $struct) = $params;
-		//开始上传
-		$qiniu = new QiniuUploads();
-		$url   = $qiniu->putForContent($struct['bits']);
-		MetaWeblogResponse::response(['url' => $url]);
+		$data = $params[3] ?? [];
+
+		$Image = new OssUploader('article');
+		$Image->setResizeDistrict(1920);
+		$Image->setExtension(['jpg', 'png', 'gif', 'jpeg', 'bmp']);
+		if ($Image->saveInput($data['bits'])) {
+			MetaWeblogResponse::response(['url' => $Image->getUrl()]);
+		}
+		else {
+			$this->creatorFail('上传图片失败:' . $Image->getError());
+		}
 	}
 
 	/**
 	 * Create new Post
-	 * @param $method
 	 * @param $params
 	 */
-	public function newPost($method, $params)
+	public function newPost($params)
 	{
-		list($blogid, $username, $password, $struct, $publish) = $params;
-		$request = $this->transform($struct);
+		$request = $this->transform($params[3]);
 		$Article = (new Article())->setPam($this->pam);
 		if ($Article->establish($request)) {
 			MetaWeblogResponse::response($Article->getArticle()->id);
@@ -243,10 +268,9 @@ class XmlRpcController implements CreatorContract, XmlRpcContract
 
 	/**
 	 * Create new Category
-	 * @param $method
 	 * @param $params
 	 */
-	public function newCategory($method, $params)
+	public function newCategory($params)
 	{
 		list($blog_id, $username, $password, $category) = $params;
 		$categorys = Categorys::firstOrCreate(['category_name' => $category]);
@@ -255,10 +279,9 @@ class XmlRpcController implements CreatorContract, XmlRpcContract
 
 	/**
 	 * delete Post
-	 * @param $method
 	 * @param $params
 	 */
-	public function deletePost($method, $params)
+	public function deletePost($params)
 	{
 		list($appKey, $postid, $username, $password, $publish) = $params;
 		$result = Posts::where('id', $postid)->delete();
@@ -290,7 +313,7 @@ class XmlRpcController implements CreatorContract, XmlRpcContract
 			'category_id' => 0,
 			'user_id'     => $this->pam->id,
 			'content'     => $structure['description'],
-			'ipaddress'   => !empty($this->client_ip) ? $this->client_ip : '127.0.0.1',
+			'ipaddress'   => !empty($this->clientIp) ? $this->clientIp : '127.0.0.1',
 		];
 		return $request;
 	}

@@ -15,6 +15,11 @@ class OssUploader extends Uploader
 
 	private $saveAliyun = false;
 
+	/**
+	 * OssUploader constructor.
+	 * @param string $folder
+	 * @throws \Illuminate\Container\EntryNotFoundException
+	 */
 	public function __construct(string $folder = 'uploads')
 	{
 		parent::__construct($folder);

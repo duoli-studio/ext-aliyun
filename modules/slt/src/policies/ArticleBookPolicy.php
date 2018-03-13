@@ -1,10 +1,10 @@
 <?php namespace Slt\Policies;
 
 
-use User\Models\PamAccount;
 use Slt\Models\ArticleBook;
+use System\Models\PamAccount;
 
-class PrdBookPolicy
+class ArticleBookPolicy
 {
 
 	/**

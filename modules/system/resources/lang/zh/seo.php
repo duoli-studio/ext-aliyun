@@ -20,4 +20,7 @@ return [
 	'develop_cp_cp'     => [
 		'title' => '开发者平台',
 	],
+	'develop_log_index' => [
+		'title' => '系统日志',
+	],
 ];

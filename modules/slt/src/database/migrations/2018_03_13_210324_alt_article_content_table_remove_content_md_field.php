@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AltArticleContentTableAddContentField extends Migration
+class AltArticleContentTableRemoveContentMdField extends Migration
 {
 	/**
 	 * Run the migrations.
@@ -14,7 +14,7 @@ class AltArticleContentTableAddContentField extends Migration
 	public function up()
 	{
 		Schema::table('article_content', function(Blueprint $table) {
-			$table->text('content')->after('content_md')->comment('内容');
+			$table->dropColumn(['content_md']);
 		});
 	}
 
@@ -26,7 +26,7 @@ class AltArticleContentTableAddContentField extends Migration
 	public function down()
 	{
 		Schema::table('article_content', function(Blueprint $table) {
-			$table->dropColumn(['content', 'description']);
+			$table->text('content_md')->after('description')->comment('Md 内容');
 		});
 	}
 }

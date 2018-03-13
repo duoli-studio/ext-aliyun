@@ -87,7 +87,7 @@ class Uploader
 
 	public function __construct($folder = 'uploads')
 	{
-		$this->folder    = $folder;
+		$this->folder    = (is_production() ? '' : 'dev/') . $folder;
 		$this->returnUrl = config('app.url') . '/';
 	}
 

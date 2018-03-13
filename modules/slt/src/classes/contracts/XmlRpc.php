@@ -11,21 +11,21 @@ interface XmlRpc
 
 	public function authenticate($email, $password);
 
-	public function getUsersBlogs($method, $params);
+	public function getUsersBlogs($params);
 
-	public function editPost($method, $params);
+	public function editPost($params);
 
-	public function getCategories($method, $params);
+	public function getCategories($params);
 
-	public function getPost($method, $params);
+	public function getPost($params);
 
-	public function getRecentPosts($method, $params);
+	public function getRecentPosts($params);
 
-	public function newMediaObject($method, $params);
+	public function newMediaObject($params);
 
-	public function newPost($method, $params);
+	public function newPost($params);
 
-	public function newCategory($method, $params);
+	public function newCategory($params);
 
-	public function deletePost($method, $params);
+	public function deletePost($params);
 }

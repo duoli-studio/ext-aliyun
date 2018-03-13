@@ -5,36 +5,33 @@ use System\Models\PamAccount;
 
 
 /**
+ * \Slt\Models\ArticleContent
  *
  * @property int             $id
  * @property int             $parent_id
- * @property int             $top_parent_id 所属文档ID
+ * @property int             $book_id  所属文档ID
  * @property string          $title
  * @property string          $description
- * @property string          $content
- * @property string          $content_origin
+ * @property string          $content_md
+ * @property string          $content  内容
  * @property string          $author
  * @property string          $icon
- * @property int             $good_num      点赞
- * @property int             $bad_num       差评
- * @property bool            $role_status   权限状态 0:无 1:加密
- * @property string          $password      访问密码
+ * @property int             $good_num 点赞
+ * @property int             $bad_num  差评
+ * @property string          $password 访问密码
  * @property int             $list_order
  * @property int             $hits
  * @property string          $status
  * @property int             $account_id
- * @property int             $cat_id        分类id
- * @property bool            $is_star       是否星标
- * @property string          $tag_note      tag 标记
- * @property Carbon          $created_at
- * @property Carbon          $updated_at
- * @property string          $prd_tag
+ * @property int             $is_star  是否星标
+ * @property string          $tag_note tag 标记
+ * @property Carbon|null     $created_at
+ * @property Carbon|null     $updated_at
  * @property-read PamAccount $pam
  * @mixin \Eloquent
  */
 class ArticleContent extends \Eloquent
 {
-
 
 	const STATUS_DELETE = 'delete';
 	const STATUS_TRASH  = 'trash';

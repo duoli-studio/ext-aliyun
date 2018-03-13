@@ -49,8 +49,8 @@ class Article
 			if (!$this->init($id)) {
 				return false;
 			}
-			if (!$this->policy('self', [$this->article], '此文档不是您创建, 您无权操作')) {
-				return false;
+			if (!$this->pam->can('edit', [$this->article])) {
+				return $this->setError('此文档不是您创建, 您无权操作');
 			}
 			$oldContent = $this->article->content_origin;
 			$this->article->update($data);
