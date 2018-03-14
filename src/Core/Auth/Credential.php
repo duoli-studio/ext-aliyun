@@ -1,21 +1,20 @@
 <?php
-
 namespace Poppy\Extension\Aliyun\Core\Auth;
 
 class Credential
 {
-	private  $dateTimeFormat = 'Y-m-d\TH:i:s\Z'; 
-	private	 $refreshDate;
-	private  $expiredDate;
-	private  $accessKeyId;
-	private  $accessSecret;
-	private  $securityToken;
+	private $dateTimeFormat = 'Y-m-d\TH:i:s\Z';
+	private $refreshDate;
+	private $expiredDate;
+	private $accessKeyId;
+	private $accessSecret;
+	private $securityToken;
 	
-	function  __construct($accessKeyId, $accessSecret)
+	public function __construct($accessKeyId, $accessSecret)
 	{
-	    $this->accessKeyId = $accessKeyId;
-	    $this->accessSecret = $accessSecret;
-	    $this->refreshDate = date($this->dateTimeFormat);
+		$this->accessKeyId  = $accessKeyId;
+		$this->accessSecret = $accessSecret;
+		$this->refreshDate  = date($this->dateTimeFormat);
 	}
 	
 	public function isExpired()
@@ -24,10 +23,11 @@ class Credential
 		{
 			return false;
 		}
-		if(strtotime($this->expiredDate)>date($this->dateTimeFormat))
+		if(strtotime($this->expiredDate) > date($this->dateTimeFormat))
 		{
 			return false;
 		}
+
 		return true;
 	}
 	
@@ -43,9 +43,9 @@ class Credential
 	
 	public function setExpiredDate($expiredHours)
 	{
-		if($expiredHours>0)
+		if($expiredHours > 0)
 		{
-			return $this->expiredDate = date($this->dateTimeFormat, strtotime("+".$expiredHours." hour"));
+			return $this->expiredDate = date($this->dateTimeFormat, strtotime('+' . $expiredHours . ' hour'));
 		}
 	}
 	
@@ -68,5 +68,4 @@ class Credential
 	{
 		$this->accessSecret = $accessSecret;
 	}
-
 }

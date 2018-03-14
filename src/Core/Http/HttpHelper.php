@@ -7,7 +7,7 @@ class HttpHelper
 	public static $connectTimeout = 30;//30 second
 	public static $readTimeout    = 80;//80 second
 
-	public static function curl($url, $httpMethod = "GET", $postFields = null, $headers = null)
+	public static function curl($url, $httpMethod = 'GET', $postFields = null, $headers = null)
 	{
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $httpMethod);
@@ -29,7 +29,7 @@ class HttpHelper
 			curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, self::$connectTimeout);
 		}
 		//https request
-		if (strlen($url) > 5 && strtolower(substr($url, 0, 5)) == "https") {
+		if (strlen($url) > 5 && strtolower(substr($url, 0, 5)) == 'https') {
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 		}
@@ -41,27 +41,30 @@ class HttpHelper
 		$httpResponse->setBody(curl_exec($ch));
 		$httpResponse->setStatus(curl_getinfo($ch, CURLINFO_HTTP_CODE));
 		if (curl_errno($ch)) {
-			throw new ClientException("Server unreachable: Errno: " . curl_errno($ch) . " " . curl_error($ch), "SDK.ServerUnreachable");
+			throw new ClientException('Server unreachable: Errno: ' . curl_errno($ch) . ' ' . curl_error($ch), 'SDK.ServerUnreachable');
 		}
 		curl_close($ch);
+
 		return $httpResponse;
 	}
 
-	static function getPostHttpBody($postFildes)
+	public static function getPostHttpBody($postFildes)
 	{
-		$content = "";
+		$content = '';
 		foreach ($postFildes as $apiParamKey => $apiParamValue) {
-			$content .= "$apiParamKey=" . urlencode($apiParamValue) . "&";
+			$content .= "$apiParamKey=" . urlencode($apiParamValue) . '&';
 		}
+
 		return substr($content, 0, -1);
 	}
 
-	static function getHttpHearders($headers)
+	public static function getHttpHearders($headers)
 	{
-		$httpHeader = array();
+		$httpHeader = [];
 		foreach ($headers as $key => $value) {
-			array_push($httpHeader, $key . ":" . $value);
+			array_push($httpHeader, $key . ':' . $value);
 		}
+
 		return $httpHeader;
 	}
 }

@@ -23,27 +23,27 @@ use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
 class BindTagRequest extends RpcAcsRequest
 {
-	function  __construct()
+	public function __construct()
 	{
-		parent::__construct("Push", "2016-08-01", "BindTag");
-		$this->setMethod("POST");
+		parent::__construct('Push', '2016-08-01', 'BindTag');
+		$this->setMethod('POST');
 	}
 
-	private  $tagName;
+	private $tagName;
 
-	private  $clientKey;
+	private $clientKey;
 
-	private  $appKey;
+	private $appKey;
 
-	private  $keyType;
+	private $keyType;
 
 	public function getTagName() {
 		return $this->tagName;
 	}
 
 	public function setTagName($tagName) {
-		$this->tagName = $tagName;
-		$this->queryParameters["TagName"]=$tagName;
+		$this->tagName                   = $tagName;
+		$this->queryParameters['TagName']=$tagName;
 	}
 
 	public function getClientKey() {
@@ -51,8 +51,8 @@ class BindTagRequest extends RpcAcsRequest
 	}
 
 	public function setClientKey($clientKey) {
-		$this->clientKey = $clientKey;
-		$this->queryParameters["ClientKey"]=$clientKey;
+		$this->clientKey                   = $clientKey;
+		$this->queryParameters['ClientKey']=$clientKey;
 	}
 
 	public function getAppKey() {
@@ -60,8 +60,8 @@ class BindTagRequest extends RpcAcsRequest
 	}
 
 	public function setAppKey($appKey) {
-		$this->appKey = $appKey;
-		$this->queryParameters["AppKey"]=$appKey;
+		$this->appKey                   = $appKey;
+		$this->queryParameters['AppKey']=$appKey;
 	}
 
 	public function getKeyType() {
@@ -69,8 +69,7 @@ class BindTagRequest extends RpcAcsRequest
 	}
 
 	public function setKeyType($keyType) {
-		$this->keyType = $keyType;
-		$this->queryParameters["KeyType"]=$keyType;
+		$this->keyType                   = $keyType;
+		$this->queryParameters['KeyType']=$keyType;
 	}
-	
 }

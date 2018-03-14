@@ -23,33 +23,33 @@ use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
 class PushNoticeToAndroidRequest extends RpcAcsRequest
 {
-	function  __construct()
+	public function __construct()
 	{
-		parent::__construct("Push", "2016-08-01", "PushNoticeToAndroid");
-		$this->setMethod("POST");
+		parent::__construct('Push', '2016-08-01', 'PushNoticeToAndroid');
+		$this->setMethod('POST');
 	}
 
-	private  $extParameters;
+	private $extParameters;
 
-	private  $appKey;
+	private $appKey;
 
-	private  $targetValue;
+	private $targetValue;
 
-	private  $title;
+	private $title;
 
-	private  $body;
+	private $body;
 
-	private  $jobKey;
+	private $jobKey;
 
-	private  $target;
+	private $target;
 
 	public function getExtParameters() {
 		return $this->extParameters;
 	}
 
 	public function setExtParameters($extParameters) {
-		$this->extParameters = $extParameters;
-		$this->queryParameters["ExtParameters"]=$extParameters;
+		$this->extParameters                   = $extParameters;
+		$this->queryParameters['ExtParameters']=$extParameters;
 	}
 
 	public function getAppKey() {
@@ -57,8 +57,8 @@ class PushNoticeToAndroidRequest extends RpcAcsRequest
 	}
 
 	public function setAppKey($appKey) {
-		$this->appKey = $appKey;
-		$this->queryParameters["AppKey"]=$appKey;
+		$this->appKey                   = $appKey;
+		$this->queryParameters['AppKey']=$appKey;
 	}
 
 	public function getTargetValue() {
@@ -66,8 +66,8 @@ class PushNoticeToAndroidRequest extends RpcAcsRequest
 	}
 
 	public function setTargetValue($targetValue) {
-		$this->targetValue = $targetValue;
-		$this->queryParameters["TargetValue"]=$targetValue;
+		$this->targetValue                   = $targetValue;
+		$this->queryParameters['TargetValue']=$targetValue;
 	}
 
 	public function getTitle() {
@@ -75,8 +75,8 @@ class PushNoticeToAndroidRequest extends RpcAcsRequest
 	}
 
 	public function setTitle($title) {
-		$this->title = $title;
-		$this->queryParameters["Title"]=$title;
+		$this->title                   = $title;
+		$this->queryParameters['Title']=$title;
 	}
 
 	public function getBody() {
@@ -84,8 +84,8 @@ class PushNoticeToAndroidRequest extends RpcAcsRequest
 	}
 
 	public function setBody($body) {
-		$this->body = $body;
-		$this->queryParameters["Body"]=$body;
+		$this->body                   = $body;
+		$this->queryParameters['Body']=$body;
 	}
 
 	public function getJobKey() {
@@ -93,8 +93,8 @@ class PushNoticeToAndroidRequest extends RpcAcsRequest
 	}
 
 	public function setJobKey($jobKey) {
-		$this->jobKey = $jobKey;
-		$this->queryParameters["JobKey"]=$jobKey;
+		$this->jobKey                   = $jobKey;
+		$this->queryParameters['JobKey']=$jobKey;
 	}
 
 	public function getTarget() {
@@ -102,8 +102,7 @@ class PushNoticeToAndroidRequest extends RpcAcsRequest
 	}
 
 	public function setTarget($target) {
-		$this->target = $target;
-		$this->queryParameters["Target"]=$target;
+		$this->target                   = $target;
+		$this->queryParameters['Target']=$target;
 	}
-	
 }

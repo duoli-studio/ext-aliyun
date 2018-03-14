@@ -1,5 +1,4 @@
 <?php
-
 namespace Poppy\Extension\Aliyun\Core\Regions;
 
 class EndpointProvider
@@ -17,9 +16,10 @@ class EndpointProvider
 		{
 			if(in_array($regionId, $endpoint->getRegionIds()))
 			{
-			 	return self::findProductDomainByProduct($endpoint->getProductDomains(), $product);
-			}	
+				return self::findProductDomainByProduct($endpoint->getProductDomains(), $product);
+			}
 		}
+
 		return null;
 	}
 	
@@ -36,9 +36,9 @@ class EndpointProvider
 				return $productDomain->getDomainName();
 			}
 		}
+
 		return null;
 	}
-	
 	
 	public static function getEndpoints()
 	{
@@ -49,5 +49,4 @@ class EndpointProvider
 	{
 		self::$endpoints = $endpoints;
 	}
-	
 }

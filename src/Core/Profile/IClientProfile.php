@@ -1,5 +1,4 @@
 <?php
-
 namespace Poppy\Extension\Aliyun\Core\Profile;
 
 interface IClientProfile

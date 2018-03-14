@@ -23,10 +23,9 @@ use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
 class ListSummaryAppsRequest extends RpcAcsRequest
 {
-	function  __construct()
+	public function __construct()
 	{
-		parent::__construct("Push", "2016-08-01", "ListSummaryApps");
-		$this->setMethod("POST");
+		parent::__construct('Push', '2016-08-01', 'ListSummaryApps');
+		$this->setMethod('POST');
 	}
-	
 }

@@ -23,23 +23,23 @@ use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
 class QueryPushDetailRequest extends RpcAcsRequest
 {
-	function  __construct()
+	public function __construct()
 	{
-		parent::__construct("Push", "2016-08-01", "QueryPushDetail");
-		$this->setMethod("POST");
+		parent::__construct('Push', '2016-08-01', 'QueryPushDetail');
+		$this->setMethod('POST');
 	}
 
-	private  $messageId;
+	private $messageId;
 
-	private  $appKey;
+	private $appKey;
 
 	public function getMessageId() {
 		return $this->messageId;
 	}
 
 	public function setMessageId($messageId) {
-		$this->messageId = $messageId;
-		$this->queryParameters["MessageId"]=$messageId;
+		$this->messageId                   = $messageId;
+		$this->queryParameters['MessageId']=$messageId;
 	}
 
 	public function getAppKey() {
@@ -47,8 +47,7 @@ class QueryPushDetailRequest extends RpcAcsRequest
 	}
 
 	public function setAppKey($appKey) {
-		$this->appKey = $appKey;
-		$this->queryParameters["AppKey"]=$appKey;
+		$this->appKey                   = $appKey;
+		$this->queryParameters['AppKey']=$appKey;
 	}
-	
 }

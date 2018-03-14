@@ -2,27 +2,27 @@
 
 abstract class AcsRequest
 {
-	protected  $version;
-	protected  $product;
-	protected  $actionName;
-	protected  $regionId;
-	protected  $acceptFormat;
-	protected  $method;
-	protected  $protocolType = "http";
-	protected  $content;
+	protected $version;
+	protected $product;
+	protected $actionName;
+	protected $regionId;
+	protected $acceptFormat;
+	protected $method;
+	protected $protocolType = 'http';
+	protected $content;
 	
-	protected $queryParameters = array();
-	protected $headers = array();
+	protected $queryParameters = [];
+	protected $headers         = [];
 	
-	function  __construct($product, $version, $actionName)
+	public function __construct($product, $version, $actionName)
 	{
-	    $this->headers["x-sdk-client"] = "php/2.0.0";
-	    $this->product = $product;
-	    $this->version = $version;
-	    $this->actionName = $actionName;
+		$this->headers['x-sdk-client'] = 'php/2.0.0';
+		$this->product                 = $product;
+		$this->version                 = $version;
+		$this->actionName              = $actionName;
 	}
 	
-	public abstract function composeUrl($iSigner, $credential, $domain);
+	abstract public function composeUrl($iSigner, $credential, $domain);
 	
 	public function getVersion()
 	{
@@ -98,26 +98,24 @@ abstract class AcsRequest
 	{
 		return $this->regionId;
 	}
+
 	public function setRegionId($region)
 	{
 		$this->regionId = $region;
 	}
 	
 	public function getContent()
-    {
-        return $this->content;
-    }
+	{
+		return $this->content;
+	}
 
-    public function setContent($content)
-    {
-        $this->content = $content;
-    } 
-        
-        
-    public function addHeader($headerKey, $headerValue)
-    {
-        $this->headers[$headerKey] = $headerValue;
-    } 
-	
+	public function setContent($content)
+	{
+		$this->content = $content;
+	}
 		
+	public function addHeader($headerKey, $headerValue)
+	{
+		$this->headers[$headerKey] = $headerValue;
+	}
 }

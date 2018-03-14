@@ -23,27 +23,27 @@ use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
 class QueryUniqueDeviceStatRequest extends RpcAcsRequest
 {
-	function  __construct()
+	public function __construct()
 	{
-		parent::__construct("Push", "2016-08-01", "QueryUniqueDeviceStat");
-		$this->setMethod("POST");
+		parent::__construct('Push', '2016-08-01', 'QueryUniqueDeviceStat');
+		$this->setMethod('POST');
 	}
 
-	private  $granularity;
+	private $granularity;
 
-	private  $endTime;
+	private $endTime;
 
-	private  $appKey;
+	private $appKey;
 
-	private  $startTime;
+	private $startTime;
 
 	public function getGranularity() {
 		return $this->granularity;
 	}
 
 	public function setGranularity($granularity) {
-		$this->granularity = $granularity;
-		$this->queryParameters["Granularity"]=$granularity;
+		$this->granularity                   = $granularity;
+		$this->queryParameters['Granularity']=$granularity;
 	}
 
 	public function getEndTime() {
@@ -51,8 +51,8 @@ class QueryUniqueDeviceStatRequest extends RpcAcsRequest
 	}
 
 	public function setEndTime($endTime) {
-		$this->endTime = $endTime;
-		$this->queryParameters["EndTime"]=$endTime;
+		$this->endTime                   = $endTime;
+		$this->queryParameters['EndTime']=$endTime;
 	}
 
 	public function getAppKey() {
@@ -60,8 +60,8 @@ class QueryUniqueDeviceStatRequest extends RpcAcsRequest
 	}
 
 	public function setAppKey($appKey) {
-		$this->appKey = $appKey;
-		$this->queryParameters["AppKey"]=$appKey;
+		$this->appKey                   = $appKey;
+		$this->queryParameters['AppKey']=$appKey;
 	}
 
 	public function getStartTime() {
@@ -69,8 +69,7 @@ class QueryUniqueDeviceStatRequest extends RpcAcsRequest
 	}
 
 	public function setStartTime($startTime) {
-		$this->startTime = $startTime;
-		$this->queryParameters["StartTime"]=$startTime;
+		$this->startTime                   = $startTime;
+		$this->queryParameters['StartTime']=$startTime;
 	}
-	
 }

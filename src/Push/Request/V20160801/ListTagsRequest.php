@@ -23,21 +23,20 @@ use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
 class ListTagsRequest extends RpcAcsRequest
 {
-	function  __construct()
+	public function __construct()
 	{
-		parent::__construct("Push", "2016-08-01", "ListTags");
-		$this->setMethod("POST");
+		parent::__construct('Push', '2016-08-01', 'ListTags');
+		$this->setMethod('POST');
 	}
 
-	private  $appKey;
+	private $appKey;
 
 	public function getAppKey() {
 		return $this->appKey;
 	}
 
 	public function setAppKey($appKey) {
-		$this->appKey = $appKey;
-		$this->queryParameters["AppKey"]=$appKey;
+		$this->appKey                   = $appKey;
+		$this->queryParameters['AppKey']=$appKey;
 	}
-	
 }

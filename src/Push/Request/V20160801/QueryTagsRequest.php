@@ -23,25 +23,25 @@ use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
 class QueryTagsRequest extends RpcAcsRequest
 {
-	function  __construct()
+	public function __construct()
 	{
-		parent::__construct("Push", "2016-08-01", "QueryTags");
-		$this->setMethod("POST");
+		parent::__construct('Push', '2016-08-01', 'QueryTags');
+		$this->setMethod('POST');
 	}
 
-	private  $clientKey;
+	private $clientKey;
 
-	private  $appKey;
+	private $appKey;
 
-	private  $keyType;
+	private $keyType;
 
 	public function getClientKey() {
 		return $this->clientKey;
 	}
 
 	public function setClientKey($clientKey) {
-		$this->clientKey = $clientKey;
-		$this->queryParameters["ClientKey"]=$clientKey;
+		$this->clientKey                   = $clientKey;
+		$this->queryParameters['ClientKey']=$clientKey;
 	}
 
 	public function getAppKey() {
@@ -49,8 +49,8 @@ class QueryTagsRequest extends RpcAcsRequest
 	}
 
 	public function setAppKey($appKey) {
-		$this->appKey = $appKey;
-		$this->queryParameters["AppKey"]=$appKey;
+		$this->appKey                   = $appKey;
+		$this->queryParameters['AppKey']=$appKey;
 	}
 
 	public function getKeyType() {
@@ -58,8 +58,7 @@ class QueryTagsRequest extends RpcAcsRequest
 	}
 
 	public function setKeyType($keyType) {
-		$this->keyType = $keyType;
-		$this->queryParameters["KeyType"]=$keyType;
+		$this->keyType                   = $keyType;
+		$this->queryParameters['KeyType']=$keyType;
 	}
-	
 }

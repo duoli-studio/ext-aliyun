@@ -1,11 +1,9 @@
 <?php namespace Poppy\Extension\Aliyun;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Contracts\Config\Repository as ConfigRepository;
 
 class ExtensionServiceProvider extends ServiceProvider
 {
-
 	/**
 	 * Indicates if loading of the provider is deferred.
 	 * @var bool
@@ -18,7 +16,6 @@ class ExtensionServiceProvider extends ServiceProvider
 	 */
 	public function boot()
 	{
-
 	}
 
 	/**
@@ -27,7 +24,6 @@ class ExtensionServiceProvider extends ServiceProvider
 	 */
 	public function register()
 	{
-
 	}
 
 	/**
@@ -40,5 +36,4 @@ class ExtensionServiceProvider extends ServiceProvider
 
 		];
 	}
-
 }

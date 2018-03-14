@@ -1,5 +1,4 @@
 <?php
-
 namespace Poppy\Extension\Aliyun\Core\Http;
 
 class HttpResponse
@@ -33,6 +32,7 @@ class HttpResponse
 		{
 			return true;
 		}
+
 		return false;
 	}
 }

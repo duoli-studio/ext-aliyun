@@ -23,27 +23,27 @@ use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
 class UnbindAliasRequest extends RpcAcsRequest
 {
-	function  __construct()
+	public function __construct()
 	{
-		parent::__construct("Push", "2016-08-01", "UnbindAlias");
-		$this->setMethod("POST");
+		parent::__construct('Push', '2016-08-01', 'UnbindAlias');
+		$this->setMethod('POST');
 	}
 
-	private  $aliasName;
+	private $aliasName;
 
-	private  $appKey;
+	private $appKey;
 
-	private  $deviceId;
+	private $deviceId;
 
-	private  $unbindAll;
+	private $unbindAll;
 
 	public function getAliasName() {
 		return $this->aliasName;
 	}
 
 	public function setAliasName($aliasName) {
-		$this->aliasName = $aliasName;
-		$this->queryParameters["AliasName"]=$aliasName;
+		$this->aliasName                   = $aliasName;
+		$this->queryParameters['AliasName']=$aliasName;
 	}
 
 	public function getAppKey() {
@@ -51,8 +51,8 @@ class UnbindAliasRequest extends RpcAcsRequest
 	}
 
 	public function setAppKey($appKey) {
-		$this->appKey = $appKey;
-		$this->queryParameters["AppKey"]=$appKey;
+		$this->appKey                   = $appKey;
+		$this->queryParameters['AppKey']=$appKey;
 	}
 
 	public function getDeviceId() {
@@ -60,8 +60,8 @@ class UnbindAliasRequest extends RpcAcsRequest
 	}
 
 	public function setDeviceId($deviceId) {
-		$this->deviceId = $deviceId;
-		$this->queryParameters["DeviceId"]=$deviceId;
+		$this->deviceId                   = $deviceId;
+		$this->queryParameters['DeviceId']=$deviceId;
 	}
 
 	public function getUnbindAll() {
@@ -69,8 +69,7 @@ class UnbindAliasRequest extends RpcAcsRequest
 	}
 
 	public function setUnbindAll($unbindAll) {
-		$this->unbindAll = $unbindAll;
-		$this->queryParameters["UnbindAll"]=$unbindAll;
+		$this->unbindAll                   = $unbindAll;
+		$this->queryParameters['UnbindAll']=$unbindAll;
 	}
-	
 }

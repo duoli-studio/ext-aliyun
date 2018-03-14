@@ -1,17 +1,16 @@
 <?php
-
 namespace Poppy\Extension\Aliyun\Core\Regions;
 
 class Endpoint
 {
 	private $name;
-	private $regionIds; 
+	private $regionIds;
 	private $productDomains;
 	
-	function  __construct($name, $regionIds, $productDomains)
+	public function __construct($name, $regionIds, $productDomains)
 	{
-		$this->name = $name;
-		$this->regionIds = $regionIds;
+		$this->name           = $name;
+		$this->regionIds      = $regionIds;
 		$this->productDomains = $productDomains;
 	}
 	
