@@ -25,12 +25,3 @@ php artisan migrate
 ```
 php artisan serve
 ```
-
-## 安装 ext-fe
-
-```
-cd extensions 
-git clone https://github.com/duoli-studio/ext-fe
-cd ext-fe
-composer update -vvv
-```

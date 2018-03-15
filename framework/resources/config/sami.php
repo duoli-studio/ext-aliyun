@@ -3,7 +3,7 @@
 // config/sami.php
 // php ./resources/sami/sami.phar update ./resources/sami/config.php
 
-$baseDir  = dirname(dirname(dirname(dirname(__DIR__))));
+$baseDir  = dirname(dirname(__DIR__));
 $folders  = glob($baseDir . '/{extensions,modules,framework}/*/src', GLOB_BRACE);
 $excludes = [];
 foreach ($folders as $folder) {
