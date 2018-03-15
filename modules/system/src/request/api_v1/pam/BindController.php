@@ -4,10 +4,9 @@ use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\JsonResponse;
 use Poppy\Framework\Application\ApiController;
 use Poppy\Framework\Classes\Resp;
-use System\Classes\Traits\SystemTrait;
 use System\Action\OAuth;
 use System\Action\Pam;
-
+use System\Classes\Traits\SystemTrait;
 
 class BindController extends ApiController
 {
@@ -28,9 +27,8 @@ class BindController extends ApiController
 		if (!$OAuth->setPam($this->getJwtWebGuard()->user())->unbind($type)) {
 			return Resp::web(Resp::ERROR, $OAuth->getError());
 		}
-		else {
+		 
 			return Resp::web(Resp::SUCCESS, '绑定成功');
-		}
 	}
 
 	/**
@@ -52,8 +50,7 @@ class BindController extends ApiController
 		if (!$Pam->newPassport($verify_code, $passport, $captcha)) {
 			return Resp::web(Resp::ERROR, $Pam->getError());
 		}
-		else {
+		 
 			return Resp::web(Resp::SUCCESS, '更换成功');
-		}
 	}
 }

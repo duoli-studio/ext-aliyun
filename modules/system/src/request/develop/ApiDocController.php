@@ -10,7 +10,6 @@ use Poppy\Framework\Helper\StrHelper;
 
 class ApiDocController extends Controller
 {
-
 	protected $self_menu;
 
 	public function __construct()
@@ -23,7 +22,6 @@ class ApiDocController extends Controller
 				if (isset($api_doc['title']) && $api_doc['title']) {
 					$this->self_menu[$api_doc['title']] = config('app.url') . ltrim($api_doc['doc'], 'public');
 				}
-
 			}
 		}
 		$this->self_menu['apiDoc'] = 'http://apidocjs.com';
@@ -32,7 +30,6 @@ class ApiDocController extends Controller
 		]);
 	}
 
-
 	/**
 	 * 自动生成接口
 	 * @param string $type
@@ -40,10 +37,9 @@ class ApiDocController extends Controller
 	 */
 	public function auto($type = '')
 	{
-
 		$catalog = config('fe.apidoc');
 		if (!$catalog) {
-			return Resp::web(Resp::ERROR, "尚未配置 apidoc 生成目录");
+			return Resp::web(Resp::ERROR, '尚未配置 apidoc 生成目录');
 		}
 		if (!$type) {
 			$keys = array_keys($catalog);
@@ -52,7 +48,7 @@ class ApiDocController extends Controller
 
 		$this->seo('Restful-' . $type, '优雅的在线接口调试方案');
 
-		$tokenGet = function($cookie_key) {
+		$tokenGet = function ($cookie_key) {
 			if (RawCookieHelper::has($cookie_key)) {
 				$token = RawCookieHelper::get($cookie_key);
 
@@ -66,6 +62,7 @@ class ApiDocController extends Controller
 					RawCookieHelper::remove($cookie_key);
 				}
 			}
+
 			return RawCookieHelper::get($cookie_key);
 		};
 
@@ -107,8 +104,9 @@ class ApiDocController extends Controller
 			$user  = [];
 			$front = [];
 			if (!isset($data['current'])) {
-				return Resp::web(Resp::ERROR, "没有找到对应 URL 地址");
+				return Resp::web(Resp::ERROR, '没有找到对应 URL 地址');
 			}
+
 			return view('system::develop.api_doc.auto', [
 				'guard'     => $type,
 				'data'      => $data,
@@ -122,7 +120,6 @@ class ApiDocController extends Controller
 			return Resp::web(Resp::ERROR, $e->getMessage());
 		}
 	}
-
 
 	protected function apiData($type, $prefix = null, $method = 'get', $version = '1.0.0')
 	{
@@ -189,16 +186,19 @@ class ApiDocController extends Controller
 			case 'string':
 				if (strpos($size, '..') !== false) {
 					list($start, $end) = explode('..', $size);
-					$start = (int) $start;
-					$end   = (int) $end;
+					$start             = (int) $start;
+					$end               = (int) $end;
 
 					$length = rand($start, $end);
+
 					return StrHelper::random($length);
 				}
 				if ($allowedValues) {
 					shuffle($allowedValues);
+
 					return $allowedValues[0];
 				}
+
 				return '';
 				break;
 			case 'boolean':
@@ -207,26 +207,31 @@ class ApiDocController extends Controller
 			case 'number':
 				if (strpos($size, '-') !== false) {
 					list($start, $end) = explode('-', $size);
-					$start = (int) $start;
-					$end   = (int) $end;
+					$start             = (int) $start;
+					$end               = (int) $end;
+
 					return rand($start, $end);
 				}
 				if (strpos($size, '..') !== false) {
 					list($start, $end) = explode('..', $size);
-					$start = (int) $start;
-					$end   = (int) $end;
+					$start             = (int) $start;
+					$end               = (int) $end;
 
 					$start = ((int) str_pad(1, $start, 0));
 					$end   = ((int) str_pad(1, $end + 1, 0)) - 1;
+
 					return rand($start, $end);
 				}
 				if ($allowedValues) {
 					shuffle($allowedValues);
+
 					return $allowedValues[0];
 				}
+
 				return rand(0, 99999999);
 				break;
 		}
+
 		return '';
 	}
 }

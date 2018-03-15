@@ -1,10 +1,8 @@
 <?php namespace System\Models;
 
-
 use Illuminate\Database\Eloquent\Builder;
 use Poppy\Framework\Http\Pagination\PageInfo;
 use System\Classes\Traits\FilterTrait;
-
 
 /**
  * System\Models\SysArea
@@ -42,6 +40,5 @@ class SysArea extends \Eloquent
 		'top_parent_id',
 		'children',
 	];
-
 }
 

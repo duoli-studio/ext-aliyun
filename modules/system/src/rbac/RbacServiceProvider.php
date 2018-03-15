@@ -3,13 +3,10 @@
 /**
  * Copyright (C) Update For IDE
  */
-
 use Poppy\Framework\Support\ServiceProvider;
 
 class RbacServiceProvider extends ServiceProvider
 {
-
-
 	/**
 	 * Bootstrap the module services.
 	 */
@@ -27,7 +24,6 @@ class RbacServiceProvider extends ServiceProvider
 	{
 		$this->registerRbac();
 	}
-
 
 	/**
 	 * register rbac and alias
@@ -52,7 +48,7 @@ class RbacServiceProvider extends ServiceProvider
 		});
 
 		\Blade::directive('endrole', function ($expression) {
-			return "<?php endif; // Rbac::hasRole ?>";
+			return '<?php endif; // Rbac::hasRole ?>';
 		});
 
 		// Call to Entrust::capable
@@ -61,7 +57,7 @@ class RbacServiceProvider extends ServiceProvider
 		});
 
 		\Blade::directive('endpermission', function ($expression) {
-			return "<?php endif; // Rbac::capable ?>";
+			return '<?php endif; // Rbac::capable ?>';
 		});
 
 		// Call to Entrust::ability
@@ -70,7 +66,7 @@ class RbacServiceProvider extends ServiceProvider
 		});
 
 		\Blade::directive('endability', function ($expression) {
-			return "<?php endif; // Rbac::ability ?>";
+			return '<?php endif; // Rbac::ability ?>';
 		});
 	}
 

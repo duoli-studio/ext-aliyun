@@ -1,20 +1,17 @@
 <?php namespace System\Request\ApiV1\Util;
 
-
 use Poppy\Framework\Application\ApiController;
 use Poppy\Framework\Classes\Resp;
+use System\Action\ImageCaptcha;
+use System\Action\Pam;
 use System\Action\Verification;
 use System\Classes\Traits\SystemTrait;
 use System\Models\PamAccount;
 use System\Models\PamCaptcha;
-use System\Action\Pam;
-use System\Action\ImageCaptcha;
-
 
 class CaptchaController extends ApiController
 {
 	use SystemTrait;
-
 
 	/**
 	 * @api                 {get} api_v1/util/captcha/image [O]图像验证码
@@ -37,9 +34,9 @@ class CaptchaController extends ApiController
 		if ($validator->fails()) {
 			return Resp::web(Resp::ERROR, $validator->messages(), 'json|1');
 		}
+
 		return (new ImageCaptcha())->generate($input['mobile']);
 	}
-
 
 	/**
 	 * @api                 {post} api_v1/util/captcha/send [O]验证码
@@ -57,7 +54,6 @@ class CaptchaController extends ApiController
 		$passport   = input('passport', '');
 		$image_code = input('image_code', '');
 		$type       = input('type', '');
-
 
 		$passportType = (new Pam())->passportType($passport);
 
@@ -91,7 +87,6 @@ class CaptchaController extends ApiController
 					return Resp::web(Resp::ERROR, trans('system::action.captcha.account_miss'));
 				}
 				break;
-
 			case PamCaptcha::CON_USER:
 				// 需要授权
 				/** @var PamAccount $jwtUser */
@@ -101,7 +96,6 @@ class CaptchaController extends ApiController
 				}
 				$passport = $jwtUser->mobile;
 				break;
-
 			case PamCaptcha::CON_REBIND:
 				// 需要授权
 				$jwtUser = $this->getJwtWebGuard()->user();
@@ -126,14 +120,13 @@ class CaptchaController extends ApiController
 		if (!$Verification->send($passport, $type)) {
 			return Resp::web(Resp::ERROR, $Verification->getError());
 		}
-		else {
+		 
 			$captcha = $Verification->getCaptcha();
 			$tip     = trans('system::util.captcha.ctl.send_success');
-			$tip     .= !is_production() ? ', 验证码是: ' . $captcha->captcha : '';
-			return Resp::web(Resp::SUCCESS, $tip);
-		}
-	}
+			$tip .= !is_production() ? ', 验证码是: ' . $captcha->captcha : '';
 
+			return Resp::web(Resp::SUCCESS, $tip);
+	}
 
 	/**
 	 * @api                 {post} api_v1/util/captcha/verify_code [O]验证串
@@ -157,11 +150,11 @@ class CaptchaController extends ApiController
 		if (!$Verification->check($passport, $captcha)) {
 			return Resp::web(Resp::ERROR, $Verification->getError());
 		}
-		else {
+		 
 			$Verification->delete($passport);
+
 			return Resp::web(Resp::SUCCESS, '操作成功', [
 				'verify_code' => $Verification->genOnceVerifyCode(10, $passport),
 			]);
-		}
 	}
 }

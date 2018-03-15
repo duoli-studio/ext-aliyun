@@ -1,12 +1,10 @@
 <?php namespace System\Module\Listeners;
 
-
 use Poppy\Framework\Application\Event;
 use System\Classes\Traits\SystemTrait;
 
 class ClearCacheListener
 {
-
 	use SystemTrait;
 
 	/**

@@ -3,11 +3,10 @@
 /**
  * Copyright (C) Update For IDE
  */
-
+use Finance\Classes\Extension\AliPush;
 use Poppy\Framework\Application\TestCase;
 use System\Models\PamAccount;
 use System\Models\SysHelp;
-use Finance\Classes\Extension\AliPush;
 use System\Notifications\HelpNotification;
 
 class PushTest extends TestCase
@@ -29,7 +28,6 @@ class PushTest extends TestCase
 	 */
 	public function testSendPush()
 	{
-
 		$notify = [
 			'title'            => '测试',
 			'content'          => '内容',
@@ -44,10 +42,7 @@ class PushTest extends TestCase
 			'registration_ids' => '',
 		];
 
-
 		$result = AliPush::sendPush($notify);
 		$this->assertTrue($result, true);
-
 	}
-
 }

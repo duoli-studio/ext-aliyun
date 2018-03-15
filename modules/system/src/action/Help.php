@@ -64,7 +64,7 @@ class Help
 			'title'   => [
 				Rule::required(),
 				Rule::string(),
-				Rule::unique($this->helpTable, 'title')->where('cat_id',$cat_id),
+				Rule::unique($this->helpTable, 'title')->where('cat_id', $cat_id),
 			],
 			'content' => [
 				Rule::required(),
@@ -86,7 +86,6 @@ class Help
 
 		if ($id) {
 			$this->help->update($initDb);
-
 		}
 		else {
 			/** @var SysHelp $help */
@@ -112,9 +111,9 @@ class Help
 		if ($id && !$this->initHelp($id)) {
 			return false;
 		}
+
 		return $this->help->delete();
 	}
-
 
 	/**
 	 * 初始化id
@@ -126,6 +125,7 @@ class Help
 		try {
 			$this->help   = SysHelp::findOrFail($id);
 			$this->helpId = $this->help->id;
+
 			return true;
 		} catch (\Exception $e) {
 			return $this->setError(trans('system::action.help.item_not_exist'));

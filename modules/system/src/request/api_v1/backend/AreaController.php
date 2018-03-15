@@ -4,14 +4,12 @@ use Poppy\Framework\Application\ApiController;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Helper\StrHelper;
 use Poppy\Framework\Helper\TreeHelper;
-use Poppy\Framework\Http\Pagination\PageInfo;
-use System\Action\Area as ActArea;
 use System\Action\Area;
+use System\Action\Area as ActArea;
 use System\Classes\Traits\SystemTrait;
 use System\Models\Filters\SysAreaFilter;
 use System\Models\Resources\AreaResource;
 use System\Models\SysArea;
-
 
 class AreaController extends ApiController
 {
@@ -75,9 +73,9 @@ class AreaController extends ApiController
 
 		/** @var SysArea $Db */
 		$Db = SysArea::filter($input, SysAreaFilter::class);
+
 		return SysArea::paginationInfo($Db, AreaResource::class, $append);
 	}
-
 
 	/**
 	 * @api                 {post} api_v1/backend/system/area/establish [O]地区-C2E
@@ -97,9 +95,8 @@ class AreaController extends ApiController
 		if (!$Area->establish($input, $id)) {
 			return Resp::web(Resp::ERROR, $Area->getError());
 		}
-		else {
+		 
 			return Resp::web(Resp::SUCCESS, '操作成功');
-		}
 	}
 
 	/**
@@ -123,11 +120,11 @@ class AreaController extends ApiController
 				if (call_user_func([$Area, $action], $id)) {
 					return Resp::web(Resp::SUCCESS, '操作成功');
 				}
-				else {
+				 
 					return Resp::web(Resp::ERROR, $Area->getError());
-				}
 			}
 		}
+
 		return Resp::web(Resp::ERROR, '不存在的方法');
 	}
 
@@ -181,7 +178,6 @@ class AreaController extends ApiController
 			$min = $Db->min('id');
 		}
 
-
 		// ↑↑↑↑↑↑↑↑↑↑↑   获取参数
 
 		// 剩余数
@@ -206,7 +202,6 @@ class AreaController extends ApiController
 			$percentage = '0';
 		}
 
-
 		$url = route_url('backend:api_v1.area.fix', null, [
 			'max'     => $max,
 			'min'     => $min,
@@ -221,7 +216,7 @@ class AreaController extends ApiController
 			'section'       => $section,
 			'left'          => $left,
 			'percentage'    => $percentage,
-			'continue_time' => 500,// ms 毫秒
+			'continue_time' => 500, // ms 毫秒
 			'continue_url'  => $url,
 		]);
 	}
@@ -301,7 +296,6 @@ class AreaController extends ApiController
 			$percentage = '0';
 		}
 
-
 		$url = route_url('backend:api_v1.area.child', null, [
 			'max'     => $max,
 			'min'     => $min,
@@ -316,7 +310,7 @@ class AreaController extends ApiController
 			'section'       => $section,
 			'left'          => $left,
 			'percentage'    => $percentage,
-			'continue_time' => 500,// ms 毫秒
+			'continue_time' => 500, // ms 毫秒
 			'continue_url'  => $url,
 		]);
 	}

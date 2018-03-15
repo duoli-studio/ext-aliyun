@@ -30,10 +30,12 @@ class LayoutController extends ApiController
 			}
 			$this->getSetting()->set('system::system.menus', json_encode($data));
 			$this->getCache('poppy')->flush();
+
 			return $this->getResponse()->json([
 				'message' => '批量更新数据成功！',
 			]);
 		}
+
 		return $this->getResponse()->json([
 			'data'      => $this->getModule()->menus()->structures()->toArray(),
 			'message'   => '获取菜单数据成功！',
@@ -78,7 +80,6 @@ class LayoutController extends ApiController
 	 */
 	public function dashboards()
 	{
-
 		if (is_post()) {
 			$this->validate($this->getRequest(), [
 				'hidden' => [
@@ -96,13 +97,13 @@ class LayoutController extends ApiController
 				'right.array'  => '右侧数据必须为数组',
 			]);
 			$data = collect();
-			$data->put('hidden', collect($this->getRequest()->input('hidden', []))->transform(function(array $data) {
+			$data->put('hidden', collect($this->getRequest()->input('hidden', []))->transform(function (array $data) {
 				return $data['identification'];
 			}));
-			$data->put('left', collect($this->getRequest()->input('left', []))->transform(function(array $data) {
+			$data->put('left', collect($this->getRequest()->input('left', []))->transform(function (array $data) {
 				return $data['identification'];
 			}));
-			$data->put('right', collect($this->getRequest()->input('right', []))->transform(function(array $data) {
+			$data->put('right', collect($this->getRequest()->input('right', []))->transform(function (array $data) {
 				return $data['identification'];
 			}));
 			$this->getSetting()->set('administration.dashboards', json_encode($data->toArray()));
@@ -115,8 +116,8 @@ class LayoutController extends ApiController
 		$hidden     = collect();
 		$left       = collect();
 		$right      = collect();
-		$this->getModule()->enabled()->each(function(Module $module) use ($dashboards) {
-			$module->offsetExists('dashboards') && collect($module->get('dashboards'))->each(function(
+		$this->getModule()->enabled()->each(function (Module $module) use ($dashboards) {
+			$module->offsetExists('dashboards') && collect($module->get('dashboards'))->each(function (
 				$definition,
 				$identification
 			) use ($dashboards) {
@@ -135,7 +136,7 @@ class LayoutController extends ApiController
 		});
 		$dashboards = $dashboards->keyBy('identification');
 		$saved      = collect(json_decode($this->getSetting()->get('administration.dashboards', '')));
-		$saved->has('hidden') && collect($saved->get('hidden', []))->each(function($identification) use (
+		$saved->has('hidden') && collect($saved->get('hidden', []))->each(function ($identification) use (
 			$dashboards,
 			$hidden
 		) {
@@ -144,7 +145,7 @@ class LayoutController extends ApiController
 				$dashboards->offsetUnset($identification);
 			}
 		});
-		$saved->has('left') && collect($saved->get('left', []))->each(function($identification) use (
+		$saved->has('left') && collect($saved->get('left', []))->each(function ($identification) use (
 			$dashboards,
 			$left
 		) {
@@ -153,7 +154,7 @@ class LayoutController extends ApiController
 				$dashboards->offsetUnset($identification);
 			}
 		});
-		$saved->has('right') && collect($saved->get('right', []))->each(function($identification) use (
+		$saved->has('right') && collect($saved->get('right', []))->each(function ($identification) use (
 			$dashboards,
 			$right
 		) {
@@ -163,7 +164,7 @@ class LayoutController extends ApiController
 			}
 		});
 		if ($dashboards->isNotEmpty()) {
-			$dashboards->each(function($definition) use ($left) {
+			$dashboards->each(function ($definition) use ($left) {
 				$left->push($definition);
 			});
 		}
@@ -196,7 +197,7 @@ class LayoutController extends ApiController
 
 			return Resp::web(Resp::SUCCESS, '更新成功');
 		}
-		$page = $this->getBackend()->pages()->filter(function($definition) use ($path) {
+		$page = $this->getBackend()->pages()->filter(function ($definition) use ($path) {
 			return $definition['initialization']['path'] == $path;
 		})->first();
 
@@ -206,6 +207,7 @@ class LayoutController extends ApiController
 				$page['tabs'][$key] = $tab;
 			}
 		}
+
 		return $this->getResponse()->json([
 			'data'    => $page,
 			'message' => '获取数据成功！',
@@ -229,6 +231,7 @@ class LayoutController extends ApiController
 			],
 			'message' => '获取模块和插件信息成功！',
 		]);
+
 		return $data;
 	}
 }

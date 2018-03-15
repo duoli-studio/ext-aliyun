@@ -1,9 +1,7 @@
 <?php namespace System\Rbac\Contracts;
 
-
 interface RbacRoleContract
 {
-
 	/**
 	 * Many-to-Many relations with the user model.
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany

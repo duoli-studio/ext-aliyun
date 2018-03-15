@@ -6,7 +6,6 @@ use System\Models\PamRole;
 
 trait RbacPermissionTrait
 {
-
 	/**
 	 * Many-to-Many relations with role model.
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -33,6 +32,7 @@ trait RbacPermissionTrait
 			if (!method_exists((new PamPermission()), 'bootSoftDeletes')) {
 				$permission->roles()->sync([]);
 			}
+
 			return true;
 		});
 	}

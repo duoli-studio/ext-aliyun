@@ -18,7 +18,8 @@ class ModulesAssets extends Repository
 	public function initialize(Collection $data)
 	{
 		$this->items = $this->getCache('poppy')->rememberForever(
-			'modules.assets', function () use ($data) {
+			'modules.assets',
+			function () use ($data) {
 			$collection = collect();
 			$data->each(function ($items, $slug) use ($collection) {
 				$items = collect($items);
@@ -47,7 +48,9 @@ class ModulesAssets extends Repository
 					});
 				});
 			});
+
 			return $collection->all();
-		});
+		}
+		);
 	}
 }

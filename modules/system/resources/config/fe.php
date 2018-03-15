@@ -1,9 +1,9 @@
 <?php
 return [
 	'bower' => [
-		"bootstrap" => [
-			"folder" => "bt3",
-			"shim"   => ["jquery"],
+		'bootstrap' => [
+			'folder' => 'bt3',
+			'shim'   => ['jquery'],
 		],
 	],
 ];

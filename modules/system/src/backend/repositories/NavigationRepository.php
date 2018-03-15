@@ -17,7 +17,6 @@ class NavigationRepository extends Repository
 	 */
 	public function initialize(Collection $data)
 	{
-
 		$this->items = $this->getCache('poppy')->rememberForever(
 			'backend.navigation',
 			function () use ($data) {

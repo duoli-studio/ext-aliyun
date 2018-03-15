@@ -6,7 +6,6 @@ use System\Action\Pam;
 
 class PamAutoEnableCommand extends Command
 {
-
 	/**
 	 * The name and signature of the console command.
 	 *

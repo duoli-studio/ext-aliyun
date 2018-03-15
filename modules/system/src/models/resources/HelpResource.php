@@ -4,7 +4,6 @@ use Illuminate\Http\Resources\Json\Resource;
 
 class HelpResource extends Resource
 {
-
 	/**-
 	 * 将资源转换成数组。
 	 * @param $request

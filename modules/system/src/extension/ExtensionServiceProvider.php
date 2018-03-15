@@ -1,5 +1,4 @@
 <?php
-
 namespace System\Extension;
 
 use Illuminate\Support\ServiceProvider;

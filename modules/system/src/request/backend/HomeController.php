@@ -2,16 +2,14 @@
 
 use Illuminate\Http\Request;
 use Poppy\Framework\Classes\Resp;
+use System\Action\Pam;
 use System\Classes\SettingUI;
 use System\Models\PamAccount;
 use System\Models\SysConfig;
-use System\Action\Pam;
 use User\Classes\Socialite\QqMobile\Provider;
-
 
 class HomeController extends InitController
 {
-
 	/**
 	 * 登录
 	 * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
@@ -29,9 +27,8 @@ class HomeController extends InitController
 			if ($actPam->loginCheck($credentials['username'], $credentials['password'], PamAccount::GUARD_BACKEND)) {
 				return Resp::web(Resp::SUCCESS, '登录成功', 'location|' . route('backend:home.cp'));
 			}
-			else {
+			 
 				return Resp::web(Resp::ERROR, '登录用户名密码不匹配');
-			}
 		}
 
 		if ($auth->check()) {
@@ -41,6 +38,7 @@ class HomeController extends InitController
 				return Resp::web(Resp::SUCCESS, '登录成功', 'location|' . route('backend:home.cp'));
 			}
 		}
+
 		return view('system::backend.home.login');
 	}
 
@@ -77,7 +75,6 @@ class HomeController extends InitController
 				return Resp::web(Resp::ERROR, $validator->errors());
 			}
 
-
 			/** @var PamAccount $pam */
 			$pam    = $this->getBeGuard()->user();
 			$actPam = new Pam();
@@ -87,8 +84,10 @@ class HomeController extends InitController
 
 			$actPam->setPassword($pam, $password);
 			\Auth::logout();
+
 			return Resp::web(Resp::SUCCESS, '密码修改成功, 请重新登录', 'location|' . route('backend:home.login'));
 		}
+
 		return view('system::backend.home.password');
 	}
 
@@ -99,6 +98,7 @@ class HomeController extends InitController
 	public function logout()
 	{
 		\Auth::guard(PamAccount::GUARD_BACKEND)->logout();
+
 		return Resp::web(Resp::SUCCESS, '退出登录', 'location|' . route('backend:home.login'));
 	}
 
@@ -124,8 +124,10 @@ class HomeController extends InitController
 			if (!$Setting->save($request)) {
 				return Resp::web(Resp::ERROR, $Setting->getError(), 'forget|1');
 			}
+
 			return Resp::web(Resp::SUCCESS, '更新配置成功', 'forget|!');
 		}
+
 		return $Setting->render();
 	}
 
@@ -137,6 +139,7 @@ class HomeController extends InitController
 	{
 		SysConfig::cacheClear();
 		SysAcl::reCache();
+
 		return Resp::web(Resp::SUCCESS, '更新缓存成功', 'location|message');
 	}
 
@@ -144,5 +147,4 @@ class HomeController extends InitController
 	{
 		phpinfo();
 	}
-
 }

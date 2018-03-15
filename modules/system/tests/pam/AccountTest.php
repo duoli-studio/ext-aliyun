@@ -3,7 +3,6 @@
 /**
  * Copyright (C) Update For IDE
  */
-
 use Illuminate\Support\Facades\Crypt;
 use Poppy\Framework\Application\TestCase;
 use System\Action\Pam;
@@ -37,6 +36,4 @@ class AccountTest extends TestCase
 			dd($Pam->getSuccess());
 		}
 	}
-
-
 }

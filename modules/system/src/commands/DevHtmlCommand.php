@@ -1,10 +1,8 @@
 <?php namespace System\Commands;
 
-
 use Illuminate\Console\Command;
 use Poppy\Framework\Exceptions\ModuleNotFoundException;
 use System\Classes\Traits\SystemTrait;
-
 
 /**
  * 项目初始化
@@ -24,7 +22,6 @@ class DevHtmlCommand extends Command
 	 * @var string
 	 */
 	protected $description = 'Develop Html generate.';
-
 
 	/**
 	 * Execute the console command.

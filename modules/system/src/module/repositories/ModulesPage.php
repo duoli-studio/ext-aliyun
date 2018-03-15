@@ -18,7 +18,8 @@ class ModulesPage extends Repository
 	public function initialize(Collection $slugs)
 	{
 		$this->items = $this->getCache('poppy')->rememberForever(
-			'modules.page', function () use ($slugs) {
+			'modules.page',
+			function () use ($slugs) {
 			$collection = collect();
 			$slugs->each(function ($items, $module) use ($collection) {
 				collect($items)->each(function ($definition, $identification) use ($collection, $module) {
@@ -44,8 +45,10 @@ class ModulesPage extends Repository
 						else {
 							$definition['value'] = $setting;
 						}
+
 						return $definition;
 					}));
+
 					return $definition;
 				}));
 
@@ -53,6 +56,7 @@ class ModulesPage extends Repository
 			});
 
 			return $collection->all();
-		});
+		}
+		);
 	}
 }

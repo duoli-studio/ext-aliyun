@@ -3,9 +3,7 @@
 /**
  * Copyright (C) Update For IDE
  */
-
 use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Container\Container;
 use Poppy\Framework\Exceptions\ModuleNotFoundException;
 use Poppy\Framework\Support\PoppyServiceProvider;
 use System\Backend\BackendServiceProvider;
@@ -21,13 +19,13 @@ use System\Commands\DocCommand;
 use System\Commands\InstallCommand;
 use System\Commands\LogCommand;
 use System\Commands\PamAutoEnableCommand;
+use System\Commands\UserCommand;
 use System\Extension\ExtensionServiceProvider;
 use System\Models\PamAccount;
 use System\Models\PamRole;
 use System\Models\Policies\AccountPolicy;
 use System\Models\Policies\RolePolicy;
 use System\Module\ModuleServiceProvider;
-use System\Commands\UserCommand;
 use System\Permission\Commands\PermissionCommand;
 use System\Permission\PermissionServiceProvider;
 use System\Rbac\RbacServiceProvider;
@@ -37,6 +35,10 @@ use System\Setting\SettingServiceProvider;
 
 class ServiceProvider extends PoppyServiceProvider
 {
+	/**
+	 * @var string Module name
+	 */
+	protected $name = 'system';
 
 	protected $listens = [
 		'Poppy\Framework\Poppy\Events\PoppyOptimized' => [
@@ -46,17 +48,15 @@ class ServiceProvider extends PoppyServiceProvider
 		'System\Setting\Events\SettingUpdated'        => [
 			'System\Module\Listeners\ClearCacheListener',
 		],
+		'System\Event\LoginSuccessEvent'              => [
+			'System\Listeners\LoginSuccess\LogListener',
+		],
 	];
 
 	protected $policies = [
 		PamRole::class    => RolePolicy::class,
 		PamAccount::class => AccountPolicy::class,
 	];
-
-	/**
-	 * @var string Module name
-	 */
-	protected $name = 'system';
 
 	/**
 	 * Bootstrap the module services.
@@ -98,13 +98,11 @@ class ServiceProvider extends PoppyServiceProvider
 		$this->registerAuth();
 
 		$this->registerSchedule();
-
 	}
-
 
 	private function registerSchedule()
 	{
-		$this->app['events']->listen('console.schedule', function(Schedule $schedule) {
+		$this->app['events']->listen('console.schedule', function (Schedule $schedule) {
 			$schedule->command('system:pam-auto_enable')
 				->everyThirtyMinutes()->appendOutputTo($this->consoleLog());
 			// auto clean
@@ -130,36 +128,36 @@ class ServiceProvider extends PoppyServiceProvider
 
 	private function registerAuth()
 	{
-		\Auth::provider('pam.web', function($app) {
+		\Auth::provider('pam.web', function ($app) {
 			return new WebProvider(PamAccount::class);
 		});
-		\Auth::provider('pam.backend', function($app) {
+		\Auth::provider('pam.backend', function ($app) {
 			return new BackendProvider(PamAccount::class);
 		});
-		\Auth::provider('pam.develop', function($app) {
+		\Auth::provider('pam.develop', function ($app) {
 			return new DevelopProvider(PamAccount::class);
 		});
-		\Auth::provider('pam', function($app) {
+		\Auth::provider('pam', function ($app) {
 			return new PamProvider(PamAccount::class);
 		});
 
-		\Auth::extend('jwt.backend', function($app, $name, array $config) {
-			// dd($app['auth']->createUserProvider($config['provider']));
+		\Auth::extend('jwt.backend', function ($app, $name, array $config) {
 			$guard = new JwtAuthGuard(
 				$app['tymon.jwt'],
 				$app['auth']->createUserProvider($config['provider']),
 				$app['request']
 			);
 			$app->refresh('request', $guard, 'setRequest');
+
 			return $guard;
 		});
 
-		$this->app->singleton('poppy.form', function($app) {
+		$this->app->singleton('poppy.form', function ($app) {
 			$form = new FeForm($app['html'], $app['url'], $app['view'], $app['session.store']->token());
+
 			return $form->setSessionStore($app['session.store']);
 		});
 	}
-
 
 	private function bootConfigMail()
 	{
@@ -179,13 +177,12 @@ class ServiceProvider extends PoppyServiceProvider
 		} catch (\Exception $e) {
 			\Log::error('[System:ServiceProvider]' . $e->getMessage());
 		}
-
 	}
 
 	public function provides()
 	{
 		return [
-			'poppy.form'
+			'poppy.form',
 		];
 	}
 }

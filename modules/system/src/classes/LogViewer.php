@@ -1,13 +1,10 @@
 <?php namespace System\Classes;
 
-
 use Psr\Log\LogLevel;
 use ReflectionClass;
 
-
 class LogViewer
 {
-
 	/**
 	 * @var string file
 	 */
@@ -93,11 +90,9 @@ class LogViewer
 			for ($i = 0, $j = count($h); $i < $j; $i++) {
 				foreach ($log_levels as $level_key => $level_value) {
 					if (strpos(strtolower($h[$i]), '.' . $level_value)) {
-
 						preg_match('/^\[(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\].*?\.' . $level_key . ': (.*?)( in .*?:[0-9]+)?$/', $h[$i], $current);
 
 						if (!isset($current[2])) continue;
-
 						$log[] = [
 							'level'       => $level_value,
 							'level_class' => self::$levels_classes[$level_value],
@@ -129,6 +124,7 @@ class LogViewer
 				$files[$k] = basename($file);
 			}
 		}
+
 		return array_values($files);
 	}
 
@@ -137,7 +133,8 @@ class LogViewer
 	 */
 	private static function getLogLevels()
 	{
-		$class = new ReflectionClass(new LogLevel);
+		$class = new ReflectionClass(new LogLevel());
+
 		return $class->getConstants();
 	}
 }

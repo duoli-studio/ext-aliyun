@@ -5,8 +5,6 @@
  */
 class EnvController extends InitController
 {
-
-
 	public function phpinfo()
 	{
 		return view('system::develop.env.phpinfo');
@@ -14,55 +12,57 @@ class EnvController extends InitController
 
 	public function check()
 	{
-
 		$env = [
-			'weixin'       => [
+			'weixin'   => [
 				'title'  => '微信',
 				'result' => class_exists('\Poppy\Extension\Wxpay\Lib\WxPayAppApiPay'),
 			],
-			'alipay'       => [
+			'alipay'   => [
 				'title'  => '支付宝',
 				'result' => class_exists('\Finance\Classes\Extension\AliPay'),
 			],
-			'yunxin'       => [
+			'yunxin'   => [
 				'title'  => '网易云信',
 				'result' => class_exists('\Poppy\Extension\NetEase\Im\Yunxin'),
 			],
-			'node'       => [
+			'node'     => [
 				'title'  => 'Node',
-				'result' =>  command_exist('node'),
+				'result' => command_exist('node'),
 			],
-			'apidoc'       => [
+			'apidoc'   => [
 				'title'  => 'Node-apidoc',
-				'result' =>  command_exist('apidoc'),
+				'result' => command_exist('apidoc'),
 			],
-			'php-gd'       => [
+			'php-gd'   => [
 				'title'  => 'PHP-Gd',
-				'result' =>  extension_loaded('gd'),
+				'result' => extension_loaded('gd'),
 			],
-			'php-json'       => [
-				'title'  => 'PHP-JSON',
-				'result' =>  extension_loaded('json'),
+			'php-json' => [
+				'title'  => 'PHP-json',
+				'result' => extension_loaded('json'),
 			],
-
-			'php-iconv'       => [
+			'php-iconv' => [
 				'title'  => 'PHP-iconv',
-				'result' =>  extension_loaded('iconv'),
+				'result' => extension_loaded('iconv'),
 			],
-
-			'php-mysqlnd'       => [
+			'php-mysqlnd'  => [
 				'title'  => 'PHP-mysqlnd',
-				'result' =>  extension_loaded('mysqlnd'),
+				'result' => extension_loaded('mysqlnd'),
 			],
-			'php-mbstring'       => [
+			'php-mbstring' => [
 				'title'  => 'PHP-mbstring',
-				'result' =>  extension_loaded('mbstring'),
+				'result' => extension_loaded('mbstring'),
 			],
-			'php-bcmath'       => [
+			'php-bcmath'   => [
 				'title'  => 'PHP-bcmath',
-				'result' =>  extension_loaded('bcmath'),
+				'result' => extension_loaded('bcmath'),
+			],
+			'php-mcrypt' => [
+				'title'  => 'PHP-mcrypt',
+				'result' => extension_loaded('mcrypt'),
 			],
 		];
+
 		return view('system::develop.env.check', [
 			'env' => $env,
 		]);
@@ -76,7 +76,7 @@ class EnvController extends InitController
 	{
 		$tables = array_map('reset', \DB::select('show tables'));
 
-		$suggestString   = function($col) {
+		$suggestString   = function ($col) {
 			if (strpos($col['Type'], 'char') !== false) {
 				if ($col['Null'] === 'YES') {
 					return '(Char-null)';
@@ -87,12 +87,13 @@ class EnvController extends InitController
 					}
 				}
 			}
+
 			return '';
 		};
-		$suggestInt      = function($col) {
+		$suggestInt      = function ($col) {
 			if (strpos($col['Type'], 'int') !== false) {
 				switch ($col['Key']) {
-					case "PRI":
+					case 'PRI':
 						// 主键不能为Null (Allow Null 不可选)
 						// Default 不可填入值
 						// 所以无任何输出
@@ -107,20 +108,22 @@ class EnvController extends InitController
 						break;
 				}
 			}
+
 			return '';
 		};
-		$suggestDecimal  = function($col) {
+		$suggestDecimal  = function ($col) {
 			if (strpos($col['Type'], 'decimal') !== false) {
-				if ($col['Default'] !== "0.00") {
+				if ($col['Default'] !== '0.00') {
 					return '(Decimal-default)';
 				}
 				if ($col['Null'] === 'YES') {
 					return '(Decimal-Null)';
 				}
 			}
+
 			return '';
 		};
-		$suggestDatetime = function($col) {
+		$suggestDatetime = function ($col) {
 			if (strpos($col['Type'], 'datetime') !== false) {
 				if (!is_null($col['Default'])) {
 					return '(Datetime-default)';
@@ -129,12 +132,14 @@ class EnvController extends InitController
 					return '(Datetime-null)';
 				}
 			}
+
 			return '';
 		};
-		$suggestFloat    = function($col) {
+		$suggestFloat    = function ($col) {
 			if (strpos($col['Type'], 'float') !== false) {
 				return '(Float-set)';
 			}
+
 			return '';
 		};
 
@@ -145,14 +150,14 @@ class EnvController extends InitController
 			/*
 			 * column 字段
 			 * Field      : account_no
-		     * Type       : varchar(100)
-		     * Collation  : utf8_general_ci
-		     * Null       : NO
-		     * Key        : ""
-		     * Default    : ""
-		     * Extra      : ""
-		     * Privileges : select,insert,update,references
-		     * Comment    : 账号
+			 * Type       : varchar(100)
+			 * Collation  : utf8_general_ci
+			 * Null       : NO
+			 * Key        : ""
+			 * Default    : ""
+			 * Extra      : ""
+			 * Privileges : select,insert,update,references
+			 * Comment    : 账号
 			 * ---------------------------------------- */
 
 			foreach ($columns as $column) {
@@ -167,9 +172,9 @@ class EnvController extends InitController
 			}
 			$formatTables[$table] = $formatColumns;
 		}
+
 		return view('system::develop.env.db', [
 			'items' => $formatTables,
 		]);
 	}
-
 }

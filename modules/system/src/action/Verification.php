@@ -16,20 +16,18 @@ class Verification
 
 	const CRYPT_METHOD = 'AES-256-ECB';
 
-	/** @var  string 隐藏在加密中的字符串 */
+	/** @var string 隐藏在加密中的字符串 */
 	private $hiddenStr;
 
 	/** @var PamCaptcha */
 	private $captcha;
 
-
-	static $acsClient = null;
+	public static $acsClient = null;
 
 	public function __construct()
 	{
 		Config::load();
 	}
-
 
 	/**
 	 * @param string $passport
@@ -67,7 +65,7 @@ class Verification
 			$captcha->captcha = StrHelper::randomCustom(6, '0123456789');
 		}
 		else {
-			$captcha->num  += 1;
+			$captcha->num += 1;
 			$captcha->type = $passportType;
 		}
 		$captcha->disabled_at = $expired;
@@ -83,9 +81,9 @@ class Verification
 		else {
 			$this->sendMail($passport, $type);
 		}
+
 		return true;
 	}
-
 
 	/**
 	 * 验证验证码
@@ -107,9 +105,8 @@ class Verification
 		if ($exists) {
 			return true;
 		}
-		else {
+		 
 			return $this->setError(trans('system::action.verification.check_captcha_error'));
-		}
 	}
 
 	/**
@@ -176,6 +173,7 @@ class Verification
 			];
 		}
 		\Cache::forever($cacheKey, $data);
+
 		return openssl_encrypt($str, self::CRYPT_METHOD, substr(config('app.key'), 0, 32));
 	}
 
@@ -200,16 +198,15 @@ class Verification
 			if (!isset($data[$key])) {
 				return $this->setError(trans('system::action.verification.verify_code_expired'));
 			}
-			else {
+			 
 				unset($data[$key]);
 				$this->hiddenStr = $split[2];
 				\Cache::forever($cacheKey, $data);
+
 				return true;
-			}
 		}
-		else {
+		 
 			return $this->setError(trans('system::action.verification.verify_code_error'));
-		}
 	}
 
 	public function getHiddenStr()
@@ -252,8 +249,9 @@ class Verification
 			$content = ($sign ? "[{$sign}]" : '') . sys_setting('extension::sms_local.captcha_text');
 			$trans   = sys_trans($content, $param);
 			\Log::info($trans);
+
 			return true;
-		};
+		}
 
 		// 初始化 SendSmsRequest 实例用于设置发送短信的参数
 		$request = new SendSmsRequest();
@@ -267,14 +265,12 @@ class Verification
 			if ($acsResponse->Code && $acsResponse->Code == 'OK') {
 				return true;
 			}
-			else {
+			 
 				return $this->setError($acsResponse->Message);
-			}
 		} catch (\Exception $e) {
 			return $this->setError(substr($e->getMessage(), 0, 255));
 		}
 	}
-
 
 	/**
 	 * @param $passport
@@ -282,7 +278,6 @@ class Verification
 	 */
 	private function sendMail($passport, $rand_number)
 	{
-
 	}
 
 	/**
@@ -291,7 +286,6 @@ class Verification
 	 */
 	private function getAcsClient()
 	{
-
 		$accessKeyId     = $this->getSetting()->get('extension::sms_aliyun.access_key');
 		$accessKeySecret = $this->getSetting()->get('extension::sms_aliyun.access_secret');
 
@@ -304,7 +298,6 @@ class Verification
 		$endPointName = 'cn-hangzhou';
 
 		if (static::$acsClient == null) {
-
 			//初始化acsClient,暂不支持region化
 			$profile = DefaultProfile::getProfile($region, $accessKeyId, $accessKeySecret);
 
@@ -314,8 +307,7 @@ class Verification
 			// 初始化AcsClient用于发起请求
 			static::$acsClient = new DefaultAcsClient($profile);
 		}
+
 		return static::$acsClient;
 	}
-
-
 }

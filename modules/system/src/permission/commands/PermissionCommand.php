@@ -32,7 +32,6 @@ class PermissionCommand extends Command
 	 */
 	public function handle()
 	{
-
 		$action    = $this->argument('do');
 		$this->key = $this->key($action);
 		switch ($action) {
@@ -45,7 +44,7 @@ class PermissionCommand extends Command
 			case 'assign':
 				$this->assign();
 				break;
-			case 'check';
+			case 'check':
 				$permission = $this->option('permission');
 				$this->checkPermission($permission);
 				break;
@@ -82,7 +81,8 @@ class PermissionCommand extends Command
 		$permissions = $this->getPermission()->permissions();
 		$dropNum     = 0;
 		if (!$permissions) {
-			$this->info($this->key . "No permission need import.");
+			$this->info($this->key . 'No permission need import.');
+
 			return;
 		}
 
@@ -121,7 +121,7 @@ class PermissionCommand extends Command
 		if ($createdNum) {
 			$str .= '`' . $createdNum . '` created;';
 		}
-		$this->info($this->key . "Import permission Success! " . $str);
+		$this->info($this->key . 'Import permission Success! ' . $str);
 	}
 
 	/**
@@ -135,20 +135,20 @@ class PermissionCommand extends Command
 
 		if (!$role) {
 			$this->error($this->key . 'Role [' . $name . '] not exists in table !');
+
 			return;
 		}
 
 		$permissions = PamPermission::where('type', $permission_type)->get();
 		if (!$permissions) {
 			$this->error($this->key . 'Permission type [' . $permission_type . '] has no permissions !');
+
 			return;
 		}
 		$role->savePermissions($permissions);
 		$role->flushPermissionRole();
 		$this->info("\nSave [{$permission_type}] permission to role [{$name}] !");
-
 	}
-
 
 	private function checkPermission($permission)
 	{
@@ -164,5 +164,4 @@ class PermissionCommand extends Command
 	{
 		return '[System:Permission (action:' . $action . ')] ';
 	}
-
 }

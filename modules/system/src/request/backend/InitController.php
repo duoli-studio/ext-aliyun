@@ -3,7 +3,6 @@
 use Poppy\Framework\Application\Controller;
 use System\Classes\Traits\SystemTrait;
 
-
 class InitController extends Controller
 {
 	use SystemTrait;

@@ -1,6 +1,5 @@
 <?php namespace System\Models;
 
-
 use System\Rbac\Contracts\RbacPermissionContract;
 use System\Rbac\Traits\RbacPermissionTrait;
 
@@ -9,7 +8,6 @@ use System\Rbac\Traits\RbacPermissionTrait;
  */
 class PamPermission extends \Eloquent implements RbacPermissionContract
 {
-
 	use RbacPermissionTrait;
 
 	protected $table = 'pam_permission';
@@ -25,6 +23,4 @@ class PamPermission extends \Eloquent implements RbacPermissionContract
 		'module',
 		'type',
 	];
-
-
 }

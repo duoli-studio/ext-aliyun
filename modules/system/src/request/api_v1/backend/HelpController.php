@@ -4,8 +4,8 @@ use Poppy\Framework\Application\ApiController;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Helper\StrHelper;
 use Poppy\Framework\Helper\TreeHelper;
-use System\Classes\Traits\SystemTrait;
 use System\Action\Help;
+use System\Classes\Traits\SystemTrait;
 use System\Models\Filters\SysHelpFilter;
 use System\Models\Resources\HelpResource;
 use System\Models\SysCategory;
@@ -80,6 +80,7 @@ class HelpController extends ApiController
 
 		/** @var SysHelp $Db */
 		$Db = SysHelp::filter($input, SysHelpFilter::class);
+
 		return SysHelp::paginationInfo($Db, HelpResource::class, $append);
 	}
 
@@ -101,9 +102,8 @@ class HelpController extends ApiController
 		if (!$Help->setPam($this->getJwtBeGuard()->user())->establish($input, $id)) {
 			return Resp::web(Resp::ERROR, $Help->getError());
 		}
-		else {
+		 
 			return Resp::web(Resp::SUCCESS, $Help->getSuccess());
-		}
 	}
 
 	/**
@@ -126,11 +126,11 @@ class HelpController extends ApiController
 				if (call_user_func([$Help, $action], $id)) {
 					return Resp::web(Resp::SUCCESS, '操作成功');
 				}
-				else {
+				 
 					return Resp::web(Resp::ERROR, $Help->getError());
-				}
 			}
 		}
+
 		return Resp::web(Resp::ERROR, '不存在的方法');
 	}
 }

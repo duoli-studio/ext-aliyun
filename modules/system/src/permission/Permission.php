@@ -8,7 +8,6 @@ use System\Permission\Repositories\PermissionRepository;
  */
 class Permission
 {
-
 	/**
 	 * @var PermissionRepository
 	 */
@@ -24,18 +23,15 @@ class Permission
 	 */
 	protected $root = '';
 
-
 	/**
 	 * @var string Root Permission Title
 	 */
 	protected $rootTitle = '';
 
-
 	/**
 	 * @var string Permission group title
 	 */
 	protected $groupTitle = '';
-
 
 	/**
 	 * @var string Group name

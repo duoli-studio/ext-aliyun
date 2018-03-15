@@ -5,7 +5,6 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Collection;
 use JsonSerializable;
 use Poppy\Framework\Classes\Traits\HasAttributesTrait;
-use Poppy\Framework\Helper\UtilHelper;
 use System\Classes\Traits\SystemTrait;
 use System\Models\PamAccount;
 
@@ -71,10 +70,10 @@ class Module implements Arrayable, ArrayAccess, JsonSerializable
 		return collect($this->get('pages', []))->map(function ($definition, $identification) {
 			$definition['initialization']['identification'] = $identification;
 			unset($definition['initialization']['tabs']);
+
 			return $definition['initialization'];
 		})->groupBy('target');
 	}
-
 
 	/**
 	 * @param string $entry
@@ -114,6 +113,7 @@ class Module implements Arrayable, ArrayAccess, JsonSerializable
 		if (!$identification) {
 			return true;
 		}
+
 		return $this->getPermission()->check($identification, $guard);
 	}
 
@@ -144,7 +144,6 @@ class Module implements Arrayable, ArrayAccess, JsonSerializable
 
 		return $data->toArray();
 	}
-
 
 	/**
 	 * @return bool

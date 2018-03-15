@@ -1,11 +1,9 @@
 <?php namespace System\Classes;
 
-
 use Collective\Html\FormBuilder;
 
 class FeForm extends FormBuilder
 {
-
 	/**
 	 * 上传缩略图
 	 * @param       $name
@@ -24,7 +22,7 @@ class FeForm extends FormBuilder
 		$id = str_random(4);
 
 		$thumb_key   = $value ?: '';
-		$display_str = !$value ? "class=\"hidden icons\"" : "class=\"icons\"";
+		$display_str = !$value ? 'class="hidden icons"' : 'class="icons"';
 		$extension   = $options['ext'] ?? 'zip';
 		$upload_url  = $options['upload_url'] ?? '';
 		$field       = $options['field'] ?? 'uploader_file';
@@ -372,6 +370,7 @@ class FeForm extends FormBuilder
 			})
 		</script>
 CONTENT;
+
 		return $parseStr;
 	}
 }

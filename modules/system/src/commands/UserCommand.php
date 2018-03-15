@@ -1,17 +1,16 @@
 <?php namespace System\Commands;
 
-use System\Models\PamAccount;
 use Illuminate\Console\Command;
+use System\Action\Pam;
+use System\Models\PamAccount;
 use System\Models\PamRole;
 use System\Models\SysConfig;
-use System\Action\Pam;
 
 /**
  * User
  */
 class UserCommand extends Command
 {
-
 	/**
 	 * 前端部署.
 	 * @var string
@@ -28,7 +27,6 @@ class UserCommand extends Command
 	 */
 	protected $description = 'user handler.';
 
-
 	/**
 	 * Execute the console command.
 	 * @return mixed
@@ -36,7 +34,6 @@ class UserCommand extends Command
 	 */
 	public function handle()
 	{
-
 		$do = $this->argument('do');
 		switch ($do) {
 			case 'reset_pwd':
@@ -102,6 +99,5 @@ class UserCommand extends Command
 				$this->error('Please type right action![reset_pwd, init_role, create_user]');
 				break;
 		}
-
 	}
 }

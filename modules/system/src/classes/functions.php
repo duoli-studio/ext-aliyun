@@ -2,7 +2,6 @@
 /**
  * Copyright (C) Update For IDE
  */
-
 use Illuminate\Support\Str;
 
 if (!function_exists('sys_setting')) {
@@ -29,7 +28,8 @@ if (!function_exists('sys_gen_order')) {
 	{
 		$sequence = rand(1000, 9999);
 		$current  = \Carbon\Carbon::now()->format('YmdHis');
-		return sprintf("%s%s%s%s", strtoupper($prefix), $current, \Poppy\Framework\Helper\TimeHelper::micro(), sprintf("%'.04d", $sequence));
+
+		return sprintf('%s%s%s%s', strtoupper($prefix), $current, \Poppy\Framework\Helper\TimeHelper::micro(), sprintf("%'.04d", $sequence));
 	}
 }
 
@@ -44,9 +44,8 @@ if (!function_exists('sys_order_prefix')) {
 		if (preg_match('/^([a-zA-z]{1,})\d*/i', $order_no, $matches)) {
 			return $matches[1];
 		}
-		else {
+		 
 			return 'other';
-		}
 	}
 }
 
@@ -66,6 +65,7 @@ if (!function_exists('sys_trans')) {
 				$line
 			);
 		}
+
 		return $line;
 	}
 }
@@ -77,9 +77,8 @@ if (!function_exists('sys_seo')) {
 		if ($route) {
 			// fetch route defination
 		}
-		else {
+		 
 			// default
-		}
 	}
 }
 

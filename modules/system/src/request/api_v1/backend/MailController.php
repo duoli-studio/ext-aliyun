@@ -5,7 +5,6 @@ use Poppy\Framework\Classes\Resp;
 use System\Classes\Traits\SystemTrait;
 use System\Mail\TestSend;
 
-
 class MailController extends ApiController
 {
 	use SystemTrait;
@@ -20,6 +19,7 @@ class MailController extends ApiController
 	public function fetch()
 	{
 		$Setting = $this->getSetting();
+
 		return $this->getResponse()->json([
 			'data'    => [
 				'driver'     => $Setting->get('system::mail.driver'),
@@ -51,6 +51,7 @@ class MailController extends ApiController
 		foreach ($all as $key => $value) {
 			$Setting->set('system::mail.' . $key, $value);
 		}
+
 		return Resp::web(Resp::SUCCESS, '更新邮件配置成功');
 	}
 

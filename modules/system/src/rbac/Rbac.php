@@ -2,14 +2,12 @@
 
 use System\Models\PamAccount;
 
-
 /**
  * This class is the main entry point of rbac. Usually this the interaction
  * with this class will be done through the Entrust Facade
  */
 class Rbac
 {
-
 	/**
 	 * Laravel application
 	 * @var \Illuminate\Foundation\Application
@@ -45,7 +43,7 @@ class Rbac
 	 * Check if the current user has a permission by its name
 	 * 检测当前用户是否有权限
 	 * @param        $guard
-	 * @param string $permission Permission string.
+	 * @param string $permission permission string
 	 * @param bool   $requireAll
 	 * @return bool
 	 */
@@ -60,9 +58,9 @@ class Rbac
 
 	/**
 	 * Check if the current user has a role or permission by its name
-	 * @param array|string $roles       The role(s) needed.
-	 * @param array|string $permissions The permission(s) needed.
-	 * @param array        $options     The Options.
+	 * @param array|string $roles       the role(s) needed
+	 * @param array|string $permissions the permission(s) needed
+	 * @param array        $options     the Options
 	 * @return bool
 	 */
 	public function ability($guard, $roles, $permissions, $options = [])

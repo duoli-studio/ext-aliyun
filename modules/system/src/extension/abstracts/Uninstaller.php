@@ -1,5 +1,4 @@
 <?php
-
 namespace System\Extension\Abstracts;
 
 /**
@@ -7,8 +6,8 @@ namespace System\Extension\Abstracts;
  */
 abstract class Uninstaller
 {
-    /**
-     * @return true
-     */
-    abstract public function handle();
+	/**
+	 * @return true
+	 */
+	abstract public function handle();
 }

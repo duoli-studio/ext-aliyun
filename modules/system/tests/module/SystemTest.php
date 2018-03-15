@@ -1,6 +1,5 @@
 <?php namespace System\Tests\Module;
 
-
 use Poppy\Framework\Application\TestCase;
 
 class SystemTest extends TestCase

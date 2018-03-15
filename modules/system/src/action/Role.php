@@ -10,7 +10,6 @@ use System\Models\PamRoleAccount;
 
 class Role
 {
-
 	use SystemTrait;
 
 	/** @var PamRole */
@@ -23,7 +22,6 @@ class Role
 	 * @var string
 	 */
 	protected $roleTable;
-
 
 	public function __construct()
 	{
@@ -38,7 +36,6 @@ class Role
 	 */
 	public function establish($data, $id = null)
 	{
-
 		if (!$this->checkPam()) {
 			return false;
 		}
@@ -53,7 +50,7 @@ class Role
 		$rule = [
 			'title' => [
 				Rule::required(),
-				Rule::unique($this->roleTable, 'title')->where(function($query) use ($id) {
+				Rule::unique($this->roleTable, 'title')->where(function ($query) use ($id) {
 					if ($id) {
 						$query->where('id', '!=', $id);
 					}
@@ -64,7 +61,7 @@ class Role
 				Rule::string(),
 				Rule::alphaDash(),
 				Rule::between(3, 15),
-				Rule::unique($this->roleTable, 'name')->where(function($query) use ($id) {
+				Rule::unique($this->roleTable, 'name')->where(function ($query) use ($id) {
 					if ($id) {
 						$query->where('id', '!=', $id);
 					}
@@ -111,9 +108,9 @@ class Role
 			}
 			$this->role = PamRole::create($initDb);
 		}
+
 		return true;
 	}
-
 
 	/**
 	 * 保存权限
@@ -154,6 +151,7 @@ class Role
 		}
 		$this->role->savePermissions($objPermissions);
 		$this->role->flushPermissionRole();
+
 		return true;
 	}
 
@@ -162,18 +160,17 @@ class Role
 		try {
 			$this->role   = PamRole::findOrFail($id);
 			$this->roleId = $this->role->id;
+
 			return true;
 		} catch (\Exception $e) {
 			return $this->setError(trans('system::action.role.role_not_exists'));
 		}
 	}
 
-
 	public function share()
 	{
 		\View::share(['item' => $this->role]);
 	}
-
 
 	/**
 	 * 获取所有权限以及默认值
@@ -207,7 +204,7 @@ class Role
 		}
 
 		$permission = [];
-		$collectPermission->each(function($item, $key) use (&$permission, $role) {
+		$collectPermission->each(function ($item, $key) use (&$permission, $role) {
 			$root    = [
 				'title'  => $item['root_title'],
 				'root'   => $item['root'],
@@ -255,9 +252,9 @@ class Role
 			}
 			$permission = $p;
 		}
+
 		return $permission;
 	}
-
 
 	/**
 	 * 删除数据
@@ -287,11 +284,10 @@ class Role
 			PamPermissionRole::where('role_id', $this->roleId)->delete();
 			// 删除角色
 			$this->role->delete();
+
 			return true;
 		} catch (\Exception $e) {
 			return $this->setError($e->getMessage());
 		}
-
 	}
-
 }

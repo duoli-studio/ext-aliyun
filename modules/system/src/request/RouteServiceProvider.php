@@ -3,7 +3,6 @@
 /**
  * Copyright (C) Update For IDE
  */
-
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Routing\Router;
 use Poppy\Framework\GraphQL\GraphQLController;
@@ -11,8 +10,6 @@ use System\Request\System\HomeController;
 
 class RouteServiceProvider extends ServiceProvider
 {
-
-
 	/**
 	 * Define the routes for the module.
 	 * @return void
@@ -35,7 +32,7 @@ class RouteServiceProvider extends ServiceProvider
 	{
 		\Route::group([
 			'prefix' => 'system',
-		], function(Router $router) {
+		], function (Router $router) {
 			$router->get('/', HomeController::class . '@layout');
 			$router->get('/login', HomeController::class . '@login');
 		});
@@ -44,7 +41,7 @@ class RouteServiceProvider extends ServiceProvider
 		\Route::group([
 			'middleware' => 'backend',
 			'prefix'     => 'backend',
-		], function() {
+		], function () {
 			require_once poppy_path('system', 'src/request/routes/backend.php');
 		});
 	}
@@ -60,7 +57,7 @@ class RouteServiceProvider extends ServiceProvider
 		\Route::group([
 			'middleware' => 'web',
 			'prefix'     => 'develop',
-		], function() {
+		], function () {
 			require_once poppy_path('system', 'src/request/routes/develop.php');
 		});
 	}
@@ -72,35 +69,31 @@ class RouteServiceProvider extends ServiceProvider
 	 */
 	protected function mapApiRoutes()
 	{
-
 		// Api V1 版本
 		\Route::group([
 			'middleware' => ['cross'],
 			'prefix'     => 'api_v1',
-		], function() {
+		], function () {
 			require_once poppy_path('system', 'src/request/routes/web_v1.php');
 			require_once poppy_path('system', 'src/request/routes/backend_v1.php');
 		});
 
-
 		$this->graphqlApi();
 	}
-
 
 	private function graphqlApi()
 	{
 		\Route::group([
 			'middleware' => ['cross'],
-		], function(Router $route) {
+		], function (Router $route) {
 			$route->any('api/g/{graphql_schema?}', GraphQLController::class . '@query')
 				->name('api.graphql');
 		});
 		\Route::group([
 			'middleware' => ['cross'],
-		], function(Router $router) {
+		], function (Router $router) {
 			$router->any('api/j/{url}', HomeController::class . '@json')
 				->where('url', '[a-zA-z/]+');
 		});
-
 	}
 }

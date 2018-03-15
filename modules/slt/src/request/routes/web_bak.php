@@ -35,26 +35,7 @@
 		Route::any('fe/react/{book}', 'Web\FeController@react')
 			->name('web:fe.react');
 
-		\Route::any('prd/create', 'Web\PrdController@create')
-			->name('web:prd.create');
-		\Route::any('prd/popup/{id?}', 'Web\PrdController@popup')
-			->name('web:prd.popup');
-		\Route::any('prd/content/{id}', 'Web\PrdController@content')
-			->name('web:prd.content');
-		\Route::any('prd/my_book', 'Web\PrdController@myBook')
-			->name('web:prd.my_book');
-		\Route::any('prd/show/{id}', 'Web\PrdController@show')
-			->name('web:prd.show');
-		\Route::any('prd/destroy/{id}', 'Web\PrdController@destroy')
-			->name('web:prd.destroy');
-		\Route::any('prd/access/{id}', 'Web\PrdController@access')
-			->name('web:prd.access');
-		\Route::any('prd/address/{id}', 'Web\PrdController@address')
-			->name('web:prd.address');
-		\Route::any('prd/status/{id}/{type}', 'Web\PrdController@status')
-			->name('web:prd.status');
-		Route::any('prd/my_book_item/{id?}', 'Web\PrdController@myBookItem')
-			->name('web:prd.my_book_item');
+
 
 		Route::any('nav/my_book_item/{id?}', 'Web\PrdController@book')
 			->name('web:prd.book');
@@ -129,36 +110,9 @@
 		'postBad'          => 'front_prd.bad',
 	]);
 	*/
-	// tgp
-	Route::get('tgp/fw', 'Web\TgpController@fw')
-		->name('web:tgp.fw');
-	Route::any('tgp/search', 'Web\TgpController@search')
-		->name('web:tgp.search');
-	Route::get('tgp/zj', 'Web\TgpController@zj')
-		->name('web:tgp.zj');
-	Route::get('tgp/get_player_mastery_spell', 'Web\TgpController@getPlayerMasterySpell')
-		->name('web:tgp.player_mastery_spell');
-	Route::get('tgp/tcall', 'Web\TgpController@tcall')
-		->name('web:tgp.tcall');
-	Route::get('tgp/player', 'Web\TgpController@player')
-		->name('web:tgp.player');
-	Route::get('tgp/tgp_info', 'Web\TgpController@tgpInfo')
-		->name('web:tgp.tgp_info');
-	Route::get('tgp/search_player', 'Web\TgpController@searchPlayer')
-		->name('web:tgp.tgp_search_player');
-	Route::get('tgp/get_user_hot_info', 'Web\TgpController@getUserHotInfo')
-		->name('web:tgp.get_user_hot_info');
-	Route::get('tgp/core/{type}', 'Web\TgpController@core')
-		->name('web:tgp.core');
-
 
 	// dailian
 	Route::get('test', 'Web\TestController@index')
 		->name('web:test.index');
-	\Route::get('l5_log', '\Duoli\L5Log\Http\L5LogController@index')
-		->name('duoli.l5_log');
-	\Route::get('l5_api_doc', '\Duoli\L5ApiDoc\Http\L5ApiDocController@auto')
-		->name('duoli.l5_api_doc');
-
 });
 

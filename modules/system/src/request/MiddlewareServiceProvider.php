@@ -1,16 +1,14 @@
 <?php namespace System\Request;
 
-
 use Clockwork\Support\Laravel\ClockworkMiddleware;
+use Illuminate\Contracts\Http\Kernel as KernelContract;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Contracts\Http\Kernel as KernelContract;
 use Poppy\Framework\Http\Middlewares\CrossPreflight;
 use System\Request\Middleware\DisabledPam;
 
 class MiddlewareServiceProvider extends ServiceProvider
 {
-
 	public function boot(Router $router)
 	{
 		$router->middlewareGroup('backend', [
@@ -34,5 +32,4 @@ class MiddlewareServiceProvider extends ServiceProvider
 			$this->app->make(KernelContract::class)->prependMiddleware(CrossPreflight::class);
 		}
 	}
-
 }

@@ -25,7 +25,8 @@ class Modules extends Repository
 	public function initialize(Collection $slugs)
 	{
 		$this->items = $this->getCache('poppy')->rememberForever(
-			'modules', function () use ($slugs) {
+			'modules',
+			function () use ($slugs) {
 			// load from file
 			$this->loadFromCache = false;
 			$collection          = collect();
@@ -47,8 +48,10 @@ class Modules extends Repository
 					$collection->put($slug, $module);
 				}
 			});
+
 			return $collection->all();
-		});
+		}
+		);
 	}
 
 	/**
@@ -77,11 +80,11 @@ class Modules extends Repository
 					$configurations->put($name, Yaml::parse(file_get_contents($file)));
 				}
 			});
+
 			return $configurations;
 		}
-		else {
+		 
 			throw new LoadConfigurationException('Load Module fail: ' . $directory);
-		}
 	}
 
 	/**
@@ -93,7 +96,6 @@ class Modules extends Repository
 			return $module->get('enabled') == true;
 		});
 	}
-
 
 	/**
 	 * @return \Illuminate\Support\Collection

@@ -6,20 +6,19 @@ use PHPUnit\Runner\Exception;
 use Poppy\Framework\Helper\UtilHelper;
 use Poppy\Framework\Validation\Rule;
 use System\Classes\Traits\SystemTrait;
+use System\Event\LoginFailedEvent;
+use System\Event\LoginSuccessEvent;
+use System\Event\PamRegisteredEvent;
 use System\Models\PamAccount;
 use System\Models\PamBind;
 use System\Models\PamCaptcha;
 use System\Models\PamRole;
 use System\Models\SysConfig;
-use System\Event\Events\LoginFailed;
-use System\Event\Events\LoginSuccess;
-use System\Event\Events\PamRegistered;
 use Tymon\JWTAuth\JWTGuard;
 
 class Pam
 {
 	use SystemTrait;
-
 
 	/**
 	 * @var string Pam table
@@ -31,13 +30,11 @@ class Pam
 	 */
 	private $bindTable;
 
-
 	public function __construct()
 	{
 		$this->pamTable  = (new PamAccount())->getTable();
 		$this->bindTable = (new PamBind())->getTable();
 	}
-
 
 	/**
 	 * 验证验登录
@@ -72,27 +69,28 @@ class Pam
 		if (!PamAccount::where($passportType, $initDb['passport'])->exists()) {
 			if ($this->register($initDb['passport'])) {
 				$actUtil->delete($passport);
+
 				return true;
 			}
-			else {
+			 
 				return false;
-			}
 		}
-		else {
+		 
 			// 登录
 			$this->pam = PamAccount::where($passportType, $passport)->first();
 
 			if ($this->pam->is_enable == SysConfig::NO) {
 				// 账户被禁用
 				$this->webLogout();
+
 				return $this->setError(trans('system::action.pam.account_disable_not_login'));
 			}
 			//登录时间
 			$this->pam->logined_at  = Carbon::now();
 			$this->pam->login_times += 1;
 			$this->pam->save();
+
 			return true;
-		}
 	}
 
 	/**
@@ -156,7 +154,6 @@ class Pam
 			return $this->setError($validator->messages());
 		}
 
-
 		if (is_numeric($role_name)) {
 			/** @var PamRole $role */
 			$role = PamRole::find($role_name);
@@ -190,8 +187,7 @@ class Pam
 
 		try {
 			// 处理数据库
-			return \DB::transaction(function() use ($initDb, $role, $password, $hasAccountName, $prefix) {
-
+			return \DB::transaction(function () use ($initDb, $role, $password, $hasAccountName, $prefix) {
 				/** @var PamAccount $pam pam */
 				$pam = PamAccount::create($initDb);
 
@@ -211,9 +207,10 @@ class Pam
 				}
 
 				// 触发注册成功的事件
-				$this->getEvent()->dispatch(new PamRegistered($pam));
+				$this->getEvent()->dispatch(new PamRegisteredEvent($pam));
 
 				$this->pam = $pam;
+
 				return true;
 			});
 		} catch (\Exception $e) {
@@ -269,23 +266,23 @@ class Pam
 			if ($user->is_enable == SysConfig::NO) {
 				// 账户被禁用
 				$guard->logout();
+
 				return $this->setError(trans('system::action.pam.account_disable_not_login'));
 			}
 
-			$this->getEvent()->dispatch(new LoginSuccess($user));
+			$this->getEvent()->dispatch(new LoginSuccessEvent($user));
 			$this->pam = $user;
 
 			return true;
 		}
-		else {
+		 
 			$credentials += [
 				'type'     => $type,
 				'passport' => $passport,
 			];
-			$this->getEvent()->dispatch(new LoginFailed($credentials));
-			return $this->setError(trans('system::action.pam.login_fail_again'));
-		}
+			$this->getEvent()->dispatch(new LoginFailedEvent($credentials));
 
+			return $this->setError(trans('system::action.pam.login_fail_again'));
 	}
 
 	/**
@@ -323,8 +320,6 @@ class Pam
 		if ($validator->fails()) {
 			return $this->setError($validator->messages());
 		}
-
-
 	}
 
 	/**
@@ -334,6 +329,7 @@ class Pam
 	public function webLogout()
 	{
 		\Auth::guard(PamAccount::GUARD_WEB)->logout();
+
 		return true;
 	}
 
@@ -360,6 +356,7 @@ class Pam
 		$pam->password     = $cryptPassword;
 		$pam->password_key = $key;
 		$pam->save();
+
 		return true;
 	}
 
@@ -402,6 +399,7 @@ class Pam
 
 		//发送验证码
 		$actUtil->send($newMobile, $type = PamCaptcha::CON_LOGIN);
+
 		return true;
 	}
 
@@ -460,6 +458,7 @@ class Pam
 			$this->pam->update([
 				'mobile' => $passport,
 			]);
+
 			return true;
 		} catch (\Exception $e) {
 			return $this->setError($e->getMessage());
@@ -469,7 +468,7 @@ class Pam
 	/**
 	 * 检测账户密码是否正确
 	 * @param PamAccount $pam      用户账户信息
-	 * @param String     $password 用户传入的密码
+	 * @param string     $password 用户传入的密码
 	 * @return bool
 	 */
 	public function checkPassword($pam, $password)
@@ -478,6 +477,7 @@ class Pam
 		$reg_datetime  = $pam->created_at->toDateTimeString();
 		$authPassword  = $pam->getAuthPassword();
 		$cryptPassword = $this->cryptPassword($password, $reg_datetime, $key);
+
 		return (bool) ($authPassword === $cryptPassword);
 	}
 
@@ -519,6 +519,7 @@ class Pam
 		else {
 			$type = PamAccount::REG_TYPE_USERNAME;
 		}
+
 		return $type;
 	}
 
@@ -538,6 +539,7 @@ class Pam
 		if (!$this->setPassword($pam, $password)) {
 			return false;
 		}
+
 		return true;
 	}
 
@@ -583,6 +585,7 @@ class Pam
 			'disable_start_at' => Carbon::now(),
 			'disable_end_at'   => Carbon::createFromFormat('Y-m-d', $data['disable_to'])->startOfDay(),
 		]);
+
 		return true;
 	}
 
@@ -600,6 +603,7 @@ class Pam
 			PamAccount::where('id', $id)->update([
 				'is_enable' => PamAccount::STATUS_ENABLE,
 			]);
+
 			return true;
 		} catch (\Exception $e) {
 			return $this->setError($e->getMessage());
@@ -615,6 +619,7 @@ class Pam
 			PamAccount::where('disable_end_at', '<', Carbon::now())->update([
 				'is_enable' => PamAccount::STATUS_ENABLE,
 			]);
+
 			return true;
 		} catch (Exception $e) {
 			return $this->setError($e->getMessage());
@@ -623,15 +628,13 @@ class Pam
 
 	/**
 	 * 生成账户密码
-	 * @param String $password     原始密码
-	 * @param String $reg_datetime 注册时间(datetime) 类型
-	 * @param String $random_key   六位随机值
+	 * @param string $password     原始密码
+	 * @param string $reg_datetime 注册时间(datetime) 类型
+	 * @param string $random_key   六位随机值
 	 * @return string
 	 */
 	private function cryptPassword($password, $reg_datetime, $random_key)
 	{
 		return md5(sha1($password . $reg_datetime) . $random_key);
 	}
-
-
 }

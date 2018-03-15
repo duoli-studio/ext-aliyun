@@ -26,4 +26,5 @@ $options = [
 ];
 
 $sami = new \Sami\Sami($iterator, $options);
+
 return $sami;

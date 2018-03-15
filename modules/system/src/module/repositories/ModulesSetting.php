@@ -18,7 +18,8 @@ class ModulesSetting extends Repository
 	public function initialize(Collection $data)
 	{
 		$this->items = $this->getCache('poppy')->rememberForever(
-			'modules.setting', function () use ($data) {
+			'modules.setting',
+			function () use ($data) {
 			$collection = collect();
 			$data->each(function ($items, $slug) use ($collection) {
 				$items = collect($items);
@@ -26,7 +27,9 @@ class ModulesSetting extends Repository
 					$collection->put($entry, $items);
 				});
 			});
+
 			return $collection->all();
-		});
+		}
+		);
 	}
 }

@@ -20,13 +20,11 @@ class PamCaptcha extends \Eloquent
 	const CON_USER     = 'user';
 	const CON_REBIND   = 'rebind';
 
-
 	protected $table = 'pam_captcha';
 
 	protected $dates = [
 		'disabled_at',
 	];
-
 
 	protected $fillable = [
 		'type',

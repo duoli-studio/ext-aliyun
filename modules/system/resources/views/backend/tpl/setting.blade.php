@@ -39,7 +39,7 @@
                 <ul role="tablist" class="nav nav-tabs">
 					<?php $i = 0 ?>
                     @foreach($tabs as $group_key => $group)
-                        <li role="presentation" class="<?php echo($i++ == 0 ? 'active' : ''); ?>">
+                        <li role="presentation" class="<?php echo $i++ == 0 ? 'active' : ''; ?>">
                             <a href="#{!! $group_key !!}" aria-controls="{!! $group_key !!}" role="tab"
                                data-toggle="tab">
                                 {!! isset($group['title']) ? $group['title'] : '其他'  !!}
@@ -51,7 +51,7 @@
             <div class="tab-content mt15">
 				<?php $i = 0 ?>
                 @foreach($tabs as $group_key => $group)
-                    <div role="tabpanel" class="tab-pane <?php echo($i++ == 0 ? 'active' : ''); ?>"
+                    <div role="tabpanel" class="tab-pane <?php echo $i++ == 0 ? 'active' : ''; ?>"
                          id="{!! $group_key !!}">
                         {!! Form::open(['url' => $url,'id' => 'form_'.$group_key, 'class' => 'form-horizontal']) !!}
                         {!! Form::hidden('_group', $group_key) !!}

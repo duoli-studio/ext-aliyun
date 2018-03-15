@@ -4,7 +4,6 @@ use Poppy\Framework\Application\Controller;
 use Poppy\Framework\Classes\Traits\ViewTrait;
 use System\Classes\Traits\SystemTrait;
 
-
 class InitController extends Controller
 {
 	use SystemTrait, ViewTrait;

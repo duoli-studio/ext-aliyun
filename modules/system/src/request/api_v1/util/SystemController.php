@@ -50,7 +50,6 @@ class SystemController extends ApiController
 	 */
 	public function info()
 	{
-
 		$system['pay']    = [
 			'alipay_mobile' => $this->getSetting()->get('extension::pay_alipay.mobile_is_open'),
 			'wxpay_mobile'  => $this->getSetting()->get('extension::pay_wxpay.mobile_is_open'),
@@ -64,7 +63,7 @@ class SystemController extends ApiController
 			'notice_account' => $this->getSetting()->get('system::im_notice.notice_account'),
 			'order_account'  => $this->getSetting()->get('system::im_notice.order_account'),
 		];
+
 		return Resp::web(Resp::SUCCESS, '获取系统配置信息', $system);
 	}
-
 }

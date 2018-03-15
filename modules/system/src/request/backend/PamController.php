@@ -3,19 +3,17 @@
 use Illuminate\Http\Request;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Validation\Rule;
+use System\Action\Pam;
 use System\Models\Filters\PamFilter;
 use System\Models\PamAccount;
 use System\Models\PamRole;
 use System\Models\PamRoleAccount;
-use System\Action\Pam;
 
 /**
  * 账户管理
  */
 class PamController extends InitController
 {
-
-
 	/**
 	 * Display a listing of the resource.
 	 * @param Request $request
@@ -36,7 +34,6 @@ class PamController extends InitController
 		]);
 	}
 
-
 	/**
 	 * Show the form for creating a new resource.
 	 * @param Request $request
@@ -56,10 +53,10 @@ class PamController extends InitController
 			if ($actPam->register($username, $password, $role_name)) {
 				return Resp::web(Resp::SUCCESS, '用户添加成功', 'top_reload|1');
 			}
-			else {
+			 
 				return Resp::web(Resp::ERROR, $actPam->getError());
-			}
 		}
+
 		return view('system::backend.pam.establish', [
 			'type'  => $type,
 			'roles' => PamRole::getLinear($type, 'name'),
@@ -76,7 +73,6 @@ class PamController extends InitController
 	{
 		$pam = PamAccount::find($id);
 		if (is_post()) {
-
 			$validator = \Validator::make($request->all(), [
 				'password' => [
 					Rule::required(),
@@ -95,10 +91,10 @@ class PamController extends InitController
 			if ($actPam->setPassword($pam, $password)) {
 				return Resp::web(Resp::SUCCESS, '设置密码成功', 'top_reload|1');
 			}
-			else {
+			 
 				return Resp::web(Resp::ERROR, $actPam->getError());
-			}
 		}
+
 		return view('system::backend.pam.password', [
 			'pam' => $pam,
 		]);
@@ -114,7 +110,7 @@ class PamController extends InitController
 		$id      = $request->input('id');
 		$account = PamAccount::find($id);
 
-		\DB::transaction(function() use ($account) {
+		\DB::transaction(function () use ($account) {
 			// 删除 pam
 
 			$id           = $account->account_id;
@@ -147,6 +143,7 @@ class PamController extends InitController
 	public function getEdit($id)
 	{
 		$item = PamAccount::info($id, true);
+
 		return view('desktop.pam_account.item', [
 			'account_type' => $item['account_type'],
 			'item'         => $item,
@@ -224,6 +221,7 @@ class PamController extends InitController
 			return AppWeb::resp(AppWeb::ERROR, '您尚未选择用户!');
 		}
 		PamAccount::whereIn('account_id', $accountId)->update(['is_enable' => 'N']);
+
 		return AppWeb::resp(AppWeb::SUCCESS, '状态修改成功', 'reload|1');
 	}
 
@@ -234,9 +232,9 @@ class PamController extends InitController
 			return AppWeb::resp(AppWeb::ERROR, '您尚未选择用户!');
 		}
 		PamAccount::whereIn('account_id', $accountId)->update(['is_enable' => 'Y']);
+
 		return AppWeb::resp(AppWeb::SUCCESS, '状态修改成功', 'reload|1');
 	}
-
 
 	/**
 	 * 改变账户状态
@@ -255,6 +253,7 @@ class PamController extends InitController
 		PamAccount::where('account_id', $id)->update([
 			$field => $status,
 		]);
+
 		return AppWeb::resp(AppWeb::SUCCESS, '状态修改成功', 'reload|1');
 	}
 
@@ -264,6 +263,7 @@ class PamController extends InitController
 	public function getLog()
 	{
 		$items = PamLog::orderBy('created_at', 'desc')->paginate($this->pagesize);
+
 		return view('desktop.pam_account.log', [
 			'items' => $items,
 		]);
@@ -283,6 +283,7 @@ class PamController extends InitController
 		else {
 			$auth = [];
 		}
+
 		return view('desktop.pam_account.acl', [
 			'id'   => $id,
 			'auth' => ['auth' => $auth],
@@ -298,8 +299,7 @@ class PamController extends InitController
 		$auth = json_encode(\Input::get('auth'));
 		BaseConfig::configUpdate(['account_id_' . $id => $auth], 'acl');
 		BaseConfig::reCache('acl');
+
 		return AppWeb::resp(AppWeb::SUCCESS, '保存成功', 'reload|1');
 	}
-
-
 }

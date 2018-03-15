@@ -1,6 +1,5 @@
 <?php namespace System\Tests\Module;
 
-
 use Poppy\Framework\Application\TestCase;
 use System\Classes\Traits\SystemTrait;
 use System\Setting\Events\SettingUpdated;
@@ -8,7 +7,6 @@ use System\Setting\Events\SettingUpdated;
 class ModuleManagerTest extends TestCase
 {
 	use SystemTrait;
-
 
 	public function testRepository()
 	{

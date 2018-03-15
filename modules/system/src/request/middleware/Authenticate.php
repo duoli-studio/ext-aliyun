@@ -36,7 +36,6 @@ class Authenticate extends IlluminateAuthenticate
 		throw new AuthenticationException('Unauthenticated.', $guards);
 	}
 
-
 	/**
 	 * Handle an incoming request.
 	 * @param  \Illuminate\Http\Request $request
@@ -51,7 +50,7 @@ class Authenticate extends IlluminateAuthenticate
 		} catch (\Exception $e) {
 			if ($request->ajax()) {
 				return response()->json([
-					"message" => 'Unauthorized',
+					'message' => 'Unauthorized',
 				], 401);
 			}
 			// develop
@@ -69,12 +68,13 @@ class Authenticate extends IlluminateAuthenticate
 						'location' => route(config('poppy.guard_location.web')),
 					];
 				}
+
 				return Resp::web(Resp::ERROR, '无权限访问', $appends);
 			}
-			else {
+			 
 				return response('Unauthorized.', 401);
-			}
 		}
+
 		return $next($request);
 	}
 }

@@ -3,7 +3,6 @@
 /**
  * Copyright (C) Update For IDE
  */
-
 use Poppy\Framework\Application\TestCase;
 use System\Classes\Traits\SystemTrait;
 

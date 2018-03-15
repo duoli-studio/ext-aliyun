@@ -4,11 +4,9 @@ use Poppy\Framework\Application\ApiController;
 use Poppy\Framework\Classes\Resp;
 use System\Classes\Traits\SystemTrait;
 
-
 class CoreController extends ApiController
 {
 	use SystemTrait;
-
 
 	/**
 	 * @api                 {get} api_v1/backend/system/core/cache_clear [O]清空缓存
@@ -19,6 +17,7 @@ class CoreController extends ApiController
 	public function cacheClear()
 	{
 		\Artisan::call('cache:clear');
+
 		return $this->getResponse()->json([
 			'message' => '清空缓存！',
 			'status'  => Resp::SUCCESS,

@@ -35,7 +35,7 @@ if (!function_exists('slt_upload')) {
 	{
 		$url = route('slt:util.image');
 		$id  = \Poppy\Framework\Helper\HtmlHelper::nameToId($name);
-		return app('poppy.fe.form')->webuploader($name, $value, [
+		return app('poppy.form')->webuploader($name, $value, [
 			'id'         => $id,
 			'ext'        => $ext,
 			'upload_url' => $url,

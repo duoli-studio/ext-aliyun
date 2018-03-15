@@ -4,7 +4,6 @@ use System\Classes\LogViewer;
 
 class LogController extends InitController
 {
-
 	/**
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View|\Symfony\Component\HttpFoundation\BinaryFileResponse
 	 * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
@@ -20,9 +19,9 @@ class LogController extends InitController
 		}
 		elseif (\Input::has('del')) {
 			\File::delete(storage_path() . '/logs/' . base64_decode(\Input::get('del')));
+
 			return \Redirect::to(\Request::url());
 		}
-
 
 		$logs = LogViewer::all();
 

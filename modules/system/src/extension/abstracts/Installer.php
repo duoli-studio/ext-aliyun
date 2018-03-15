@@ -1,5 +1,4 @@
 <?php
-
 namespace System\Extension\Abstracts;
 
 /**
@@ -7,8 +6,8 @@ namespace System\Extension\Abstracts;
  */
 abstract class Installer
 {
-    /**
-     * @return bool
-     */
-    abstract public function handle();
+	/**
+	 * @return bool
+	 */
+	abstract public function handle();
 }

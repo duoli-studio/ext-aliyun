@@ -1,6 +1,5 @@
 <?php namespace System\Models;
 
-
 /**
  * 角色 & 权限表
  */

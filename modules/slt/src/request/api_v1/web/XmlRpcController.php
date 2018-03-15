@@ -3,7 +3,6 @@
 use Comodojo\Exception\XmlrpcException;
 use Comodojo\Xmlrpc\XmlrpcDecoder;
 use Illuminate\Http\Request;
-use Poppy\Framework\Classes\Resp;
 use Slt\Action\Article;
 use Slt\Classes\Contracts\Creator as CreatorContract;
 use Slt\Classes\Contracts\XmlRpc as XmlRpcContract;
@@ -14,8 +13,8 @@ use System\Action\OssUploader;
 use System\Action\Pam;
 
 /**
+ * 通过 xmlRpc 接口可以发布文章
  * 文档 https://codex.wordpress.org/XML-RPC_MetaWeblog_API
- * Class XmlRpcController
  */
 class XmlRpcController implements CreatorContract, XmlRpcContract
 {

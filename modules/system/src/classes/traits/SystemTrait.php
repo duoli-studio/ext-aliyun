@@ -19,7 +19,6 @@ trait SystemTrait
 {
 	use PoppyTrait, AppTrait;
 
-
 	/**
 	 * @var PamAccount;
 	 */
@@ -33,7 +32,6 @@ trait SystemTrait
 		return $this->pam;
 	}
 
-
 	/**
 	 * 检查 pam 用户
 	 * @return bool
@@ -43,9 +41,9 @@ trait SystemTrait
 		if (!$this->pam) {
 			return $this->setError(trans('system::action.pam.check_permission_need_login'));
 		}
+
 		return true;
 	}
-
 
 	/**
 	 * check if is web user
@@ -60,9 +58,8 @@ trait SystemTrait
 		elseif ($guard->user()->type != PamAccount::TYPE_USER) {
 			return false;
 		}
-		else {
+		 
 			return true;
-		}
 	}
 
 	/**
@@ -78,9 +75,8 @@ trait SystemTrait
 		elseif ($guard->user()->type != PamAccount::TYPE_BACKEND) {
 			return false;
 		}
-		else {
+		 
 			return true;
-		}
 	}
 
 	/**
@@ -91,9 +87,9 @@ trait SystemTrait
 	public function setPam($pam)
 	{
 		$this->pam = $pam;
+
 		return $this;
 	}
-
 
 	/**
 	 * Get Jwt Backend Guard
@@ -111,12 +107,10 @@ trait SystemTrait
 		return $this->getAuth()->guard(PamAccount::GUARD_BACKEND);
 	}
 
-
 	public function getJwtWebGuard()
 	{
 		return $this->getAuth()->guard(PamAccount::GUARD_JWT_WEB);
 	}
-
 
 	public function getWebGuard()
 	{
@@ -164,7 +158,6 @@ trait SystemTrait
 		return $this->getContainer()->make('module');
 	}
 
-
 	/**
 	 * @return ExtensionManager
 	 */
@@ -172,7 +165,6 @@ trait SystemTrait
 	{
 		return $this->getContainer()->make('extension');
 	}
-
 
 	/**
 	 * 检查当前是否是在事务中
@@ -183,9 +175,7 @@ trait SystemTrait
 		if (\DB::transactionLevel() <= 0) {
 			return $this->setError('当前操作未在事务中');
 		}
-		else {
+		 
 			return true;
-		}
 	}
-
 }

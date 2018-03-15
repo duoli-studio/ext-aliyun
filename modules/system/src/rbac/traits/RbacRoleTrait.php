@@ -1,6 +1,5 @@
 <?php namespace System\Rbac\Traits;
 
-
 use Illuminate\Cache\TaggableStore;
 use System\Models\PamAccount;
 use System\Models\PamPermission;
@@ -10,7 +9,6 @@ use System\Models\PamRoleAccount;
 
 trait RbacRoleTrait
 {
-
 	//Big block of caching functionality.
 	public function cachedPermissions()
 	{
@@ -32,6 +30,7 @@ trait RbacRoleTrait
 			return false;
 		}
 		$this->flushPermissionRole();
+
 		return true;
 	}
 
@@ -41,6 +40,7 @@ trait RbacRoleTrait
 			return false;
 		}
 		$this->flushPermissionRole();
+
 		return true;
 	}
 
@@ -50,6 +50,7 @@ trait RbacRoleTrait
 			return false;
 		}
 		$this->flushPermissionRole();
+
 		return true;
 	}
 
@@ -111,8 +112,8 @@ trait RbacRoleTrait
 
 	/**
 	 * Checks if the role has a permission by its name.
-	 * @param string|array $name       Permission name or array of permission names.
-	 * @param bool         $requireAll All permissions in the array are required.
+	 * @param string|array $name       permission name or array of permission names
+	 * @param bool         $requireAll all permissions in the array are required
 	 * @return bool
 	 */
 	public function hasPermission($name, $requireAll = false)
@@ -134,15 +135,13 @@ trait RbacRoleTrait
 			// Return the value of $requireAll;
 			return $requireAll;
 		}
-		else {
-
+		 
 			foreach ($this->cachedPermissions() as $permission) {
 				if ($permission->name == $name) {
 					return true;
 				}
 			}
-		}
-
+		
 		return false;
 	}
 

@@ -3,12 +3,11 @@
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\UserProvider as UserProviderBase;
-use System\Models\PamAccount;
 use System\Action\Pam;
+use System\Models\PamAccount;
 
 class PamProvider implements UserProviderBase
 {
-
 	/**
 	 * The Eloquent user model.
 	 * @var string
@@ -42,7 +41,6 @@ class PamProvider implements UserProviderBase
 	 */
 	public function retrieveByCredentials(array $credentials)
 	{
-
 		// First we will add each credential element to the query as a where clause.
 		// Then we can execute the query and, if we found a user, return it in a
 		// Eloquent User "model" that will be utilized by the Guard instances.
@@ -51,9 +49,9 @@ class PamProvider implements UserProviderBase
 		foreach ($credentials as $key => $value) {
 			if (!str_contains($key, 'password')) $query->where($key, $value);
 		}
+
 		return $query->first();
 	}
-
 
 	/**
 	 * @param Authenticatable|PamAccount $user
@@ -63,9 +61,9 @@ class PamProvider implements UserProviderBase
 	public function validateCredentials(Authenticatable $user, array $credentials)
 	{
 		$plain = $credentials['password'];
-		return (new Pam)->checkPassword($user, $plain);
-	}
 
+		return (new Pam())->checkPassword($user, $plain);
+	}
 
 	/**
 	 * Retrieve a user by their unique identifier and "remember me" token.
@@ -83,7 +81,6 @@ class PamProvider implements UserProviderBase
 			->first();
 	}
 
-
 	/**
 	 * 更新记住的token
 	 * @param Authenticatable|PamAccount $user
@@ -96,7 +93,6 @@ class PamProvider implements UserProviderBase
 		$user->save();
 	}
 
-
 	/**
 	 * Create a new instance of the model.
 	 * @return \Illuminate\Database\Eloquent\Model
@@ -104,8 +100,7 @@ class PamProvider implements UserProviderBase
 	public function createModel()
 	{
 		$class = '\\' . ltrim($this->model, '\\');
-		return new $class;
+
+		return new $class();
 	}
-
-
 }

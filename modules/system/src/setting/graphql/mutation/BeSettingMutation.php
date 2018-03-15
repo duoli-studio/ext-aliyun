@@ -10,7 +10,6 @@ class BeSettingMutation extends Mutation
 {
 	use SystemTrait;
 
-
 	public function __construct($attributes = [])
 	{
 		parent::__construct($attributes);
@@ -57,8 +56,7 @@ class BeSettingMutation extends Mutation
 		if (!$conf->set($key, $value)) {
 			return $conf->getError()->toArray();
 		}
-		else {
+		 
 			return $conf->getSuccess()->toArray();
-		}
 	}
 }

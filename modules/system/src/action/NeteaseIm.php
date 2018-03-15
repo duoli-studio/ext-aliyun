@@ -1,9 +1,9 @@
 <?php namespace System\Action;
 
 use Poppy\Extension\NetEase\Im\Yunxin;
+use Poppy\Framework\Validation\Rule;
 use System\Classes\Traits\SystemTrait;
 use User\Models\UserProfile;
-use Poppy\Framework\Validation\Rule;
 
 class NeteaseIm
 {
@@ -36,7 +36,7 @@ class NeteaseIm
 
 		$validator = \Validator::make($arr, [
 			'push_type' => [
-				Rule::in('order', 'activity', 'system'),
+				Rule::in('order', 'notice', 'system'),
 			],
 			'passport'  => [
 				Rule::required(),
@@ -89,43 +89,49 @@ class NeteaseIm
 			if ($result['code'] == 200) {
 				return true;
 			}
-			else {
+			 
 				return $this->setError($result['desc']);
-			}
 		}
-		else {
+		 
 			return $this->setError(trans('system::action.im.start_push_error'));
-		}
 	}
 
 	/**
 	 * 发送普通消息
-	 * @param $account_id
-	 * @param $msg
+	 * @param $input
 	 * @return bool
 	 */
-	public function sendMsg($account_id, $msg)
+	public function sendMsg($input)
 	{
-		$profile = UserProfile::find($account_id);
-		$data    = [
-			'from' => '',
-			'ope'  => 0,
+		$passport = data_get($input, 'passport', '');
+		$from     = data_get($input, 'from');
+		$ope      = data_get($input, 'ope');
+		$msg      = data_get($input, 'content', '');
+		$profile  = UserProfile::getByPassport($passport);
+		$from     = UserProfile::getByPassport($from);
+		if ($from) {
+			$accid = $from->accid;
+		}
+		else {
+			$accid = data_get($input, 'accid');
+		}
+		if (!$ope) {
+			$ope = 0;
+		}
+		$data = [
+			'from' => $accid,
+			'ope'  => $ope,
 			'to'   => $profile->accid,
 			'type' => 0,
 			'body' => '{"msg":" ' . $msg . ' "}',
 		];
 
-		if ($result = $this->yun->sendMsg($data)) {
-			if ($result['code'] == 200) {
-				return true;
-			}
-			else {
-				return $this->setError($result['desc']);
-			}
+		$result = $this->yun->sendMsg($data);
+		if ($result['code'] != 200) {
+			return $this->setError($result['desc']);
 		}
-		else {
-			return $this->setError(trans('system::action.im.start_push_error'));
-		}
+		 
+			return true;
 	}
 
 	public function setSystemInfo($input)
@@ -206,8 +212,10 @@ class NeteaseIm
 				$b .= $aa . '  ';
 			}
 			$this->setError($b);
+
 			return false;
 		}
+
 		return true;
 	}
 }

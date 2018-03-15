@@ -1,9 +1,7 @@
 <?php namespace System\Rbac\Contracts;
 
-
 interface RbacUserContract
 {
-
 	/**
 	 * Many-to-Many relations with Role.
 	 * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
@@ -12,16 +10,16 @@ interface RbacUserContract
 
 	/**
 	 * Checks if the user has a role by its name.
-	 * @param string|array $name       Role name or array of role names.
-	 * @param bool         $requireAll All roles in the array are required.
+	 * @param string|array $name       role name or array of role names
+	 * @param bool         $requireAll all roles in the array are required
 	 * @return bool
 	 */
 	public function hasRole($name, $requireAll = false);
 
 	/**
 	 * Check if user has a permission by its name.
-	 * @param string|array $permission Permission string or array of permissions.
-	 * @param bool         $requireAll All permissions in the array are required.
+	 * @param string|array $permission permission string or array of permissions
+	 * @param bool         $requireAll all permissions in the array are required
 	 * @return bool
 	 */
 	public function capable($permission, $requireAll = false);
@@ -29,7 +27,7 @@ interface RbacUserContract
 	/**
 	 * Checks role(s) and permission(s).
 	 * @param string|array $roles       Array of roles or comma separated string
-	 * @param string|array $permissions Array of permissions or comma separated string.
+	 * @param string|array $permissions array of permissions or comma separated string
 	 * @param array        $options     validate_all (true|false) or return_type (boolean|array|both)
 	 * @throws \InvalidArgumentException
 	 * @return array|bool

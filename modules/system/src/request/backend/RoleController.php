@@ -2,12 +2,11 @@
 
 use Illuminate\Http\Request;
 use Poppy\Framework\Classes\Resp;
+use System\Action\Role;
 use System\Classes\Traits\SystemTrait;
 use System\Models\Filters\RoleFilter;
 use System\Models\PamAccount;
 use System\Models\PamRole;
-use System\Action\Role;
-
 
 class RoleController extends InitController
 {
@@ -32,6 +31,7 @@ class RoleController extends InitController
 		$type          = $input['type'] ?? PamAccount::TYPE_BACKEND;
 		$input['type'] = $type;
 		$items         = PamRole::filter($input, RoleFilter::class)->paginateFilter();
+
 		return view('system::backend.role.index', compact('items', 'type'));
 	}
 
@@ -48,11 +48,11 @@ class RoleController extends InitController
 			if ($role->establish($request->all(), $id)) {
 				return Resp::web(Resp::SUCCESS, '创建成功', 'top_reload|1');
 			}
-			else {
+			 
 				return Resp::web(Resp::ERROR, $role->getError());
-			}
 		}
 		$id && $role->initRole($id) && $role->share();
+
 		return view('system::backend.role.establish');
 	}
 
@@ -69,11 +69,9 @@ class RoleController extends InitController
 		if (!$role->delete($id)) {
 			return Resp::web(Resp::ERROR, $role->getError());
 		}
-		else {
+		 
 			return Resp::web(Resp::SUCCESS, '删除成功', 'top_reload|1');
-		}
 	}
-
 
 	/**
 	 * 带单列表
@@ -89,17 +87,16 @@ class RoleController extends InitController
 			if (!$actRole->savePermission($id, $perms)) {
 				return Resp::web(Resp::SUCCESS, $actRole->getError());
 			}
-			else {
+			 
 				return Resp::web(Resp::SUCCESS, '保存会员权限配置成功!', 'reload|1');
-			}
 		}
 		$permission = (new Role())->permissions($id);
 		if (!$permission) {
 			return Resp::web(Resp::ERROR, '暂无权限信息！');
 		}
+
 		return view('system::backend.role.menu', compact('permission', 'role'));
 	}
-
 
 	/**
 	 *

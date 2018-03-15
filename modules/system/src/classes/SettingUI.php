@@ -5,7 +5,6 @@ use Poppy\Framework\Classes\Traits\KeyParserTrait;
 use Poppy\Framework\Validation\Rule;
 use System\Classes\Traits\SystemTrait;
 
-
 class SettingUI
 {
 	use SystemTrait, KeyParserTrait;
@@ -46,7 +45,6 @@ class SettingUI
 	 */
 	private $url;
 
-
 	/**
 	 * SettingManager constructor.
 	 * @param $key
@@ -54,12 +52,11 @@ class SettingUI
 	 */
 	public function __construct($key)
 	{
-
 		try {
 			$this->pages = $this->getBackend()->pages();
 			$poppyPages  = config('poppy.backend_pages');
 			if ($poppyPages) {
-				$this->pages = $this->pages->filter(function($page, $key) use ($poppyPages) {
+				$this->pages = $this->pages->filter(function ($page, $key) use ($poppyPages) {
 					return in_array($key, $poppyPages);
 				});
 			}
@@ -88,7 +85,7 @@ class SettingUI
 				else {
 					$form = [];
 				}
-				$form             += $this->getValidates($field, 'js-validation');
+				$form += $this->getValidates($field, 'js-validation');
 				$field['options'] = $form;
 
 				list($ns, $group, $item) = $this->parseKey($field['key']);
@@ -107,7 +104,6 @@ class SettingUI
 		$this->url = $this->url ?: \Input::url();
 	}
 
-
 	public function render()
 	{
 		return view('system::backend.tpl.setting', [
@@ -120,7 +116,6 @@ class SettingUI
 		]);
 	}
 
-
 	/**
 	 * 更新配置
 	 * @param Request $request
@@ -131,9 +126,8 @@ class SettingUI
 		$inputKeys = collect();
 		$keys      = collect($request->keys());
 		$configs   = [];
-		$keys->each(function($item) use ($inputKeys, $request, &$configs) {
+		$keys->each(function ($item) use ($inputKeys, $request, &$configs) {
 			if (strpos($item, '::') !== false) {
-
 				$configs[$item] = $request->get($item);
 				$inputKeys->push($item);
 			}
@@ -161,6 +155,7 @@ class SettingUI
 		}
 
 		\Cache::forget('modules.page');
+
 		return true;
 	}
 
@@ -178,11 +173,12 @@ class SettingUI
 					$required = $validate['required'] ?? false;
 					if ($required) {
 						$rule += [
-							'data-rule-required' => "true",
+							'data-rule-required' => 'true',
 							'data-msg-required'  => $validate['message'] ?? '此项必填',
 						];
 					}
 				}
+
 				return $rule;
 				break;
 			case 'laravel': // framework 使用
@@ -201,9 +197,9 @@ class SettingUI
 						$rule[] = Rule::required();
 					}
 				}
+
 				return array_unique($rule);
 				break;
 		}
 	}
-
 }

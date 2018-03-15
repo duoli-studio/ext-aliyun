@@ -41,10 +41,10 @@ class BowerCommand extends Command
 	private $debug   = false;
 	private $mapData = [];
 
-	/** @var  string 当前处理的Js在 bower 中的 name 值 */
+	/** @var string 当前处理的Js在 bower 中的 name 值 */
 	protected $name;
 
-	/** @var  array 当前插件的bower 定义 */
+	/** @var array 当前插件的bower 定义 */
 	private $bowerData;
 
 	/** @var \Storage */
@@ -73,7 +73,6 @@ class BowerCommand extends Command
 		$this->force = (bool) $this->option('force');
 		$this->debug = (bool) $this->option('debug');
 
-
 		$this->config['path']['global'] = $this->jsPath . '/global';
 
 		$this->mapData = config('fe');
@@ -82,14 +81,15 @@ class BowerCommand extends Command
 		try {
 			if (!$disk) {
 				$this->error($this->getKey('fe') . 'No disk defined at `fe` config file');
+
 				return;
 			}
 			$this->disk = \Storage::disk($disk);
 		} catch (\Exception $e) {
 			$this->error($this->getKey('fe') . 'No disk `' . $disk . '` defined at `filesystems` config file');
+
 			return;
 		}
-
 
 		$directories = $this->getFile()->directories($this->bowerDir());
 		if (count($directories)) {
@@ -110,7 +110,6 @@ class BowerCommand extends Command
 		}
 
 		$this->writeGlobal();
-
 	}
 
 	/**
@@ -141,7 +140,6 @@ class BowerCommand extends Command
 		$this->line(str_pad($mark, 100, '='));
 	}
 
-
 	/**
 	 * 处理JS 文件
 	 * @param $folder
@@ -149,7 +147,6 @@ class BowerCommand extends Command
 	 */
 	private function disposeJs($folder)
 	{
-
 		$map = isset($this->mapData['bower'][$this->name]['js'])
 			? $this->mapData['bower'][$this->name]['js'] : '';
 
@@ -179,6 +176,7 @@ class BowerCommand extends Command
 		}
 		if (!$oriMainJsPath || !$aimJsPath) {
 			$this->error($key . 'Does not has main file or aim path');
+
 			return;
 		}
 
@@ -231,7 +229,6 @@ class BowerCommand extends Command
 		$this->info($key . 'Handle Js Success');
 	}
 
-
 	/**
 	 * css
 	 * @param $ori_folder
@@ -272,7 +269,6 @@ class BowerCommand extends Command
 		}
 	}
 
-
 	/**
 	 * @param $aim_folder
 	 * @param $aim_key
@@ -286,7 +282,6 @@ class BowerCommand extends Command
 		$ori_path = str_replace('//', '/', $ori_path);
 
 		$files = $this->getFile()->glob($ori_scan);
-
 
 		foreach ($files as $res_file) {
 			// /dist/css/bootstrap-theme.css
@@ -306,7 +301,6 @@ class BowerCommand extends Command
 				$this->disposeFile($aim_file, $res_file);
 			}
 			else {
-
 				$relative_path  = str_replace([$ori_path, $ori_dirname, '//'], ['', '', '/'], $res_file);
 				$relative_match = basename($ori_key);
 
@@ -328,29 +322,28 @@ class BowerCommand extends Command
 	{
 		$key = 'Skip: ';
 		if (!$this->disk->exists($aim_file)) {
-
 			$extension = $this->getFile()->extension($aim_file);
 			$content   = $this->getFile()->get($res_file);
 			if ($extension == 'css') {
 				// aim file : assets/css/libs/jquery/layer/moon/style.css
 				// match    : default.png
-				$mapUrlContent = function($content, $aim_file) {
-					$content = preg_replace_callback('/url\(([\'"]?)(.*?)\1\)/i', function($matches) use ($aim_file) {
+				$mapUrlContent = function ($content, $aim_file) {
+					$content = preg_replace_callback('/url\(([\'"]?)(.*?)\1\)/i', function ($matches) use ($aim_file) {
 						$match = $matches[2];
 
 						if ($match == 'about:blank' || strpos($match, 'data:image/') !== false) {
 							return 'url("' . $match . '")';
 						}
-						else {
+						 
 							$relative_path = dirname($aim_file) . '/' . $match;
-							return 'url("/' . $relative_path . '")';
-						}
-					}, $content);
 
+							return 'url("/' . $relative_path . '")';
+					}, $content);
 
 					$opc     = new Parser($content);
 					$oCss    = $opc->parse();
 					$oFormat = OutputFormat::create()->indentWithSpaces(4)->setSpaceBetweenRules("\n");
+
 					return $oCss->render($oFormat);
 				};
 
@@ -401,7 +394,6 @@ class BowerCommand extends Command
 		$this->info($this->getKey($this->name) . 'Handle Font Success');
 	}
 
-
 	/**
 	 * 图片背景替换 / 轮询
 	 * @param $obj
@@ -417,9 +409,8 @@ class BowerCommand extends Command
 			elseif (strpos($url, 'data:image/png') !== false) {
 				return;
 			}
-			else {
+			 
 				$obj->setURL(new CSSString('/' . $version_folder . '/' . $url));
-			}
 		}
 		if ($obj instanceof RuleValueList) {
 			foreach ($obj->getListComponents() as $subOjb) {
@@ -447,6 +438,7 @@ class BowerCommand extends Command
 			$this->error('Path ' . $bowerDir . ' not exist.');
 		}
 		$this->info('Bower Path : ' . $bowerDir);
+
 		return base_path(data_get($arrBowerRc, 'directory'));
 	}
 
@@ -496,10 +488,10 @@ JS;
 		$this->disk->put($this->jsGlobalFile, $js);
 	}
 
-
 	private function getVersion($item)
 	{
 		$version = array_get($this->bowerData, 'version') ?: '';
+
 		return str_replace('{VERSION}', $version, $item);
 	}
 
@@ -507,7 +499,6 @@ JS;
 	{
 		return $this->mapData['bower'][$this->name]['key'] ?? $this->name;
 	}
-
 
 	private function disposeRefactor()
 	{
@@ -524,7 +515,6 @@ JS;
 			}
 		}
 	}
-
 
 	private function getKey($key = '')
 	{

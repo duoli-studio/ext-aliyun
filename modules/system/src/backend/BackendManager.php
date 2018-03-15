@@ -86,6 +86,7 @@ class BackendManager
 			$this->navigationRepository = new NavigationRepository();
 			$this->navigationRepository->initialize($this->getModule()->menus()->structures());
 		}
+
 		return $this->navigationRepository;
 	}
 
@@ -98,6 +99,7 @@ class BackendManager
 			$this->pageRepository = new PageRepository();
 			$this->pageRepository->initialize(collect());
 		}
+
 		return $this->pageRepository;
 	}
 
@@ -123,6 +125,7 @@ class BackendManager
 			$this->stylesheetRepository = new StylesheetRepository();
 			$this->stylesheetRepository->initialize(collect());
 		}
+
 		return $this->stylesheetRepository;
 	}
 }

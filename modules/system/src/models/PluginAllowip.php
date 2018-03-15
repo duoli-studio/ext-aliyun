@@ -3,10 +3,9 @@
 use Carbon\Carbon;
 use Poppy\Framework\Helper\UtilHelper;
 
-
 /**
  * App\Models\PluginAllowip
- * @property integer $id
+ * @property int $id
  * @property string  $ip_address
  * @property string  $note
  * @property Carbon  $created_at
@@ -14,8 +13,6 @@ use Poppy\Framework\Helper\UtilHelper;
  */
 class PluginAllowip extends \Eloquent
 {
-
-
 	protected $table = 'plugin_allowip';
 
 	protected $fillable = [
@@ -33,6 +30,7 @@ class PluginAllowip extends \Eloquent
 		if (!UtilHelper::isIp($ip)) {
 			return false;
 		}
+
 		return self::where('ip_address', $ip)->value('id');
 	}
 }

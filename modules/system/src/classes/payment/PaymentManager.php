@@ -31,12 +31,11 @@ class PaymentManager
 		if (!class_exists($class)) {
 			throw new ApplicationException('指定的类' . $class . '不存在');
 		}
-		$obj = new $class;
+		$obj = new $class();
 		if ($obj instanceof Payment) {
 			return $obj;
 		}
-		else {
+		 
 			throw new ApplicationException('支付对象必须实现 ' . Payment::class . ' 类');
-		}
 	}
 }

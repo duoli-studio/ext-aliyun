@@ -12,7 +12,6 @@ class BackendServiceProvider extends ServiceProvider
 	 */
 	protected $defer = true;
 
-
 	/**
 	 * Register for service provider.
 	 */

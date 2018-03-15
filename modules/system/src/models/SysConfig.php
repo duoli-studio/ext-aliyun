@@ -3,9 +3,8 @@
 use Illuminate\Database\Eloquent\Builder;
 use Poppy\Framework\Classes\Traits\KeyParserTrait;
 
-
 /**
- * @property integer $id          配置id
+ * @property int $id          配置id
  * @property string  $namespace   命名空间
  * @property string  $group       配置分组
  * @property string  $item        配置名称
@@ -44,13 +43,13 @@ class SysConfig extends \Eloquent
 
 	public $timestamps = false;
 
-
 	public static function kvYn($key = null)
 	{
 		$desc = [
 			self::NO  => '否',
 			self::YES => '是',
 		];
+
 		return kv($desc, $key);
 	}
 

@@ -3,10 +3,8 @@
 use GraphQL\Type\Definition\Type;
 use Poppy\Framework\GraphQL\Support\Type as AbstractType;
 
-
 class BeSettingType extends AbstractType
 {
-
 	public function __construct($attributes = [])
 	{
 		parent::__construct($attributes);

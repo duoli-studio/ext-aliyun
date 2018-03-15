@@ -2,7 +2,6 @@
 
 use Poppy\Framework\Application\ApiController;
 use Poppy\Framework\Classes\Resp;
-use Poppy\Framework\Http\Pagination\PageInfo;
 use System\Action\NeteaseIm;
 use System\Classes\Traits\SystemTrait;
 
@@ -26,16 +25,38 @@ class NeteaseImController extends ApiController
 	{
 		$type     = input('type');
 		$passport = input('passport');
-		$msg_type = input('msg_type') == 'single' ? 0 : 1;
+		$msg_type = input('msg_type') == 'single' ? 0 : 0;
 		$content  = input('content');
 
 		$im = new NeteaseIm();
 		if ($im->systemNotice($type, $passport, $msg_type, $content)) {
 			return Resp::web(Resp::SUCCESS, '发送成功!');
 		}
-		else {
+		 
+			return Resp::web(Resp::ERROR, $im->getError());
+	}
+
+	/**
+	 * @api                  {post} api_v1/backend/system/im/send_msg 发送普通消息
+	 * @apiVersion           1.0.0
+	 * @apiName              SendMsg
+	 * @apiGroup             Notice
+	 * @apiParam  {String}   [from]       发起者passport [二选一,优先此选项]
+	 * @apiParam  {String}   [accid]      发起者accid    [二选一]
+	 * @apiParam  {String}   passport     接受者
+	 * @apiParam  {Integer}  [ope]        推送to类型
+	 *          [0|点对点个人消息;1|群消息;]
+	 * @apiParam  {String}   content      消息内容
+	 */
+	public function sendMsg()
+	{
+		$input = input();
+		$im    = new NeteaseIm();
+		if (!$im->sendMsg($input)) {
 			return Resp::web(Resp::ERROR, $im->getError());
 		}
+		 
+			return Resp::web(Resp::SUCCESS, '发送成功!');
 	}
 
 	/**
@@ -59,8 +80,7 @@ class NeteaseImController extends ApiController
 		if ($im->setSystemInfo($input)) {
 			return Resp::web(Resp::SUCCESS, '设置成功!');
 		}
-		else {
+		 
 			return Resp::web(Resp::ERROR, $im->getError());
-		}
 	}
 }

@@ -5,9 +5,7 @@ use System\Models\PamBind;
 
 class OAuth
 {
-
 	use SystemTrait;
-
 
 	/**
 	 * 解绑第三方账号
@@ -37,6 +35,7 @@ class OAuth
 				'qq_key'      => '',
 				'qq_union_id' => '',
 			]);
+
 			return true;
 		}
 		if ($type == 'wx') {
@@ -44,10 +43,10 @@ class OAuth
 				'wx_key'      => '',
 				'wx_union_id' => '',
 			]);
+
 			return true;
 		}
+
 		return $this->setError(trans('system::action.o_auth.bind_type_error'));
 	}
-
-
 }

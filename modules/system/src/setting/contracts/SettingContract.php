@@ -5,7 +5,6 @@
  */
 interface SettingContract
 {
-
 	/**
 	 * Delete a setting value.
 	 * @param $key

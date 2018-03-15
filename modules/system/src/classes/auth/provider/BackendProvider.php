@@ -4,8 +4,6 @@ use System\Models\PamAccount;
 
 class BackendProvider extends PamProvider
 {
-
-
 	/**
 	 * Retrieve a user by the given credentials.
 	 * DO NOT TEST PASSWORD HERE!
@@ -18,6 +16,4 @@ class BackendProvider extends PamProvider
 
 		return parent::retrieveByCredentials($credentials);
 	}
-
-
 }

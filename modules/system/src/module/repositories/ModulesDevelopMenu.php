@@ -16,20 +16,22 @@ class ModulesDevelopMenu extends Repository
 	public function initialize(Collection $data)
 	{
 		$this->items = $this->getCache('poppy')->rememberForever(
-			'modules.develop_menus', function() use ($data) {
+			'modules.develop_menus',
+			function () use ($data) {
 			$collection = collect();
-			$data->each(function($items, $slug) use ($collection) {
+			$data->each(function ($items, $slug) use ($collection) {
 				$items = collect($items);
-				$items->count() && $items->each(function($item, $entry) use ($collection, $slug, $items) {
+				$items->count() && $items->each(function ($item, $entry) use ($collection, $slug, $items) {
 					$items[$entry] = $this->handleNavigation($item);
 
 					$collection->put($slug, $items);
 				});
 			});
-			return $collection->all();
-		});
-	}
 
+			return $collection->all();
+		}
+		);
+	}
 
 	private function handleNavigation($definition)
 	{
@@ -39,7 +41,6 @@ class ModulesDevelopMenu extends Repository
 				if (!is_null($calc)) {
 					$definition['children'][$key] = $calc;
 				}
-
 			}
 		}
 		$route        = $definition['route'] ?? '';
@@ -58,7 +59,7 @@ class ModulesDevelopMenu extends Repository
 		$definition['url'] = $url;
 		unset($definition['route'], $definition['param'], $definition['route_param']);
 		$definition['key'] = UtilHelper::md5($definition);
+
 		return $definition;
 	}
-
 }

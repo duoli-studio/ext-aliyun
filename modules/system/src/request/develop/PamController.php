@@ -2,14 +2,11 @@
 
 use Illuminate\Http\Request;
 use Poppy\Framework\Classes\Resp;
-use System\Models\PamAccount;
 use System\Action\Pam;
-
+use System\Models\PamAccount;
 
 class PamController extends InitController
 {
-
-
 	public function login(Request $request)
 	{
 		if (is_post()) {
@@ -21,9 +18,8 @@ class PamController extends InitController
 			if ($pam->loginCheck($username, $password, PamAccount::GUARD_DEVELOP, true)) {
 				return Resp::web(Resp::SUCCESS, '登录成功！', 'location|' . route('system:develop.cp.cp'));
 			}
-			else {
+			 
 				return Resp::web(Resp::ERROR, $pam->getError());
-			}
 		}
 		$guard = $this->getAuth()->guard(PamAccount::GUARD_DEVELOP)->user();
 		// todo check guard permission
@@ -32,7 +28,7 @@ class PamController extends InitController
 				'location' => route('system:develop.cp.cp'),
 			]);
 		}
+
 		return view('system::develop.pam.login');
 	}
-
 }

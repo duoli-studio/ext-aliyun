@@ -33,6 +33,7 @@ class PamFilter extends ModelFilter
 	public function role_id($role_id)
 	{
 		$account_ids = PamRoleAccount::where('role_id', $role_id)->pluck('account_id');
+
 		return $this->whereIn('account_id', $account_ids);
 	}
 }

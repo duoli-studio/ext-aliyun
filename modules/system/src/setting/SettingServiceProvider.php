@@ -3,7 +3,6 @@
 use Illuminate\Support\ServiceProvider;
 use System\Setting\Repository\SettingRepository;
 
-
 class SettingServiceProvider extends ServiceProvider
 {
 	/**

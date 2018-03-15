@@ -6,11 +6,9 @@ use Poppy\Framework\GraphQL\Exception\TypeNotFound;
 use Poppy\Framework\GraphQL\Support\Query;
 use System\Classes\Traits\SystemTrait;
 
-
 class BeSettingQuery extends Query
 {
 	use SystemTrait;
-
 
 	public function __construct($attributes = [])
 	{
@@ -50,12 +48,11 @@ class BeSettingQuery extends Query
 	{
 		$value   = $this->getSetting()->get($args['key']);
 		$setting = (array) $this->getModule()->settings()->get($args['key']);
+
 		return [
 			'key'         => $args['key'],
 			'value'       => $value,
 			'description' => data_get($setting, 'description'),
 		];
 	}
-
-
 }

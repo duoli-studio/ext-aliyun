@@ -4,11 +4,10 @@
 	'middleware' => ['cross'],
 	'prefix'     => 'backend/system',
 	'namespace'  => 'System\Request\ApiV1\Backend',
-], function(Illuminate\Routing\Router $route) {
-
+], function (Illuminate\Routing\Router $route) {
 	$route->group([
 		'middleware' => ['auth:jwt_backend'],
-	], function(Illuminate\Routing\Router $route) {
+	], function (Illuminate\Routing\Router $route) {
 		// layout
 		$route->any('/layout/information', 'LayoutController@information');
 		$route->any('/layout/dashboards', 'LayoutController@dashboards');
@@ -59,7 +58,8 @@
 		$route->any('category/do', 'CategoryController@do');
 
 		//netease im
-		$route->any('im/send','NeteaseImController@systemNotice');
-		$route->any('im/set','NeteaseImController@set');
+		$route->any('im/send', 'NeteaseImController@systemNotice');
+		$route->any('im/set', 'NeteaseImController@set');
+		$route->any('im/send_msg', 'NeteaseImController@sendMsg');
 	});
 });

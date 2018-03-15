@@ -7,11 +7,10 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Poppy\Framework\Http\Pagination\PageInfo;
-use System\Classes\Traits\FilterTrait;
 use System\Action\Pam;
+use System\Classes\Traits\FilterTrait;
 use System\Rbac\Traits\RbacUserTrait;
 use Tymon\JWTAuth\Contracts\JWTSubject as JWTSubjectAuthenticatable;
-
 
 /**
  * System\Models\PamAccount
@@ -25,7 +24,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject as JWTSubjectAuthenticatable;
  * @property string                    $account_pwd        账号密码
  * @property string                    $account_key        账号注册时候随机生成的6位key
  * @property string                    $account_type       账户类型
- * @property integer                   $login_times        登录次数
+ * @property int                   $login_times        登录次数
  * @property string                    $reg_ip             注册IP
  * @property string                    $is_enable
  * @property Carbon                    $created_at
@@ -51,7 +50,6 @@ use Tymon\JWTAuth\Contracts\JWTSubject as JWTSubjectAuthenticatable;
  */
 class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthenticatable
 {
-
 	use TraitAuthenticatable, RbacUserTrait, Authorizable, FilterTrait;
 
 	/* Register Type
@@ -84,7 +82,6 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 	const STATUS_ENABLE  = 1;
 	const STATUS_DISABLE = 0;
 
-
 	protected $table = 'pam_account';
 
 	protected $dates = [
@@ -109,10 +106,10 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 
 	public static function passport($passport)
 	{
-		$type = (new Pam)->passportType($passport);
-		return PamAccount::where($type, $passport)->first();
-	}
+		$type = (new Pam())->passportType($passport);
 
+		return self::where($type, $passport)->first();
+	}
 
 	/**
 	 * 根据 Username 获取账户ID
@@ -137,9 +134,9 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 			self::TYPE_BACKEND => '后台管理员',
 			self::TYPE_DEVELOP => '开发者',
 		];
+
 		return kv($desc, $key, $check_key);
 	}
-
 
 	/**
 	 * 允许缓存, 获取账户类型, 因为账户类型不会变化
@@ -150,11 +147,11 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 	{
 		static $accountType;
 		if (!isset($accountType[$id])) {
-			$accountType[$id] = PamAccount::where('id', $id)->value('type');
+			$accountType[$id] = self::where('id', $id)->value('type');
 		}
+
 		return $accountType[$id];
 	}
-
 
 	/**
 	 * 获取定义的 kv 值
@@ -169,9 +166,9 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 			self::REG_TYPE_MOBILE   => '手机号',
 			self::REG_TYPE_EMAIL    => '邮箱',
 		];
+
 		return kv($desc, $key, $check_key);
 	}
-
 
 	/**
 	 * 注册平台
@@ -187,6 +184,7 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 			self::REG_PLATFORM_PC      => 'pc',
 			self::REG_PLATFORM_WEB     => 'web',
 		];
+
 		return kv($desc, $key, $check_exists);
 	}
 

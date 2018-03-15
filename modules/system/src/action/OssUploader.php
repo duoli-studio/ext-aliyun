@@ -5,8 +5,6 @@ use System\Classes\Uploader;
 
 class OssUploader extends Uploader
 {
-
-
 	/**
 	 * 是否在保存后删除本地文件
 	 * @var bool
@@ -42,6 +40,7 @@ class OssUploader extends Uploader
 		if ($this->saveAliyun) {
 			return $this->saveAli($this->deleteLocal);
 		}
+
 		return true;
 	}
 
@@ -58,6 +57,7 @@ class OssUploader extends Uploader
 		if ($this->saveAliyun) {
 			return $this->saveAli($this->deleteLocal);
 		}
+
 		return true;
 	}
 
@@ -88,6 +88,7 @@ class OssUploader extends Uploader
 			if ($delete_local) {
 				$this->storage()->delete($this->destination);
 			}
+
 			return true;
 		} catch (\Exception $e) {
 			return $this->setError($e->getMessage());

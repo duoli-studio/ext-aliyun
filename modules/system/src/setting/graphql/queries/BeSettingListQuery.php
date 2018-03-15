@@ -6,11 +6,9 @@ use Poppy\Framework\GraphQL\Exception\TypeNotFound;
 use Poppy\Framework\GraphQL\Support\Query;
 use System\Classes\Traits\SystemTrait;
 
-
 class BeSettingListQuery extends Query
 {
 	use SystemTrait;
-
 
 	public function __construct($attributes = [])
 	{
@@ -54,6 +52,4 @@ class BeSettingListQuery extends Query
 	{
 		return $this->getSetting()->getNsGroup($args['namespace'], $args['group']);
 	}
-
-
 }

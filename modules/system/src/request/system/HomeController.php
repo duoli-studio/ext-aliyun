@@ -3,7 +3,6 @@
 use Poppy\Framework\Application\Controller;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Classes\Traits\ViewTrait;
-use Poppy\Framework\Helper\RawCookieHelper;
 use System\Classes\Traits\SystemTrait;
 
 /**
@@ -13,13 +12,13 @@ class HomeController extends Controller
 {
 	use SystemTrait, ViewTrait;
 
-
 	/**
 	 * @return \Response
 	 */
 	public function layout()
 	{
 		$this->share('translations', json_encode($this->getTranslator()->fetch('zh')));
+
 		return view('system::layout');
 	}
 
@@ -35,8 +34,7 @@ class HomeController extends Controller
 		if (file_exists($file)) {
 			return \Response::make($this->getFile()->get($file));
 		}
-		else {
+		 
 			return Resp::web(Resp::ERROR, 'no file', 'json|1');
-		}
 	}
 }

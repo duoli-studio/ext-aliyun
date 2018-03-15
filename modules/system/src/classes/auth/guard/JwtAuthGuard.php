@@ -52,7 +52,8 @@ class JwtAuthGuard implements Guard
 			return $this->user;
 		}
 		if ($this->jwt->setRequest($this->request)->getToken() && $this->jwt->check()) {
-			$id = $this->jwt->payload()->get('sub');
+			$id                = $this->jwt->payload()->get('sub');
+
 			return $this->user = $this->provider->retrieveById($id);
 		}
 	}
@@ -66,8 +67,10 @@ class JwtAuthGuard implements Guard
 	{
 		if ($this->validate($credentials)) {
 			$this->setUser($this->lastAttempted);
+
 			return true;
 		}
+
 		return false;
 	}
 
@@ -93,6 +96,7 @@ class JwtAuthGuard implements Guard
 		if ($this->hasValidCredentials($user, $credentials)) {
 			return $login ? $this->login($user) : true;
 		}
+
 		return false;
 	}
 
@@ -104,6 +108,7 @@ class JwtAuthGuard implements Guard
 	public function login(JWTSubject $user)
 	{
 		$this->setUser($user);
+
 		return $this->jwt->fromUser($user);
 	}
 
@@ -116,8 +121,10 @@ class JwtAuthGuard implements Guard
 	{
 		if (!is_null($user = $this->provider->retrieveById($id))) {
 			$this->setUser($user);
+
 			return true;
 		}
+
 		return false;
 	}
 
@@ -181,6 +188,7 @@ class JwtAuthGuard implements Guard
 	public function setToken($token)
 	{
 		$this->jwt->setToken($token);
+
 		return $this;
 	}
 
@@ -214,6 +222,7 @@ class JwtAuthGuard implements Guard
 		if (!$this->getToken()) {
 			throw new BadRequestHttpException('Token could not be parsed from the request.');
 		}
+
 		return $this->jwt;
 	}
 
@@ -252,6 +261,7 @@ class JwtAuthGuard implements Guard
 	public function setProvider(UserProvider $provider)
 	{
 		$this->provider = $provider;
+
 		return $this;
 	}
 
@@ -263,6 +273,7 @@ class JwtAuthGuard implements Guard
 	public function setRequest(Request $request)
 	{
 		$this->request = $request;
+
 		return $this;
 	}
 

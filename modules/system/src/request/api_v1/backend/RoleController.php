@@ -1,6 +1,5 @@
 <?php namespace System\Request\ApiV1\Backend;
 
-
 use Poppy\Framework\Application\ApiController;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Validation\Rule;
@@ -11,11 +10,9 @@ use System\Models\PamAccount;
 use System\Models\PamRole;
 use System\Models\Resources\RoleResource;
 
-
 class RoleController extends ApiController
 {
 	use SystemTrait;
-
 
 	/**
 	 * @api                   {post} api_v1/backend/system/role/lists [O]角色-列表
@@ -68,10 +65,12 @@ class RoleController extends ApiController
 		/** @var PamAccount $pam */
 		$pam      = $this->getJwtBeGuard()->user();
 		$Db       = PamRole::filter($input, RoleFilter::class);
-		return PamRole::paginationInfo($Db, function($item) use ($pam) {
+
+		return PamRole::paginationInfo($Db, function ($item) use ($pam) {
 			$role                   = (new RoleResource($item))->toArray(app('request'));
 			$role['can_permission'] = $pam->can('menu', $item);
 			$role['can_delete']     = $pam->can('delete', $item);
+
 			return $role;
 		});
 	}
@@ -123,10 +122,11 @@ class RoleController extends ApiController
 
 		$role_id = $this->getRequest()->get('role_id');
 
-		$Role = (new ActRole);
+		$Role = (new ActRole());
 		if (!($permission = $Role->permissions($role_id, false))) {
 			return Resp::web(Resp::ERROR, $Role->getError());
 		}
+
 		return Resp::web(Resp::SUCCESS, '获取成功', $permission);
 	}
 
@@ -149,9 +149,8 @@ class RoleController extends ApiController
 		if (!$Role->savePermission($role_id, $permission)) {
 			return Resp::web(Resp::ERROR, $Role->getError());
 		}
-		else {
+		 
 			return Resp::web(Resp::SUCCESS, '操作成功');
-		}
 	}
 
 	/**
@@ -168,15 +167,14 @@ class RoleController extends ApiController
 	 */
 	public function establish()
 	{
-		$all = \Input::all();
-		$id  = \Input::get('id', null);
+		$all  = \Input::all();
+		$id   = \Input::get('id', null);
 		$Role = (new ActRole())->setPam($this->getJwtBeGuard()->user());
 		if (!$Role->establish($all, $id)) {
 			return Resp::web(Resp::ERROR, $Role->getError());
 		}
-		else {
+		 
 			return Resp::web(Resp::SUCCESS, '操作成功');
-		}
 	}
 
 	/**
@@ -196,8 +194,7 @@ class RoleController extends ApiController
 		if (!$Role->delete($id)) {
 			return Resp::web(Resp::ERROR, $Role->getError());
 		}
-		else {
+		 
 			return Resp::web(Resp::SUCCESS, '操作成功');
-		}
 	}
 }

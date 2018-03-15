@@ -1,13 +1,9 @@
 <?php namespace System\Models\Resources;
 
-
 use Illuminate\Http\Resources\Json\Resource;
-use System\Models\PamRole;
-
 
 class RoleResource extends Resource
 {
-
 	/**-
 	 * 将资源转换成数组。
 	 * @param $request

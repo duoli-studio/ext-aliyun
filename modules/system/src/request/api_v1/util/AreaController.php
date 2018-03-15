@@ -1,17 +1,14 @@
 <?php namespace System\Request\ApiV1\Util;
 
-
 use Poppy\Framework\Application\ApiController;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Helper\UtilHelper;
 use System\Classes\Traits\SystemTrait;
 use System\Models\SysArea;
 
-
 class AreaController extends ApiController
 {
 	use SystemTrait;
-
 
 	/**
 	 * @api                  {get} api_v1/util/area/code [O]地区代码
@@ -86,6 +83,7 @@ class AreaController extends ApiController
 			}
 			$return[$province_key] = $new_province_value;
 		}
+
 		return Resp::web(Resp::SUCCESS, '获取数据成功', $return);
 	}
 }

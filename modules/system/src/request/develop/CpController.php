@@ -4,7 +4,6 @@ use Curl\Curl;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Helper\RawCookieHelper;
 
-
 class CpController extends InitController
 {
 	/**
@@ -24,6 +23,7 @@ class CpController extends InitController
 	public function graphi($schema = 'default')
 	{
 		$token = RawCookieHelper::get('dev_token#' . $schema);
+
 		return view('system::graphql.graphiql', [
 			'graphqlPath' => route('api.graphql', $schema),
 			'token'       => $token,
@@ -34,7 +34,7 @@ class CpController extends InitController
 	public function api()
 	{
 		$this->seo('接口调试平台');
-		$tokenGet = function($cookie_key) {
+		$tokenGet = function ($cookie_key) {
 			if (RawCookieHelper::has($cookie_key)) {
 				$token = RawCookieHelper::get($cookie_key);
 
@@ -48,6 +48,7 @@ class CpController extends InitController
 					RawCookieHelper::remove($cookie_key);
 				}
 			}
+
 			return RawCookieHelper::get($cookie_key);
 		};
 
@@ -59,7 +60,6 @@ class CpController extends InitController
 			'url_poppy'     => route('system:develop.cp.doc', 'poppy'),
 		]);
 	}
-
 
 	/**
 	 * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector|\Illuminate\View\View
@@ -82,12 +82,13 @@ class CpController extends InitController
 				}
 				$token = 'dev_token#' . $type;
 				RawCookieHelper::set($token, $data->token);
+
 				return Resp::web(Resp::SUCCESS, '登录成功', 'top_reload|1');
 			}
-			else {
+			 
 				return Resp::web(Resp::ERROR, $curl->errorMessage);
-			}
 		}
+
 		return view('system::develop.cp.api_login', compact('type'));
 	}
 
@@ -106,9 +107,11 @@ class CpController extends InitController
 			}
 			RawCookieHelper::remove($cookieKey);
 			RawCookieHelper::set($cookieKey, $token);
+
 			return Resp::web(Resp::SUCCESS, '设置 token 成功', 'top_reload|1');
 		}
 		$token = RawCookieHelper::get($cookieKey);
+
 		return view('system::develop.cp.set_token', compact('type', 'token'));
 	}
 
@@ -120,6 +123,7 @@ class CpController extends InitController
 	public function doc($type = null)
 	{
 		$type = $type ?: 'system';
+
 		return redirect(url('docs/' . $type));
 	}
 }

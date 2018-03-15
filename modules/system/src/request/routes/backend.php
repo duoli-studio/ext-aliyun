@@ -4,12 +4,12 @@ use Illuminate\Routing\Router;
 
 \Route::group([
 	'namespace' => 'System\Request\Backend',
-], function(Router $router) {
+], function (Router $router) {
 	$router->any('/', 'HomeController@login')->name('backend:home.login');
 	$router->any('/test', 'HomeController@test')->name('backend:home.test');
 	$router->group([
 		'middleware' => ['auth:backend', 'disabled_pam'],
-	], function(Router $router) {
+	], function (Router $router) {
 		$router->any('/cp', config('poppy.backend_cp') ?: 'HomeController@cp')
 			->name('backend:home.cp');
 		$router->any('/password', 'HomeController@password')

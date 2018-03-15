@@ -3,13 +3,11 @@
 /**
  * Copyright (C) Update For IDE
  */
-
 use Poppy\Framework\Application\TestCase;
-use Poppy\Framework\Http\Pagination\PageInfo;
+use System\Action\Role;
 use System\Models\Filters\RoleFilter;
 use System\Models\PamAccount;
 use System\Models\PamRole;
-use System\Action\Role;
 
 class RoleTest extends TestCase
 {
@@ -29,7 +27,8 @@ class RoleTest extends TestCase
 	public function testList()
 	{
 		$Db       = PamRole::filter([], RoleFilter::class);
-		return PamRole::paginationInfo($Db, function($item) {
+
+		return PamRole::paginationInfo($Db, function ($item) {
 			return $item;
 		});
 	}

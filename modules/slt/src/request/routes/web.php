@@ -61,6 +61,30 @@
 			->name('slt:nav.fetch_title');
 		$route->any('nav/tag', 'NavController@tag')
 			->name('slt:nav.tag');
+
+
+		\Route::any('book/my', 'BookController@my')
+			->name('slt:book.my');
+
+		\Route::any('article/create', 'ArticleController@create')
+			->name('web:prd.create');
+		\Route::any('article/popup/{id?}', 'ArticleController@popup')
+			->name('web:prd.popup');
+		\Route::any('article/content/{id}', 'ArticleController@content')
+			->name('web:prd.content');
+
+		\Route::any('article/show/{id}', 'ArticleController@show')
+			->name('web:prd.show');
+		\Route::any('article/destroy/{id}', 'ArticleController@destroy')
+			->name('web:prd.destroy');
+		\Route::any('article/access/{id}', 'ArticleController@access')
+			->name('web:prd.access');
+		\Route::any('article/address/{id}', 'ArticleController@address')
+			->name('web:prd.address');
+		\Route::any('article/status/{id}/{type}', 'ArticleController@status')
+			->name('web:prd.status');
+		Route::any('article/my_book_item/{id?}', 'ArticleController@myBookItem')
+			->name('web:prd.my_book_item');
 	});
 
 });

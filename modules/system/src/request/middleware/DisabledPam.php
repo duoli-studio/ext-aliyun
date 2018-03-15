@@ -7,11 +7,9 @@ use System\Models\PamAccount;
 use System\Models\SysConfig;
 use Tymon\JWTAuth\JWTGuard;
 
-
 class DisabledPam
 {
 	use SystemTrait;
-
 
 	/**
 	 * Handle an incoming request.
@@ -30,6 +28,7 @@ class DisabledPam
 				return Resp::web(Resp::ERROR, '用户被禁用, 原因 : ' . $user->disable_reason . ', 解禁时间 : ' . $user->disable_end_at);
 			}
 		}
+
 		return $next($request);
 	}
 }

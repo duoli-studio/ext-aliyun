@@ -2,9 +2,8 @@
 
 use Poppy\Framework\Application\ApiController;
 use Poppy\Framework\Classes\Resp;
-use Poppy\Framework\Http\Pagination\PageInfo;
-use System\Classes\Traits\SystemTrait;
 use System\Action\Category as ActCategory;
+use System\Classes\Traits\SystemTrait;
 use System\Models\Filters\SysCategoryFilter;
 use System\Models\Resources\CategoryResource;
 use System\Models\SysCategory;
@@ -64,6 +63,7 @@ class CategoryController extends ApiController
 
 		/** @var SysCategory $Db */
 		$Db = SysCategory::filter($input, SysCategoryFilter::class);
+
 		return SysCategory::paginationInfo($Db, CategoryResource::class);
 	}
 
@@ -87,9 +87,8 @@ class CategoryController extends ApiController
 		if (!$Category->setPam($this->getJwtBeGuard()->user())->establish($input, $id)) {
 			return Resp::web(Resp::ERROR, $Category->getError());
 		}
-		else {
+		 
 			return Resp::web(Resp::SUCCESS, $Category->getSuccess());
-		}
 	}
 
 	/**
@@ -112,11 +111,11 @@ class CategoryController extends ApiController
 				if (call_user_func([$Category, $action], $id)) {
 					return Resp::web(Resp::SUCCESS, '操作成功');
 				}
-				else {
+				 
 					return Resp::web(Resp::ERROR, $Category->getError());
-				}
 			}
 		}
+
 		return Resp::web(Resp::ERROR, '不存在的方法');
 	}
 }

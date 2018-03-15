@@ -79,7 +79,6 @@ class Category
 
 		if ($id) {
 			$this->category->update($initDb);
-
 		}
 		else {
 			/** @var SysCategory $category */
@@ -105,9 +104,9 @@ class Category
 		if ($id && !$this->initCategory($id)) {
 			return false;
 		}
+
 		return $this->category->delete();
 	}
-
 
 	/**
 	 * 初始化id
@@ -119,6 +118,7 @@ class Category
 		try {
 			$this->category   = SysCategory::findOrFail($id);
 			$this->categoryId = $this->category->id;
+
 			return true;
 		} catch (\Exception $e) {
 			return $this->setError(trans('system::action.category.item_not_exist'));

@@ -17,9 +17,9 @@ class Navigations extends Repository
 	 */
 	public function initialize(Collection $data)
 	{
-
 		$this->items = $this->getCache('poppy')->rememberForever(
-			'extensions.navigation', function () use ($data) {
+			'extensions.navigation',
+			function () use ($data) {
 			$collection = collect();
 			$data->each(function ($definition, $key) use ($collection) {
 				if (is_array($definition) && $definition) {

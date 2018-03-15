@@ -5,7 +5,6 @@ use Illuminate\Contracts\Support\Arrayable;
 use JsonSerializable;
 use Poppy\Framework\Classes\Traits\HasAttributesTrait;
 
-
 class Extension implements Arrayable, ArrayAccess, JsonSerializable
 {
 	use HasAttributesTrait;

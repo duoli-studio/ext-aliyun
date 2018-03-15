@@ -1,6 +1,5 @@
 <?php namespace System\Commands;
 
-
 use Illuminate\Console\Command;
 use System\Models\PamRole;
 
@@ -9,7 +8,6 @@ use System\Models\PamRole;
  */
 class InstallCommand extends Command
 {
-
 	/**
 	 * 前端部署.
 	 * @var string
@@ -22,7 +20,6 @@ class InstallCommand extends Command
 	 */
 	protected $description = 'Install system module.';
 
-
 	/**
 	 * Execute the console command.
 	 */
@@ -31,6 +28,7 @@ class InstallCommand extends Command
 		// check
 		if (PamRole::where('name', PamRole::BE_ROOT)->exists()) {
 			$this->warn('You Already Installed!');
+
 			return;
 		}
 

@@ -1,13 +1,10 @@
 <?php namespace System\Tests\Module;
 
-
 use Poppy\Framework\Application\TestCase;
 use System\Backend\Repositories\NavigationRepository;
 
-
 class BackendTest extends TestCase
 {
-
 	public function testMenu()
 	{
 		// dd(get_included_files());
@@ -19,5 +16,4 @@ class BackendTest extends TestCase
 	{
 		dd(app('backend')->scripts());
 	}
-
 }

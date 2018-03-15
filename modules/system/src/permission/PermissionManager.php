@@ -31,6 +31,7 @@ class PermissionManager
 		if (!$user) {
 			return false;
 		}
+
 		return $user->capable($permission);
 	}
 
@@ -52,7 +53,6 @@ class PermissionManager
 
 		return $this->repository;
 	}
-
 
 	/**
 	 * Get all permissions.
@@ -99,6 +99,7 @@ class PermissionManager
 				});
 			});
 		});
+
 		return $perms;
 	}
 
@@ -115,6 +116,7 @@ class PermissionManager
 				$permissions->push($permission->key());
 			}
 		});
+
 		return $permissions;
 	}
 }

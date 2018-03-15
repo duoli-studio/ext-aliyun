@@ -6,13 +6,11 @@
  * @license MIT
  * @package Zizaco\Entrust
  */
-
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
 
 class RbacAbility
 {
-
 	protected $auth;
 
 	/**

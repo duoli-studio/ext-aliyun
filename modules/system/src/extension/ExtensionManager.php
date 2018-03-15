@@ -17,13 +17,11 @@ class ExtensionManager
 	 */
 	protected $repository;
 
-
 	protected $navigation;
-
 
 	public function register()
 	{
-		$this->repository()->each(function(Extension $extension) {
+		$this->repository()->each(function (Extension $extension) {
 			if (isset($extension['service']) && $extension['service'] && class_exists($extension['service'])) {
 				$this->getContainer()->register($extension->service());
 			}
@@ -48,6 +46,7 @@ class ExtensionManager
 			$this->repository = new Extensions();
 			$this->repository->initialize(collect($this->getFile()->directories($this->getExtensionPath())));
 		}
+
 		return $this->repository;
 	}
 
@@ -57,12 +56,13 @@ class ExtensionManager
 	public function navigations()
 	{
 		if (!$this->navigation instanceof Navigations) {
-			$collection       = $this->enabled()->map(function(Extension $addon) {
+			$collection       = $this->enabled()->map(function (Extension $addon) {
 				return $addon->offsetExists('navigations') ? (array) $addon->get('navigations') : [];
 			});
 			$this->navigation = new Navigations();
 			$this->navigation->initialize($collection);
 		}
+
 		return $this->navigation;
 	}
 

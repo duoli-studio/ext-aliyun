@@ -4,13 +4,13 @@ use Illuminate\Routing\Router;
 
 \Route::group([
 	'namespace' => 'System\Request\Develop',
-], function(Router $router) {
+], function (Router $router) {
 	$router->any('login', 'PamController@login')
 		->name('system:develop.pam.login');
 
 	$router->group([
 		'middleware' => ['web', 'auth:develop', 'disabled_pam'],
-	], function(Router $router) {
+	], function (Router $router) {
 		$router->get('/', 'CpController@index')
 			->name('system:develop.cp.cp');
 
@@ -44,7 +44,6 @@ use Illuminate\Routing\Router;
 			->name('system:develop.log.index');
 		$router->any('/api_doc/{type?}', 'ApiDocController@auto')
 			->name('system:develop.doc.index');
-
 	});
 });
 

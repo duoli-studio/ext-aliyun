@@ -12,7 +12,6 @@ use System\Classes\Traits\SystemTrait;
  */
 class Uploader
 {
-
 	use SystemTrait;
 
 	/**
@@ -83,7 +82,6 @@ class Uploader
 			'description' => '请选择xls文件',
 		],
 	];
-
 
 	public function __construct($folder = 'uploads')
 	{
@@ -168,19 +166,17 @@ class Uploader
 				}
 			}
 
-
 			$zipContent = $this->resizeContent($extension, $zipContent);
 
 			$Disk->put($fileRelativePath, $zipContent);
 
 			$this->destination = $fileRelativePath;
+
 			return true;
 		}
-		else {
+		 
 			return $this->setError($file->getErrorMessage());
-		}
 	}
-
 
 	/**
 	 * 裁剪和压缩
@@ -219,7 +215,7 @@ class Uploader
 			}
 		}
 
-		$Image->resize($width, $height, function(Constraint $constraint) {
+		$Image->resize($width, $height, function (Constraint $constraint) {
 			$constraint->aspectRatio();
 			$constraint->upsize();
 		});
@@ -244,6 +240,7 @@ class Uploader
 
 		$Disk->put($fileRelativePath, $zipContent);
 		$this->destination = $fileRelativePath;
+
 		return true;
 	}
 
@@ -275,12 +272,10 @@ class Uploader
 		}
 	}
 
-
 	public function setDestination($destination)
 	{
 		$this->destination = $destination;
 	}
-
 
 	public function getDestination()
 	{
@@ -297,11 +292,11 @@ class Uploader
 		return $this->returnUrl . $this->destination;
 	}
 
-
 	private function genRelativePath($extension = 'png')
 	{
 		$now      = Carbon::now();
 		$fileName = $now->format('is') . str_random(8) . '.' . $extension;
+
 		return ($this->folder ? $this->folder . '/' : '') . $now->format('Ym/d/H/') . $fileName;
 	}
 
@@ -322,6 +317,7 @@ class Uploader
 				if ($width >= $this->resizeDistrict || $height >= $this->resizeDistrict) {
 					$r_width  = ($width > $height) ? $this->resizeDistrict : null;
 					$r_height = ($width > $height) ? null : $this->resizeDistrict;
+
 					return $this->resize($Image, $r_width, $r_height);
 				}
 			} catch (\Exception $e) {
@@ -331,6 +327,7 @@ class Uploader
 		else {
 			return $zip_content;
 		}
+
 		return $zip_content;
 	}
 }

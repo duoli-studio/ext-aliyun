@@ -13,9 +13,9 @@ class SettingRepository implements SettingContract
 {
 	use KeyParserTrait, SystemTrait;
 
-	private        $table;
-	private        $cacheName;
-	private        $cacheMinute;
+	private $table;
+	private $cacheName;
+	private $cacheMinute;
 	private static $cache = [];
 
 	public function __construct()
@@ -28,7 +28,7 @@ class SettingRepository implements SettingContract
 
 	/**
 	 * Resets a setting value by deleting the record.
-	 * @param string $key Specifies the setting key value.
+	 * @param string $key specifies the setting key value
 	 * @return bool
 	 * @throws \Exception
 	 */
@@ -48,14 +48,15 @@ class SettingRepository implements SettingContract
 
 		unset(static::$cache[$key]);
 		$this->writeCache();
+
 		return true;
 	}
 
 	/**
 	 * Returns a setting value by the module (or plugin) name and setting name.
 	 * @param string $key     Specifies the setting key value, for example 'system:updates.check'
-	 * @param mixed  $default The default value to return if the setting doesn't exist in the DB.
-	 * @return mixed Returns the setting value loaded from the database or the default value.
+	 * @param mixed  $default the default value to return if the setting doesn't exist in the DB
+	 * @return mixed returns the setting value loaded from the database or the default value
 	 */
 	public function get($key, $default = null)
 	{
@@ -93,18 +94,20 @@ class SettingRepository implements SettingContract
 
 			static::$cache[$key] = $default;
 			$this->writeCache();
+
 			return static::$cache[$key];
 		}
 
 		static::$cache[$key] = unserialize($record->value);
 		$this->writeCache();
+
 		return static::$cache[$key];
 	}
 
 	/**
 	 * Stores a setting value to the database.
 	 * @param string $key   Specifies the setting key value, for example 'system:updates.check'
-	 * @param mixed  $value The setting value to store, serializable.
+	 * @param mixed  $value the setting value to store, serializable
 	 * @return bool
 	 */
 	public function set($key, $value)
@@ -113,6 +116,7 @@ class SettingRepository implements SettingContract
 			foreach ($key as $_key => $_value) {
 				$this->set($_key, $_value);
 			}
+
 			return true;
 		}
 
@@ -124,11 +128,11 @@ class SettingRepository implements SettingContract
 
 		$record = $this->findRecord($key);
 		if (!$record) {
-			$record = new SysConfig;
+			$record                         = new SysConfig();
 			list($namespace, $group, $item) = $this->parseKey($key);
-			$record->namespace = $namespace;
-			$record->group     = $group;
-			$record->item      = $item;
+			$record->namespace              = $namespace;
+			$record->group                  = $group;
+			$record->item                   = $item;
 		}
 
 		$record->value = serialize($value);
@@ -136,6 +140,7 @@ class SettingRepository implements SettingContract
 
 		static::$cache[$key] = $value;
 		$this->writeCache();
+
 		return true;
 	}
 
@@ -149,7 +154,7 @@ class SettingRepository implements SettingContract
 	{
 		$collection = collect([]);
 		$this->getModule()->settings()->each(
-			function($define, $settingKey) use ($namespace, $group, $collection) {
+			function ($define, $settingKey) use ($namespace, $group, $collection) {
 				$key = $namespace . '::' . $group;
 				if (starts_with($settingKey, $key)) {
 					$value = $this->get($settingKey);
@@ -162,6 +167,7 @@ class SettingRepository implements SettingContract
 				}
 			}
 		);
+
 		return $collection;
 	}
 
@@ -174,9 +180,9 @@ class SettingRepository implements SettingContract
 	{
 		/** @var SysConfig $record */
 		$record = SysConfig::query();
+
 		return $record->applyKey($key)->first();
 	}
-
 
 	private function writeCache()
 	{

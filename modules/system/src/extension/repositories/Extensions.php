@@ -23,19 +23,18 @@ class Extensions extends Repository
 	 */
 	public function initialize(Collection $data)
 	{
-
-
 		$this->items = $this->getCache('poppy')->rememberForever(
-			'extensions', function() use ($data) {
+			'extensions',
+			function () use ($data) {
 			$collection = collect();
-			$data->each(function($directory, $index) use ($collection) {
+			$data->each(function ($directory, $index) use ($collection) {
 				$extension = new Extension([
 					'directory' => $directory,
 				]);
 
 				if ($this->getFile()->exists($file = $directory . DIRECTORY_SEPARATOR . 'composer.json')) {
 					$configurations = $this->loadConfigurations($directory);
-					$configurations->isNotEmpty() && $configurations->each(function($value, $item) use ($extension) {
+					$configurations->isNotEmpty() && $configurations->each(function ($value, $item) use ($extension) {
 						$extension->offsetSet($item, $value);
 					});
 
@@ -51,7 +50,7 @@ class Extensions extends Repository
 							$this->getFile()->requireOnce($autoload);
 							$this->loadFromCache = false;
 						}
-						collect(data_get($package, 'autoload.psr-4'))->each(function($entry, $namespace) use (
+						collect(data_get($package, 'autoload.psr-4'))->each(function ($entry, $namespace) use (
 							$extension
 						) {
 							$extension->offsetSet('namespace', $namespace);
@@ -77,9 +76,10 @@ class Extensions extends Repository
 			});
 
 			return $collection->all();
-		});
+		}
+		);
 		if ($this->loadFromCache) {
-			collect($this->items)->each(function(Extension $extension) {
+			collect($this->items)->each(function (Extension $extension) {
 				if ($extension->offsetExists('autoload')) {
 					$autoload = $extension->get('autoload');
 					$this->getFile()->exists($autoload) && $this->getFile()->requireOnce($autoload);
@@ -97,14 +97,15 @@ class Extensions extends Repository
 	{
 		$configurations = collect();
 		if ($this->getFile()->isDirectory($directory = $directory . DIRECTORY_SEPARATOR . 'configurations')) {
-			collect($this->getFile()->files($directory))->each(function($file) use ($configurations) {
+			collect($this->getFile()->files($directory))->each(function ($file) use ($configurations) {
 				if ($this->getFile()->isReadable($file)) {
-					collect(Yaml::dump(file_get_contents($file)))->each(function($data, $key) use ($configurations) {
+					collect(Yaml::dump(file_get_contents($file)))->each(function ($data, $key) use ($configurations) {
 						$configurations->put($key, $data);
 					});
 				}
 			});
 		}
+
 		return $configurations;
 	}
 
@@ -113,7 +114,7 @@ class Extensions extends Repository
 	 */
 	public function enabled(): Collection
 	{
-		return $this->filter(function(Extension $extension) {
+		return $this->filter(function (Extension $extension) {
 			return $extension->get('enabled') == true;
 		});
 	}

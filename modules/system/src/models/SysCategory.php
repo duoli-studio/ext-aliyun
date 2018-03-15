@@ -4,7 +4,6 @@ use Illuminate\Database\Query\Builder;
 use Poppy\Framework\Http\Pagination\PageInfo;
 use System\Classes\Traits\FilterTrait;
 
-
 /**
  * System\Model\Help
  *
@@ -37,6 +36,5 @@ class SysCategory extends \Eloquent
 		'parent_id',
 		'title',
 	];
-
 }
 

@@ -6,7 +6,6 @@ use Poppy\Framework\Classes\Traits\AppTrait;
 
 class ImageCaptcha
 {
-
 	use AppTrait;
 
 	/**
@@ -20,20 +19,18 @@ class ImageCaptcha
 		if (!$captcha) {
 			return $this->setError(trans('system::action.image_captcha.check_not_input'));
 		}
-		else {
+		 
 			$captchaCache = \Cache::get('captcha_' . $mobile);
 			if (!$captchaCache) {
 				return $this->setError(trans('system::action.image_captcha.check_not_exist'));
 			}
-			else {
+			 
 				if (strtolower($captchaCache) !== strtolower($captcha)) {
 					return $this->setError(trans('system::action.image_captcha.check_error'));
 				}
-				else {
+				 
 					\Cache::forget('captcha_' . $mobile);
-				}
-			}
-		}
+				
 		return true;
 	}
 
@@ -59,6 +56,7 @@ class ImageCaptcha
 		//生成图片
 		$builder->output();
 		$content = ob_get_clean();
+
 		return response($content, 200, [
 			'Content-Type'  => 'image/png',
 			'Cache-Control' => 'no-cache, must-revalidate',

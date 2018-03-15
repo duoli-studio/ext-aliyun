@@ -12,8 +12,6 @@ class PermissionServiceProvider extends ServiceProvider
 	 */
 	protected $defer = true;
 
-
-
 	/**
 	 * ServiceProvider register.
 	 */

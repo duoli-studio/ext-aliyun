@@ -1,12 +1,10 @@
 <?php namespace System\Models\Policies;
 
-
 use System\Models\PamAccount;
 use System\Models\PamRole;
 
 class RolePolicy
 {
-
 	private $manage = 'backend:global.role.manage';
 
 	public function before(PamAccount $pam, $ability)
@@ -14,6 +12,7 @@ class RolePolicy
 		if (!$pam->hasRole('root')) {
 			return $pam->capable($this->manage);
 		}
+
 		return null;
 	}
 
@@ -49,6 +48,7 @@ class RolePolicy
 		if ($role->name == PamRole::BE_ROOT) {
 			return false;
 		}
+
 		return true;
 	}
 
@@ -63,6 +63,7 @@ class RolePolicy
 		if ($role->is_system) {
 			return false;
 		}
+
 		return true;
 	}
 }

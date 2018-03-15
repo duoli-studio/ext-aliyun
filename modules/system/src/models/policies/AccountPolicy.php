@@ -1,13 +1,10 @@
 <?php namespace System\Models\Policies;
 
-
 use System\Models\PamAccount;
-use System\Models\PamRole;
 use System\Models\SysConfig;
 
 class AccountPolicy
 {
-
 	private $manage = 'backend:global.pam.manage';
 
 	public function before(PamAccount $pam, $ability)
@@ -15,6 +12,7 @@ class AccountPolicy
 		if (!$pam->hasRole('root')) {
 			return $pam->capable($this->manage);
 		}
+
 		return null;
 	}
 
@@ -50,6 +48,7 @@ class AccountPolicy
 		if ($item->is_enable == SysConfig::NO) {
 			return true;
 		}
+
 		return false;
 	}
 
@@ -65,6 +64,7 @@ class AccountPolicy
 		if ($pam->id == $item->id) {
 			return false;
 		}
+
 		return !$this->enable($pam, $item);
 	}
 }

@@ -5,11 +5,9 @@ use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Validation\Rule;
 use System\Classes\Traits\SystemTrait;
 
-
 class SettingController extends ApiController
 {
 	use SystemTrait;
-
 
 	/**
 	 * @api                 {get} api_v1/backend/system/setting/fetch [O]设置-获取
@@ -52,7 +50,10 @@ class SettingController extends ApiController
 		}
 
 		$setting = $this->getSetting()->getNsGroup($namespace, $group);
-		return Resp::web(Resp::SUCCESS, '操作成功',
+
+		return Resp::web(
+			Resp::SUCCESS,
+			'操作成功',
 			$setting
 		);
 	}
@@ -74,8 +75,7 @@ class SettingController extends ApiController
 		if (!$Setting->set($key, $value)) {
 			return Resp::web(Resp::ERROR, $Setting->getError());
 		}
-		else {
+		 
 			return Resp::web(Resp::SUCCESS, '操作成功');
-		}
 	}
 }

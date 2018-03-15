@@ -1,6 +1,5 @@
 <?php namespace System\Providers\Facades;
 
-
 use Illuminate\Support\Facades\Facade;
 
 /**
@@ -8,12 +7,9 @@ use Illuminate\Support\Facades\Facade;
  */
 class RbacFacade extends Facade
 {
-
 	protected static function getFacadeAccessor()
 	{
 		return 'poppy.rbac';
 	}
 }
-
-
 

@@ -1,6 +1,5 @@
 <?php namespace System\Action;
 
-
 use Poppy\Framework\Validation\Rule;
 use System\Classes\Traits\SystemTrait;
 use System\Models\SysArea;
@@ -8,7 +7,6 @@ use System\Models\SysArea;
 class Area
 {
 	use SystemTrait;
-
 
 	/**
 	 * @var SysArea
@@ -114,9 +112,9 @@ class Area
 		$parentIds = $this->parentIds($id, 'array');
 		$this->area->delete();
 		$this->batchFix($parentIds);
+
 		return true;
 	}
-
 
 	/**
 	 * 获取父元素IDs
@@ -133,6 +131,7 @@ class Area
 			$ids[] = $id;
 		}
 		$ids = array_reverse($ids);
+
 		return ($type == 'string') ? implode(',', $ids) : $ids;
 	}
 
@@ -159,9 +158,8 @@ class Area
 		if (!$children) {
 			return $ids;
 		}
-		else {
+		 
 			return array_merge($ids, $this->getChildren($children));
-		}
 	}
 
 	/**
@@ -192,6 +190,7 @@ class Area
 				'has_child' => 0,
 			]);
 		}
+
 		return true;
 	}
 
@@ -208,7 +207,8 @@ class Area
 			SysArea::where('id', $id)->update([
 				'level' => 2,
 			]);
-		};
+		}
+
 		return true;
 	}
 
@@ -222,6 +222,7 @@ class Area
 		try {
 			$this->area   = SysArea::findOrFail($id);
 			$this->areaId = $this->area->id;
+
 			return true;
 		} catch (\Exception $e) {
 			return $this->setError(trans('system::action.area.undefined_error'));
@@ -238,11 +239,11 @@ class Area
 		if ($clear) {
 			\Cache::forget($cache_name);
 		}
-		return \Cache::remember($cache_name, 10, function() {
+
+		return \Cache::remember($cache_name, 10, function () {
 			return SysArea::pluck('parent_id', 'id')->toArray();
 		});
 	}
-
 
 	/**
 	 * @param $ids
@@ -267,8 +268,7 @@ class Area
 		if (count($parentIds) == 1) {
 			return $id;
 		}
-		else {
+		 
 			return $parentIds[1];
-		}
 	}
 }

@@ -16,7 +16,8 @@ class ModulesBackendMenu extends Repository
 	public function initialize(Collection $data)
 	{
 		$this->items = $this->getCache('poppy')->rememberForever(
-			'modules.backend_menus', function () use ($data) {
+			'modules.backend_menus',
+			function () use ($data) {
 			$collection = collect();
 			$data->each(function ($items, $slug) use ($collection) {
 				$items = collect($items);
@@ -25,10 +26,11 @@ class ModulesBackendMenu extends Repository
 					$collection->put($slug, $items);
 				});
 			});
-			return $collection->all();
-		});
-	}
 
+			return $collection->all();
+		}
+		);
+	}
 
 	private function handleNavigation($definition)
 	{
@@ -49,7 +51,7 @@ class ModulesBackendMenu extends Repository
 		$definition['routes'] = $childrenRoutes;
 		unset($definition['param'], $definition['route_param']);
 		$definition['key'] = UtilHelper::md5($definition);
+
 		return $definition;
 	}
-
 }

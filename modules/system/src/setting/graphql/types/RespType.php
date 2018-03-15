@@ -4,10 +4,8 @@ use GraphQL\Type\Definition\Type;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\GraphQL\Support\Type as AbstractType;
 
-
 class RespType extends AbstractType
 {
-
 	public function __construct($attributes = [])
 	{
 		parent::__construct($attributes);
@@ -37,5 +35,4 @@ class RespType extends AbstractType
 			],
 		];
 	}
-
 }

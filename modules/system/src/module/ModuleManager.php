@@ -2,11 +2,11 @@
 
 use Illuminate\Support\Collection;
 use Poppy\Framework\Classes\Traits\PoppyTrait;
+use System\Module\Repositories\Modules;
 use System\Module\Repositories\ModulesAssets;
 use System\Module\Repositories\ModulesBackendMenu;
-use System\Module\Repositories\ModulesMenu;
-use System\Module\Repositories\Modules;
 use System\Module\Repositories\ModulesDevelopMenu;
+use System\Module\Repositories\ModulesMenu;
 use System\Module\Repositories\ModulesPage;
 use System\Module\Repositories\ModulesSetting;
 
@@ -83,6 +83,7 @@ class ModuleManager
 			$slugs            = app('poppy')->enabled()->pluck('slug');
 			$this->repository->initialize($slugs);
 		}
+
 		return $this->repository;
 	}
 
@@ -195,6 +196,7 @@ class ModuleManager
 			$this->developMenus = new ModulesDevelopMenu();
 			$this->developMenus->initialize($collection);
 		}
+
 		return $this->developMenus;
 	}
 
@@ -211,6 +213,7 @@ class ModuleManager
 			$this->backendMenus = new ModulesBackendMenu();
 			$this->backendMenus->initialize($collection);
 		}
+
 		return $this->backendMenus;
 	}
 

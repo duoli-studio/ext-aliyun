@@ -3,15 +3,13 @@
 use Poppy\Framework\Application\ApiController;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Helper\StrHelper;
-use Poppy\Framework\Http\Pagination\PageInfo;
+use System\Action\Pam as ActPam;
 use System\Classes\Traits\SystemTrait;
 use System\Models\Filters\PamFilter;
 use System\Models\Filters\RoleFilter;
 use System\Models\PamAccount;
 use System\Models\PamRole;
 use System\Models\Resources\PamResource;
-use System\Action\Pam as ActPam;
-
 
 class PamController extends ApiController
 {
@@ -87,10 +85,12 @@ class PamController extends ApiController
 			$roles          = PamRole::filter($filter, RoleFilter::class)->get();
 			$append['role'] = $roles;
 		}
-		return PamAccount::paginationInfo($Db, function($item) use ($user) {
+
+		return PamAccount::paginationInfo($Db, function ($item) use ($user) {
 			$pam                = (new PamResource($item))->toArray(app('request'));
 			$pam['can_enable']  = $user->can('enable', $item);
 			$pam['can_disable'] = $user->can('disable', $item);
+
 			return $pam;
 		}, $append);
 	}
@@ -115,11 +115,9 @@ class PamController extends ApiController
 		if (!$Pam->register($passport, $password, $role_id)) {
 			return Resp::web(Resp::ERROR, $Pam->getError());
 		}
-		else {
+		 
 			return Resp::web(Resp::SUCCESS, '操作成功');
-		}
 	}
-
 
 	/**
 	 * @api                 {get} api_v1/backend/system/pam/do [O]账号-Do
@@ -140,9 +138,9 @@ class PamController extends ApiController
 				if (!$Pam->enable($id)) {
 					return Resp::web(Resp::ERROR, $Pam->getError());
 				}
-				else {
+				 
 					return Resp::web(Resp::SUCCESS, '操作成功');
-				}
+				
 				break;
 			default:
 				return Resp::web(Resp::ERROR, '无效操作');
@@ -170,9 +168,8 @@ class PamController extends ApiController
 		if (!$Pam->disable($id, $date, $reason)) {
 			return Resp::web(Resp::ERROR, $Pam->getError());
 		}
-		else {
+		 
 			return Resp::web(Resp::SUCCESS, '操作成功');
-		}
 	}
 
 	/**
@@ -188,12 +185,11 @@ class PamController extends ApiController
 	{
 		$id       = input('id', 0);
 		$password = input('password', '');
-		$Pam      = (new ActPam)->setPam($this->getJwtBeGuard()->user());
+		$Pam      = (new ActPam())->setPam($this->getJwtBeGuard()->user());
 		if (!$Pam->setPasswordById($id, $password)) {
 			return Resp::web(Resp::ERROR, $Pam->getError());
 		}
-		else {
+		 
 			return Resp::web(Resp::SUCCESS, '操作成功');
-		}
 	}
 }

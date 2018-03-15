@@ -1,16 +1,13 @@
 <?php namespace System\Request\ApiV1\Util;
 
-
 use Poppy\Framework\Application\ApiController;
 use Poppy\Framework\Classes\Resp;
-use System\Classes\Traits\SystemTrait;
 use System\Action\OssUploader;
-
+use System\Classes\Traits\SystemTrait;
 
 class ImageController extends ApiController
 {
 	use SystemTrait;
-
 
 	/**
 	 * @api                 {post} api_v1/util/image/upload [O]图片上传
@@ -63,7 +60,7 @@ class ImageController extends ApiController
 				}
 			}
 		}
-		else if ($type == 'base64') {
+		elseif ($type == 'base64') {
 			$image = \Input::get('image');
 
 			if (!is_array($image)) {
@@ -84,8 +81,7 @@ class ImageController extends ApiController
 				'json' => 1,
 			]);
 		}
-		else {
+		 
 			return Resp::web(Resp::ERROR, $Image->getError());
-		}
 	}
 }

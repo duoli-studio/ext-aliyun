@@ -5,13 +5,12 @@ use Illuminate\Http\JsonResponse;
 use Poppy\Framework\Application\ApiController;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Validation\Rule;
+use System\Action\Pam;
 use System\Action\Verification;
 use System\Classes\Traits\SystemTrait;
 use System\Models\PamAccount;
 use System\Models\Resources\PamResource as PamResource;
-use System\Action\Pam;
 use System\Models\SysConfig;
-
 
 class AuthController extends ApiController
 {
@@ -51,7 +50,9 @@ class AuthController extends ApiController
 			], 401, [], JSON_UNESCAPED_UNICODE);
 		}
 
-		return Resp::web(Resp::SUCCESS, '有效登录',
+		return Resp::web(
+			Resp::SUCCESS,
+			'有效登录',
 			(new PamResource($user))->toArray($this->getRequest())
 		);
 	}
@@ -83,12 +84,13 @@ class AuthController extends ApiController
 		if ($this->hasTooManyLoginAttempts($this->getRequest())) {
 			$seconds = $this->limiter()->availableIn($this->throttleKey($this->getRequest()));
 			$message = $this->getTranslator()->get('auth.throttle', ['seconds' => $seconds]);
+
 			return $this->getResponse()->json([
 				'message' => $message,
 			], 401, [], JSON_UNESCAPED_UNICODE);
 		}
 
-		$credentials = (new Pam)->passportData($this->getRequest());
+		$credentials = (new Pam())->passportData($this->getRequest());
 
 		if (!$this->guard($guard)->attempt($credentials)) {
 			return $this->getResponse()->json([
@@ -112,6 +114,7 @@ class AuthController extends ApiController
 				'message' => '凭证有误',
 			], 401, [], JSON_UNESCAPED_UNICODE);
 		}
+
 		return $this->getResponse()->json([
 			'token'   => $token,
 			'message' => '认证通过',
@@ -132,7 +135,7 @@ class AuthController extends ApiController
 		$verify_code = input('verify_code', '');
 		$password    = input('password', '');
 
-		$Verification = (new Verification);
+		$Verification = (new Verification());
 		if ($Verification->verifyOnceCode($verify_code)) {
 			$passport = $Verification->getHiddenStr();
 			$Pam      = new Pam();
@@ -140,13 +143,11 @@ class AuthController extends ApiController
 			if ($Pam->setPassword($pam, $password)) {
 				return Resp::web(Resp::SUCCESS, '密码已经重新设置');
 			}
-			else {
+			 
 				return Resp::web(Resp::ERROR, $Pam->getError());
-			}
 		}
-		else {
+		 
 			return Resp::web(Resp::ERROR, $Verification->getError());
-		}
 	}
 
 	/**
@@ -165,7 +166,6 @@ class AuthController extends ApiController
 	 */
 	public function login()
 	{
-
 		$passport = input('passport', '');
 		$captcha  = input('captcha', '');
 		$password = input('password', '');
@@ -191,11 +191,10 @@ class AuthController extends ApiController
 		if (!$token = $this->getJwt()->fromUser($pam)) {
 			return Resp::web(Resp::ERROR, trans('user::login.graphql.get_token_fail'));
 		}
-		else {
+		 
 			return Resp::web(Resp::SUCCESS, '登录成功', [
 				'token' => $token,
 			]);
-		}
 	}
 
 	protected function guard($guard)
@@ -206,6 +205,7 @@ class AuthController extends ApiController
 		else {
 			$guard = PamAccount::GUARD_JWT_BACKEND;
 		}
+
 		return $this->getAuth()->guard($guard);
 	}
 

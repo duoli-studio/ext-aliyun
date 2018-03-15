@@ -18,13 +18,12 @@ class DocCommand extends Command
 
 	protected $description = 'Generate Api Doc Document';
 
-
 	/**
 	 * Execute the console command.
+	 * @throws \Poppy\Framework\Exceptions\ModuleNotFoundException
 	 */
 	public function handle()
 	{
-
 		$type = $this->argument('type');
 		switch ($type) {
 			case 'api':
@@ -34,12 +33,12 @@ class DocCommand extends Command
 				else {
 					$catalog = config('fe.apidoc');
 					if (!$catalog) {
-						$this->error("尚未配置 apidoc 生成目录");
+						$this->error('尚未配置 apidoc 生成目录');
+
 						return;
 					}
 					// 多少个任务
 					$bar = $this->output->createProgressBar(count($catalog));
-
 
 					foreach ($catalog as $key => $dir) {
 						if (isset($dir['origin']) && isset($dir['doc'])) {
@@ -50,13 +49,24 @@ class DocCommand extends Command
 						else {
 							$this->error("尚未配置 {$key} 所对应的文档目录");
 						}
-
 					}
 					$bar->finish();
 				}
 				break;
+			case 'phpcs':
+			case 'cs':
+				$config = poppy_path('system', 'resources/specs/.php_cs');
+				$this->info(
+					'Please Run Command:' . "\n" .
+					'php-cs-fixer fix --config=' . $config . ' --diff --dry-run --verbose --diff-format=udiff'
+				);
+				break;
 			case 'php':
-				$this->info('Please Run Command:' . "\n" . 'php ./extensions/ext-fe/resources/sami/sami.phar update ./extensions/ext-fe/resources/sami/config.php');
+			case 'sami':
+				$this->info('Please Run Command:' . "\n" . 'php ./modules/system/resources/sami/sami.phar update ./modules/system/resources/sami/config.php');
+				break;
+			case 'phplint':
+				$this->info('Please Run Command:' . "\n" . './vendor/bin/phplint');
 				break;
 			case 'poppy':
 			case 'project':
@@ -72,7 +82,6 @@ class DocCommand extends Command
 				$this->getFile()->copyDirectory(base_path('resources/docs'), $aimFolder);
 				$this->info('Publish Success!');
 				break;
-
 		}
 	}
 
@@ -83,6 +92,7 @@ class DocCommand extends Command
 
 		if (!file_exists($path)) {
 			$this->error('Err > 目录 `' . $path . '` 不存在');
+
 			return;
 		}
 		$filter = data_get($dir, 'filter');
@@ -93,11 +103,11 @@ class DocCommand extends Command
 			}
 		}
 		$lower = strtolower($key);
-		$shell = "apidoc -i " . $path . '  -o ' . $aim . ' ' . $f;
+		$shell = 'apidoc -i ' . $path . '  -o ' . $aim . ' ' . $f;
 		$this->info($shell);
 		$process = new Process($shell);
 		$process->start();
-		$process->wait(function($type, $buffer) use ($lower) {
+		$process->wait(function ($type, $buffer) use ($lower) {
 			if (Process::ERR === $type) {
 				$this->error('ERR > ' . $buffer . "\n");
 			}

@@ -1,5 +1,4 @@
 <?php
-
 namespace System\Extension\Abstracts;
 
 use Poppy\Framework\Http\Abstracts\ServiceProvider;

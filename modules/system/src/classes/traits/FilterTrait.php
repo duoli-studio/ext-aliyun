@@ -6,11 +6,9 @@ use Illuminate\Database\Query\Builder;
 use Poppy\Framework\Classes\Resp;
 use Poppy\Framework\Http\Pagination\PageInfo;
 
-
 trait FilterTrait
 {
 	use Filterable;
-
 
 	/**
 	 * @param Builder  $query
@@ -20,6 +18,7 @@ trait FilterTrait
 	public function scopePageFilter($query, PageInfo $pageInfo)
 	{
 		$offset = ($pageInfo->page() - 1) * $pageInfo->size();
+
 		return $query->offset($offset)->take($pageInfo->size());
 	}
 
@@ -52,13 +51,13 @@ trait FilterTrait
 		$data = collect();
 		if ($list->count()) {
 			if (is_string($resource) && class_exists($resource)) {
-				$list->each(function($item) use ($resource, $data) {
+				$list->each(function ($item) use ($resource, $data) {
 					$res = (new $resource($item))->toArray(app('request'));
 					$data->push($res);
 				});
 			}
 			if (is_callable($resource)) {
-				$list->each(function($payload) use ($resource, $data) {
+				$list->each(function ($payload) use ($resource, $data) {
 					$res = $resource(...array_values(func_get_args()));
 					$data->push($res);
 				});
@@ -82,7 +81,7 @@ trait FilterTrait
 		if ($append) {
 			$return['data'] += $append;
 		}
+
 		return \Response::json($return, 200, [], JSON_UNESCAPED_UNICODE);
 	}
-
 }
