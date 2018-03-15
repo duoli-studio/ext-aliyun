@@ -1,10 +1,9 @@
-<?php namespace System\Event\Events;
+<?php namespace System\Event;
 
 use System\Models\PamAccount;
 
-class PamRegistered
+class PamRegisteredEvent
 {
-
 	/** @var PamAccount */
 	private $pam;
 

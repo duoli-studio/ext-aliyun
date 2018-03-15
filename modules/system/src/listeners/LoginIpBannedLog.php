@@ -1,18 +1,15 @@
-<?php namespace System\Event\Listeners;
-
+<?php namespace System\Listeners;
 
 use Poppy\Framework\Helper\EnvHelper;
 use System\Models\PamLog;
 
 class LoginIpBannedLog
 {
-
 	/**
 	 * Create the event handler.
 	 */
 	public function __construct()
 	{
-		//
 	}
 
 	/**
@@ -29,8 +26,5 @@ class LoginIpBannedLog
 			'log_content'  => 'ip 禁止登陆',
 		]);
 	}
-
 }
-
-
 

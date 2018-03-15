@@ -1,11 +1,9 @@
-<?php namespace System\Event\Events;
-
+<?php namespace System\Event;
 
 use System\Models\PamAccount;
 
-class LoginSuccess
+class LoginSuccessEvent
 {
-
 	/** @var PamAccount */
 	private $pam;
 

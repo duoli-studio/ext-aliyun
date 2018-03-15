@@ -1,9 +1,7 @@
-<?php namespace System\Event\Events;
+<?php namespace System\Event;
 
-
-class LoginFailed
+class LoginFailedEvent
 {
-
 	/** @var string */
 	private $type;
 
