@@ -120,12 +120,12 @@ class CaptchaController extends ApiController
 		if (!$Verification->send($passport, $type)) {
 			return Resp::web(Resp::ERROR, $Verification->getError());
 		}
-		 
-			$captcha = $Verification->getCaptcha();
-			$tip     = trans('system::util.captcha.ctl.send_success');
-			$tip .= !is_production() ? ', 验证码是: ' . $captcha->captcha : '';
 
-			return Resp::web(Resp::SUCCESS, $tip);
+		$captcha = $Verification->getCaptcha();
+		$tip     = trans('system::util.captcha.ctl.send_success');
+		$tip     .= !is_production() ? ', 验证码是: ' . $captcha->captcha : '';
+
+		return Resp::web(Resp::SUCCESS, $tip);
 	}
 
 	/**
@@ -150,11 +150,11 @@ class CaptchaController extends ApiController
 		if (!$Verification->check($passport, $captcha)) {
 			return Resp::web(Resp::ERROR, $Verification->getError());
 		}
-		 
-			$Verification->delete($passport);
 
-			return Resp::web(Resp::SUCCESS, '操作成功', [
-				'verify_code' => $Verification->genOnceVerifyCode(10, $passport),
-			]);
+		$Verification->delete($passport);
+
+		return Resp::web(Resp::SUCCESS, '操作成功', [
+			'verify_code' => $Verification->genOnceVerifyCode(10, $passport),
+		]);
 	}
 }

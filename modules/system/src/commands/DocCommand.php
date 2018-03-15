@@ -20,7 +20,6 @@ class DocCommand extends Command
 
 	/**
 	 * Execute the console command.
-	 * @throws \Poppy\Framework\Exceptions\ModuleNotFoundException
 	 */
 	public function handle()
 	{
@@ -55,7 +54,7 @@ class DocCommand extends Command
 				break;
 			case 'phpcs':
 			case 'cs':
-				$config = poppy_path('system', 'resources/specs/.php_cs');
+				$config = base_path('vendor/poppy/framework/.php_cs');
 				$this->info(
 					'Please Run Command:' . "\n" .
 					'php-cs-fixer fix --config=' . $config . ' --diff --dry-run --verbose --diff-format=udiff'

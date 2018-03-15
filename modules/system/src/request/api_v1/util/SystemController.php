@@ -50,15 +50,15 @@ class SystemController extends ApiController
 	 */
 	public function info()
 	{
-		$system['pay']    = [
+		$system['pay']      = [
 			'alipay_mobile' => $this->getSetting()->get('extension::pay_alipay.mobile_is_open'),
 			'wxpay_mobile'  => $this->getSetting()->get('extension::pay_wxpay.mobile_is_open'),
 		];
-		$system['login']  = [
+		$system['login']    = [
 			'wechat_mobile' => $this->getSetting()->get('extension::login_wechat.mobile_is_open'),
 			'qq_mobile'     => $this->getSetting()->get('extension::login_qq.mobile_is_open'),
 		];
-		$system['notice'] = [
+		$system['notice']   = [
 			'system_account' => $this->getSetting()->get('system::im_notice.system_account'),
 			'notice_account' => $this->getSetting()->get('system::im_notice.notice_account'),
 			'order_account'  => $this->getSetting()->get('system::im_notice.order_account'),

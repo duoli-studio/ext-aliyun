@@ -19,18 +19,18 @@ class ImageCaptcha
 		if (!$captcha) {
 			return $this->setError(trans('system::action.image_captcha.check_not_input'));
 		}
-		 
-			$captchaCache = \Cache::get('captcha_' . $mobile);
-			if (!$captchaCache) {
-				return $this->setError(trans('system::action.image_captcha.check_not_exist'));
-			}
-			 
-				if (strtolower($captchaCache) !== strtolower($captcha)) {
-					return $this->setError(trans('system::action.image_captcha.check_error'));
-				}
-				 
-					\Cache::forget('captcha_' . $mobile);
-				
+
+		$captchaCache = \Cache::get('captcha_' . $mobile);
+		if (!$captchaCache) {
+			return $this->setError(trans('system::action.image_captcha.check_not_exist'));
+		}
+
+		if (strtolower($captchaCache) !== strtolower($captcha)) {
+			return $this->setError(trans('system::action.image_captcha.check_error'));
+		}
+
+		\Cache::forget('captcha_' . $mobile);
+
 		return true;
 	}
 
