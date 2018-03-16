@@ -11,6 +11,10 @@ class FeController extends InitController
 {
 	private $selfMenu;
 
+	private $single;
+	private $bt3;
+	private $jquery;
+
 	/**
 	 * FeController constructor.
 	 */
@@ -53,12 +57,11 @@ class FeController extends InitController
 			return Resp::web(Resp::ERROR, '配置文件不存在!');
 		}
 
-		$single = [];
-
+		$this->autoJs();
 
 		// 默认插件
 		if (!$plugin) {
-			$plugin = $single[0];
+			$plugin = $this->single[0];
 		}
 
 		$folder = 'resources/js/libs/';
@@ -101,16 +104,16 @@ class FeController extends InitController
 
 		$markdownContent = '';
 		if ($markdownPath && file_exists($markdownPath)) {
-			$content = file_get_contents($markdownPath);
 			try {
-				$markdownContent = $content;
+				$content = file_get_contents($markdownPath);
+				$Parsedown       = new \Parsedown();
+				$markdownContent     = $Parsedown->text($content);
 			} catch (\Exception $e) {
 				return Resp::web(Resp::ERROR, $e->getMessage());
 			}
 		}
 
 
-		$this->autoJs();
 		$data = [
 			'view'      => $viewContent,
 			'plugin'    => $plugin,
@@ -303,7 +306,7 @@ HTML;
 		$shell   = "/bin/bash " . base_path() . 'resources/shell/deploy.sh' . ' ' . base_path() . ' master';
 		$process = new Process($shell);
 		$process->start();
-		$process->wait(function($type, $buffer) {
+		$process->wait(function ($type, $buffer) {
 			if (Process::ERR === $type) {
 				echo('ERR > ' . $buffer);
 			}
@@ -355,7 +358,7 @@ HTML;
 		sort($jquery);
 		sort($bt3);
 
-		$alphaSplit = function($array, $split = 3) {
+		$alphaSplit = function ($array, $split = 3) {
 			//  计算总数
 			sort($array);
 			$num     = count($array);
@@ -382,6 +385,9 @@ HTML;
 			return $temp;
 		};
 
+		$this->single = $single;
+		$this->bt3    = $bt3;
+		$this->jquery = $jquery;
 
 		$singles = $alphaSplit($single, 3);
 		$jquerys = $alphaSplit($jquery, 4);

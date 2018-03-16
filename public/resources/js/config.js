@@ -11,6 +11,8 @@ var alias = {
     "datatables.net": "resources/js/libs/jquery/data-tables/1.10.16/jquery.data-tables",
     "global": "resources/js/global",
     "highlight": "resources/js/libs/highlight/9.12.0/highlight",
+    "inline-attachment": "resources/js/libs/inline-attachment/2.0.3/inline-attachment",
+    "inline-attachment.codemirror": "resources/js/libs/inline-attachment/2.0.3/codemirror.inline-attachment",
     "jquery": "resources/js/libs/jquery/2.2.4/jquery.min",
     "jquery.form": "resources/js/libs/jquery/form/4.2.2/jquery.form",
     "jquery.layer": "resources/js/libs/jquery/layer/3.1.1/jquery.layer",
@@ -25,12 +27,9 @@ var alias = {
     "markdown-it": "resources/js/libs/markdown-it/8.4.1/markdown-it",
     "pace": "resources/js/libs/pace/1.0.2/pace.min",
     "requirejs": "resources/js/libs/requirejs/require",
+    "simplemde": "resources/js/libs/simplemde/1.11.2/simplemde.min",
     "smooth-scroll": "resources/js/libs/smooth-scroll/1.4.0/smooth-scroll",
     "sockjs": "resources/js/libs/sockjs/0.3.4/sockjs",
-    "squire-rte": "resources/js/libs/squire/1.8.11/squire",
-    "to-mark": "resources/js/libs/to-mark/1.1.0/to-mark",
-    "tui-code-snippet": "resources/js/libs/tui-code-snippet/1.2.9/tui-code-snippet",
-    "tui-editor": "resources/js/libs/tui-editor/1.0.5/tui-editor",
     "underscore": "resources/js/libs/underscore/1.8.3/underscore",
     "vkbeautify": "resources/js/libs/vkbeautify/vkbeautify",
     "wow": "resources/js/libs/wow/1.1.2/wow.min"
@@ -60,6 +59,9 @@ var shim  = {
     "highlight": {
         "exports": "hljs"
     },
+    "inline-attachment": {
+        "exports": "inlineAttachment"
+    },
     "jquery.form": [
         "jquery"
     ],
@@ -86,6 +88,9 @@ var shim  = {
     },
     "json": {
         "exports": "JSON"
+    },
+    "simplemde": {
+        "exports": "SimpleMDE"
     },
     "vkbeautify": {
         "exports": "vkbeautify"

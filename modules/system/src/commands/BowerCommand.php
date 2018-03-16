@@ -164,7 +164,7 @@ class BowerCommand extends Command
 			$oriMainJsPath = $map['main'];
 		}
 		// ori path
-		if (is_string($main)) {
+		if (is_string($main) && !$oriMainJsPath) {
 			// 检查 key map
 			$oriMainJsPath = $main;
 		}
@@ -222,6 +222,11 @@ class BowerCommand extends Command
 		if ($map && is_array($map) && count($map)) {
 			foreach ($map as $ori_key => $item) {
 				$aim_key = $this->getVersion($item);
+				$this->error("$this->jsLibPath, $aim_key, $folder, $ori_key");
+				// resources/js/libs
+				// inline-attachment/2.0.3/codemirror.inline-attachment.js
+				// data/workbench/www/slt/storage/bower//inline-attachment
+				// src/codemirror.inline-attachment.j
 				$this->disposeItem($this->jsLibPath, $aim_key, $folder, $ori_key);
 			}
 		}
@@ -334,10 +339,10 @@ class BowerCommand extends Command
 						if ($match == 'about:blank' || strpos($match, 'data:image/') !== false) {
 							return 'url("' . $match . '")';
 						}
-						 
-							$relative_path = dirname($aim_file) . '/' . $match;
 
-							return 'url("/' . $relative_path . '")';
+						$relative_path = dirname($aim_file) . '/' . $match;
+
+						return 'url("/' . $relative_path . '")';
 					}, $content);
 
 					$opc     = new Parser($content);
@@ -409,8 +414,8 @@ class BowerCommand extends Command
 			elseif (strpos($url, 'data:image/png') !== false) {
 				return;
 			}
-			 
-				$obj->setURL(new CSSString('/' . $version_folder . '/' . $url));
+
+			$obj->setURL(new CSSString('/' . $version_folder . '/' . $url));
 		}
 		if ($obj instanceof RuleValueList) {
 			foreach ($obj->getListComponents() as $subOjb) {

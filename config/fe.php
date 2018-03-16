@@ -111,11 +111,12 @@ return [
 			],
 		],
 
-		"clipboard"  => [
+		"clipboard" => [
 			"js" => [
 				'aim' => 'clipboard/{VERSION}/clipboard.min.js',
 			],
 		],
+
 		"codemirror" => [
 			"js"  => [
 				'main'    => 'lib/codemirror.js',
@@ -172,7 +173,7 @@ return [
 			],
 			'shim' => [
 				"exports" => "hljs",
-			]
+			],
 		],
 
 		"jquery" => [
@@ -217,6 +218,22 @@ return [
 			],
 			"key"  => 'jquery.image-picker',
 			'shim' => ['jquery'],
+		],
+
+		"inline-attachment" => [
+			"js"   => [
+				'main'    => 'src/inline-attachment.js',
+				'aim'     => 'inline-attachment/{VERSION}/inline-attachment.js',
+				'dispose' => [
+					'src/codemirror.inline-attachment.js' => 'inline-attachment/{VERSION}/codemirror.inline-attachment.js',
+				],
+				'config' => [
+					'inline-attachment.codemirror' => '/codemirror.inline-attachment',
+				]
+			],
+			"shim" => [
+				'exports' => "inlineAttachment",
+			],
 		],
 
 		"toastr" => [
@@ -301,6 +318,18 @@ return [
 				'aim'  => 'smooth-scroll/{VERSION}/smooth-scroll.js',
 			],
 		],
+		"simplemde"     => [
+			"js"   => [
+				'main' => 'dist/simplemde.min.js',
+				'aim'  => 'simplemde/{VERSION}/simplemde.min.js',
+			],
+			"css"  => [
+				'dist/simplemde.min.css' => 'simplemde/simplemde.css',
+			],
+			"shim" => [
+				"exports" => "SimpleMDE",
+			],
+		],
 
 		"sockjs" => [
 			"js" => [
@@ -315,7 +344,7 @@ return [
 			],
 		],
 
-		"vkBeautify"  => [
+		"vkBeautify" => [
 			"js"   => [
 				'main' => 'vkbeautify.js',
 				'aim'  => 'vkbeautify/vkbeautify.js',
@@ -325,13 +354,15 @@ return [
 				"exports" => "vkbeautify",
 			],
 		],
+
 		"markdown-it" => [
 			"js" => [
 				'main' => 'dist/markdown-it.js',
 				'aim'  => 'markdown-it/{VERSION}/markdown-it.js',
 			],
 		],
-		"metisMenu"   => [
+
+		"metisMenu" => [
 			"js"  => [
 				'main' => 'dist/metisMenu.js',
 				'aim'  => 'jquery/metis-menu/{VERSION}/jquery.metis-menu.js',
@@ -342,7 +373,7 @@ return [
 			"key" => 'jquery.metis-menu',
 		],
 
-		"vue"         => [
+		"vue" => [
 			"js" => [
 				'main' => 'dist/vue.min.js',
 				'aim'  => 'vue/{VERSION}/vue.min.js',
