@@ -119,7 +119,6 @@ class ServiceProvider extends PoppyServiceProvider
 			UserCommand::class,
 			InstallCommand::class,
 			DevHtmlCommand::class,
-			LogCommand::class,
 			PamAutoEnableCommand::class,
 			BowerCommand::class,
 			DocCommand::class,

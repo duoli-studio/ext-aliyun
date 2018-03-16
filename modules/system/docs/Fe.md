@@ -6,7 +6,7 @@ Bower 是 twitter 推出的一款包管理工具，基于nodejs的模块化思�
 ### 命令
 
 ```
-php artisan ext:fe_bower
+php artisan system:bower
 ```
 
 ### 配置文件解析
@@ -81,7 +81,7 @@ php artisan ext:fe_bower
 apidoc 是一个简单的 RESTful API 文档生成工具，它从代码注释中提取特定格式的内容，生成文档。
 
 ```
-php artisan ext:fe_doc api
+php artisan system:doc api
 ```
 
 配置信息
@@ -105,19 +105,268 @@ php artisan ext:fe_doc api
 ],
 ```
 
-## 生成 PHP 文档
+### 定义项目
 
-sami 作为一款优秀的生成 PHP 文档的工具也已经纳入到这个项目中来, [Sami](https://github.com/FriendsOfPHP/Sami) , 这个工具生成的是 `modules` 文件夹下面的文档, 然后生成项目的技术文档.
-
-```
-php artisan ext:fe_doc php
-```
-
-## 生成项目文档
-
-项目文档使用 : [Docsify](https://docsify.js.org/) 这个优秀的工具, 所有放到 `resources/docs` 文件夹下的目录都会作为项目文档生成.访问地址是
-`(url_site)docs/poppy/`.
 
 ```
-php artisan ext:fe_doc poppy
+'animate.css' => [
+    'css' => [
+        'animate.css' => 'animate/animate.css',
+    ],
+    'key' => 'animate.css',
+],
+
+'ace-builds' => [
+    'js'   => [
+        'main'    => 'src/ace.js',
+        'aim'     => 'ace/{VERSION}/ace.js',
+        'dispose' => [
+            'src/*' => 'ace/{VERSION}/',
+        ],
+        'config'  => [
+            // 和 key 相同, 覆盖掉 key 的定义位置
+            '__same' => '',
+        ],
+    ],
+    'key'  => 'ace',
+    'shim' => [
+        'exports' => 'ace',
+    ],
+],
+
+'bootstrap' => [
+    'js'   => [
+        'main' => 'dist/js/bootstrap.js',
+        'aim'  => 'bt3/{VERSION}/bootstrap.js',
+    ],
+    'css'  => [
+        'dist/css/bootstrap.css'       => 'bt3/{VERSION}/css/bootstrap.css',
+        'dist/css/bootstrap-theme.css' => 'bt3/{VERSION}/css/bootstrap-theme.css',
+        'dist/fonts/*'                 => 'bt3/{VERSION}/fonts/',
+    ],
+    'shim' => ['jquery'],
+    'key'  => 'bt3',
+],
+
+'bootstrap-hover-dropdown' => [
+    'js'   => [
+        'aim' => 'bt3/hover-dropdown/{VERSION}/bt3.hover-dropdown.js',
+    ],
+    'shim' => ['jquery', 'bt3'],
+    'key'  => 'bt3.hover-dropdown',
+],
+'bootstrap-validator'      => [
+    'js'   => [
+        'aim' => 'bt3/validator/{VERSION}/bt3.validator.js',
+    ],
+    'shim' => ['jquery', 'bt3'],
+    'key'  => 'bt3.validator',
+],
+'centrifuge'               => [
+    'js' => [
+        'aim' => 'centrifuge/{VERSION}/centrifuge.js',
+    ],
+],
+'clipboard'                => [
+    'js' => [
+        'aim' => 'clipboard/{VERSION}/clipboard.min.js',
+    ],
+],
+
+'datatables.net' => [
+    'js'   => [
+        'main' => 'js/jquery.dataTables.js',
+        'aim'  => 'jquery/data-tables/{VERSION}/jquery.data-tables.js',
+    ],
+    'shim' => ['jquery'],
+],
+
+'datatables.net-bs' => [
+    'js'   => [
+        'main' => 'js/dataTables.bootstrap.js',
+        'aim'  => 'bt3/data-tables/{VERSION}/bt3.data-tables.js',
+    ],
+    'css'  => [
+        'css/dataTables.bootstrap.css' => 'bt3/data-tables/data-tables.bootstrap.css',
+    ],
+    'key'  => 'bt3.data-tables',
+    'shim' => ['jquery', 'bt3'],
+],
+
+'fex-webuploader' => [
+    'js'   => [
+        'aim' => 'jquery/webuploader/{VERSION}/jquery.webuploader.js',
+    ],
+    'css'  => [
+        'dist/*.css' => 'jquery/webuploader/',
+    ],
+    'key'  => 'jquery.webuploader',
+    'shim' => ['jquery'],
+],
+
+'jquery' => [
+    'js' => [
+        'main' => 'jquery.min.js',
+        'aim'  => 'jquery/{VERSION}/jquery.min.js',
+    ],
+],
+
+'layer' => [
+    'js'   => [
+        'main' => 'src/layer.js',
+        'aim'  => 'jquery/layer/{VERSION}/jquery.layer.js',
+    ],
+    'css'  => [
+        'src/theme/*' => 'jquery/layer/',
+    ],
+    'key'  => 'jquery.layer',
+    'shim' => ['jquery'],
+],
+
+'image-picker' => [
+    'js'   => [
+        'aim' => 'jquery/image-picker/{VERSION}/jquery.image-picker.js',
+    ],
+    'css'  => [
+        'image-picker/image-picker.css' => 'jquery/image-picker/image-picker.css',
+    ],
+    'key'  => 'jquery.image-picker',
+    'shim' => ['jquery'],
+],
+
+'sockjs' => [
+    'js' => [
+        'aim' => 'sockjs/{VERSION}/sockjs.js',
+    ],
+],
+
+'toastr' => [
+    'js'   => [
+        'main' => 'toastr.min.js',
+        'aim'  => 'jquery/toastr/{VERSION}/jquery.toastr.js',
+    ],
+    'css'  => [
+        'toastr.css' => 'jquery/toastr/toastr.css',
+    ],
+    'key'  => 'jquery.toastr',
+    'shim' => ['jquery'],
+],
+
+'tokenize2' => [
+    'js'   => [
+        'main' => 'dist/tokenize2.min.js',
+        'aim'  => 'jquery/tokenize2/{VERSION}/jquery.tokenize2.js',
+    ],
+    'css'  => [
+        'dist/tokenize2.min.css' => 'jquery/tokenize2/tokenize2.min.css',
+    ],
+    'key'  => 'jquery.tokenize2',
+    'shim' => ['jquery'],
+],
+
+'jquery-form' => [
+    'js'   => [
+        'aim' => 'jquery/form/{VERSION}/jquery.form.js',
+    ],
+    'key'  => 'jquery.form',
+    'shim' => ['jquery'],
+],
+
+'jquery-validation' => [
+    'js'   => [
+        'aim' => 'jquery/validation/{VERSION}/jquery.validation.js',
+    ],
+    'key'  => 'jquery.validation',
+    'shim' => ['jquery'],
+],
+
+'jquery-slimscroll' => [
+    'js'   => [
+        'main' => 'jquery.slimscroll.min.js',
+        'aim'  => 'jquery/slimscroll/{VERSION}/jquery.slimscroll.min.js',
+    ],
+    'key'  => 'jquery.slimscroll',
+    'shim' => ['jquery'],
+],
+
+'js-cookie' => [
+    'js'   => [
+        'main' => 'src/js.cookie.js',
+        'aim'  => 'js-cookie/{VERSION}/js-cookie.js',
+    ],
+    'shim' => [
+        'exports' => 'Cookies',
+    ],
+],
+
+'json' => [
+    'js'   => [
+        'aim' => 'json/json2.js',
+    ],
+    'shim' => [
+        'exports' => 'JSON',
+    ],
+],
+
+'smooth-scroll' => [
+    'js'  => [
+        'main' => 'smooth-scroll.js',
+        'aim'  => 'smooth-scroll/{VERSION}/smooth-scroll.js',
+    ],
+    'key' => 'smooth-scroll',
+],
+
+'vkBeautify' => [
+    'js'   => [
+        'main' => 'vkbeautify.js',
+        'aim'  => 'vkbeautify/vkbeautify.js',
+    ],
+    'key'  => 'vkbeautify',
+    'shim' => [
+        'exports' => 'vkbeautify',
+    ],
+],
+
+'metisMenu' => [
+    'js'  => [
+        'main' => 'dist/metisMenu.js',
+        'aim'  => 'jquery/metis-menu/{VERSION}/jquery.metis-menu.js',
+    ],
+    'css' => [
+        'dist/*.css' => 'jquery/metis-menu/',
+    ],
+    'key' => 'jquery.metis-menu',
+],
+
+'requirejs' => [
+    'js'  => [
+        'main' => 'require.js',
+        'aim'  => 'requirejs/require.js',
+    ],
+    'key' => 'requirejs',
+],
+
+'PACE' => [
+    'js'  => [
+        'main' => 'pace.min.js',
+        'aim'  => 'pace/{VERSION}/pace.min.js',
+    ],
+    'css' => [
+        'themes/*' => 'pace/',
+    ],
+    'key' => 'pace',
+],
+
+'underscore' => [
+    'js' => [
+        'main' => 'underscore-min.js',
+        'aim'  => 'underscore/{VERSION}/underscore-min.js',
+    ],
+],
+'vue'        => [
+    'js' => [
+        'main' => 'dist/vue.min.js',
+        'aim'  => 'vue/{VERSION}/vue.min.js',
+    ],
+],
 ```
