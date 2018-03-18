@@ -28,7 +28,7 @@
 		<pre id="J_script"></pre>
 	</div>
 </div>
-<script id="J_scriptSource">
+<script id="J_script_source">
 require(['jquery', 'plupload'], function ($,plupload) {
 	var uploader = new plupload.Uploader({
 		runtimes : 'html5,flash,silverlight,html4',

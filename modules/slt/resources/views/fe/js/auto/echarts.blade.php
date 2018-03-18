@@ -9,7 +9,7 @@
         <pre id="J_script"></pre>
     </div>
 </div>
-<script id="J_scriptSource">
+<script id="J_script_source">
     require(['echarts'], function (echarts) {
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById('main'));

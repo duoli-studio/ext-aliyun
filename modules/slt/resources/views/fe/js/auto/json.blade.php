@@ -17,7 +17,7 @@
 		<pre id="J_script"></pre>
 	</div>
 </div>
-<script id="J_scriptSource">
+<script id="J_script_source">
 	require(['json'], function (json) {
 		var jsonStr = '{"error":0,"url":"http:\/\/www.www.cc\/2014\/01\/07\/102217_Og3K.jpg","basename":"20140107102217_Og3K.jpg","extension":"jpg"}';
 		alert(json.parse(jsonStr).url);

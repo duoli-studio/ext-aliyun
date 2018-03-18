@@ -23,6 +23,6 @@
 		<pre id="J_script"></pre>
 	</div>
 </div>
-{{--<script id="J_scriptSource">--}}
+{{--<script id="J_script_source">--}}
 	{{----}}
 {{--</script>--}}

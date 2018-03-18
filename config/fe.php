@@ -229,9 +229,9 @@ return [
 				'dispose' => [
 					'src/codemirror.inline-attachment.js' => 'inline-attachment/{VERSION}/codemirror.inline-attachment.js',
 				],
-				'config' => [
+				'config'  => [
 					'inline-attachment.codemirror' => '/codemirror.inline-attachment',
-				]
+				],
 			],
 			"shim" => [
 				'exports' => "inlineAttachment",

@@ -40,7 +40,7 @@
 		<pre id="J_script"></pre>
 	</div>
 </div>
-<script id="J_scriptSource">
+<script id="J_script_source">
 require(['swfobject', 'full-avatar-editor', 'global'], function (swfobject,fullAvatarEditor, lemon){
 	window.swfobject = swfobject;
 	var path = lemon.url_js + '/libs/full-avatar-editor/2.3/fullAvatarEditor.swf';

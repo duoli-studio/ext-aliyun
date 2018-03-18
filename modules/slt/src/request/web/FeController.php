@@ -67,13 +67,13 @@ class FeController extends InitController
 		$folder = 'resources/js/libs/';
 		if (strpos($plugin, 'bt3') !== false) {
 			// bt3
-			$viewDir   = 'auto_jquery_bt3';
-			$viewName  = substr($plugin, 11);
+			$viewDir   = 'bt3';
+			$viewName  = substr($plugin, 4);
 			$pluginDir = $folder . 'bt3/' . $viewName;
 		}
 		elseif (strpos($plugin, 'jquery') !== false) {
 			// jquery
-			$viewDir   = 'auto_jquery';
+			$viewDir   = 'jquery';
 			$viewName  = substr($plugin, 7);
 			$pluginDir = $folder . 'jquery/' . $viewName;
 		}
@@ -86,6 +86,7 @@ class FeController extends InitController
 
 		$viewContent = '';
 		$view        = 'slt::fe.js.' . $viewDir . '.' . $viewName;
+
 		if ($this->getView()->exists($view)) {
 			$viewContent = view($view)->render();
 		}
@@ -105,9 +106,9 @@ class FeController extends InitController
 		$markdownContent = '';
 		if ($markdownPath && file_exists($markdownPath)) {
 			try {
-				$content = file_get_contents($markdownPath);
+				$content         = file_get_contents($markdownPath);
 				$Parsedown       = new \Parsedown();
-				$markdownContent     = $Parsedown->text($content);
+				$markdownContent = $Parsedown->text($content);
 			} catch (\Exception $e) {
 				return Resp::web(Resp::ERROR, $e->getMessage());
 			}
@@ -332,26 +333,17 @@ HTML;
 		$bt3         = [];
 
 		foreach ($directories as $dir) {
-
 			if (in_array($dir, $unset)) {
 				continue;
 			}
-			if (strpos($dir, 'jquery.') === false) {
-				if (strpos($dir, '/') === false) {
-					$single[] = $dir;
-				}
+			if (strpos($dir, 'bt3.') !== false) {
+				$bt3[] = str_replace('bt3.', '', $dir);
 			}
 			elseif (strpos($dir, 'jquery.') !== false) {
-				$dir = str_replace('jquery.', '', $dir);
-				if (strpos($dir, '/') === false) {
-					$jquery[] = $dir;
-				}
+				$jquery[] = str_replace('jquery.', '', $dir);
 			}
-			elseif (strpos($dir, 'bt3.') !== false) {
-				$dir = str_replace('bt3.', '', $dir);
-				if (strpos($dir, '/') === false) {
-					$bt3[] = $dir;
-				}
+			else {
+				$single[] = $dir;
 			}
 		}
 		sort($single);

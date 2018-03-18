@@ -11,7 +11,7 @@
 @section('script-cp')
 	<script>
 	require(['lemon/doc', 'bt3'], function (doc) {
-		doc.fill_and_highlight('J_scriptSource', 'J_script', 'script');
+		doc.fill_and_highlight('J_script_source', 'J_script', 'script');
 		doc.highlight();
 		doc.trim_content('J_html');
 	})

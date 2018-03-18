@@ -199,7 +199,7 @@
 &lt;button class="J_info" data-url="http://www.sl_fe.com/project/xundu/data/layerDemo-per.json"&gt;张先生&lt;/button&gt;</pre>
         <hr>
         <hr>
-        <script id="J_scriptSource">
+        <script id="J_script_source">
             require(['jquery', 'lemon/cp'])
         </script>
     </div>

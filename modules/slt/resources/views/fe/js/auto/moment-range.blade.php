@@ -19,7 +19,7 @@
         <pre id="J_script"></pre>
     </div>
 </div>
-<script id="J_scriptSource">
+<script id="J_script_source">
     require(['moment','moment-range'], function (moment) {
         var start = new Date(2012, 4, 1);
         var end   = new Date(2012, 4, 23);

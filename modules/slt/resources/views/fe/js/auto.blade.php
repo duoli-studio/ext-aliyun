@@ -33,10 +33,11 @@
         </div>
     </div>
     <script>
-	require(['poppy/doc'], function(doc) {
+	require(['poppy/doc', 'bt3', 'bt3.hover-dropdown'], function(doc) {
 		doc.fill_and_highlight('J_script_source', 'J_script', 'script');
 		doc.highlight();
 		doc.trim_content('J_html');
+		$('.dropdown-toggle').dropdownHover();
 	});
     </script>
 @endsection

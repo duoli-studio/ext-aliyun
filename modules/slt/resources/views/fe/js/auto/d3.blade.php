@@ -8,7 +8,7 @@
 		<pre id="J_script"></pre>
 	</div>
 </div>
-<script id="J_scriptSource">
+<script id="J_script_source">
 require(['d3'], function (d3) {
 	var svg = d3.select("#svg")		//选择文档中的body元素
 			.append("svg")				//添加一个svg元素

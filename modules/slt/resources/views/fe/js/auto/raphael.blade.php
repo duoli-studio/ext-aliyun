@@ -19,7 +19,7 @@
 		<pre id="J_script"></pre>
 	</div>
 </div>
-<script id="J_scriptSource">
+<script id="J_script_source">
 window.onload = function () {
 	require(['raphael'], function(Raphael) {
 		var paper = Raphael("canvas", 640, 480);

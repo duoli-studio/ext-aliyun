@@ -19,7 +19,7 @@
 		<pre id="J_script"></pre>
 	</div>
 </div>
-<script id="J_scriptSource">
+<script id="J_script_source">
 require(['underscore'], function () {
 	_.each([1, 2, 3], alert);
 });

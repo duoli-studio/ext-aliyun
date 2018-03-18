@@ -20,7 +20,7 @@
 		<pre id="J_script"></pre>
 	</div>
 </div>
-<script id="J_scriptSource">
+<script id="J_script_source">
 require(['moment'], function (moment) {
 	var p = document.getElementById("moment_id");
 	p.innerHTML = moment("20111031", "YYYYMMDD").fromNow();

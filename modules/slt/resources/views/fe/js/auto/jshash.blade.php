@@ -29,7 +29,7 @@
 		<pre id="J_script"></pre>
 	</div>
 </div>
-<script id="J_scriptSource">
+<script id="J_script_source">
 require(['jquery', 'jshash-md5'], function ($, md5) {
 	$(function(){
 		$('input[name=original]').on('change blur input', function(){

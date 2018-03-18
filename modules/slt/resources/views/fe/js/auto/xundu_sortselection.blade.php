@@ -10,7 +10,7 @@
     </div>
 </div>
 <script src="../../../../assets/js/xundu/xundu_sortselection/load_hycode.js"></script>
-<script id="J_scriptSource">
+<script id="J_script_source">
     require(['jquery','xundu/xundu_sortselection/xundu_sortselection'],function($,xundu_sortselection){
         $('.nation').click(function(){xundu_sortselection.appendselectbar(this,'duoxuan')})
     })

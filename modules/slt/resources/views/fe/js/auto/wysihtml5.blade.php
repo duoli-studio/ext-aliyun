@@ -61,7 +61,7 @@
         <pre id="J_script"></pre>
     </div>
 </div>
-<script id="J_scriptSource">
+<script id="J_script_source">
     require(['wysihtml5'], function (wysihtml5) {
         var editor = new wysihtml5.Editor("wysihtml5-textarea", { // id of textarea element
             toolbar:      "wysihtml5-toolbar", // id of toolbar element

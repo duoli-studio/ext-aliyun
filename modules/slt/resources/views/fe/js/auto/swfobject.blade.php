@@ -32,7 +32,7 @@
 		<pre id="J_script"></pre>
 	</div>
 </div>
-<script id="J_scriptSource">
+<script id="J_script_source">
 require(['swfobject','global'], function (SWFObject,lemon) {
 //    var movieswf = lemon.utl_js + '/wsfobject/2.3.0/expressinstall.swf';
 //    var so = new SWFObject(movieswf, "mymovie", "400", "200", "8", "#336699");

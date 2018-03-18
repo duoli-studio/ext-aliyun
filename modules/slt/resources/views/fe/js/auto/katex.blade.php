@@ -18,7 +18,7 @@
 		<pre id="J_script"></pre>
 	</div>
 </div>
-<script id="J_scriptSource">
+<script id="J_script_source">
 require(['katex'], function (katex) {
 	katex.render("c = \\pm\\sqrt{a^2 + b^2}", element);
 });

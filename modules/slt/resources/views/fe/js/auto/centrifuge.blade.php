@@ -49,7 +49,7 @@
             <pre id="J_script"></pre>
         </div>
     </div>
-    <script id="J_scriptSource">
+    <script id="J_script_source">
 	require(['centrifuge', 'json', 'sockjs'], function(Centrifuge, JSON) {
 		var centrifuge = new Centrifuge({
 			url       : "{!! \Input::get('url') !!}",

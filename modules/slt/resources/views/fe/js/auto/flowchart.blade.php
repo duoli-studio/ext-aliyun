@@ -57,7 +57,7 @@ c2(no)->op2->e
 		<pre id="J_script"></pre>
 	</div>
 </div>
-<script id="J_scriptSource">
+<script id="J_script_source">
 require(['jquery','flowchart', 'raphael'], function ($, flowchart) {
 	var btn = document.getElementById("run"),
 			cd = document.getElementById("code"),
