@@ -56,7 +56,7 @@ abstract class RpcAcsRequest extends AcsRequest
 
 			return $requestUrl;
 		}
-		 	
+			
 			$requestUrl = $this->getProtocol() . '://' . $domain . '/?';
 
 			foreach ($apiParams as $apiParamKey => $apiParamValue)
