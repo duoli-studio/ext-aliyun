@@ -2,13 +2,12 @@
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
-use Sour\Lemon\Classes\Tree;
-use Sour\Lemon\Helper\StrHelper;
-use Sour\Lemon\Support\Resp;
+use Poppy\Framework\Classes\Resp;
+use Slt\Action\Article;
+use Slt\Models\ArticleContent;
 use Sour\Poppy\Action\ActPrd;
 use Sour\Poppy\Auth\FeUser;
 use Sour\Poppy\Models\PrdBook;
-use Sour\Poppy\Models\PrdContent;
 use Sour\Poppy\Models\PrdTag;
 use Sunra\PhpSimple\HtmlDomParser;
 
@@ -33,11 +32,11 @@ class ArticleController extends InitController
 		}
 		$title       = \Input::get('title');
 		$parent_id   = \Input::get('parent_id');
-		$topParentId = PrdContent::topParentId($parent_id);
+		$topParentId = ArticleContent::topParentId($parent_id);
 		if (!$topParentId) {
 			return Resp::web('来源不正确, 请重新输入');
 		}
-		$titles = PrdContent::parentTitles($parent_id, true);
+		$titles = ArticleContent::parentTitles($parent_id, true);
 
 		return view('web.prd.create', [
 			'title'         => $title,
@@ -48,11 +47,10 @@ class ArticleController extends InitController
 	}
 
 
-
 	public function myBookItem($id)
 	{
 		$book  = PrdBook::find($id);
-		$items = PrdContent::where('top_parent_id', $id)->get();
+		$items = ArticleContent::where('top_parent_id', $id)->get();
 
 		$array = [];
 		// 构建生成树中所需的数据
@@ -98,64 +96,64 @@ TABLE_LINE;
 	public function popup($id = 0)
 	{
 		if (is_post()) {
-			$Prd = (new ActPrd())->setUser(FeUser::instance());
-			if ($Prd->establishPopup(\Input::all(), $id)) {
-				$prd = $Prd->getPrd();
-				return Resp::web('OK~创建文档成功', 'top_location|' . route('web:prd.my_book_item', [$prd->top_parent_id]));
+			$Article = (new Article())->setPam($this->getWebPam());
+			if ($Article->establishPopup(\Input::all(), $id)) {
+				$prd = $Article->getArticle();
+				return Resp::web(Resp::SUCCESS, '创建文档成功', 'top_location|' . route('slt:book.show', [$prd->book_id]));
 			}
 			else {
-				return Resp::web($Prd->getError());
+				return Resp::web(Resp::ERROR, $Article->getError());
 			}
 		}
 		$book_id = \Input::get('book_id');
 		if ($id) {
-			$item    = PrdContent::find($id);
-			$book_id = $item->top_parent_id;
+			$item    = ArticleContent::find($id);
+			$book_id = $item->book_id;
 			\View::share('item', $item);
 		}
 		if (!$book_id) {
-			return Resp::web('不正确的数据');
+			return Resp::web(Resp::ERROR, '不正确的数据');
 		}
-		$articles = PrdContent::where('top_parent_id', $book_id)->get();
+		$articles = ArticleContent::where('book_id', $book_id)->get();
 		$items    = [];
 		if ($articles->count()) {
 			foreach ($articles as $prd) {
 				$items[$prd->id] = [
-					'id'    => $prd->id,
-					'title' => $prd->title,
-					'pid'   => $prd->parent_id,
+					'id'        => $prd->id,
+					'title'     => $prd->title,
+					'parent_id' => $prd->parent_id,
 				];
 			}
 		}
-		return view('web.prd.popup_item', [
+		return view('slt::article.popup', [
 			'items'   => $items,
 			'book_id' => $book_id,
 		]);
 	}
 
 
-	public function content($id)
+	public function establish($id)
 	{
 		if (is_post()) {
-			$Prd = (new ActPrd())->setUser(FeUser::instance());
-			if ($Prd->handle(\Input::all(), $id)) {
-				return Resp::web('OK~编辑成功!');
+			$Prd = (new Article())->setPam($this->getWebPam());
+			if ($Prd->establish(\Input::all(), $id)) {
+				return Resp::web(Resp::SUCCESS, '编辑成功!');
+			}
+			else {
+				return Resp::web(Resp::ERROR, $Prd->getError());
 			}
 
 		}
-		/** @type PrdContent $item */
-		$item = PrdContent::find($id);
-		$this->authorize('self', $item);
-		$item->prd_tag = PrdTag::unformat($item->prd_tag, ',');
-		$parent_id     = $item->parent_id;
-		$top_parent_id = PrdContent::topParentId($item->id);
-		$titles        = PrdContent::parentTitles($item->id, true);
-		return view('web.prd.content', [
-			'item'          => $item,
-			'parent_id'     => $parent_id,
-			'top_parent_id' => $top_parent_id,
-			'title'         => $item->title,
-			'titles'        => $titles,
+		/** @type ArticleContent $item */
+		$item      = ArticleContent::find($id);
+		$parent_id = $item->parent_id;
+		$titles    = ArticleContent::parentTitles($item->id, true);
+		return view('slt::article.establish', [
+			'item'      => $item,
+			'parent_id' => $parent_id,
+			'book_id'   => $item->book_id,
+			'title'     => $item->title,
+			'titles'    => $titles,
 		]);
 	}
 
@@ -166,17 +164,14 @@ TABLE_LINE;
 	 */
 	public function show($id)
 	{
-		/** @type PrdContent $prd */
-		$prd = PrdContent::find($id);
-		if ($prd->account_id != $this->pam->id) {
-			return Resp::web('您无权访问此页面!');
-		}
-		$html         = StrHelper::markdownToHtml($prd->content_origin);
-		$prd->content = PrdContent::mdInlineLink($html, $prd->id, true);
+		/** @type ArticleContent $prd */
+		$prd          = ArticleContent::find($id);
+		$html         = (new \Parsedown())->text($prd->content);
+		$prd->content = ArticleContent::mdInlineLink($html, $prd->id, true);
 		$parent_id    = $prd->parent_id;
 		$parent       = null;
 		if ($prd->parent_id) {
-			$parent    = PrdContent::find($prd->parent_id);
+			$parent    = ArticleContent::find($prd->parent_id);
 			$parent_id = $parent->id;
 		}
 
@@ -199,34 +194,33 @@ TABLE_LINE;
 			}
 		}
 		$prd->content = $content;
-
-		$levelTitles = PrdContent::parentTitles($id, false, false);
-		return view('web.prd.show', [
+		$levelTitles = ArticleContent::parentTitles($id, false, false);
+		return view('slt::article.show', [
 			'item'         => $prd,
 			'parent_id'    => $parent_id,
 			'parent'       => $parent,
-			'parent_url'   => route('front_prd.show', [$parent_id]),
+			'parent_url'   => route('slt:article.show', [$parent_id]),
 			'level_titles' => $levelTitles,
 		]);
 	}
 
 	public function name($parent_id, $name)
 	{
-		/** @var PrdContent $parent */
-		$parent = PrdContent::findOrFail($parent_id);
+		/** @var ArticleContent $parent */
+		$parent = ArticleContent::findOrFail($parent_id);
 		if ($parent->parent_id) {
-			$parent = PrdContent::findOrFail($parent_id);
+			$parent = ArticleContent::findOrFail($parent_id);
 		}
-		$topParentId = PrdContent::topParentId($parent_id);
-		$topParent   = PrdContent::find($topParentId);
-		$item        = PrdContent::where('top_parent_id', $topParentId)
+		$topParentId = ArticleContent::topParentId($parent_id);
+		$topParent   = ArticleContent::find($topParentId);
+		$item        = ArticleContent::where('top_parent_id', $topParentId)
 			->where('title', trim($name))
 			->first();
 		if ($item) {
 			return redirect(route('front_prd.show', [$item->id]));
 		}
 
-		$levelTitles = PrdContent::parentTitles($parent_id, false, true);
+		$levelTitles = ArticleContent::parentTitles($parent_id, false, true);
 
 		return view('web.prd.show', [
 			'item'          => $item,
@@ -244,22 +238,22 @@ TABLE_LINE;
 		if (!is_array($id)) {
 			$id = [$id];
 		}
-		PrdContent::whereIn('id', $id)->update([
-			'status' => PrdContent::STATUS_TRASH,
+		ArticleContent::whereIn('id', $id)->update([
+			'status' => ArticleContent::STATUS_TRASH,
 		]);
 		return Resp::web('OK~移动到垃圾桶', 'reload|1');
 	}
 
 	public function status($id, $status)
 	{
-		if (!PrdContent::kvStatus($status, true)) {
+		if (!ArticleContent::kvStatus($status, true)) {
 			return Resp::web('状态错误');
 		}
 		if (!is_array($id)) {
 			$id = [$id];
 		}
 
-		PrdContent::whereIn('id', $id)->update([
+		ArticleContent::whereIn('id', $id)->update([
 			'status' => $status,
 		]);
 		return Resp::web('OK~操作成功', 'reload|1');
@@ -271,8 +265,8 @@ TABLE_LINE;
 		if (!is_array($id)) {
 			$id = [$id];
 		}
-		PrdContent::whereIn('id', $id)->update([
-			'status' => PrdContent::STATUS_POST,
+		ArticleContent::whereIn('id', $id)->update([
+			'status' => ArticleContent::STATUS_POST,
 		]);
 		return Resp::web('OK~发布成功', 'reload|1');
 	}
@@ -282,8 +276,8 @@ TABLE_LINE;
 		if (!is_array($id)) {
 			$id = [$id];
 		}
-		PrdContent::whereIn('id', $id)->update([
-			'status' => PrdContent::STATUS_DRAFT,
+		ArticleContent::whereIn('id', $id)->update([
+			'status' => ArticleContent::STATUS_DRAFT,
 		]);
 		return Resp::web('OK~成功移动到草稿箱', 'reload|1');
 	}
@@ -294,8 +288,8 @@ TABLE_LINE;
 		if (!$prd_id) {
 			return Resp::web('原型id不能为空');
 		}
-		/** @var PrdContent $prd */
-		$prd = PrdContent::find($prd_id);
+		/** @var ArticleContent $prd */
+		$prd = ArticleContent::find($prd_id);
 		if (empty($prd)) return Resp::web('原型不存在');
 
 		$url      = route_url('front_prd.view', null, ['id' => $prd->id]);
@@ -320,18 +314,18 @@ TABLE_LINE;
 	{
 		$id = $request->input('id');
 		if (!$id) return Resp::web('原型id不能为空');
-		/** @var PrdContent $prd */
-		$prd = PrdContent::find($id);
+		/** @var ArticleContent $prd */
+		$prd = ArticleContent::find($id);
 		if (empty($prd)) {
 			return Resp::web('原型不存在');
 		}
 
-		$topParentId = PrdContent::topParentId($id);
+		$topParentId = ArticleContent::topParentId($id);
 
 		// 检测原型是否加密
 		// 已经加密并且没有密码
 		if (
-		($prd->role_status == PrdContent::ROLE_STATUS_PWD && !\Session::has('prd_view_' . $topParentId))
+		($prd->role_status == ArticleContent::ROLE_STATUS_PWD && !\Session::has('prd_view_' . $topParentId))
 		) {
 			return view('web.prd.view_pwd', [
 				'item'     => $prd,
@@ -340,15 +334,15 @@ TABLE_LINE;
 		}
 		else {
 			$html         = StrHelper::markdownToHtml($prd->content_origin);
-			$prd->content = PrdContent::mdInlineLink($html, $prd->id, false);
+			$prd->content = ArticleContent::mdInlineLink($html, $prd->id, false);
 			$parent_id    = $prd->parent_id;
 			$parent       = null;
 			if ($prd->parent_id) {
-				$parent    = PrdContent::find($prd->parent_id);
+				$parent    = ArticleContent::find($prd->parent_id);
 				$parent_id = $parent->id;
 			}
 
-			$levelTitles = PrdContent::parentTitles($id, false, true);
+			$levelTitles = ArticleContent::parentTitles($id, false, true);
 			return view('web.prd.view_content', [
 				'item'         => $prd,
 				'level_titles' => $levelTitles,
@@ -367,13 +361,13 @@ TABLE_LINE;
 	public function detail($id)
 	{
 		if (!$id) return Resp::web('原型id不能为空');
-		/** @var PrdContent $prd */
-		$prd = PrdContent::with('front')->find($id);
+		/** @var ArticleContent $prd */
+		$prd = ArticleContent::with('front')->find($id);
 		if (empty($prd)) {
 			return Resp::web('原型不存在');
 		}
 
-		if ($prd->type == PrdContent::TYPE_PRIVATE) {
+		if ($prd->type == ArticleContent::TYPE_PRIVATE) {
 			return Resp::web('私有文档不允许查看');
 		}
 
@@ -381,15 +375,15 @@ TABLE_LINE;
 			'<body>', '<html>', '</body>', '</html>',
 		], '', $prd->content);
 		$html         = StrHelper::markdownToHtml($content);
-		$prd->content = PrdContent::mdInlineLink($html, $prd->id, false);
+		$prd->content = ArticleContent::mdInlineLink($html, $prd->id, false);
 		$parent_id    = $prd->parent_id;
 		$parent       = null;
 		if ($prd->parent_id) {
-			$parent    = PrdContent::find($prd->parent_id);
+			$parent    = ArticleContent::find($prd->parent_id);
 			$parent_id = $parent->id;
 		}
 
-		$levelTitles = PrdContent::parentTitles($id, false, true);
+		$levelTitles = ArticleContent::parentTitles($id, false, true);
 
 
 		$has_good     = false;
@@ -412,22 +406,22 @@ TABLE_LINE;
 
 	public function viewName($parent_id, $name)
 	{
-		/** @var PrdContent $parent */
-		$parent = PrdContent::findOrFail($parent_id);
+		/** @var ArticleContent $parent */
+		$parent = ArticleContent::findOrFail($parent_id);
 		if ($parent->parent_id) {
-			$parent = PrdContent::findOrFail($parent_id);
+			$parent = ArticleContent::findOrFail($parent_id);
 		}
-		$topParentId = PrdContent::topParentId($parent_id);
-		/** @var PrdContent $topParent */
-		$topParent = PrdContent::find($topParentId);
-		$item      = PrdContent::where('top_parent_id', $topParentId)
+		$topParentId = ArticleContent::topParentId($parent_id);
+		/** @var ArticleContent $topParent */
+		$topParent = ArticleContent::find($topParentId);
+		$item      = ArticleContent::where('top_parent_id', $topParentId)
 			->where('prd_title', trim($name))
 			->first();
 		if ($item) {
 			return redirect(route_url('front_prd.view', null, ['id' => $item->id]));
 		}
 
-		$levelTitles = PrdContent::parentTitles($parent_id, true);
+		$levelTitles = ArticleContent::parentTitles($parent_id, true);
 
 		return view('web.prd.view_name', [
 			'item'          => $item,
@@ -469,8 +463,8 @@ TABLE_LINE;
 			'type'       => PrdStar::TYPE_BAD,
 		])->delete();
 
-		/** @var PrdContent $prd */
-		$prd           = PrdContent::find($id);
+		/** @var ArticleContent $prd */
+		$prd           = ArticleContent::find($id);
 		$prd->good_num = PrdStar::typeNum($id);
 		$prd->bad_num  = PrdStar::typeNum($id, PrdStar::TYPE_BAD);
 		$prd->save();
@@ -506,8 +500,8 @@ TABLE_LINE;
 			'type'       => PrdStar::TYPE_GOOD,
 		])->delete();
 
-		/** @var PrdContent $prd */
-		$prd           = PrdContent::find($id);
+		/** @var ArticleContent $prd */
+		$prd           = ArticleContent::find($id);
 		$prd->good_num = PrdStar::typeNum($id);
 		$prd->bad_num  = PrdStar::typeNum($id, PrdStar::TYPE_BAD);
 		$prd->save();
@@ -542,14 +536,14 @@ TABLE_LINE;
 				'role_status' => $access,
 				'password'    => $password,
 			];
-			PrdContent::where('id', $prd_id)->update($data);
+			ArticleContent::where('id', $prd_id)->update($data);
 			return Resp::web('OK~权限设置成功', 'reload_opener|1;time|1000');
 		}
 		if (!$prd_id) {
 			return Resp::web('原型id不能为空');
 		}
-		/** @var PrdContent $prd */
-		$prd = PrdContent::find($prd_id);
+		/** @var ArticleContent $prd */
+		$prd = ArticleContent::find($prd_id);
 		if (empty($prd)) return Resp::web('原型不存在');
 
 		return view('web.prd.access', [

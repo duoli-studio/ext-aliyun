@@ -3,12 +3,12 @@
     @if ($_pam)
         <li class="dropdown">
             <a href="javascript:@include('slt::inc.collection')">
-                <i class="iconfont icon-link"></i> 收藏
+                <i class="glyphicon glyphicon-heart"></i> 收藏
             </a>
         </li>
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" title="添加收藏夹">
-                <i class="iconfont icon-add"></i>&nbsp;
+                <i class="glyphicon glyphicon-menu-hamburger"></i>&nbsp;菜单
                 <span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
@@ -26,6 +26,7 @@
         </li>
         <li class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown">
+                {!! $_pam->username !!}
                 {{--
                 {!! Html::image('', '头像', ['width'=> 24, 'height'=>24]) !!}
                 --}}
@@ -34,10 +35,10 @@
                 <li>
                     <a href="{!! route('slt:user.profile') !!}"><i class="iconfont icon-setting-user"></i> 账号设置</a>
                 </li>
-                <li>
-                    <a href="{!! route('slt:user.logout') !!}"><i class="iconfont icon-quit"></i> 退出登录</a>
-                </li>
             </ul>
+        </li>
+        <li>
+            <a href="{!! route('slt:user.logout') !!}"><i class="glyphicon glyphicon-log-out"></i> 退出登录</a>
         </li>
     @else
         <li>

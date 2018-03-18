@@ -1,6 +1,8 @@
 <?php namespace System\Classes;
 
 use Collective\Html\FormBuilder;
+use Poppy\Framework\Helper\StrHelper;
+use Poppy\Framework\Helper\TreeHelper;
 
 class FeForm extends FormBuilder
 {
@@ -372,5 +374,103 @@ class FeForm extends FormBuilder
 CONTENT;
 
 		return $parseStr;
+	}
+
+
+	/**
+	 * 生成树选择
+	 * @param        $name
+	 * @param        $tree
+	 * @param string $selected
+	 * @param array  $options
+	 * @param string $id
+	 * @param string $title
+	 * @param string $pid
+	 * @return string
+	 */
+	public function tree($name, $tree, $selected = '', $options = [], $id = 'id', $title = 'title', $pid = 'pid')
+	{
+		$Tree = new TreeHelper();
+		$Tree->init($tree, $id, $pid, $title);
+		$treeArray = $Tree->getTreeArray(0, '');
+
+		return $this->select($name, $treeArray, $selected, $options);
+	}
+
+	/**
+	 * markdown 编辑框
+	 * @param        $name
+	 * @param string $value
+	 * @param array  $options
+	 * @return string
+	 */
+	public function simplemde($name, $value = '', $options = [])
+	{
+		$options['style'] = 'display:none';
+		$options['id']    = 'simplemde_' . StrHelper::random('5');
+		$value            = (string) $this->getValueAttribute($name, $value);
+		$save             = $options['save'] ?? '';
+		$csrfToken        = csrf_token();
+		$uploadUrl        = route_url('slt:image.upload');
+		$append           = <<<MARKDOWN
+<textarea id="{$options['id']}" name="{$name}" style="display: none;">{$value}</textarea>
+<script>
+require(['simplemde', 'inline-attachment', 'global'], function(SimpleMDE, inlineAttachment, lemon) {
+	var simplemde = new SimpleMDE({
+		element      : document.getElementById("{$options['id']}"),
+		spellChecker : false,
+		forceSync    : true,
+		toolbar      : [
+			"bold", "italic", "heading", "|", "quote", "code", "table",
+			"horizontal-rule", "unordered-list", "ordered-list", "|",
+			"link", "image", "|", "side-by-side", "preview", 'fullscreen','|',
+			{
+                name: "guide",
+                action: function customFunction(editor){
+                    var win = window.open('http://www.markdown.cn/', '_blank');
+                    if (win) {
+                        //Browser has allowed it to be opened
+                        win.focus();
+                    } else {
+                        //Browser has blocked it
+                        alert('Please allow popups for this website');
+                    }
+                },
+                className: "fa fa-info-circle",
+                title: "Markdown 语法！",
+            },$save
+		]
+	});
+	inlineAttachment.editors.codemirror4.attach(simplemde.codemirror, {
+		uploadUrl            : '{$uploadUrl}',
+		uploadFieldName      : 'image',
+		extraParams          : {
+			'_token' : '{$csrfToken}'
+		},
+		onFileUploadResponse : function(xhr) {
+			var result = JSON.parse(xhr.responseText),
+				filename;
+
+			if (result.status === 0) {
+				filename = result.data.url[0];
+			}
+			if (result && filename) {
+				var newValue;
+				if (typeof this.settings.urlText === 'function') {
+					newValue = this.settings.urlText.call(this, filename, result);
+				} else {
+					newValue = this.settings.urlText.replace(this.filenameTag, filename);
+				}
+				var text = this.editor.getValue().replace(this.lastValue, newValue);
+				this.editor.setValue(text);
+				this.settings.onFileUploaded.call(this, filename);
+			}
+			return false;
+		}
+	});
+})
+</script>
+MARKDOWN;
+		return $append;
 	}
 }

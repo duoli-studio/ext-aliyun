@@ -3,8 +3,10 @@
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use Poppy\Framework\Classes\Resp;
+use Poppy\Framework\Helper\TreeHelper;
 use Slt\Action\Book;
 use Slt\Models\ArticleBook;
+use Slt\Models\ArticleContent;
 use Sour\Lemon\Classes\Tree;
 use Sour\Lemon\Helper\StrHelper;
 use Sour\Poppy\Action\ActPrd;
@@ -47,13 +49,13 @@ class BookController extends InitController
 				return Resp::web(Resp::ERROR, $Prd->getError());
 			}
 		}
-		return view('web.prd.book');
+		return view('slt::book.establish');
 	}
 
-	public function Item($id)
+	public function show($id)
 	{
-		$book  = PrdBook::find($id);
-		$items = PrdContent::where('top_parent_id', $id)->get();
+		$book  = ArticleBook::find($id);
+		$items = ArticleContent::where('book_id', $id)->get();
 
 		$array = [];
 		// 构建生成树中所需的数据
@@ -63,28 +65,28 @@ class BookController extends InitController
 			$item['id']    = $r->id;
 			$item['sort']  = $r->list_order;
 			$item['pid']   = $r->parent_id;
-			$item['add']   = "<a class='J_iframe' href=\"" . route_url('web:prd.popup', null, ['parent_id' => $r->id, 'book_id' => $id]) . "\"><i class='iconfont icon-add'></i></a>";
-			$item['edit']  = "<a href=\"" . route('web:prd.content', [$r->id]) . "\"><i class='fa fa-edit'></i></a>";
-			$item['del']   = "<a class=\"J_request\" href='" . route('web:prd.destroy', [$r->id]) . "' data-confirm=\"确定删除该文档吗?\" ><i class='fa fa-close'></i></a>";
+			$item['add']   = "<a class='J_iframe' href=\"" . route_url('slt:article.popup', null, ['parent_id' => $r->id, 'book_id' => $id]) . "\"><i class='glyphicon glyphicon-plus'></i></a>";
+			$item['edit']  = "<a href=\"" . route('slt:article.establish', [$r->id]) . "\"><i class='glyphicon glyphicon-pencil'></i></a>";
+			$item['del']   = "<a class=\"J_request\" href='" . route('slt:article.destroy', [$r->id]) . "' data-confirm=\"确定删除该文档吗?\" ><i class='glyphicon glyphicon-remove'></i></a>";
 			$array[$r->id] = $item;
 		}
 		// gen html
 		$str = <<<TABLE_LINE
-<tr class="tr">
-	<td class="txt-center"><input type="text" value="\$sort" class="w36 form-control input-sm" name="sort[\$id]"></td>
-	<td class="txt-center">\$id</td>
+<tr class=\"tr\">
+	<td class=\"txt-center\"><input type=\"text\" value=\"\$sort\" class=\"w36 form-control input-sm\" name=\"sort[\$id]\"></td>
+	<td class=\"txt-center\">\$id</td>
 	<td>\$spacer \$title </td>
-	<td class="txt-center">
+	<td class=\"txt-center\">
 		  \$add \$edit  \$del
 	</td>
 </tr>
 TABLE_LINE;
 
-		$Tree = new Tree();
+		$Tree = new TreeHelper();
 		$Tree->init($array);
 		$html_tree = $Tree->getTree(0, $str);
 
-		return view('web.prd.my_book_item', [
+		return view('slt::book.show', [
 			'html_tree' => $html_tree,
 			'book'      => $book,
 		]);

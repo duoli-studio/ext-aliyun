@@ -52,7 +52,7 @@ class ArticleContent extends \Eloquent
 		'title',
 		'cat_id',
 		'parent_id',
-		'top_parent_id',
+		'book_id',
 		'content',
 		'content_md',
 		'account_id',
@@ -155,7 +155,7 @@ class ArticleContent extends \Eloquent
 		$titles     = self::whereIn('id', $parent_ids)
 			->select(['title', 'id'])->get();
 		foreach ($titles as $k => &$v) {
-			$v->crypt_url = route('web:prd.show', [$v->id]);
+			$v->crypt_url = route('slt:article.show', [$v->id]);
 		}
 		if ($titles->count() > $num) {
 			// 多于数量, 去掉最顶部的标题

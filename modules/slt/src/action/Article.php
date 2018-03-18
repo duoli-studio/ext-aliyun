@@ -89,21 +89,21 @@ class Article
 		}
 
 		// rule check
-		$cat_id    = intval(array_get($data, 'cat_id'));
+		$book_id   = intval(array_get($data, 'book_id'));
 		$rule      = [
+			'book_id' => 'required',
 			'title'   => [
 				'required',
-				Rule::unique($this->prdTable, 'title')->where(function($query) use ($id, $cat_id) {
+				Rule::unique($this->prdTable, 'title')->where(function ($query) use ($id, $book_id) {
 					$query->where('account_id', $this->pam->id);
 					if ($id) {
 						$query->where('id', '!=', $id);
 					}
-					if ($cat_id) {
-						$query->where('cat_id', $id);
+					if ($book_id) {
+						$query->where('book_id', $id);
 					}
 				}),
 			],
-			'book_id' => 'required',
 		];
 		$validator = \Validator::make($data, $rule, [], [
 			'title'   => '文档标题',
@@ -118,9 +118,8 @@ class Article
 		$data = [
 			'title'         => strval(array_get($data, 'title')),
 			'account_id'    => $this->pam->id,
-			'cat_id'        => $cat_id,
+			'book_id'       => $book_id,
 			'parent_id'     => intval(array_get($data, 'parent_id')),
-			'top_parent_id' => array_get($data, 'book_id'),
 		];
 
 		if ($id) {
@@ -128,8 +127,8 @@ class Article
 			if (!$this->init($id)) {
 				return false;
 			}
-			if (!$this->policy('self', [$this->article], '此文档不是您创建, 您无权操作')) {
-				return false;
+			if (!$this->pam->can('edit', [$this->article])) {
+				return $this->setError('您无权操作');
 			}
 			$this->article->update($data);
 		}
@@ -137,7 +136,6 @@ class Article
 			$data = array_merge($data, [
 				'good_num'       => 0,
 				'bad_num'        => 0,
-				'role_status'    => ArticleContent::ROLE_STATUS_NONE,
 				'password'       => '',
 				'description'    => '',
 				'content_origin' => '',
@@ -147,7 +145,6 @@ class Article
 				'hits'           => 0,
 				'is_star'        => 0,
 				'tag_note'       => '',
-				'prd_tag'        => '',
 			]);
 
 			// db create
@@ -174,7 +171,7 @@ class Article
 		$rule      = [
 			'title' => [
 				'required',
-				Rule::unique($this->prdTable, 'title')->where(function($query) use ($id) {
+				Rule::unique($this->prdTable, 'title')->where(function ($query) use ($id) {
 					$query->where('account_id', $this->pam->id);
 					if ($id) {
 						$query->where('id', '!=', $id);

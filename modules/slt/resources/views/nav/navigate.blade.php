@@ -1,4 +1,4 @@
-@extends('slt::inc.tpl')
+@extends('slt::tpl.default')
 @section('body-start')
     <body class="site_nav">@stop
     @section('tpl-main')
@@ -43,5 +43,5 @@
                 @endif
             </div>
         </div>
-    @include('web.inc.footer')
+    @include('slt::tpl.inc_footer')
 @endsection

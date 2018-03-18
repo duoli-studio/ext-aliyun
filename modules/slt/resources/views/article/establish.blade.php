@@ -1,4 +1,4 @@
-@extends('slt::inc.tpl')
+@extends('slt::tpl.default')
 @section('tpl-main')
     <style>
         html {
@@ -7,12 +7,12 @@
         }
     </style>
     @if (isset($item))
-        {!! Form::model($item,['route' => ['web:prd.content', $item->id], 'id' => 'form_md', 'style'=> 'height:100%']) !!}
+        {!! Form::model($item,['route' => ['slt:article.establish', $item->id], 'id' => 'form_md', 'style'=> 'height:100%']) !!}
     @else
-        {!! Form::open(['route' => 'web:prd.create','id' => 'form_md', 'style'=> 'height:100%']) !!}
+        {!! Form::open(['route' => 'slt:article.establish','id' => 'form_md', 'style'=> 'height:100%']) !!}
     @endif
     {!! Form::hidden('parent_id', $parent_id) !!}
-    {!! Form::hidden('top_parent_id', $top_parent_id) !!}
+    {!! Form::hidden('book_id', $book_id) !!}
     {!! Form::hidden('prd_title', $title) !!}
     <div class="container-fluid">
         <div class="row">
@@ -34,9 +34,9 @@
                 </div>
             </div>
         </div>
-        {!! Form::editormd('content', null, ['id'=> 'editormd']) !!}
+        {!! app('poppy.form')->simplemde('content', null, ['id'=> 'editormd']) !!}
     </div>
     {!! Form::hidden('title', isset($item) ? null : Input::input('title'), ['class' => 'form-control J_submit', 'placeholder'=>'文档标题']) !!}
     {!! Form::close() !!}
-    @include('web.inc.footer')
+    @include('slt::tpl.inc_footer')
 @endsection

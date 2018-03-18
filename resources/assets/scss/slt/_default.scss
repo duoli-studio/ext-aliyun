@@ -27,9 +27,13 @@ a {
 		padding-top   : 7px;
 	}
 }
+/* 对话框
+ * ---------------------------------------- */
 .sour--page_dialog {
 	margin : 10px 0;
 }
+/* header
+ * ---------------------------------------- */
 .sour--header_top {
 	background    : #ffffff;
 	border-bottom : 1px solid #f1f1f1;
@@ -54,37 +58,29 @@ a {
 	.navbar-header {
 		margin-right : 15px;
 	}
-	.navbar-default {
-		background : #ffffff;
-		.navbar-toggle {
-			&:hover, &:focus {
-				background : $color-green;
-				.icon-bar {
-					background-color : #ffffff !important;
-				}
-			}
 
-		}
-		.navbar-nav {
-			> li, > li > a {
-				height : 55px;
-			}
-			> .active {
-				> a, > a:hover, > a:focus {
-					background-color : transparent;
-					color            : $color-green;
-					border           : none;
-				}
+	.navbar-nav {
+		> li {
+			font-size : 16px;
+			a {
+				padding : 19px;
 			}
 		}
-		li a {
-			font-size   : 14px;
-			font-weight : 600;
-			padding     : 15px 15px;
-			color       : $color-dark;
-			&:hover {
-				border-bottom : none;
+		> .active {
+			> a, > a:hover, > a:focus {
+				background-color : transparent;
+				color            : $color-green;
+				border           : none;
 			}
+		}
+	}
+	li a {
+		font-size   : 14px;
+		font-weight : 600;
+		padding     : 15px 15px;
+		color       : $color-dark;
+		&:hover {
+			border-bottom : none;
 		}
 	}
 
@@ -93,44 +89,6 @@ a {
 		margin : 17px 10px 0 90px;
 		width  : 180px;
 	}
-
-	/*
-	border           : none;
-	height           : $nav-height;
-	min-height       : $nav-height;
-	background-color : #ffffff;
-	border-bottom    : 1px solid $light-grey;
-	@include border-radius(0);
-	
-	
-	.nav > li > a, .navbar-brand {
-		line-height : $nav-height;
-		height      : $nav-height;
-		padding     : 0 12px;
-		color       : $black;
-		&:hover, &:focus {
-			background    : none;
-			border-bottom : 3px solid $purple;
-		}
-	}
-	.nav li {
-		&.active {
-			a {
-				border-bottom : 3px solid $purple;
-			}
-		}
-	}
-	&.navbar {
-		margin-bottom : 0;
-	}
-	.navbar-brand {
-		color : $purple;
-		&:hover {
-			color         : $dark-purple;
-			border-bottom : none;
-		}
-	}
-	*/
 	.header_top-user_status {
 		margin-bottom : 0;
 		> li {
@@ -174,6 +132,8 @@ a {
 		}
 	}
 }
+/* footer
+ * ---------------------------------------- */
 .sour--footer {
 	height      : 50px;
 	line-height : 50px;
@@ -218,4 +178,9 @@ a {
 			font-style   : normal;
 		}
 	}
+}
+/* 背景
+ * ---------------------------------------- */
+.bg-white {
+	background : #ffffff;
 }

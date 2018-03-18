@@ -7,6 +7,11 @@ use System\Models\PamAccount;
 class ArticleContentPolicy
 {
 
+	public function create($pam)
+	{
+		return true;
+	}
+
 	/**
 	 * 是否自己
 	 * @param PamAccount     $pam

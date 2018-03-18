@@ -1,4 +1,4 @@
-@extends('slt::inc.tpl')
+@extends('slt::tpl.default')
 @section('head-css')
     @parent
     {!! Html::style('/assets/js/libs/codemirror/5.24.2/codemirror.css') !!}

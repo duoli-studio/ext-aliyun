@@ -3,10 +3,10 @@
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Poppy\Framework\Classes\Resp;
+use Slt\Action\User;
+use System\Action\Pam;
 use System\Models\PamAccount;
 use System\Models\PamRole;
-use User\Pam\Action\Fans;
-use User\Pam\Action\Pam;
 
 class UserController extends InitController
 {
@@ -32,9 +32,8 @@ class UserController extends InitController
 			$password = $request->input('password');
 			$remember = $request->input('remember_me');
 
-			/** @var Pam $actPam */
-			$actPam = app('act.pam');
-			if ($actPam->loginCheck($passport, $password, PamAccount::GUARD_WEB, $remember)) {
+			$Pam = new Pam();
+			if ($Pam->loginCheck($passport, $password, PamAccount::GUARD_WEB, $remember)) {
 				if (!empty($type) && $type == 'mini') {
 					$forward = 'top_reload|1';
 				}
@@ -55,7 +54,7 @@ class UserController extends InitController
 				return Resp::web(Resp::SUCCESS, '登录成功', $forward);
 			}
 			else {
-				return Resp::web(Resp::ERROR, $actPam->getError());
+				return Resp::web(Resp::ERROR, $Pam->getError());
 			}
 		}
 
@@ -98,13 +97,11 @@ class UserController extends InitController
 			$account  = $request->input($type);
 			$password = $request->input('password');
 
-			/** @var Fans $actPam */
-			$actPam = app('act.pam');
-			if (!$actPam->register($account, $password, PamRole::FE_USER)) {
-				return Resp::web(Resp::ERROR, $actPam->getError(), '', $request->only([$type]));
+			$Pam = new Pam();
+			if (!$Pam->register($account, $password, PamRole::FE_USER)) {
+				return Resp::web(Resp::ERROR, $Pam->getError(), '', $request->only([$type]));
 			}
-
-			$pam = $actPam->getPam();
+			$pam = $Pam->getPam();
 
 			if ($guard->loginUsingId($pam->id)) {
 				return Resp::web(Resp::SUCCESS, '注册成功, 登录用户系统', 'reload|1');
@@ -143,8 +140,8 @@ class UserController extends InitController
 	 */
 	public function logout()
 	{
-		(new ActAccount())->webLogout();
-		return Resp::web('OK~退出登录成功', 'location|' . route('front_user.login'));
+		(new User())->webLogout();
+		return Resp::web(Resp::SUCCESS, '退出登录', 'location|' . route('slt:user.login'));
 	}
 
 	public function getAuthLogout()

@@ -1,4 +1,4 @@
-@extends('slt::inc.tpl')
+@extends('slt::tpl.default')
 @section('tpl-main')
     <div class="container ">
         <div class="row">
@@ -8,7 +8,7 @@
                     <div class="pull-right">
                         <a class="J_iframe btn btn-success btn-sm pull-right" data-width="400" data-height="444"
                            data-title="创建Prd文档"
-                           href="{!! route_url('web:prd.popup', [], ['book_id'=>$book->id]) !!}">
+                           href="{!! route_url('slt:article.popup', [], ['book_id'=>$book->id]) !!}">
                             <i class="iconfont icon-add"></i>
                             创建新文档
                         </a>
@@ -48,5 +48,5 @@
             </div>
         </div>
     </div>
-    @include('web.inc.footer')
+    @include('slt::tpl.inc_footer')
 @endsection

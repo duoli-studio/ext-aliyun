@@ -65,18 +65,22 @@
 
 		\Route::any('book/my', 'BookController@my')
 			->name('slt:book.my');
+		\Route::any('book/establish/{id?}', 'BookController@establish')
+			->name('slt:book.establish');
+		\Route::any('book/{id?}', 'BookController@show')
+			->name('slt:book.show');
 
 		\Route::any('article/create', 'ArticleController@create')
-			->name('web:prd.create');
+			->name('slt:article.create');
 		\Route::any('article/popup/{id?}', 'ArticleController@popup')
-			->name('web:prd.popup');
-		\Route::any('article/content/{id}', 'ArticleController@content')
-			->name('web:prd.content');
+			->name('slt:article.popup');
+		\Route::any('article/establish/{id}', 'ArticleController@establish')
+			->name('slt:article.establish');
+		\Route::any('article/{id}', 'ArticleController@show')
+			->name('slt:article.show');
 
-		\Route::any('article/show/{id}', 'ArticleController@show')
-			->name('web:prd.show');
 		\Route::any('article/destroy/{id}', 'ArticleController@destroy')
-			->name('web:prd.destroy');
+			->name('slt:article.destroy');
 		\Route::any('article/access/{id}', 'ArticleController@access')
 			->name('web:prd.access');
 		\Route::any('article/address/{id}', 'ArticleController@address')

@@ -25,7 +25,7 @@
                     @endif
                 </div>
                 @if ($readme)
-                    <div role="tabpanel" class="tab-pane editor-preview-side" id="profile">
+                    <div role="tabpanel" class="tab-pane editor-preview-side jslib-markdown" id="profile">
                         {!! $readme !!}
                     </div>
                 @endif

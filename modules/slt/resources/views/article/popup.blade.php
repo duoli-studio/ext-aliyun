@@ -1,4 +1,4 @@
-@extends('web.inc.tpl_dialog')
+@extends('slt::tpl.default_dialog')
 @section('tpl-main')
     <div class="mb40">
         @if (isset($item))
@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="form-group">
-            {!! Form::tree('parent_id', $items, (isset($item) ? $item->parent_id : (\Input::get('parent_id'))), ['placeholder'=> '请选择上级文档', 'class'=> 'form-control']) !!}
+            {!! app('poppy.form')->tree('parent_id', $items, (isset($item) ? $item->parent_id : (\Input::get('parent_id'))), ['placeholder'=> '请选择上级文档', 'class'=> 'form-control']) !!}
         </div>
         <div class="form-group">
             {!! Form::button(isset($item) ? '编辑' : '保存', ['class' => 'form-control btn-success J_submit', 'type'=> 'submit']) !!}

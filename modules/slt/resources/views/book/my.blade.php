@@ -1,4 +1,4 @@
-@extends('slt::inc.tpl')
+@extends('slt::tpl.default')
 @section('tpl-main')
     <div class="container ">
         <div class="row">
@@ -8,7 +8,7 @@
                     <div class="pull-right">
                         <a class="J_iframe btn btn-info btn-sm pull-right" data-width="400" data-height="444"
                            data-title="创建文库"
-                           href="{!! route('web:prd.book') !!}">
+                           href="{!! route('slt:book.establish') !!}">
                             <i class="iconfont icon-book-collection"></i>
                             创建文库
                         </a>
@@ -28,22 +28,18 @@
                                         </div>
                                         <div class="item-desc">
                                             <h4 class="text-ellipsis">
-                                                <a href="{!! route('web:prd.show', [$item->id]) !!}"
+                                                <a href="{!! route('slt:book.show', [$item->id]) !!}"
                                                    title="{!! $item->title !!}">
                                                     {!! $item->title !!}
                                                 </a>
                                             </h4>
-                                            最后更新于 {!! \Sour\Lemon\Helper\TimeHelper::datetime($item->created_at, '3-2') !!}
+                                            最后更新于 {!! \Poppy\Framework\Helper\TimeHelper::datetime($item->created_at, '3-2') !!}
                                             <div class="clearfix">
                                                 <div class="item-more mr8">
                                                     <a class="J_iframe"
                                                        href="{!! route('web:prd.access', [$item->id]) !!}"
                                                        data-width="444" data-height="333" data-title="权限控制">
-                                                        @if ($item->role_status == \Sour\Poppy\Models\PrdContent::ROLE_STATUS_PWD)
-                                                            <i class="iconfont icon-lock"></i>
-                                                        @else
-                                                            <i class="iconfont icon-unlock"></i>
-                                                        @endif
+                                                        <i class="iconfont icon-lock"></i>
                                                     </a>
                                                 </div>
                                                 <div class="item-more mr8">
@@ -56,7 +52,7 @@
                                                 <div class="btn-group item-more mr8">
                                                     <button type="button" class="dropdown-toggle" data-toggle="dropdown"
                                                             aria-haspopup="true" aria-expanded="false">
-                                                        <i class="iconfont icon-more-circle"></i>
+                                                        <i class="glyphicon glyphicon-wrench"></i>
                                                     </button>
                                                     <ul class="dropdown-menu">
                                                         <li><a class="J_iframe"
@@ -68,7 +64,7 @@
                                                             </li>
                                                         @endcan
                                                         <li>
-                                                            <a href="{!! route('web:prd.content', [$item->id]) !!}">编辑</a>
+                                                            <a href="{!! route('slt:article.establish', [$item->id]) !!}">编辑</a>
                                                         </li>
                                                         <li><a class="J_request"
                                                                data-confirm="确认删除`{!! $item->title !!}` ? "
@@ -93,7 +89,7 @@
                     @else
                         <div class="row">
                             <div class="col-md-12">
-                                @include('web.inc.empty')
+                                @include('slt::tpl.inc_empty')
                             </div>
                         </div>
                     @endif
@@ -103,5 +99,5 @@
     </div>
 
 
-    @include('web.inc.footer')
+    @include('slt::tpl.inc_footer')
 @endsection

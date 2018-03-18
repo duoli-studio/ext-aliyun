@@ -660,9 +660,15 @@ a:hover {
   }
 }
 
+/* 对话框
+ * ---------------------------------------- */
+
 .sour--page_dialog {
   margin: 10px 0;
 }
+
+/* header
+ * ---------------------------------------- */
 
 .sour--header_top {
   background: #ffffff;
@@ -670,43 +676,6 @@ a:hover {
   color: #909090;
   height: 5rem;
   z-index: 9;
-  /*
-	border           : none;
-	height           : $nav-height;
-	min-height       : $nav-height;
-	background-color : #ffffff;
-	border-bottom    : 1px solid $light-grey;
-	@include border-radius(0);
-	
-	
-	.nav > li > a, .navbar-brand {
-		line-height : $nav-height;
-		height      : $nav-height;
-		padding     : 0 12px;
-		color       : $black;
-		&:hover, &:focus {
-			background    : none;
-			border-bottom : 3px solid $purple;
-		}
-	}
-	.nav li {
-		&.active {
-			a {
-				border-bottom : 3px solid $purple;
-			}
-		}
-	}
-	&.navbar {
-		margin-bottom : 0;
-	}
-	.navbar-brand {
-		color : $purple;
-		&:hover {
-			color         : $dark-purple;
-			border-bottom : none;
-		}
-	}
-	*/
 }
 
 .sour--header_top .navbar {
@@ -729,41 +698,30 @@ a:hover {
   margin-right: 15px;
 }
 
-.sour--header_top .navbar-default {
-  background: #ffffff;
+.sour--header_top .navbar-nav > li {
+  font-size: 16px;
 }
 
-.sour--header_top .navbar-default .navbar-toggle:hover,
-.sour--header_top .navbar-default .navbar-toggle:focus {
-  background: #62cb31;
+.sour--header_top .navbar-nav > li a {
+  padding: 19px;
 }
 
-.sour--header_top .navbar-default .navbar-toggle:hover .icon-bar,
-.sour--header_top .navbar-default .navbar-toggle:focus .icon-bar {
-  background-color: #ffffff !important;
-}
-
-.sour--header_top .navbar-default .navbar-nav > li,
-.sour--header_top .navbar-default .navbar-nav > li > a {
-  height: 55px;
-}
-
-.sour--header_top .navbar-default .navbar-nav > .active > a,
-.sour--header_top .navbar-default .navbar-nav > .active > a:hover,
-.sour--header_top .navbar-default .navbar-nav > .active > a:focus {
+.sour--header_top .navbar-nav > .active > a,
+.sour--header_top .navbar-nav > .active > a:hover,
+.sour--header_top .navbar-nav > .active > a:focus {
   background-color: transparent;
   color: #62cb31;
   border: none;
 }
 
-.sour--header_top .navbar-default li a {
+.sour--header_top li a {
   font-size: 14px;
   font-weight: 600;
   padding: 15px 15px;
   color: #455463;
 }
 
-.sour--header_top .navbar-default li a:hover {
+.sour--header_top li a:hover {
   border-bottom: none;
 }
 
@@ -823,6 +781,9 @@ a:hover {
   color: #cfcfcf;
 }
 
+/* footer
+ * ---------------------------------------- */
+
 .sour--footer {
   height: 50px;
   line-height: 50px;
@@ -873,6 +834,13 @@ a:hover {
   font-style: normal;
 }
 
+/* 背景
+ * ---------------------------------------- */
+
+.bg-white {
+  background: #ffffff;
+}
+
 /*
 |--------------------------------------------------------------------------
 | 颜色
@@ -887,7 +855,7 @@ a:hover {
 .fe--item_navigation {
   background: #ffffff;
   border: none;
-  z-index: 100;
+  z-index: 8;
   -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
           box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   -webkit-transition: all .2s;
@@ -925,7 +893,7 @@ a:hover {
   margin: 10px 0;
 }
 
-.fe--jslib .editor-preview-side {
+.fe--jslib .editor-preview-side.jslib-markdown {
   position: relative;
   width: auto;
   margin-top: 0;

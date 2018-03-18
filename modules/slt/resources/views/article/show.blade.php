@@ -1,9 +1,8 @@
-@extends('daniu.template.main')
+@extends('slt::tpl.default')
 @section('body-start')
 	<body class="bg-grey">@endsection
-	@section('daniu-main')
-		@include('front.inc.nav')
-		@include('front.prd.header')
+	@section('tpl-main')
+		@include('slt::article.header')
 		<div class="container markdown prd-detail">
 			<div class="prd-detail-title">
 				<h3 class="clearfix">
@@ -11,19 +10,19 @@
 						@foreach($level_titles as $num => $prd)
 							@if ($num == 0)
 								<a class="prd-title-first" href="{!! $prd->crypt_url !!}">
-									{!! $prd->prd_title !!}
+									{!! $prd->title !!}
 								</a>
 							@else
 								&gt;
 								<a class="prd-title-small" href="{!! $prd->crypt_url !!}">
-									{!! $prd->prd_title !!}
+									{!! $prd->title !!}
 								</a>
 							@endif
 						@endforeach
 						@if ($item)
 							&gt;
 							<small>
-								{!! $item->prd_title !!}
+								{!! $item->title !!}
 							</small>
 						@else
 							&gt;
@@ -34,9 +33,9 @@
 
 					@else
 						@if ($item)
-							{!! $item->prd_title !!}
+							{!! $item->title !!}
 						@else
-							{!! $parent->prd_title !!}
+							{!! $parent->title !!}
 							&gt;
 							<span class="prd-title-small">
 									{!! $title !!}
@@ -46,7 +45,7 @@
 
 					@if ($item)
 						@can('edit', $item)
-							<a class="btn btn-success pull-right" href="{!! route('web:prd.edit', $item->id) !!}">
+							<a class="btn btn-success pull-right" href="{!! route('slt:article.establish', $item->id) !!}">
 								编辑本页
 							</a>
 						@endcan
@@ -59,7 +58,7 @@
 			</div>
 			<div class="markdown-body">
 				@if ($item)
-					{!! $item->prd_content !!}
+					{!! $item->content !!}
 				@else
 					无内容
 				@endif
