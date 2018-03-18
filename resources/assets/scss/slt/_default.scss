@@ -10,8 +10,8 @@
 */
 body {
 	font-family : "wryh", "微软雅黑", "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-	background  : #ffffff;
 	font-size   : 13px;
+	background  : #f4f4f4;
 }
 a {
 	color : $purple;
@@ -31,6 +31,11 @@ a {
 	margin : 10px 0;
 }
 .sour--header_top {
+	background    : #ffffff;
+	border-bottom : 1px solid #f1f1f1;
+	color         : #909090;
+	height        : 5rem;
+	z-index       : 9;
 	.navbar {
 		// 默认是 1000, 这里为了兼容 编辑器, 更改为 9
 		z-index       : 9;
@@ -58,7 +63,7 @@ a {
 					background-color : #ffffff !important;
 				}
 			}
-			
+
 		}
 		.navbar-nav {
 			> li, > li > a {
@@ -82,13 +87,13 @@ a {
 			}
 		}
 	}
-	
+
 	.brand-desc {
 		color  : $color-dark;
 		margin : 17px 10px 0 90px;
 		width  : 180px;
 	}
-	
+
 	/*
 	border           : none;
 	height           : $nav-height;
@@ -159,7 +164,7 @@ a {
 				transform    : translate(-50%, 0);
 			}
 		}
-		
+
 		// first level
 		> li > a {
 			display : inline-block;

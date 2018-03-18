@@ -1,7 +1,7 @@
 .hljs {display: block;
     overflow-x: auto;
     padding: .5em;
-    background: #b7a68e url("/resources/js/libs/highlight/9.12.0/styles/./brown-papersq.png");}
+    background: #b7a68e url("/resources/scss/libs/highlight/./brown-papersq.png");}
 .hljs-keyword, .hljs-selector-tag, .hljs-literal {color: #059;
     font-weight: bold;}
 .hljs, .hljs-subst {color: #363c69;}

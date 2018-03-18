@@ -167,9 +167,11 @@ return [
 				'main'    => 'src/highlight.js',
 				'aim'     => 'highlight/{VERSION}/highlight.js',
 				'dispose' => [
-					'src/styles/*'    => 'highlight/{VERSION}/styles/',
 					'src/languages/*' => 'highlight/{VERSION}/languages/',
 				],
+			],
+			"css"  => [
+				'src/styles/*' => 'highlight/',
 			],
 			'shim' => [
 				"exports" => "hljs",

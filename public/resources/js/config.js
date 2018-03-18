@@ -7,7 +7,6 @@ var alias = {
     "bt4": "resources/js/libs/bt4/4.0.0/bootstrap",
     "centrifuge": "resources/js/libs/centrifuge/1.4.8/centrifuge",
     "clipboard": "resources/js/libs/clipboard/1.7.1/clipboard.min",
-    "codemirror": "resources/js/libs/codemirror/5.35.0/lib/codemirror",
     "datatables.net": "resources/js/libs/jquery/data-tables/1.10.16/jquery.data-tables",
     "global": "resources/js/global",
     "highlight": "resources/js/libs/highlight/9.12.0/highlight",

@@ -1,6 +1,3 @@
-<p class="alert alert-info" id="introduce">
-    这里填写简单的源码示例
-</p>
 <ul class="nav nav-pills" id="link">
     <li><a target="_blank" href="https://simplemde.com/">simplemde.com</a></li>
 </ul>
@@ -18,7 +15,7 @@
         <pre id="J_script"></pre>
     </div>
 </div>
-<script id="J_scriptSource">
+<script id="J_script_source">
 require(['simplemde', 'inline-attachment'], function(SimpleMDE, inlineAttachment) {
 	var simplemde = new SimpleMDE({
 		element      : document.getElementById("simplemde"),
