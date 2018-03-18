@@ -13,8 +13,14 @@ define('LARAVEL_START', microtime(true));
 | loading of any our classes "manually". Feels great to relax.
 |
 */
+$file = __DIR__ . '/../../vendor/autoload.php';
+if (file_exists($file)) {
+	require __DIR__ . '/../../vendor/autoload.php';
+}
+else {
+	exit('You need install composer plugin first.');
+}
 
-require __DIR__ . '/../../vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
