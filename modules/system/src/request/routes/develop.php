@@ -46,4 +46,3 @@ use Illuminate\Routing\Router;
 			->name('system:develop.doc.index');
 	});
 });
-

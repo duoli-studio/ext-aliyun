@@ -40,4 +40,3 @@ class SysHelp extends \Eloquent
 		return $this->hasOne(SysCategory::class, 'id', 'cat_id');
 	}
 }
-

@@ -36,4 +36,3 @@ use Illuminate\Routing\Router;
 			->name('backend:pam.password');
 	});
 });
-

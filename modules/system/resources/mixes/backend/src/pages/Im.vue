@@ -1,6 +1,5 @@
 <script>
 import injection, {trans} from '../helpers/injection';
-import store from '../stores';
 
 const imQuery = `
 query {
@@ -24,7 +23,6 @@ query {
 	},
 }`;
 
-const uploadUrl = `${window.url}/api_v1/util/image/upload`;
 export default {
 	beforeRouteEnter(to, from, next) {
 		injection.loading.start();
@@ -80,7 +78,7 @@ export default {
 	},
 	data() {
 		return {
-			form      : {
+			form       : {
 				system      : '',
 				notice      : '',
 				order       : '',
@@ -88,22 +86,18 @@ export default {
 				notice_icon : '',
 				order_icon  : '',
 			},
-			loading   : false,
-			url       : uploadUrl,
-			headers   : {
-				Authorization : `Bearer ${store.state.token}`
-			},
-			modal     : {
+			loading    : false,
+			modal      : {
 				loading : true,
 				visible : false,
 			},
-			notice    : {
+			notice     : {
 				type     : 'system',
 				msg_type : 'single',
 				passport : '',
 				content  : '这是一条测试消息！',
 			},
-			rules     : {
+			rules      : {
 				system : [
 					{
 						required : true,
@@ -129,7 +123,7 @@ export default {
 					},
 				],
 			},
-			testRules : {
+			testRules  : {
 				type     : [
 					{
 						required : true,
@@ -155,20 +149,22 @@ export default {
 					},
 				],
 			},
-			fileList  : {
+			fileList   : {
 				system : [],
 				notice : [],
 				order  : [],
 			},
-			dsType    : {
-				system : '系统通知',
-				notice : '官方公告',
-				order  : '订单消息'
-			},
-			dsMsgType : {
-				single : '单发',
-				multi  : '群发',
-			},
+			dataSource : {
+				types    : {
+					system : '系统通知',
+					notice : '官方公告',
+					order  : '订单消息'
+				},
+				msgTypes : {
+					single : '单发',
+					multi  : '群发',
+				}
+			}
 		};
 	},
 	methods : {
@@ -201,17 +197,23 @@ export default {
 				}
 			});
 		},
-		systemIconSuccess(response) {
-			const self = this;
-			self.form.system_icon = response.data.url[0].toString();
+		systemIconSuccess(list) {
+			this.form.system_icon = list[0].url;
 		},
-		noticeIconSuccess(response) {
-			const self = this;
-			self.form.notice_icon = response.data.url[0].toString();
+		systemIconRemove() {
+			this.form.system_icon = '';
 		},
-		orderIconSuccess(response) {
-			const self = this;
-			self.form.order_icon = response.data.url[0].toString();
+		noticeIconSuccess(list) {
+			this.form.notice_icon = list[0].url;
+		},
+		noticeIconRemove() {
+			this.form.notice_icon = '';
+		},
+		orderIconSuccess(list) {
+			this.form.order_icon = list[0].url;
+		},
+		orderIconRemove() {
+			this.form.order_icon = '';
 		},
 		send() {
 			const self = this;
@@ -267,11 +269,12 @@ export default {
 			<row>
 				<i-col span="12">
 					<form-item label="系统通知头像" prop="fileMaxSize">
-						<upload :action="url" :headers="headers" name="image" :default-file-list="fileList.system"
-								:on-success="systemIconSuccess"
-						>
-							<i-button type="ghost" icon="ios-cloud-upload-outline">上传头像</i-button>
-						</upload>
+						<uploader
+							v-model="fileList.system"
+							:max="1"
+							:on-success="systemIconSuccess"
+							:on-remove="systemIconRemove"
+						></uploader>
 					</form-item>
 				</i-col>
 			</row>
@@ -287,30 +290,34 @@ export default {
 			<row>
 				<i-col span="12">
 					<form-item label="官方通知头像" prop="fileMaxSize">
-						<upload :action="url" :headers="headers" name="image" :default-file-list="fileList.notice"
-								:on-success="noticeIconSuccess"
-						>
-							<i-button type="ghost" icon="ios-cloud-upload-outline">上传头像</i-button>
-						</upload>
+						<uploader
+							v-model="fileList.notice"
+							:max="1"
+							:on-success="noticeIconSuccess"
+							:on-remove="noticeIconRemove"
+						></uploader>
 					</form-item>
 				</i-col>
 			</row>
 			<row>
 				<i-col span="12">
 					<form-item label="订单通知账号" prop="imageProcessingEngine">
-						<i-input placeholder="订单通知账号, 和网易对接, 保证网易账号存在" v-model="form.order">
-						</i-input>
+						<i-input
+							placeholder="订单通知账号, 和网易对接, 保证网易账号存在"
+							v-model="form.order"
+						></i-input>
 					</form-item>
 				</i-col>
 			</row>
 			<row>
 				<i-col span="12">
 					<form-item label="订单通知头像" prop="fileMaxSize">
-						<upload :action="url" :headers="headers" name="image" :default-file-list="fileList.order"
-								:on-success="orderIconSuccess"
-						>
-							<i-button type="ghost" icon="ios-cloud-upload-outline">上传头像</i-button>
-						</upload>
+						<uploader
+							v-model="fileList.order"
+							:max="1"
+							:on-success="orderIconSuccess"
+							:on-remove="orderIconRemove"
+						></uploader>
 					</form-item>
 				</i-col>
 			</row>
@@ -327,16 +334,16 @@ export default {
 			</row>
 		</i-form>
 		<modal :loading="modal.loading" title="发送测试消息" :value="modal.visible" @on-cancel="modal.visible = false"
-			   @on-ok="send">
+		       @on-ok="send">
 			<i-form label-position="left" :model="notice" ref="sendForm" :rules="testRules">
 				<form-item prop="type">
 					<i-select placeholder="推送类型" v-model="notice.type">
-						<i-option v-for="(value ,type) in dsType" :value="type" :key="type">{{ value }}</i-option>
+						<i-option v-for="(value ,type) in dataSource.types" :value="type" :key="type">{{ value }}</i-option>
 					</i-select>
 				</form-item>
 				<form-item prop="type">
 					<i-select placeholder="消息类型" v-model="notice.msg_type">
-						<i-option v-for="(value ,type) in dsMsgType" :value="type" :key="type">{{ value }}</i-option>
+						<i-option v-for="(value ,type) in dataSource.msgTypes" :value="type" :key="type">{{ value }}</i-option>
 					</i-select>
 				</form-item>
 				<form-item label="接收用户名" prop="passport">

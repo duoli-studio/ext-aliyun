@@ -27,4 +27,3 @@ class PamLog extends \Eloquent
 		'area_name',   // 济南
 	];
 }
-

@@ -71,4 +71,3 @@ class SysConfig extends \Eloquent
 		return $query;
 	}
 }
-

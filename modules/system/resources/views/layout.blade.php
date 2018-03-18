@@ -29,9 +29,7 @@ window.domain = "{{ url('') }}";
 window.local = {!! $translations !!};
 window.monacoPath = "https://cdn.bootcss.com/monaco-editor/0.10.0/min/vs";
 window.token = "{{ url('system/token') }}";
-window.upload = "{{ url('editor') }}";
-window.url = "{{ url('') }}";
-window.UEDITOR_HOME_URL = "https://src.neditor.notadd.com/0.1.0/";
+window.upload = "{{ url('system:util.image.upload') }}";
 </script>
 <script src="{{ asset('assets/backend/js/app.min.js') }}"></script>
 </body>

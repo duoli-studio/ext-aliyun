@@ -19,6 +19,7 @@ import Pam from '../pages/Pam.vue';
 import Area from '../pages/Area.vue';
 import Category from '../pages/Category.vue';
 import Article from '../pages/Article.vue';
+import ArticleItem from '../pages/ArticleItem.vue';
 
 import requireAuth from '../middlewares/auth';
 import store from '../stores';
@@ -90,6 +91,10 @@ const configuration = [
 	{
 		component : Article,
 		path      : 'system/article',
+	},
+	{
+		component : ArticleItem,
+		path      : 'system/article/item/:id',
 	},
 	{
 		component : Im,

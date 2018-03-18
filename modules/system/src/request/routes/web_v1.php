@@ -24,7 +24,8 @@
 	$route->group([
 		'middleware' => ['auth:jwt', 'disabled_pam'],
 	], function (Illuminate\Routing\Router $route) {
-		$route->post('/image/upload', 'ImageController@upload');
+		$route->post('/image/upload', 'ImageController@upload')
+			->name('system:util.image.upload');
 	});
 });
 

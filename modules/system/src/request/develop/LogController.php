@@ -32,4 +32,3 @@ class LogController extends InitController
 		]);
 	}
 }
-

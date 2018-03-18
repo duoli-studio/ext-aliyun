@@ -1,7 +1,6 @@
 <?php namespace System\Commands;
 
 use Illuminate\Console\Command;
-use Poppy\Framework\Helper\FileHelper;
 use Symfony\Component\Process\Process;
 use System\Classes\Traits\SystemTrait;
 

@@ -37,4 +37,3 @@ class SysCategory extends \Eloquent
 		'title',
 	];
 }
-

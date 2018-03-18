@@ -41,4 +41,3 @@ class SysArea extends \Eloquent
 		'children',
 	];
 }
-

@@ -38,6 +38,7 @@ import Timeline from 'iview/src/components/timeline';
 import TimePicker from 'iview/src/components/time-picker';
 import Tooltip from 'iview/src/components/tooltip';
 import Transfer from 'iview/src/components/transfer';
+import {quillEditor} from 'vue-quill-editor';
 import Tree from 'iview/src/components/tree';
 import {Row, Col} from 'iview/src/components/grid';
 import {Select, Option, OptionGroup} from 'iview/src/components/select';
@@ -51,6 +52,7 @@ import Affix from '../components/affix';
 import Dashboard from '../components/dashboard';
 import DashboardContent from '../components/dashboard-content';
 import Editor from '../components/Editor.vue';
+import Uploader from '../components/Uploader.vue';
 import Input from '../components/input';
 import Team from '../components/Team.vue';
 import Upload from '../components/upload';
@@ -122,6 +124,8 @@ const components = {
 	Transfer,
 	Tree,
 	Upload,
+	quillEditor,
+	Uploader,
 };
 
 export default function(Vue, injection) {

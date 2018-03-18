@@ -210,4 +210,3 @@ class PamAccount extends \Eloquent implements Authenticatable, JWTSubjectAuthent
 		];
 	}
 }
-

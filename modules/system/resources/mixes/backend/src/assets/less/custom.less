@@ -38,3 +38,52 @@
 .ivu-table-row.liex-row-disable {
 	color : #c3c3c3;
 }
+.liex-upload-list {
+	display       : inline-block;
+	width         : 60px;
+	height        : 60px;
+	text-align    : center;
+	line-height   : 60px;
+	border        : 1px solid transparent;
+	border-radius : 4px;
+	overflow      : hidden;
+	background    : #ffffff;
+	position      : relative;
+	box-shadow    : 0 1px 1px rgba(0, 0, 0, .2);
+	margin-right  : 4px;
+	img {
+		width  : 100%;
+		height : 100%;
+	}
+	&:hover {
+		display : inline-block;
+		.liex-upload-list-cover {
+			display : inline-block;
+		}
+	}
+}
+.liex-upload-list-cover {
+	display    : none;
+	position   : absolute;
+	top        : 0;
+	bottom     : 0;
+	left       : 0;
+	right      : 0;
+	background : rgba(0, 0, 0, .6);
+	i {
+		color     : #ffffff;
+		font-size : 20px;
+		cursor    : pointer;
+		margin    : 0 2px;
+	}
+}
+.liex-upload-select {
+	background    : #ffffff;
+	border        : 1px dashed #dddee1;
+	border-radius : 4px;
+	text-align    : center;
+	cursor        : pointer;
+	position      : relative;
+	overflow      : hidden;
+	transition    : border-color 0.2s ease;
+}

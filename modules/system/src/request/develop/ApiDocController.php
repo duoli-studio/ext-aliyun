@@ -235,4 +235,3 @@ class ApiDocController extends Controller
 		return '';
 	}
 }
-

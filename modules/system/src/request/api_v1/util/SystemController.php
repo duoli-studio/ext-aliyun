@@ -63,6 +63,31 @@ class SystemController extends ApiController
 			'notice_account' => $this->getSetting()->get('system::im_notice.notice_account'),
 			'order_account'  => $this->getSetting()->get('system::im_notice.order_account'),
 		];
+		$system['picture']  = [
+			[
+				'picture'    => $this->getSetting()->get('order::picture.picture_1'),
+				'is_open'    => $this->getSetting()->get('order::picture.is_open_1'),
+				'return_url' => $this->getSetting()->get('order::picture.return_url_1'),
+				'action'     => $this->getSetting()->get('order::picture.action_1'),
+			],
+			[
+				'picture'    => $this->getSetting()->get('order::picture.picture_2'),
+				'is_open'    => $this->getSetting()->get('order::picture.is_open_2'),
+				'return_url' => $this->getSetting()->get('order::picture.return_url_2'),
+				'action'     => $this->getSetting()->get('order::picture.action_2'),
+			],
+			[
+				'picture'    => $this->getSetting()->get('order::picture.picture_3'),
+				'is_open'    => $this->getSetting()->get('order::picture.is_open_3'),
+				'return_url' => $this->getSetting()->get('order::picture.return_url_3'),
+				'action'     => $this->getSetting()->get('order::picture.action_3'),
+			],
+		];
+		$system['describe'] = [
+			'normal' => $this->getSetting()->get('order::describe.normal'),
+			'good'   => $this->getSetting()->get('order::describe.good'),
+			'golden' => $this->getSetting()->get('order::describe.golden'),
+		];
 
 		return Resp::web(Resp::SUCCESS, '获取系统配置信息', $system);
 	}

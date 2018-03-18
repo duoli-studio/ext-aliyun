@@ -18,9 +18,7 @@ window.modules = [
     {!! $modules !!}
 ];
 window.token = url + "/token/backend";
-window.upload = url + "/editor";
-
-window.UEDITOR_HOME_URL = "/assets/neditor/";
+window.upload = "{!! route('system:util.image.upload') !!}";
 </script>
 </body>
 </html>
