@@ -1,6 +1,7 @@
 {
 	"name": "poppy/ext-aliyun",
 	"description": "Poppy Aliyun Extension.",
+	"license": "MIT",
 	"type": "poppy-extension",
 	"authors": [
 		{
