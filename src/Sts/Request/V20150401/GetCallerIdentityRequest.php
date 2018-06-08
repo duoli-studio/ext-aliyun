@@ -1,4 +1,5 @@
-<?php namespace Poppy\Extension\Aliyun\Push\Request\V20160801;
+<?php namespace Poppy\Extension\Aliyun\Sts\Request\V20150401;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,46 +19,16 @@
  * under the License.
  */
 
+
 use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
-class BindPhoneRequest extends RpcAcsRequest
+class GetCallerIdentityRequest extends RpcAcsRequest
 {
 	public function __construct()
 	{
-		parent::__construct('Push', '2016-08-01', 'BindPhone');
-		$this->setMethod('POST');
+		parent::__construct("Sts", "2015-04-01", "GetCallerIdentity");
+		$this->setProtocol("https");
+		$this->setMethod("POST");
 	}
 
-	private $phoneNumber;
-
-	private $appKey;
-
-	private $deviceId;
-
-	public function getPhoneNumber() {
-		return $this->phoneNumber;
-	}
-
-	public function setPhoneNumber($phoneNumber) {
-		$this->phoneNumber                   = $phoneNumber;
-		$this->queryParameters['PhoneNumber']=$phoneNumber;
-	}
-
-	public function getAppKey() {
-		return $this->appKey;
-	}
-
-	public function setAppKey($appKey) {
-		$this->appKey                   = $appKey;
-		$this->queryParameters['AppKey']=$appKey;
-	}
-
-	public function getDeviceId() {
-		return $this->deviceId;
-	}
-
-	public function setDeviceId($deviceId) {
-		$this->deviceId                   = $deviceId;
-		$this->queryParameters['DeviceId']=$deviceId;
-	}
 }
