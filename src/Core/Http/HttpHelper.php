@@ -11,7 +11,7 @@ class HttpHelper
 	{
 		$ch = curl_init();
 		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $httpMethod);
-		if (ENABLE_HTTP_PROXY) {
+		if (defined('ENABLE_HTTP_PROXY') && ENABLE_HTTP_PROXY) {
 			curl_setopt($ch, CURLOPT_PROXYAUTH, CURLAUTH_BASIC);
 			curl_setopt($ch, CURLOPT_PROXY, HTTP_PROXY_IP);
 			curl_setopt($ch, CURLOPT_PROXYPORT, HTTP_PROXY_PORT);
