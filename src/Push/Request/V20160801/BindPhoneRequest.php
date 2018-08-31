@@ -1,4 +1,4 @@
-<?php namespace Poppy\Extension\Aliyun\Push\Request\V20160801;
+<?php
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -18,14 +18,16 @@
  * under the License.
  */
 
+namespace Poppy\Extension\Aliyun\Push\Request\V20160801;
+
 use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
 class BindPhoneRequest extends RpcAcsRequest
 {
-	public function __construct()
+	function __construct()
 	{
-		parent::__construct('Push', '2016-08-01', 'BindPhone');
-		$this->setMethod('POST');
+		parent::__construct("Push", "2016-08-01", "BindPhone");
+		$this->setMethod("POST");
 	}
 
 	private $phoneNumber;
@@ -34,30 +36,37 @@ class BindPhoneRequest extends RpcAcsRequest
 
 	private $deviceId;
 
-	public function getPhoneNumber() {
+	public function getPhoneNumber()
+	{
 		return $this->phoneNumber;
 	}
 
-	public function setPhoneNumber($phoneNumber) {
-		$this->phoneNumber                   = $phoneNumber;
-		$this->queryParameters['PhoneNumber']=$phoneNumber;
+	public function setPhoneNumber($phoneNumber)
+	{
+		$this->phoneNumber                    = $phoneNumber;
+		$this->queryParameters["PhoneNumber"] = $phoneNumber;
 	}
 
-	public function getAppKey() {
+	public function getAppKey()
+	{
 		return $this->appKey;
 	}
 
-	public function setAppKey($appKey) {
-		$this->appKey                   = $appKey;
-		$this->queryParameters['AppKey']=$appKey;
+	public function setAppKey($appKey)
+	{
+		$this->appKey                    = $appKey;
+		$this->queryParameters["AppKey"] = $appKey;
 	}
 
-	public function getDeviceId() {
+	public function getDeviceId()
+	{
 		return $this->deviceId;
 	}
 
-	public function setDeviceId($deviceId) {
-		$this->deviceId                   = $deviceId;
-		$this->queryParameters['DeviceId']=$deviceId;
+	public function setDeviceId($deviceId)
+	{
+		$this->deviceId                    = $deviceId;
+		$this->queryParameters["DeviceId"] = $deviceId;
 	}
+
 }

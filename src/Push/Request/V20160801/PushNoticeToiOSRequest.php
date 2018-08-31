@@ -17,16 +17,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 namespace Poppy\Extension\Aliyun\Push\Request\V20160801;
 
 use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
 class PushNoticeToiOSRequest extends RpcAcsRequest
 {
-	public function __construct()
+	function __construct()
 	{
-		parent::__construct('Push', '2016-08-01', 'PushNoticeToiOS');
-		$this->setMethod('POST');
+		parent::__construct("Push", "2016-08-01", "PushNoticeToiOS");
+		$this->setMethod("POST");
 	}
 
 	private $extParameters;
@@ -45,75 +46,92 @@ class PushNoticeToiOSRequest extends RpcAcsRequest
 
 	private $target;
 
-	public function getExtParameters() {
+	public function getExtParameters()
+	{
 		return $this->extParameters;
 	}
 
-	public function setExtParameters($extParameters) {
-		$this->extParameters                   = $extParameters;
-		$this->queryParameters['ExtParameters']=$extParameters;
+	public function setExtParameters($extParameters)
+	{
+		$this->extParameters                    = $extParameters;
+		$this->queryParameters["ExtParameters"] = $extParameters;
 	}
 
-	public function getApnsEnv() {
+	public function getApnsEnv()
+	{
 		return $this->apnsEnv;
 	}
 
-	public function setApnsEnv($apnsEnv) {
-		$this->apnsEnv                   = $apnsEnv;
-		$this->queryParameters['ApnsEnv']=$apnsEnv;
+	public function setApnsEnv($apnsEnv)
+	{
+		$this->apnsEnv                    = $apnsEnv;
+		$this->queryParameters["ApnsEnv"] = $apnsEnv;
 	}
 
-	public function getAppKey() {
+	public function getAppKey()
+	{
 		return $this->appKey;
 	}
 
-	public function setAppKey($appKey) {
-		$this->appKey                   = $appKey;
-		$this->queryParameters['AppKey']=$appKey;
+	public function setAppKey($appKey)
+	{
+		$this->appKey                    = $appKey;
+		$this->queryParameters["AppKey"] = $appKey;
 	}
 
-	public function getTargetValue() {
+	public function getTargetValue()
+	{
 		return $this->targetValue;
 	}
 
-	public function setTargetValue($targetValue) {
-		$this->targetValue                   = $targetValue;
-		$this->queryParameters['TargetValue']=$targetValue;
+	public function setTargetValue($targetValue)
+	{
+		$this->targetValue                    = $targetValue;
+		$this->queryParameters["TargetValue"] = $targetValue;
 	}
 
-	public function getTitle() {
+	public function getTitle()
+	{
 		return $this->title;
 	}
 
-	public function setTitle($title) {
-		$this->title                   = $title;
-		$this->queryParameters['Title']=$title;
+	public function setTitle($title)
+	{
+		$this->title                    = $title;
+		$this->queryParameters["Title"] = $title;
 	}
 
-	public function getBody() {
+	public function getBody()
+	{
 		return $this->body;
 	}
 
-	public function setBody($body) {
-		$this->body                   = $body;
-		$this->queryParameters['Body']=$body;
+	public function setBody($body)
+	{
+		$this->body                    = $body;
+		$this->queryParameters["Body"] = $body;
 	}
 
-	public function getJobKey() {
+	public function getJobKey()
+	{
 		return $this->jobKey;
 	}
 
-	public function setJobKey($jobKey) {
-		$this->jobKey                   = $jobKey;
-		$this->queryParameters['JobKey']=$jobKey;
+	public function setJobKey($jobKey)
+	{
+		$this->jobKey                    = $jobKey;
+		$this->queryParameters["JobKey"] = $jobKey;
 	}
 
-	public function getTarget() {
+	public function getTarget()
+	{
 		return $this->target;
 	}
 
-	public function setTarget($target) {
-		$this->target                   = $target;
-		$this->queryParameters['Target']=$target;
+	public function setTarget($target)
+	{
+		$this->target                    = $target;
+		$this->queryParameters["Target"] = $target;
 	}
+
 }

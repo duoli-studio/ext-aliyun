@@ -1,25 +1,26 @@
 {
-	"name": "poppy/ext-aliyun",
-	"description": "Poppy Aliyun Extension.",
-	"license": "MIT",
-	"type": "poppy-extension",
-	"authors": [
+	"name" : "poppy/ext-aliyun",
+	"description" : "Poppy Aliyun Extension.",
+	"license" : "MIT",
+	"type" : "poppy-extension",
+	"authors" : [
 		{
-			"name": "Mark Zhao",
-			"email": "zhaody901@126.com"
+			"name" : "Mark Zhao",
+			"email" : "zhaody901@126.com"
 		}
 	],
-	"require": {
-		"php": ">=7.0.0",
-		"aliyuncs/oss-sdk-php": "~2.0"
+	"require" : {
+		"php" : ">=7.0.0",
+		"aliyuncs/oss-sdk-php" : "~2.0"
 	},
-	"autoload": {
-		"psr-4": {
-			"Poppy\\Extension\\Aliyun\\": "src/"
+	"autoload" : {
+		"psr-4" : {
+			"Poppy\\Extension\\Aliyun\\" : "src/",
+			"Poppy\\Extension\\Aliyun\\Tests\\" : "tests/"
 		}
 	},
-	"config": {
-		"preferred-install": "dist"
+	"config" : {
+		"preferred-install" : "dist"
 	},
-	"minimum-stability": "dev"
+	"minimum-stability" : "dev"
 }

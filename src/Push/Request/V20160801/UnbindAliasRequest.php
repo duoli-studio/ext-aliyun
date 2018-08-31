@@ -17,16 +17,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 namespace Poppy\Extension\Aliyun\Push\Request\V20160801;
 
 use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
 class UnbindAliasRequest extends RpcAcsRequest
 {
-	public function __construct()
+	function __construct()
 	{
-		parent::__construct('Push', '2016-08-01', 'UnbindAlias');
-		$this->setMethod('POST');
+		parent::__construct("Push", "2016-08-01", "UnbindAlias");
+		$this->setMethod("POST");
 	}
 
 	private $aliasName;
@@ -37,39 +38,48 @@ class UnbindAliasRequest extends RpcAcsRequest
 
 	private $unbindAll;
 
-	public function getAliasName() {
+	public function getAliasName()
+	{
 		return $this->aliasName;
 	}
 
-	public function setAliasName($aliasName) {
-		$this->aliasName                   = $aliasName;
-		$this->queryParameters['AliasName']=$aliasName;
+	public function setAliasName($aliasName)
+	{
+		$this->aliasName                    = $aliasName;
+		$this->queryParameters["AliasName"] = $aliasName;
 	}
 
-	public function getAppKey() {
+	public function getAppKey()
+	{
 		return $this->appKey;
 	}
 
-	public function setAppKey($appKey) {
-		$this->appKey                   = $appKey;
-		$this->queryParameters['AppKey']=$appKey;
+	public function setAppKey($appKey)
+	{
+		$this->appKey                    = $appKey;
+		$this->queryParameters["AppKey"] = $appKey;
 	}
 
-	public function getDeviceId() {
+	public function getDeviceId()
+	{
 		return $this->deviceId;
 	}
 
-	public function setDeviceId($deviceId) {
-		$this->deviceId                   = $deviceId;
-		$this->queryParameters['DeviceId']=$deviceId;
+	public function setDeviceId($deviceId)
+	{
+		$this->deviceId                    = $deviceId;
+		$this->queryParameters["DeviceId"] = $deviceId;
 	}
 
-	public function getUnbindAll() {
+	public function getUnbindAll()
+	{
 		return $this->unbindAll;
 	}
 
-	public function setUnbindAll($unbindAll) {
-		$this->unbindAll                   = $unbindAll;
-		$this->queryParameters['UnbindAll']=$unbindAll;
+	public function setUnbindAll($unbindAll)
+	{
+		$this->unbindAll                    = $unbindAll;
+		$this->queryParameters["UnbindAll"] = $unbindAll;
 	}
+
 }

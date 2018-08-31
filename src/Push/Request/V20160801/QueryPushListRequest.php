@@ -22,42 +22,46 @@ namespace Poppy\Extension\Aliyun\Push\Request\V20160801;
 
 use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
-class BindTagRequest extends RpcAcsRequest
+class QueryPushListRequest extends RpcAcsRequest
 {
 	function __construct()
 	{
-		parent::__construct("Push", "2016-08-01", "BindTag");
+		parent::__construct("Push", "2016-08-01", "QueryPushList");
 		$this->setMethod("POST");
 	}
 
-	private $tagName;
+	private $pageSize;
 
-	private $clientKey;
+	private $endTime;
 
 	private $appKey;
 
-	private $keyType;
+	private $startTime;
 
-	public function getTagName()
+	private $page;
+
+	private $pushType;
+
+	public function getPageSize()
 	{
-		return $this->tagName;
+		return $this->pageSize;
 	}
 
-	public function setTagName($tagName)
+	public function setPageSize($pageSize)
 	{
-		$this->tagName                    = $tagName;
-		$this->queryParameters["TagName"] = $tagName;
+		$this->pageSize                    = $pageSize;
+		$this->queryParameters["PageSize"] = $pageSize;
 	}
 
-	public function getClientKey()
+	public function getEndTime()
 	{
-		return $this->clientKey;
+		return $this->endTime;
 	}
 
-	public function setClientKey($clientKey)
+	public function setEndTime($endTime)
 	{
-		$this->clientKey                    = $clientKey;
-		$this->queryParameters["ClientKey"] = $clientKey;
+		$this->endTime                    = $endTime;
+		$this->queryParameters["EndTime"] = $endTime;
 	}
 
 	public function getAppKey()
@@ -71,15 +75,37 @@ class BindTagRequest extends RpcAcsRequest
 		$this->queryParameters["AppKey"] = $appKey;
 	}
 
-	public function getKeyType()
+	public function getStartTime()
 	{
-		return $this->keyType;
+		return $this->startTime;
 	}
 
-	public function setKeyType($keyType)
+	public function setStartTime($startTime)
 	{
-		$this->keyType                    = $keyType;
-		$this->queryParameters["KeyType"] = $keyType;
+		$this->startTime                    = $startTime;
+		$this->queryParameters["StartTime"] = $startTime;
+	}
+
+	public function getPage()
+	{
+		return $this->page;
+	}
+
+	public function setPage($page)
+	{
+		$this->page                    = $page;
+		$this->queryParameters["Page"] = $page;
+	}
+
+	public function getPushType()
+	{
+		return $this->pushType;
+	}
+
+	public function setPushType($pushType)
+	{
+		$this->pushType                    = $pushType;
+		$this->queryParameters["PushType"] = $pushType;
 	}
 
 }

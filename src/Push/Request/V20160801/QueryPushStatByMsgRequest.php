@@ -17,37 +17,43 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 namespace Poppy\Extension\Aliyun\Push\Request\V20160801;
 
 use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
 class QueryPushStatByMsgRequest extends RpcAcsRequest
 {
-	public function __construct()
+	function __construct()
 	{
-		parent::__construct('Push', '2016-08-01', 'QueryPushStatByMsg');
-		$this->setMethod('POST');
+		parent::__construct("Push", "2016-08-01", "QueryPushStatByMsg");
+		$this->setMethod("POST");
 	}
 
 	private $messageId;
 
 	private $appKey;
 
-	public function getMessageId() {
+	public function getMessageId()
+	{
 		return $this->messageId;
 	}
 
-	public function setMessageId($messageId) {
-		$this->messageId                   = $messageId;
-		$this->queryParameters['MessageId']=$messageId;
+	public function setMessageId($messageId)
+	{
+		$this->messageId                    = $messageId;
+		$this->queryParameters["MessageId"] = $messageId;
 	}
 
-	public function getAppKey() {
+	public function getAppKey()
+	{
 		return $this->appKey;
 	}
 
-	public function setAppKey($appKey) {
-		$this->appKey                   = $appKey;
-		$this->queryParameters['AppKey']=$appKey;
+	public function setAppKey($appKey)
+	{
+		$this->appKey                    = $appKey;
+		$this->queryParameters["AppKey"] = $appKey;
 	}
+
 }

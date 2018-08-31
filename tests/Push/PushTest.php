@@ -6,18 +6,27 @@ use Poppy\Extension\Aliyun\Core\Regions\EndpointConfig;
 use Poppy\Extension\Aliyun\Push\Request\V20160801\PushRequest;
 use Poppy\Framework\Application\TestCase;
 
+/**
+ * 推送测试
+ */
 class PushTest extends TestCase
 {
+	/**
+	 * 测试推送
+	 */
 	public function testPush()
 	{
 		include '../../src/Core/Config.php';
-		$accessKeyId     = 'LTAI0DUpprvfRXiw';
-		$accessKeySecret = 'bL9XSXwKOsCza8Sg3lQJhZzxsWtsDJ';
-		$appKey          = '24787617';
+		$accessKeyId     = env('TEST_EXT_ALIYUN_ACCESS_KEY_ID');
+		$accessKeySecret = env('TEST_EXT_ALIYUN_ACCESS_KEY_SECRET');
+		$appKey          = env('TEST_EXT_ALIYUN_APP_KEY');
+		if (!$accessKeyId || !$accessKeySecret || !$appKey) {
+			$this->assertTrue(false, 'You have not define access_key|secret|app_key');
+		}
 		EndpointConfig::load();
-		$iClientProfile  = DefaultProfile::getProfile('cn-hangzhou', $accessKeyId, $accessKeySecret);
-		$client          = new DefaultAcsClient($iClientProfile);
-		$request         = new PushRequest();
+		$iClientProfile = DefaultProfile::getProfile('cn-hangzhou', $accessKeyId, $accessKeySecret);
+		$client         = new DefaultAcsClient($iClientProfile);
+		$request        = new PushRequest();
 		// 推送目标
 		$request->setAppKey($appKey);
 		$request->setTarget('ALL'); //推送目标: DEVICE:推送给设备; ACCOUNT:推送给指定帐号,TAG:推送给自定义标签; ALL: 推送给全部
@@ -50,8 +59,11 @@ class PushTest extends TestCase
 		$expireTime = gmdate('Y-m-d\TH:i:s\Z', strtotime('+1 day'));//设置失效时间为1天
 		$request->setExpireTime($expireTime);
 		$request->setStoreOffline('false'); // 离线消息是否保存,若保存, 在推送时候，用户即使不在线，下一次上线则会收到
-		$response = $client->getAcsResponse($request);
-		print_r("\r\n");
-		dd($response);
+		try {
+			$response = $client->getAcsResponse($request);
+			$this->assertNotEmpty($response->MessageId, 'Ali Push Message send success');
+		} catch (\Throwable $e) {
+			$this->assertTrue(false, $e->getMessage());
+		}
 	}
 }

@@ -17,37 +17,43 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 namespace Poppy\Extension\Aliyun\Push\Request\V20160801;
 
 use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
 class RemoveTagRequest extends RpcAcsRequest
 {
-	public function __construct()
+	function __construct()
 	{
-		parent::__construct('Push', '2016-08-01', 'RemoveTag');
-		$this->setMethod('POST');
+		parent::__construct("Push", "2016-08-01", "RemoveTag");
+		$this->setMethod("POST");
 	}
 
 	private $tagName;
 
 	private $appKey;
 
-	public function getTagName() {
+	public function getTagName()
+	{
 		return $this->tagName;
 	}
 
-	public function setTagName($tagName) {
-		$this->tagName                   = $tagName;
-		$this->queryParameters['TagName']=$tagName;
+	public function setTagName($tagName)
+	{
+		$this->tagName                    = $tagName;
+		$this->queryParameters["TagName"] = $tagName;
 	}
 
-	public function getAppKey() {
+	public function getAppKey()
+	{
 		return $this->appKey;
 	}
 
-	public function setAppKey($appKey) {
-		$this->appKey                   = $appKey;
-		$this->queryParameters['AppKey']=$appKey;
+	public function setAppKey($appKey)
+	{
+		$this->appKey                    = $appKey;
+		$this->queryParameters["AppKey"] = $appKey;
 	}
+
 }

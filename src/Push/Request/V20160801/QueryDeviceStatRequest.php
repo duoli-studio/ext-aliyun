@@ -17,16 +17,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 namespace Poppy\Extension\Aliyun\Push\Request\V20160801;
 
 use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
 class QueryDeviceStatRequest extends RpcAcsRequest
 {
-	public function __construct()
+	function __construct()
 	{
-		parent::__construct('Push', '2016-08-01', 'QueryDeviceStat');
-		$this->setMethod('POST');
+		parent::__construct("Push", "2016-08-01", "QueryDeviceStat");
+		$this->setMethod("POST");
 	}
 
 	private $endTime;
@@ -39,48 +40,59 @@ class QueryDeviceStatRequest extends RpcAcsRequest
 
 	private $queryType;
 
-	public function getEndTime() {
+	public function getEndTime()
+	{
 		return $this->endTime;
 	}
 
-	public function setEndTime($endTime) {
-		$this->endTime                   = $endTime;
-		$this->queryParameters['EndTime']=$endTime;
+	public function setEndTime($endTime)
+	{
+		$this->endTime                    = $endTime;
+		$this->queryParameters["EndTime"] = $endTime;
 	}
 
-	public function getAppKey() {
+	public function getAppKey()
+	{
 		return $this->appKey;
 	}
 
-	public function setAppKey($appKey) {
-		$this->appKey                   = $appKey;
-		$this->queryParameters['AppKey']=$appKey;
+	public function setAppKey($appKey)
+	{
+		$this->appKey                    = $appKey;
+		$this->queryParameters["AppKey"] = $appKey;
 	}
 
-	public function getStartTime() {
+	public function getStartTime()
+	{
 		return $this->startTime;
 	}
 
-	public function setStartTime($startTime) {
-		$this->startTime                   = $startTime;
-		$this->queryParameters['StartTime']=$startTime;
+	public function setStartTime($startTime)
+	{
+		$this->startTime                    = $startTime;
+		$this->queryParameters["StartTime"] = $startTime;
 	}
 
-	public function getDeviceType() {
+	public function getDeviceType()
+	{
 		return $this->deviceType;
 	}
 
-	public function setDeviceType($deviceType) {
-		$this->deviceType                   = $deviceType;
-		$this->queryParameters['DeviceType']=$deviceType;
+	public function setDeviceType($deviceType)
+	{
+		$this->deviceType                    = $deviceType;
+		$this->queryParameters["DeviceType"] = $deviceType;
 	}
 
-	public function getQueryType() {
+	public function getQueryType()
+	{
 		return $this->queryType;
 	}
 
-	public function setQueryType($queryType) {
-		$this->queryType                   = $queryType;
-		$this->queryParameters['QueryType']=$queryType;
+	public function setQueryType($queryType)
+	{
+		$this->queryType                    = $queryType;
+		$this->queryParameters["QueryType"] = $queryType;
 	}
+
 }

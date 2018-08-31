@@ -17,16 +17,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 namespace Poppy\Extension\Aliyun\Push\Request\V20160801;
 
 use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
 class QueryUniqueDeviceStatRequest extends RpcAcsRequest
 {
-	public function __construct()
+	function __construct()
 	{
-		parent::__construct('Push', '2016-08-01', 'QueryUniqueDeviceStat');
-		$this->setMethod('POST');
+		parent::__construct("Push", "2016-08-01", "QueryUniqueDeviceStat");
+		$this->setMethod("POST");
 	}
 
 	private $granularity;
@@ -37,39 +38,48 @@ class QueryUniqueDeviceStatRequest extends RpcAcsRequest
 
 	private $startTime;
 
-	public function getGranularity() {
+	public function getGranularity()
+	{
 		return $this->granularity;
 	}
 
-	public function setGranularity($granularity) {
-		$this->granularity                   = $granularity;
-		$this->queryParameters['Granularity']=$granularity;
+	public function setGranularity($granularity)
+	{
+		$this->granularity                    = $granularity;
+		$this->queryParameters["Granularity"] = $granularity;
 	}
 
-	public function getEndTime() {
+	public function getEndTime()
+	{
 		return $this->endTime;
 	}
 
-	public function setEndTime($endTime) {
-		$this->endTime                   = $endTime;
-		$this->queryParameters['EndTime']=$endTime;
+	public function setEndTime($endTime)
+	{
+		$this->endTime                    = $endTime;
+		$this->queryParameters["EndTime"] = $endTime;
 	}
 
-	public function getAppKey() {
+	public function getAppKey()
+	{
 		return $this->appKey;
 	}
 
-	public function setAppKey($appKey) {
-		$this->appKey                   = $appKey;
-		$this->queryParameters['AppKey']=$appKey;
+	public function setAppKey($appKey)
+	{
+		$this->appKey                    = $appKey;
+		$this->queryParameters["AppKey"] = $appKey;
 	}
 
-	public function getStartTime() {
+	public function getStartTime()
+	{
 		return $this->startTime;
 	}
 
-	public function setStartTime($startTime) {
-		$this->startTime                   = $startTime;
-		$this->queryParameters['StartTime']=$startTime;
+	public function setStartTime($startTime)
+	{
+		$this->startTime                    = $startTime;
+		$this->queryParameters["StartTime"] = $startTime;
 	}
+
 }
