@@ -4,10 +4,15 @@ namespace Poppy\Extension\Aliyun\Core\Auth;
 class Credential
 {
 	private $dateTimeFormat = 'Y-m-d\TH:i:s\Z';
+
 	private $refreshDate;
+
 	private $expiredDate;
+
 	private $accessKeyId;
+
 	private $accessSecret;
+
 	private $securityToken;
 	
 	public function __construct($accessKeyId, $accessSecret)

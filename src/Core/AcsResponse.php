@@ -4,6 +4,7 @@ namespace Poppy\Extension\Aliyun\Core;
 class AcsResponse
 {
 	private $code;
+
 	private $message;
 	
 	public function getCode()

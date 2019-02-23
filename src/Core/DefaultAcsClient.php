@@ -8,6 +8,7 @@ use Poppy\Extension\Aliyun\Core\Regions\EndpointProvider;
 class DefaultAcsClient implements IAcsClient
 {
 	public $iClientProfile;
+
 	public $__urlTestFlag__;
 
 	public function __construct($iClientProfile)

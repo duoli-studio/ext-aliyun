@@ -17,17 +17,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 namespace Poppy\Extension\Aliyun\Push\Request\V20160801;
 
 use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
 class QueryTagsRequest extends RpcAcsRequest
 {
-	function __construct()
+	public function __construct()
 	{
-		parent::__construct("Push", "2016-08-01", "QueryTags");
-		$this->setMethod("POST");
+		parent::__construct('Push', '2016-08-01', 'QueryTags');
+		$this->setMethod('POST');
 	}
 
 	private $clientKey;
@@ -44,7 +43,7 @@ class QueryTagsRequest extends RpcAcsRequest
 	public function setClientKey($clientKey)
 	{
 		$this->clientKey                    = $clientKey;
-		$this->queryParameters["ClientKey"] = $clientKey;
+		$this->queryParameters['ClientKey'] = $clientKey;
 	}
 
 	public function getAppKey()
@@ -55,7 +54,7 @@ class QueryTagsRequest extends RpcAcsRequest
 	public function setAppKey($appKey)
 	{
 		$this->appKey                    = $appKey;
-		$this->queryParameters["AppKey"] = $appKey;
+		$this->queryParameters['AppKey'] = $appKey;
 	}
 
 	public function getKeyType()
@@ -66,7 +65,6 @@ class QueryTagsRequest extends RpcAcsRequest
 	public function setKeyType($keyType)
 	{
 		$this->keyType                    = $keyType;
-		$this->queryParameters["KeyType"] = $keyType;
+		$this->queryParameters['KeyType'] = $keyType;
 	}
-
 }

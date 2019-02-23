@@ -19,16 +19,15 @@
  * under the License.
  */
 
-
 use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
 class GenerateSessionAccessKeyRequest extends RpcAcsRequest
 {
 	public function __construct()
 	{
-		parent::__construct("Sts", "2015-04-01", "GenerateSessionAccessKey");
-		$this->setProtocol("https");
-		$this->setMethod("POST");
+		parent::__construct('Sts', '2015-04-01', 'GenerateSessionAccessKey');
+		$this->setProtocol('https');
+		$this->setMethod('POST');
 	}
 
 	private $durationSeconds;
@@ -41,7 +40,6 @@ class GenerateSessionAccessKeyRequest extends RpcAcsRequest
 	public function setDurationSeconds($durationSeconds)
 	{
 		$this->durationSeconds                    = $durationSeconds;
-		$this->queryParameters["DurationSeconds"] = $durationSeconds;
+		$this->queryParameters['DurationSeconds'] = $durationSeconds;
 	}
-
 }

@@ -12,7 +12,9 @@ class ClientException extends \Exception
 	}
 	
 	private $errorCode;
+
 	private $errorMessage;
+
 	private $errorType;
 	
 	public function getErrorCode()

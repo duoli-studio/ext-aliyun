@@ -17,17 +17,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 namespace Poppy\Extension\Aliyun\Push\Request\V20160801;
 
 use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
 class PushRequest extends RpcAcsRequest
 {
-	function __construct()
+	public function __construct()
 	{
-		parent::__construct("Push", "2016-08-01", "Push");
-		$this->setMethod("POST");
+		parent::__construct('Push', '2016-08-01', 'Push');
+		$this->setMethod('POST');
 	}
 
 	private $androidNotificationBarType;
@@ -126,7 +125,7 @@ class PushRequest extends RpcAcsRequest
 	public function setAndroidNotificationBarType($androidNotificationBarType)
 	{
 		$this->androidNotificationBarType                    = $androidNotificationBarType;
-		$this->queryParameters["AndroidNotificationBarType"] = $androidNotificationBarType;
+		$this->queryParameters['AndroidNotificationBarType'] = $androidNotificationBarType;
 	}
 
 	public function getSmsSendPolicy()
@@ -137,7 +136,7 @@ class PushRequest extends RpcAcsRequest
 	public function setSmsSendPolicy($smsSendPolicy)
 	{
 		$this->smsSendPolicy                    = $smsSendPolicy;
-		$this->queryParameters["SmsSendPolicy"] = $smsSendPolicy;
+		$this->queryParameters['SmsSendPolicy'] = $smsSendPolicy;
 	}
 
 	public function getAndroidExtParameters()
@@ -148,7 +147,7 @@ class PushRequest extends RpcAcsRequest
 	public function setAndroidExtParameters($androidExtParameters)
 	{
 		$this->androidExtParameters                    = $androidExtParameters;
-		$this->queryParameters["AndroidExtParameters"] = $androidExtParameters;
+		$this->queryParameters['AndroidExtParameters'] = $androidExtParameters;
 	}
 
 	public function getiOSBadge()
@@ -159,7 +158,7 @@ class PushRequest extends RpcAcsRequest
 	public function setiOSBadge($iOSBadge)
 	{
 		$this->iOSBadge                    = $iOSBadge;
-		$this->queryParameters["iOSBadge"] = $iOSBadge;
+		$this->queryParameters['iOSBadge'] = $iOSBadge;
 	}
 
 	public function getiOSBadgeAutoIncrement()
@@ -170,7 +169,7 @@ class PushRequest extends RpcAcsRequest
 	public function setiOSBadgeAutoIncrement($iOSBadgeAutoIncrement)
 	{
 		$this->iOSBadgeAutoIncrement                    = $iOSBadgeAutoIncrement;
-		$this->queryParameters["iOSBadgeAutoIncrement"] = $iOSBadgeAutoIncrement;
+		$this->queryParameters['iOSBadgeAutoIncrement'] = $iOSBadgeAutoIncrement;
 	}
 
 	public function getAndroidOpenType()
@@ -181,7 +180,7 @@ class PushRequest extends RpcAcsRequest
 	public function setAndroidOpenType($androidOpenType)
 	{
 		$this->androidOpenType                    = $androidOpenType;
-		$this->queryParameters["AndroidOpenType"] = $androidOpenType;
+		$this->queryParameters['AndroidOpenType'] = $androidOpenType;
 	}
 
 	public function getTitle()
@@ -192,7 +191,7 @@ class PushRequest extends RpcAcsRequest
 	public function setTitle($title)
 	{
 		$this->title                    = $title;
-		$this->queryParameters["Title"] = $title;
+		$this->queryParameters['Title'] = $title;
 	}
 
 	public function getBody()
@@ -203,7 +202,7 @@ class PushRequest extends RpcAcsRequest
 	public function setBody($body)
 	{
 		$this->body                    = $body;
-		$this->queryParameters["Body"] = $body;
+		$this->queryParameters['Body'] = $body;
 	}
 
 	public function getDeviceType()
@@ -214,7 +213,7 @@ class PushRequest extends RpcAcsRequest
 	public function setDeviceType($deviceType)
 	{
 		$this->deviceType                    = $deviceType;
-		$this->queryParameters["DeviceType"] = $deviceType;
+		$this->queryParameters['DeviceType'] = $deviceType;
 	}
 
 	public function getPushTime()
@@ -225,7 +224,7 @@ class PushRequest extends RpcAcsRequest
 	public function setPushTime($pushTime)
 	{
 		$this->pushTime                    = $pushTime;
-		$this->queryParameters["PushTime"] = $pushTime;
+		$this->queryParameters['PushTime'] = $pushTime;
 	}
 
 	public function getSmsDelaySecs()
@@ -236,7 +235,7 @@ class PushRequest extends RpcAcsRequest
 	public function setSmsDelaySecs($smsDelaySecs)
 	{
 		$this->smsDelaySecs                    = $smsDelaySecs;
-		$this->queryParameters["SmsDelaySecs"] = $smsDelaySecs;
+		$this->queryParameters['SmsDelaySecs'] = $smsDelaySecs;
 	}
 
 	public function getSendSpeed()
@@ -247,7 +246,7 @@ class PushRequest extends RpcAcsRequest
 	public function setSendSpeed($sendSpeed)
 	{
 		$this->sendSpeed                    = $sendSpeed;
-		$this->queryParameters["SendSpeed"] = $sendSpeed;
+		$this->queryParameters['SendSpeed'] = $sendSpeed;
 	}
 
 	public function getAndroidPopupActivity()
@@ -258,7 +257,7 @@ class PushRequest extends RpcAcsRequest
 	public function setAndroidPopupActivity($androidPopupActivity)
 	{
 		$this->androidPopupActivity                    = $androidPopupActivity;
-		$this->queryParameters["AndroidPopupActivity"] = $androidPopupActivity;
+		$this->queryParameters['AndroidPopupActivity'] = $androidPopupActivity;
 	}
 
 	public function getiOSRemindBody()
@@ -269,7 +268,7 @@ class PushRequest extends RpcAcsRequest
 	public function setiOSRemindBody($iOSRemindBody)
 	{
 		$this->iOSRemindBody                    = $iOSRemindBody;
-		$this->queryParameters["iOSRemindBody"] = $iOSRemindBody;
+		$this->queryParameters['iOSRemindBody'] = $iOSRemindBody;
 	}
 
 	public function getiOSExtParameters()
@@ -280,7 +279,7 @@ class PushRequest extends RpcAcsRequest
 	public function setiOSExtParameters($iOSExtParameters)
 	{
 		$this->iOSExtParameters                    = $iOSExtParameters;
-		$this->queryParameters["iOSExtParameters"] = $iOSExtParameters;
+		$this->queryParameters['iOSExtParameters'] = $iOSExtParameters;
 	}
 
 	public function getAndroidNotifyType()
@@ -291,7 +290,7 @@ class PushRequest extends RpcAcsRequest
 	public function setAndroidNotifyType($androidNotifyType)
 	{
 		$this->androidNotifyType                    = $androidNotifyType;
-		$this->queryParameters["AndroidNotifyType"] = $androidNotifyType;
+		$this->queryParameters['AndroidNotifyType'] = $androidNotifyType;
 	}
 
 	public function getAndroidPopupTitle()
@@ -302,7 +301,7 @@ class PushRequest extends RpcAcsRequest
 	public function setAndroidPopupTitle($androidPopupTitle)
 	{
 		$this->androidPopupTitle                    = $androidPopupTitle;
-		$this->queryParameters["AndroidPopupTitle"] = $androidPopupTitle;
+		$this->queryParameters['AndroidPopupTitle'] = $androidPopupTitle;
 	}
 
 	public function getiOSMusic()
@@ -313,7 +312,7 @@ class PushRequest extends RpcAcsRequest
 	public function setiOSMusic($iOSMusic)
 	{
 		$this->iOSMusic                    = $iOSMusic;
-		$this->queryParameters["iOSMusic"] = $iOSMusic;
+		$this->queryParameters['iOSMusic'] = $iOSMusic;
 	}
 
 	public function getiOSApnsEnv()
@@ -324,7 +323,7 @@ class PushRequest extends RpcAcsRequest
 	public function setiOSApnsEnv($iOSApnsEnv)
 	{
 		$this->iOSApnsEnv                    = $iOSApnsEnv;
-		$this->queryParameters["iOSApnsEnv"] = $iOSApnsEnv;
+		$this->queryParameters['iOSApnsEnv'] = $iOSApnsEnv;
 	}
 
 	public function getiOSMutableContent()
@@ -335,7 +334,7 @@ class PushRequest extends RpcAcsRequest
 	public function setiOSMutableContent($iOSMutableContent)
 	{
 		$this->iOSMutableContent                    = $iOSMutableContent;
-		$this->queryParameters["iOSMutableContent"] = $iOSMutableContent;
+		$this->queryParameters['iOSMutableContent'] = $iOSMutableContent;
 	}
 
 	public function getAndroidNotificationBarPriority()
@@ -346,7 +345,7 @@ class PushRequest extends RpcAcsRequest
 	public function setAndroidNotificationBarPriority($androidNotificationBarPriority)
 	{
 		$this->androidNotificationBarPriority                    = $androidNotificationBarPriority;
-		$this->queryParameters["AndroidNotificationBarPriority"] = $androidNotificationBarPriority;
+		$this->queryParameters['AndroidNotificationBarPriority'] = $androidNotificationBarPriority;
 	}
 
 	public function getExpireTime()
@@ -357,7 +356,7 @@ class PushRequest extends RpcAcsRequest
 	public function setExpireTime($expireTime)
 	{
 		$this->expireTime                    = $expireTime;
-		$this->queryParameters["ExpireTime"] = $expireTime;
+		$this->queryParameters['ExpireTime'] = $expireTime;
 	}
 
 	public function getSmsTemplateName()
@@ -368,7 +367,7 @@ class PushRequest extends RpcAcsRequest
 	public function setSmsTemplateName($smsTemplateName)
 	{
 		$this->smsTemplateName                    = $smsTemplateName;
-		$this->queryParameters["SmsTemplateName"] = $smsTemplateName;
+		$this->queryParameters['SmsTemplateName'] = $smsTemplateName;
 	}
 
 	public function getAndroidPopupBody()
@@ -379,7 +378,7 @@ class PushRequest extends RpcAcsRequest
 	public function setAndroidPopupBody($androidPopupBody)
 	{
 		$this->androidPopupBody                    = $androidPopupBody;
-		$this->queryParameters["AndroidPopupBody"] = $androidPopupBody;
+		$this->queryParameters['AndroidPopupBody'] = $androidPopupBody;
 	}
 
 	public function getiOSNotificationCategory()
@@ -390,7 +389,7 @@ class PushRequest extends RpcAcsRequest
 	public function setiOSNotificationCategory($iOSNotificationCategory)
 	{
 		$this->iOSNotificationCategory                    = $iOSNotificationCategory;
-		$this->queryParameters["iOSNotificationCategory"] = $iOSNotificationCategory;
+		$this->queryParameters['iOSNotificationCategory'] = $iOSNotificationCategory;
 	}
 
 	public function getStoreOffline()
@@ -401,7 +400,7 @@ class PushRequest extends RpcAcsRequest
 	public function setStoreOffline($storeOffline)
 	{
 		$this->storeOffline                    = $storeOffline;
-		$this->queryParameters["StoreOffline"] = $storeOffline;
+		$this->queryParameters['StoreOffline'] = $storeOffline;
 	}
 
 	public function getiOSSilentNotification()
@@ -412,7 +411,7 @@ class PushRequest extends RpcAcsRequest
 	public function setiOSSilentNotification($iOSSilentNotification)
 	{
 		$this->iOSSilentNotification                    = $iOSSilentNotification;
-		$this->queryParameters["iOSSilentNotification"] = $iOSSilentNotification;
+		$this->queryParameters['iOSSilentNotification'] = $iOSSilentNotification;
 	}
 
 	public function getSmsParams()
@@ -423,7 +422,7 @@ class PushRequest extends RpcAcsRequest
 	public function setSmsParams($smsParams)
 	{
 		$this->smsParams                    = $smsParams;
-		$this->queryParameters["SmsParams"] = $smsParams;
+		$this->queryParameters['SmsParams'] = $smsParams;
 	}
 
 	public function getJobKey()
@@ -434,7 +433,7 @@ class PushRequest extends RpcAcsRequest
 	public function setJobKey($jobKey)
 	{
 		$this->jobKey                    = $jobKey;
-		$this->queryParameters["JobKey"] = $jobKey;
+		$this->queryParameters['JobKey'] = $jobKey;
 	}
 
 	public function getTarget()
@@ -445,7 +444,7 @@ class PushRequest extends RpcAcsRequest
 	public function setTarget($target)
 	{
 		$this->target                    = $target;
-		$this->queryParameters["Target"] = $target;
+		$this->queryParameters['Target'] = $target;
 	}
 
 	public function getAndroidOpenUrl()
@@ -456,7 +455,7 @@ class PushRequest extends RpcAcsRequest
 	public function setAndroidOpenUrl($androidOpenUrl)
 	{
 		$this->androidOpenUrl                    = $androidOpenUrl;
-		$this->queryParameters["AndroidOpenUrl"] = $androidOpenUrl;
+		$this->queryParameters['AndroidOpenUrl'] = $androidOpenUrl;
 	}
 
 	public function getAndroidNotificationChannel()
@@ -467,7 +466,7 @@ class PushRequest extends RpcAcsRequest
 	public function setAndroidNotificationChannel($androidNotificationChannel)
 	{
 		$this->androidNotificationChannel                    = $androidNotificationChannel;
-		$this->queryParameters["AndroidNotificationChannel"] = $androidNotificationChannel;
+		$this->queryParameters['AndroidNotificationChannel'] = $androidNotificationChannel;
 	}
 
 	public function getAndroidRemind()
@@ -478,7 +477,7 @@ class PushRequest extends RpcAcsRequest
 	public function setAndroidRemind($androidRemind)
 	{
 		$this->androidRemind                    = $androidRemind;
-		$this->queryParameters["AndroidRemind"] = $androidRemind;
+		$this->queryParameters['AndroidRemind'] = $androidRemind;
 	}
 
 	public function getAndroidActivity()
@@ -489,7 +488,7 @@ class PushRequest extends RpcAcsRequest
 	public function setAndroidActivity($androidActivity)
 	{
 		$this->androidActivity                    = $androidActivity;
-		$this->queryParameters["AndroidActivity"] = $androidActivity;
+		$this->queryParameters['AndroidActivity'] = $androidActivity;
 	}
 
 	public function getAndroidXiaoMiNotifyBody()
@@ -500,7 +499,7 @@ class PushRequest extends RpcAcsRequest
 	public function setAndroidXiaoMiNotifyBody($androidXiaoMiNotifyBody)
 	{
 		$this->androidXiaoMiNotifyBody                    = $androidXiaoMiNotifyBody;
-		$this->queryParameters["AndroidXiaoMiNotifyBody"] = $androidXiaoMiNotifyBody;
+		$this->queryParameters['AndroidXiaoMiNotifyBody'] = $androidXiaoMiNotifyBody;
 	}
 
 	public function getiOSSubtitle()
@@ -511,7 +510,7 @@ class PushRequest extends RpcAcsRequest
 	public function setiOSSubtitle($iOSSubtitle)
 	{
 		$this->iOSSubtitle                    = $iOSSubtitle;
-		$this->queryParameters["iOSSubtitle"] = $iOSSubtitle;
+		$this->queryParameters['iOSSubtitle'] = $iOSSubtitle;
 	}
 
 	public function getSmsSignName()
@@ -522,7 +521,7 @@ class PushRequest extends RpcAcsRequest
 	public function setSmsSignName($smsSignName)
 	{
 		$this->smsSignName                    = $smsSignName;
-		$this->queryParameters["SmsSignName"] = $smsSignName;
+		$this->queryParameters['SmsSignName'] = $smsSignName;
 	}
 
 	public function getiOSRemind()
@@ -533,7 +532,7 @@ class PushRequest extends RpcAcsRequest
 	public function setiOSRemind($iOSRemind)
 	{
 		$this->iOSRemind                    = $iOSRemind;
-		$this->queryParameters["iOSRemind"] = $iOSRemind;
+		$this->queryParameters['iOSRemind'] = $iOSRemind;
 	}
 
 	public function getAppKey()
@@ -544,7 +543,7 @@ class PushRequest extends RpcAcsRequest
 	public function setAppKey($appKey)
 	{
 		$this->appKey                    = $appKey;
-		$this->queryParameters["AppKey"] = $appKey;
+		$this->queryParameters['AppKey'] = $appKey;
 	}
 
 	public function getTargetValue()
@@ -555,7 +554,7 @@ class PushRequest extends RpcAcsRequest
 	public function setTargetValue($targetValue)
 	{
 		$this->targetValue                    = $targetValue;
-		$this->queryParameters["TargetValue"] = $targetValue;
+		$this->queryParameters['TargetValue'] = $targetValue;
 	}
 
 	public function getAndroidMusic()
@@ -566,7 +565,7 @@ class PushRequest extends RpcAcsRequest
 	public function setAndroidMusic($androidMusic)
 	{
 		$this->androidMusic                    = $androidMusic;
-		$this->queryParameters["AndroidMusic"] = $androidMusic;
+		$this->queryParameters['AndroidMusic'] = $androidMusic;
 	}
 
 	public function getAndroidXiaoMiActivity()
@@ -577,7 +576,7 @@ class PushRequest extends RpcAcsRequest
 	public function setAndroidXiaoMiActivity($androidXiaoMiActivity)
 	{
 		$this->androidXiaoMiActivity                    = $androidXiaoMiActivity;
-		$this->queryParameters["AndroidXiaoMiActivity"] = $androidXiaoMiActivity;
+		$this->queryParameters['AndroidXiaoMiActivity'] = $androidXiaoMiActivity;
 	}
 
 	public function getAndroidXiaoMiNotifyTitle()
@@ -588,7 +587,7 @@ class PushRequest extends RpcAcsRequest
 	public function setAndroidXiaoMiNotifyTitle($androidXiaoMiNotifyTitle)
 	{
 		$this->androidXiaoMiNotifyTitle                    = $androidXiaoMiNotifyTitle;
-		$this->queryParameters["AndroidXiaoMiNotifyTitle"] = $androidXiaoMiNotifyTitle;
+		$this->queryParameters['AndroidXiaoMiNotifyTitle'] = $androidXiaoMiNotifyTitle;
 	}
 
 	public function getPushType()
@@ -599,7 +598,6 @@ class PushRequest extends RpcAcsRequest
 	public function setPushType($pushType)
 	{
 		$this->pushType                    = $pushType;
-		$this->queryParameters["PushType"] = $pushType;
+		$this->queryParameters['PushType'] = $pushType;
 	}
-
 }

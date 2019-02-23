@@ -4,6 +4,7 @@ namespace Poppy\Extension\Aliyun\Core\Regions;
 class ProductDomain
 {
 	private $productName;
+
 	private $domainName;
 	
 	public function __construct($product, $domain) {

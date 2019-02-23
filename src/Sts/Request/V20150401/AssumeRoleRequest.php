@@ -19,16 +19,15 @@
  * under the License.
  */
 
-
 use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
 class AssumeRoleRequest extends RpcAcsRequest
 {
 	public function __construct()
 	{
-		parent::__construct("Sts", "2015-04-01", "AssumeRole");
-		$this->setProtocol("https");
-		$this->setMethod("POST");
+		parent::__construct('Sts', '2015-04-01', 'AssumeRole');
+		$this->setProtocol('https');
+		$this->setMethod('POST');
 	}
 
 	private $roleArn;
@@ -47,7 +46,7 @@ class AssumeRoleRequest extends RpcAcsRequest
 	public function setRoleArn($roleArn)
 	{
 		$this->roleArn                    = $roleArn;
-		$this->queryParameters["RoleArn"] = $roleArn;
+		$this->queryParameters['RoleArn'] = $roleArn;
 	}
 
 	public function getRoleSessionName()
@@ -58,7 +57,7 @@ class AssumeRoleRequest extends RpcAcsRequest
 	public function setRoleSessionName($roleSessionName)
 	{
 		$this->roleSessionName                    = $roleSessionName;
-		$this->queryParameters["RoleSessionName"] = $roleSessionName;
+		$this->queryParameters['RoleSessionName'] = $roleSessionName;
 	}
 
 	public function getDurationSeconds()
@@ -69,7 +68,7 @@ class AssumeRoleRequest extends RpcAcsRequest
 	public function setDurationSeconds($durationSeconds)
 	{
 		$this->durationSeconds                    = $durationSeconds;
-		$this->queryParameters["DurationSeconds"] = $durationSeconds;
+		$this->queryParameters['DurationSeconds'] = $durationSeconds;
 	}
 
 	public function getPolicy()
@@ -80,7 +79,6 @@ class AssumeRoleRequest extends RpcAcsRequest
 	public function setPolicy($policy)
 	{
 		$this->policy                    = $policy;
-		$this->queryParameters["Policy"] = $policy;
+		$this->queryParameters['Policy'] = $policy;
 	}
-
 }

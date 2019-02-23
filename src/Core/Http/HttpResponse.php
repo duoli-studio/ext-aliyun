@@ -4,6 +4,7 @@ namespace Poppy\Extension\Aliyun\Core\Http;
 class HttpResponse
 {
 	private $body;
+
 	private $status;
 	
 	public function getBody()

@@ -10,12 +10,17 @@ use Poppy\Extension\Aliyun\Core\Regions\ProductDomain;
 class DefaultProfile implements IClientProfile
 {
 	private static $profile;
+
 	private static $endpoints;
+
 	private static $credential;
+
 	private static $regionId;
+
 	private static $acceptFormat;
 	
 	private static $isigner;
+
 	private static $iCredential;
 	
 	private function __construct($regionId, $credential)
@@ -26,7 +31,7 @@ class DefaultProfile implements IClientProfile
 	
 	public static function getProfile($regionId, $accessKeyId, $accessSecret)
 	{
-		$credential    =new Credential($accessKeyId, $accessSecret);
+		$credential    = new Credential($accessKeyId, $accessSecret);
 		self::$profile = new self($regionId, $credential);
 
 		return self::$profile;

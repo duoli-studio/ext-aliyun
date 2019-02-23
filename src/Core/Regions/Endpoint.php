@@ -4,7 +4,9 @@ namespace Poppy\Extension\Aliyun\Core\Regions;
 class Endpoint
 {
 	private $name;
+
 	private $regionIds;
+
 	private $productDomains;
 	
 	public function __construct($name, $regionIds, $productDomains)

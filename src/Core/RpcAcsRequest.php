@@ -4,6 +4,7 @@ namespace Poppy\Extension\Aliyun\Core;
 abstract class RpcAcsRequest extends AcsRequest
 {
 	private $dateTimeFormat   = 'Y-m-d\TH:i:s\Z';
+
 	private $domainParameters = [];
 	
 	public function __construct($product, $version, $actionName)

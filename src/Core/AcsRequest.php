@@ -3,15 +3,23 @@
 abstract class AcsRequest
 {
 	protected $version;
+
 	protected $product;
+
 	protected $actionName;
+
 	protected $regionId;
+
 	protected $acceptFormat;
+
 	protected $method;
+
 	protected $protocolType = 'http';
+
 	protected $content;
 	
 	protected $queryParameters = [];
+
 	protected $headers         = [];
 	
 	public function __construct($product, $version, $actionName)

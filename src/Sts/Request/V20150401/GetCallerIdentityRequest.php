@@ -19,16 +19,14 @@
  * under the License.
  */
 
-
 use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
 class GetCallerIdentityRequest extends RpcAcsRequest
 {
 	public function __construct()
 	{
-		parent::__construct("Sts", "2015-04-01", "GetCallerIdentity");
-		$this->setProtocol("https");
-		$this->setMethod("POST");
+		parent::__construct('Sts', '2015-04-01', 'GetCallerIdentity');
+		$this->setProtocol('https');
+		$this->setMethod('POST');
 	}
-
 }

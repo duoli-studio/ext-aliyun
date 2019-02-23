@@ -17,17 +17,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 namespace Poppy\Extension\Aliyun\Push\Request\V20160801;
 
 use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
 class ListPushRecordsRequest extends RpcAcsRequest
 {
-	function __construct()
+	public function __construct()
 	{
-		parent::__construct("Push", "2016-08-01", "ListPushRecords");
-		$this->setMethod("POST");
+		parent::__construct('Push', '2016-08-01', 'ListPushRecords');
+		$this->setMethod('POST');
 	}
 
 	private $pageSize;
@@ -50,7 +49,7 @@ class ListPushRecordsRequest extends RpcAcsRequest
 	public function setPageSize($pageSize)
 	{
 		$this->pageSize                    = $pageSize;
-		$this->queryParameters["PageSize"] = $pageSize;
+		$this->queryParameters['PageSize'] = $pageSize;
 	}
 
 	public function getEndTime()
@@ -61,7 +60,7 @@ class ListPushRecordsRequest extends RpcAcsRequest
 	public function setEndTime($endTime)
 	{
 		$this->endTime                    = $endTime;
-		$this->queryParameters["EndTime"] = $endTime;
+		$this->queryParameters['EndTime'] = $endTime;
 	}
 
 	public function getAppKey()
@@ -72,7 +71,7 @@ class ListPushRecordsRequest extends RpcAcsRequest
 	public function setAppKey($appKey)
 	{
 		$this->appKey                    = $appKey;
-		$this->queryParameters["AppKey"] = $appKey;
+		$this->queryParameters['AppKey'] = $appKey;
 	}
 
 	public function getStartTime()
@@ -83,7 +82,7 @@ class ListPushRecordsRequest extends RpcAcsRequest
 	public function setStartTime($startTime)
 	{
 		$this->startTime                    = $startTime;
-		$this->queryParameters["StartTime"] = $startTime;
+		$this->queryParameters['StartTime'] = $startTime;
 	}
 
 	public function getPage()
@@ -94,7 +93,7 @@ class ListPushRecordsRequest extends RpcAcsRequest
 	public function setPage($page)
 	{
 		$this->page                    = $page;
-		$this->queryParameters["Page"] = $page;
+		$this->queryParameters['Page'] = $page;
 	}
 
 	public function getPushType()
@@ -105,7 +104,6 @@ class ListPushRecordsRequest extends RpcAcsRequest
 	public function setPushType($pushType)
 	{
 		$this->pushType                    = $pushType;
-		$this->queryParameters["PushType"] = $pushType;
+		$this->queryParameters['PushType'] = $pushType;
 	}
-
 }

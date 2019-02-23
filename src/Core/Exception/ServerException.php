@@ -4,6 +4,7 @@ namespace Poppy\Extension\Aliyun\Core\Exception;
 class ServerException extends ClientException
 {
 	private $httpStatus;
+
 	private $requestId;
 
 	public function __construct($errorMessage, $errorCode, $httpStatus, $requestId)

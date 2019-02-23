@@ -17,17 +17,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 namespace Poppy\Extension\Aliyun\Push\Request\V20160801;
 
 use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
 class CheckDeviceRequest extends RpcAcsRequest
 {
-	function __construct()
+	public function __construct()
 	{
-		parent::__construct("Push", "2016-08-01", "CheckDevice");
-		$this->setMethod("POST");
+		parent::__construct('Push', '2016-08-01', 'CheckDevice');
+		$this->setMethod('POST');
 	}
 
 	private $appKey;
@@ -42,7 +41,7 @@ class CheckDeviceRequest extends RpcAcsRequest
 	public function setAppKey($appKey)
 	{
 		$this->appKey                    = $appKey;
-		$this->queryParameters["AppKey"] = $appKey;
+		$this->queryParameters['AppKey'] = $appKey;
 	}
 
 	public function getDeviceId()
@@ -53,7 +52,6 @@ class CheckDeviceRequest extends RpcAcsRequest
 	public function setDeviceId($deviceId)
 	{
 		$this->deviceId                    = $deviceId;
-		$this->queryParameters["DeviceId"] = $deviceId;
+		$this->queryParameters['DeviceId'] = $deviceId;
 	}
-
 }

@@ -17,17 +17,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 namespace Poppy\Extension\Aliyun\Push\Request\V20160801;
 
 use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
 class PushMessageToAndroidRequest extends RpcAcsRequest
 {
-	function __construct()
+	public function __construct()
 	{
-		parent::__construct("Push", "2016-08-01", "PushMessageToAndroid");
-		$this->setMethod("POST");
+		parent::__construct('Push', '2016-08-01', 'PushMessageToAndroid');
+		$this->setMethod('POST');
 	}
 
 	private $appKey;
@@ -50,7 +49,7 @@ class PushMessageToAndroidRequest extends RpcAcsRequest
 	public function setAppKey($appKey)
 	{
 		$this->appKey                    = $appKey;
-		$this->queryParameters["AppKey"] = $appKey;
+		$this->queryParameters['AppKey'] = $appKey;
 	}
 
 	public function getTargetValue()
@@ -61,7 +60,7 @@ class PushMessageToAndroidRequest extends RpcAcsRequest
 	public function setTargetValue($targetValue)
 	{
 		$this->targetValue                    = $targetValue;
-		$this->queryParameters["TargetValue"] = $targetValue;
+		$this->queryParameters['TargetValue'] = $targetValue;
 	}
 
 	public function getTitle()
@@ -72,7 +71,7 @@ class PushMessageToAndroidRequest extends RpcAcsRequest
 	public function setTitle($title)
 	{
 		$this->title                    = $title;
-		$this->queryParameters["Title"] = $title;
+		$this->queryParameters['Title'] = $title;
 	}
 
 	public function getBody()
@@ -83,7 +82,7 @@ class PushMessageToAndroidRequest extends RpcAcsRequest
 	public function setBody($body)
 	{
 		$this->body                    = $body;
-		$this->queryParameters["Body"] = $body;
+		$this->queryParameters['Body'] = $body;
 	}
 
 	public function getJobKey()
@@ -94,7 +93,7 @@ class PushMessageToAndroidRequest extends RpcAcsRequest
 	public function setJobKey($jobKey)
 	{
 		$this->jobKey                    = $jobKey;
-		$this->queryParameters["JobKey"] = $jobKey;
+		$this->queryParameters['JobKey'] = $jobKey;
 	}
 
 	public function getTarget()
@@ -105,7 +104,6 @@ class PushMessageToAndroidRequest extends RpcAcsRequest
 	public function setTarget($target)
 	{
 		$this->target                    = $target;
-		$this->queryParameters["Target"] = $target;
+		$this->queryParameters['Target'] = $target;
 	}
-
 }

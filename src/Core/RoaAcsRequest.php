@@ -4,10 +4,15 @@ namespace Poppy\Extension\Aliyun\Core;
 abstract class RoaAcsRequest extends AcsRequest
 {
 	protected $uriPattern;
+
 	private $pathParameters         = [];
+
 	private $domainParameters       = [];
-	private $dateTimeFormat         ="D, d M Y H:i:s \G\M\T";
+
+	private $dateTimeFormat         = "D, d M Y H:i:s \G\M\T";
+
 	private static $headerSeparator = "\n";
+
 	private static $querySeprator   = '&';
 	
 	public function __construct($product, $version, $actionName)

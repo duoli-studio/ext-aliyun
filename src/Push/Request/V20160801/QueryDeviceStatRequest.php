@@ -17,17 +17,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 namespace Poppy\Extension\Aliyun\Push\Request\V20160801;
 
 use Poppy\Extension\Aliyun\Core\RpcAcsRequest;
 
 class QueryDeviceStatRequest extends RpcAcsRequest
 {
-	function __construct()
+	public function __construct()
 	{
-		parent::__construct("Push", "2016-08-01", "QueryDeviceStat");
-		$this->setMethod("POST");
+		parent::__construct('Push', '2016-08-01', 'QueryDeviceStat');
+		$this->setMethod('POST');
 	}
 
 	private $endTime;
@@ -48,7 +47,7 @@ class QueryDeviceStatRequest extends RpcAcsRequest
 	public function setEndTime($endTime)
 	{
 		$this->endTime                    = $endTime;
-		$this->queryParameters["EndTime"] = $endTime;
+		$this->queryParameters['EndTime'] = $endTime;
 	}
 
 	public function getAppKey()
@@ -59,7 +58,7 @@ class QueryDeviceStatRequest extends RpcAcsRequest
 	public function setAppKey($appKey)
 	{
 		$this->appKey                    = $appKey;
-		$this->queryParameters["AppKey"] = $appKey;
+		$this->queryParameters['AppKey'] = $appKey;
 	}
 
 	public function getStartTime()
@@ -70,7 +69,7 @@ class QueryDeviceStatRequest extends RpcAcsRequest
 	public function setStartTime($startTime)
 	{
 		$this->startTime                    = $startTime;
-		$this->queryParameters["StartTime"] = $startTime;
+		$this->queryParameters['StartTime'] = $startTime;
 	}
 
 	public function getDeviceType()
@@ -81,7 +80,7 @@ class QueryDeviceStatRequest extends RpcAcsRequest
 	public function setDeviceType($deviceType)
 	{
 		$this->deviceType                    = $deviceType;
-		$this->queryParameters["DeviceType"] = $deviceType;
+		$this->queryParameters['DeviceType'] = $deviceType;
 	}
 
 	public function getQueryType()
@@ -92,7 +91,6 @@ class QueryDeviceStatRequest extends RpcAcsRequest
 	public function setQueryType($queryType)
 	{
 		$this->queryType                    = $queryType;
-		$this->queryParameters["QueryType"] = $queryType;
+		$this->queryParameters['QueryType'] = $queryType;
 	}
-
 }

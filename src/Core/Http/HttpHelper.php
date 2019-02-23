@@ -5,6 +5,7 @@ use Poppy\Extension\Aliyun\Core\Exception\ClientException;
 class HttpHelper
 {
 	public static $connectTimeout = 30;//30 second
+
 	public static $readTimeout    = 80;//80 second
 
 	public static function curl($url, $httpMethod = 'GET', $postFields = null, $headers = null)
