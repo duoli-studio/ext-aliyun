@@ -1,5 +1,4 @@
-<?php
-namespace Poppy\Extension\Aliyun\Core;
+<?php namespace Poppy\Extension\Aliyun\Core;
 
 use Poppy\Extension\Aliyun\Core\Regions\EndpointConfig;
 
